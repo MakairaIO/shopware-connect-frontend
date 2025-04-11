@@ -1,0 +1,79 @@
+on:
+  push:
+    branches:
+      - stable
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Dry run release
+        id: dry-run
+        run: |
+          npx semantic-release --dry-run | tee dry-run-output.txt
+          if grep -q "no new version is released" dry-run-output.txt; then
+            echo "No release needed. Exiting."
+            echo "release_needed=false" >> $GITHUB_ENV
+            exit 0
+          fi
+          NEXT_VERSION=$(grep -oP '(?<=Published release )[^ ]+' dry-run-output.txt | head -n 1)
+          if [ -z "${NEXT_VERSION// }" ]; then
+            echo "No release needed. Exiting."
+            echo "release_needed=false" >> $GITHUB_ENV
+            exit 0
+          fi
+          echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
+          echo "release_needed=true" >> $GITHUB_ENV
+          rm dry-run-output.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Debug dry run
+        if: env.release_needed == 'true'
+        run: |
+          echo "Next version: ${{ env.NEXT_VERSION }}"
+
+      - name: Update version in package.json, components.json, README.md, and MakairaConnectFrontend.php
+        if: env.release_needed == 'true'
+        run: |
+          echo "Updating version to ${{ env.NEXT_VERSION }}"
+          jq --arg version "${{ env.NEXT_VERSION }}" '.version = $version' package.json > tmp.json && mv tmp.json package.json
+          jq --arg version "${{ env.NEXT_VERSION }}" '.version = $version' composer.json > tmp.json && mv tmp.json composer.json
+          sed -i "s/public const PLUGIN_VERSION = '.*';/public const PLUGIN_VERSION = '${{ env.NEXT_VERSION }}';/" src/MakairaConnectFrontend.php
+
+      - name: Release
+        if: env.release_needed == 'true'
+        id: release
+        run: |
+          npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push updated files
+        if: env.release_needed == 'true'
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add CHANGELOG.md package.json composer.json src/MakairaConnectFrontend.php
+          git commit -m "chore(release): update files for version ${{ env.NEXT_VERSION }}"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

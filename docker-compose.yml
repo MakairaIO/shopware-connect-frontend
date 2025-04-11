@@ -1,0 +1,28 @@
+services:
+  shopware:
+    image: dockware/dev:latest
+    container_name: shopware
+    volumes:
+      - "./:/var/www/html/custom/plugins/MakairaConnectFrontend"
+      - "/var/www/html/custom/plugins"
+      - "db_volume:/var/lib/mysql"
+      - "shop_volume:/var/www/html"
+    ports:
+      - "80:80"
+      - "3306:3306"
+      - "8888:8888"
+      - "9999:9999"
+      - "9998:9998"
+    networks:
+      - web
+    environment:
+      - XDEBUG_ENABLED=1
+
+volumes:
+  db_volume:
+    driver: local
+  shop_volume:
+    driver: local
+
+networks:
+  web:

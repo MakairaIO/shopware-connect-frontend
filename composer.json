@@ -1,0 +1,36 @@
+{
+  "name": "makaira/shopware6-connect-frontend",
+  "description": "Makaira Connect Frontend",
+  "type": "shopware-platform-plugin",
+  "version": "1.0.0",
+  "license": "GPL-3.0",
+  "require": {
+    "shopware/core": "~6.6.0",
+    "league/pipeline": "^1.1"
+  },
+  "extra": {
+    "shopware-plugin-class": "MakairaConnectFrontend\\MakairaConnectFrontend",
+    "label": {
+      "de-DE": "Makaira Connect Frontend",
+      "en-GB": "Makaira Connect Frontend"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "MakairaConnectFrontend\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MakairaConnectFrontend\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "symfony/runtime": true
+    }
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.75"
+  }
+}

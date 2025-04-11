@@ -1,0 +1,43 @@
+{
+  "branches": ["stable"],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          { "type": "feat", "release": "minor" },
+          { "type": "fix", "release": "patch" },
+          { "type": "perf", "release": "patch" },
+          { "type": "BREAKING CHANGE", "release": "major" },
+          { "type": "major", "release": "major" }
+        ],
+        "parserOpts": {
+          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES"]
+        }
+      }
+    ],
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "zip -r ./ShopwareConnectFrontend-${nextRelease.version}.zip . -x \"node_modules/*\" -x \".git/*\" -x \".github/*\" -x \".releaserc.json\" -x \".npmignore\" -x \"Makefile\" -x \".gitignore\" -x \"phpunit.xml\" -x \"tests/*\" -x \"docker-compose.yml\""
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "./ShopwareConnectFrontend-*.zip",
+            "label": "Shopware Connect Frontend ${nextRelease.version}"
+          }
+        ]
+      }
+    ]
+  ],
+  "preset": "conventionalcommits",
+  "tagFormat": "${version}",
+  "ci": true
+}

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd"
+>
+    <card>
+        <title>Makaira API Configuration</title>
+        <title lang="de-DE">Makaira API Konfiguration</title>
+       
+        <input-field type="url">
+            <name>makairaBaseUrl</name>
+            <label>Base URL of Makaira API</label>
+            <label lang="de-DE">Basis URL der Makaira API</label>
+            <defaultValue>https://&lt;customer&gt;.makaira.io</defaultValue>
+            <helpText
+      >The URL of your Makaira account in the format https://&lt;customer&gt;.makaira.io.</helpText>
+            <helpText
+        lang="de-DE"
+      >Die URL Ihres Makaira Account im Format https://&lt;customer&gt;.makaira.io.</helpText>
+        </input-field>
+
+        <input-field type="text">
+            <name>makairaInstance</name>
+            <label>Makaira instance</label>
+            <label lang="de-DE">Makaira Instanz</label>
+            <placeholder>e.g. live</placeholder>
+            <placeholder lang="de-DE">z.B. live</placeholder>
+            <helpText
+      >Please set the Makaira instance name (e.g., live or staging) to connect the data provider.</helpText>
+            <helpText
+        lang="de-DE"
+      >Bitte geben Sie den Namen der Makaira-Instanz an (z.B. live oder staging) um die entsprechenden Datne zu nutzen.</helpText>
+        </input-field>
+
+        
+
+        <input-field type="int">
+            <name>apiTimeout</name>
+            <label>API timeout (seconds)</label>
+            <label lang="de-DE">API Timeout (Sekunden)</label>
+            <defaultValue>5</defaultValue>
+            <helpText>Set the timeout for API requests in seconds.</helpText>
+            <helpText
+        lang="de-DE"
+      >Legen Sie den Timeout für API-Anfragen in Sekunden fest.</helpText>
+        </input-field>
+
+        
+    </card>
+
+    <card>
+        <title>Makaira search settings</title>
+        <title lang="de-DE">Makaira Sucheinstellungen</title>
+        
+        
+
+    <input-field type="bool">
+            <name>useForProductLists</name>
+            <label>Use for category lists</label>
+            <label lang="de-DE">Für Kategorieslisten verwenden</label>
+            <defaultValue>false</defaultValue>
+            <helpText
+      >Enable this option to use Makaira for category product listings.</helpText>
+            <helpText
+        lang="de-DE"
+      >Aktivieren Sie diese Option, um Makaira für Kategorielisten zu verwenden.</helpText>
+        </input-field>
+        
+        <input-field type="bool">
+            <name>useForSearch</name>
+            <label>Use for search</label>
+            <label lang="de-DE">Für Suche verwenden</label>
+            <defaultValue>false</defaultValue>
+            <helpText
+      >Enable this option to use Makaira for search functionality.</helpText>
+            <helpText
+        lang="de-DE"
+      >Aktivieren Sie diese Option, um Makaira für die Suche zu verwenden.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>useForSuggest</name>
+            <label>Use for autosuggest</label>
+            <label lang="de-DE">Für Autosuggest verwenden</label>
+            <defaultValue>false</defaultValue>
+            <helpText
+      >Enable this option to use Makaira for autosuggest functionality.</helpText>
+            <helpText
+        lang="de-DE"
+      >Aktivieren Sie diese Option, um Makaira für Autosuggest zu verwenden.</helpText>
+        </input-field>
+
+    </card>
+    <card>
+            <title>Recommendation Configuration</title>
+            <title lang="de-DE">Recommendation-Konfiguration</title>
+           
+
+        <input-field type="bool">
+            <name>useForRecommendation</name>
+            <label>Use for Recommendations</label>
+            <label lang="de-DE">Empfehlungen aktivieren</label>
+            <defaultValue>false</defaultValue>
+            <helpText
+      >Enable this option to use Makaira for product recommendations.</helpText>
+            <helpText
+        lang="de-DE"
+      >Aktivieren Sie diese Option, um Makaira für Produktempfehlungen zu verwenden.</helpText>
+        </input-field>
+
+        <input-field type="text">
+            <name>recommendationId</name>
+            <label>Recommendation ID</label>
+            <label lang="de-DE">Recommendation-ID</label>
+            <placeholder>Enter recommendation ID</placeholder>
+            <placeholder lang="de-DE">Recommendation-ID eingeben</placeholder>
+            <helpText
+      >Provide the ID for the recommendation configuration which you want to use for the crossselling.</helpText>
+            <helpText
+        lang="de-DE"
+      >Geben Sie die ID für die Recommendation an, die Sie für das Cross-Selling verwenden möchten.</helpText>
+        </input-field>
+
+        <input-field type="int">
+            <name>recommendationProductLimit</name>
+            <label>Recommendation Product Limit</label>
+            <label lang="de-DE">Recommendationproduktlimit</label>
+            <defaultValue>10</defaultValue>
+            <minValue>1</minValue>
+            <helpText
+      >Set the maximum number of products to return from the Makaira recommendation.</helpText>
+            <helpText
+        lang="de-DE"
+      >Legen Sie die maximale Anzahl von Produkten fest, die von der Makaira-Recommednation-API zurückgegeben werden sollen.</helpText>
+        </input-field>
+        </card>
+</config>

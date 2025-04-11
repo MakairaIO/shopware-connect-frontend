@@ -1,0 +1,104 @@
+{% sw_extends '@Storefront/storefront/layout/header/search-suggest.html.twig' %}
+
+{% block layout_search_suggest_container %}
+
+	
+	{% if page.searchResult.extensions.makairaCategories.all is empty and page.searchResult.extensions.makairaPages.all is empty and page.searchResult.extensions.makairaLinks.all is empty %}
+		<style>
+			@media (min-width: 768px) {		
+				.search-suggest-container {
+					width: 50%;
+				}
+			}
+		</style>
+	{% endif %}
+	<div class="search-suggest-container">
+		
+		<div class="search-suggest-container-left">
+			<h3>{{"makaira.products"|trans|sw_sanitize}}</h3>
+			<ul class="search-suggest-list">
+				{% block layout_search_suggest_results %}
+					{{ parent() }}
+				{% endblock %}
+
+
+				{% block layout_search_suggest_result_total %}
+					{{ parent() }}
+
+				{% endblock %}
+			</ul>
+		</div>
+
+		<div class="search-suggest-container-right">
+			{% if page.searchResult.extensions.makairaCategories.all is not empty %}
+				<div class="search-suggest-container-inner">
+					<h3>{{"general.categories"|trans|sw_sanitize}}</h3>
+					<ul class="search-suggest-list">
+						{% for category in page.searchResult.extensions.makairaCategories.all %}
+							<li class=" js-result">
+								<a href="{{category.fields.url}}" title="{{ category.fields.category_title }}" class="search-suggest-product-link">
+									<div class="row align-items-center {{ gridNoGuttersClass }}">
+										{% if category.fields.category_parent %}
+											<span class="search-suggest-category-parent">
+												{% autoescape false %}
+													{{category.fields.category_parent}}<span class="search-suggest-category-spacer">/</span>
+												{% endautoescape %}
+											</span>
+										{% endif %}
+										<span>
+											{% autoescape false %}
+												{{category.fields.category_title}}
+											{% endautoescape %}
+										</span>
+									</div>
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
+
+			{% if page.searchResult.extensions.makairaPages.all is not empty %}
+				<div class="search-suggest-container-inner">
+					<h3>{{"makaira.page"|trans|sw_sanitize}}</h3>
+					<ul class="search-suggest-list">
+						{% for makairaPage in page.searchResult.extensions.makairaPages.all %}
+							<li class=" js-result">
+								<a href="{{makairaPage.fields.url}}" title="{{ makairaPage.fields.title }}" class="search-suggest-product-link">
+									<div class="row align-items-center {{ gridNoGuttersClass }}">								
+										<span>
+											{% autoescape false %}
+												{{makairaPage.fields.title}}
+											{% endautoescape %}
+										</span>
+									</div>
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
+
+			{% if page.searchResult.extensions.makairaLinks.all is not empty %}
+				<div class="search-suggest-container-inner">
+					<h3>{{"makaira.links"|trans|sw_sanitize}}</h3>
+					<ul class="search-suggest-list">
+						{% for links in page.searchResult.extensions.makairaLinks.all %}
+							<li class=" js-result">
+								<a href="{{links.fields.url}}" title="{{ links.fields.title }}" class="search-suggest-product-link">
+									<div class="row align-items-center {{ gridNoGuttersClass }}">								
+										<span>
+											{% autoescape false %}
+												{{links.fields.title}}
+											{% endautoescape %}
+										</span>
+									</div>
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}

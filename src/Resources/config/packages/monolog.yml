@@ -1,0 +1,10 @@
+monolog:
+  channels: ["makaira_frontend"]
+
+  handlers:
+    myPluginLogHandler:
+      type: rotating_file
+      path: "%kernel.logs_dir%/makaira-frontend_%kernel.environment%.log"
+      level: error
+      max_files: 10
+      channels: ["makaira_frontend"]
