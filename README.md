@@ -44,57 +44,96 @@ To install the **Makaira Connect Frontend** module in your Shopware 6 environmen
 
 The following configuration options are available for the Makaira Connect Frontend module:
 
+### General Settings
+
 1. **Base URL of Makaira API**:
 
-   - **Key**: `makairaBaseUrl
+   - **Key**: `makairaBaseUrl`
    - **Description**: The base URL of the Makaira API.
-   - **Default Value**: https://\<customer\>.makaira.io
+   - **Default Value**: `https://<customer>.makaira.io`
+   - **Help Text**: The URL of your Makaira account in the format `https://<customer>.makaira.io`.
 
-1. **Makaira Instance**:
+2. **Makaira Instance**:
 
    - **Key**: `makairaInstance`
-   - **Description**: The instance name for Makaira (e.g., live).
-   - **Placeholder**: e.g. live
-   - **Note**: This value must be set per sales channel.
+   - **Description**: The instance name for Makaira (e.g., live or staging).
+   - **Placeholder**: e.g., live
+   - **Help Text**: Please set the Makaira instance name to connect the data provider.
+
+3. **API Timeout**:
+   - **Key**: `apiTimeout`
+   - **Description**: The timeout for API requests in seconds.
+   - **Default Value**: `5`
+   - **Help Text**: Set the timeout for API requests in seconds.
+
+---
+
+### Search Settings
 
 1. **Use for Product Lists**:
 
    - **Key**: `useForProductLists`
    - **Description**: Whether to use Makaira for category product listings.
-   - **Default Value**: false
+   - **Default Value**: `false`
+   - **Help Text**: Enable this option to use Makaira for category product listings.
 
-1. **Use for Search**:
+2. **Use for Search**:
 
    - **Key**: `useForSearch`
    - **Description**: Whether to use Makaira for search functionality.
-   - **Default Value**: false
+   - **Default Value**: `false`
+   - **Help Text**: Enable this option to use Makaira for search functionality.
 
-1. **Use for Autosuggest**:
-
+3. **Use for Autosuggest**:
    - **Key**: `useForSuggest`
    - **Description**: Whether to use Makaira for autosuggest functionality.
-   - **Default Value**: false
+   - **Default Value**: `false`
+   - **Help Text**: Enable this option to use Makaira for autosuggest functionality.
 
-1. **API Timeout**:
+---
 
-   - **Key**: apiTimeout
-   - **Description**: The timeout for API requests in seconds.
-   - **Default Value**: 5
+### Recommendation Settings
 
-How to Configure
+1. **Use for Recommendations**:
+
+   - **Key**: `useForRecommendation`
+   - **Description**: Whether to use Makaira for product recommendations.
+   - **Default Value**: `false`
+   - **Help Text**: Enable this option to use Makaira for product recommendations.
+
+2. **Recommendation ID**:
+
+   - **Key**: `recommendationId`
+   - **Description**: The ID for the recommendation configuration to use for cross-selling.
+   - **Placeholder**: Enter recommendation ID
+   - **Help Text**: Provide the ID for the recommendation configuration to use for cross-selling.
+
+3. **Recommendation Product Limit**:
+   - **Key**: `recommendationProductLimit`
+   - **Description**: The maximum number of products to return from the Makaira recommendation.
+   - **Default Value**: `10`
+   - **Minimum Value**: `1`
+   - **Help Text**: Set the maximum number of products to return from the Makaira recommendation.
+
+---
+
+### How to Configure
 
 1. Navigate to the Shopware administration panel.
-2. Go to Settings > Plugins > Makaira Connect Frontend.
+2. Go to **Settings > Plugins > Makaira Connect Frontend**.
 3. Fill in the required fields for each sales channel:
    - Base URL of Makaira API
    - Makaira Instance
+   - API Timeout
    - Use for Product Lists
    - Use for Search
    - Use for Autosuggest
-   - API Timeout
-     Save the configuration.
+   - Use for Recommendations
+   - Recommendation ID
+   - Recommendation Product Limit
+4. Save the configuration.
 
-💡 **Note**: Ensure that the `Makaira Instance` values are set individually for each sales channel to .
+💡 **Note**: Ensure that the `Makaira Instance` values are set individually for each sales channel.
 
 ---
 
