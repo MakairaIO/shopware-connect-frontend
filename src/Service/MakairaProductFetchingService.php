@@ -50,7 +50,7 @@ class MakairaProductFetchingService
         );
     }
 
-    public function fetchMakairaProductsFromCategory(SalesChannelContext $context, string $categoryId, Criteria $criteria, array $filter, array $sorting): ?\stdClass
+    public function fetchMakairaProductsFromCategory(SalesChannelContext $context, array $categoryIds, Criteria $criteria, array $filter, array $sorting): ?\stdClass
     {
         $client = $this->getClient($context);
 
@@ -59,7 +59,10 @@ class MakairaProductFetchingService
             [
                 'isSearch'           => false,
                 'enableAggregations' => true,
-                'constraints'        => array_merge($this->getDefaultConstraints($context), ['query.category_id' => [$categoryId]]),
+                'constraints'        => array_merge(
+                    $this->getDefaultConstraints($context),
+                    ['query.category_id' => $categoryIds]
+                ),
                 'count'              => $criteria->getLimit(),
                 'offset'             => $criteria->getOffset(),
                 'searchPhrase'       => '',

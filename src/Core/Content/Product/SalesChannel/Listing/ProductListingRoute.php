@@ -86,14 +86,16 @@ class ProductListingRoute extends AbstractProductListingRoute
         $makairaFilter = $this->filterExtractionService->extractMakairaFiltersFromRequest($request);
 
         $category = $this->fetchCategory($categoryId, $context);
-
         $streamId = $this->extendCriteria($context, $criteria, $category);
+
+        $categoryIds = $this->fetchSubcategoryIds($categoryId, $context);
+        $this->logger->debug('[Makaira] Category IDs ', [$categoryIds]);
 
         try {
             $makairaSorting = $this->sortingMappingService->mapSortingCriteria($criteria);
             $this->logger->debug('[Makaira] Sorting ', [$makairaSorting]);
 
-            $makairaResponse = $this->makairaProductFetchingService->fetchMakairaProductsFromCategory($context, $categoryId, $criteria, $makairaFilter, $makairaSorting);
+            $makairaResponse = $this->makairaProductFetchingService->fetchMakairaProductsFromCategory($context, $categoryIds, $criteria, $makairaFilter, $makairaSorting);
 
             if (null === $makairaResponse) {
                 throw new NoDataException('Keine Daten oder fehlerhaft vom Makaira Server.');
@@ -151,5 +153,36 @@ class ProductListingRoute extends AbstractProductListingRoute
 
         /** @var CategoryEntity $category */
         return $this->categoryRepository->search($categoryCriteria, $context->getContext())->first();
+    }
+
+    private function fetchSubcategories(string $categoryId, SalesChannelContext $context): array
+    {
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('parentId', $categoryId));
+        $criteria->setTitle('product-listing-route::subcategories-loading');
+
+        $subcategories = $this->categoryRepository->search($criteria, $context->getContext());
+
+        return $subcategories->getElements();
+    }
+
+    private function fetchSubcategoryIds(string $categoryId, SalesChannelContext $context): array
+    {
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('parentId', $categoryId));
+        $criteria->setTitle('product-listing-route::subcategories-loading');
+
+        $subcategories = $this->categoryRepository->search($criteria, $context->getContext());
+
+        // Extract only the IDs of the subcategories
+        $subcategoryIds = array_map(
+            fn ($subcategory) => $subcategory->getId(),
+            $subcategories->getElements()
+        );
+
+        // Include the current category ID
+        array_unshift($subcategoryIds, $categoryId);
+
+        return $subcategoryIds;
     }
 }
