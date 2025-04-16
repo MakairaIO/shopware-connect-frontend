@@ -142,8 +142,53 @@ The following configuration options are available for the Makaira Connect Fronte
 1. `git clone git@github.com:MakairaIO/shopware-connect-frontend`
 2. `make init`
 
-### Usefull commands
+### Useful Commands
 
 - Start project: `make up`
 - Stop project: `make down`
 - SSH to container: `make ssh`
+
+---
+
+### 📢 Events
+
+The **Makaira Connect Frontend** module provides several events that can be used to customize the request sent to the Makaira API. Below is a list of available events:
+
+#### `ModifierQueryRequestEvent`
+
+This event allows you to modify the query before it is sent to the Makaira API.
+
+- **Class**: `MakairaConnectFrontend\Events\ModifierQueryRequestEvent`
+- **Namespace**: `MakairaConnectFrontend\Events`
+- **Event Names**:
+  - `makaira.request.modifier.query.search`: Triggered for search queries.
+  - `makaira.request.modifier.query.autosuggester`: Triggered for autosuggest queries.
+  - `makaira.request.modifier.query.category`: Triggered for category-based search queries.
+  - `makaira.request.modifier.query.recommendation`: Triggered for recommendation queries.
+- **Methods**:
+  - `getQuery(): \ArrayObject`: Returns the query as an `ArrayObject` for modification.
+
+**Usage Example**:
+
+```php
+use MakairaConnectFrontend\Events\ModifierQueryRequestEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+class CustomQueryModifierSubscriber implements EventSubscriberInterface
+{
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            ModifierQueryRequestEvent::NAME_SEARCH => 'onSearchQueryModify',
+        ];
+    }
+
+    public function onSearchQueryModify(ModifierQueryRequestEvent $event): void
+    {
+        $query = $event->getQuery();
+        $query['customFilter'] = 'value'; // Add custom filter to the query
+    }
+}
+```
+
+💡 **Note**: You can subscribe to these events in your custom plugin to modify the query dynamically.
