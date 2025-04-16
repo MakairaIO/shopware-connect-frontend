@@ -1,6 +1,8 @@
 module.exports = {
   "*.md": ["prettier --write"],
-  "*.xml": ["prettier --write --plugin=@prettier/plugin-xml '**/*.xml'"],
+  "*.xml": [
+    "prettier --write --plugin=@prettier/plugin-xml --print-width 120 --tab-width 2",
+  ],
   "*.yml": ["prettier --write"],
   "*.js": ["prettier --write"],
   "*.json": ["prettier --write"],
