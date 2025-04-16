@@ -1,6 +1,1 @@
-echo "[PHP CS] Formatting PHP files..."
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=d | grep '\.php$' | tr '\n' ' ')
-[ -n "$STAGED_FILES" ] && vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --path-mode=intersection -- $STAGED_FILES && git add $STAGED_FILES
-
-
-npx lint-staged --config lint-staged.config.js
+npx lint-staged
