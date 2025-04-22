@@ -11,10 +11,7 @@
             <argument type="string">%kernel.shopware_version%</argument>
         </service>
         <service id="MakairaConnectFrontend\Makaira\Api\ApiGatewayFactory">
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Makaira\Api\ApiClientFactory"
-      />
+            <argument type="service" id="MakairaConnectFrontend\Makaira\Api\ApiClientFactory" />
             <argument type="service" id="clock" />
             <argument type="service" id="monolog.logger.makaira_frontend" />
         </service>         
@@ -25,40 +22,16 @@
       decoration-priority="-1001"
       decoration-on-invalid="ignore"
     >
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\Search\ProductSearchRoute.inner"
-      />
+            <argument type="service" id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\Search\ProductSearchRoute.inner" />
             <argument type="service" id="event_dispatcher" />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\FilterExtractionService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\SortingMappingService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\ShopwareProductFetchingService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\MakairaProductFetchingService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\AggregationProcessingService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\BannerProcessingService"
-      />
+            <argument type="service" id="MakairaConnectFrontend\Service\FilterExtractionService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\SortingMappingService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\ShopwareProductFetchingService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\MakairaProductFetchingService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\AggregationProcessingService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\BannerProcessingService" />
             <argument type="service" id="monolog.logger.makaira_frontend" />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Utils\PluginConfig"
-      />
+            <argument type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />
         </service>
 
         <service
@@ -67,50 +40,21 @@
       decoration-priority="-1001"
       decoration-on-invalid="ignore"
     >
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\Listing\ProductListingRoute.inner"
-      />            
+            <argument type="service" id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\Listing\ProductListingRoute.inner" />            
             <argument type="service" id="category.repository" />
-            <argument
-        type="service"
-        id="Shopware\Core\Content\ProductStream\Service\ProductStreamBuilder"
-      />
+            <argument type="service" id="Shopware\Core\Content\ProductStream\Service\ProductStreamBuilder" />
+      
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="sales_channel.product.repository" />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\FilterExtractionService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\SortingMappingService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\MakairaProductFetchingService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\ShopwareProductFetchingService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\AggregationProcessingService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\BannerProcessingService"
-      />
+            <argument type="service" id="MakairaConnectFrontend\Service\FilterExtractionService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\SortingMappingService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\MakairaProductFetchingService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\ShopwareProductFetchingService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\AggregationProcessingService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\BannerProcessingService" />
             <argument type="service" id="monolog.logger.makaira_frontend" />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Utils\PluginConfig"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Loader\SalesChannelLoader"
-      />
+            <argument type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />
+            <argument type="service" id="MakairaConnectFrontend\Loader\SalesChannelLoader" />
         </service>
 
         <service
@@ -118,41 +62,17 @@
       decorates="Shopware\Core\Content\Product\SalesChannel\Suggest\ProductSuggestRoute"
       decoration-on-invalid="ignore"
     >
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\Suggest\ProductSuggestRoute.inner"
-      />
-            <argument
-        type="service"
-        id="Shopware\Core\Content\Product\SearchKeyword\ProductSearchBuilderInterface"
-      />
+            <argument type="service" id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\Suggest\ProductSuggestRoute.inner" />
+            <argument type="service" id="Shopware\Core\Content\Product\SearchKeyword\ProductSearchBuilderInterface" />
             <argument type="service" id="event_dispatcher" />
-            <argument
-        type="service"
-        id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingLoader"
-      />
-            <argument
-        type="service"
-        id="Shopware\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder"
-      />
+            <argument type="service" id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingLoader" />
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder" />
             <argument type="service" id="sales_channel.product.repository" />
-            <argument
-        type="service"
-        id="Shopware\Core\Content\Product\ProductDefinition"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\MakairaProductFetchingService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\ShopwareProductFetchingService"
-      />
+            <argument type="service" id="Shopware\Core\Content\Product\ProductDefinition" />
+            <argument type="service" id="MakairaConnectFrontend\Service\MakairaProductFetchingService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\ShopwareProductFetchingService" />
             <argument type="service" id="monolog.logger.makaira_frontend" />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Utils\PluginConfig"
-      />
+            <argument type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />
         </service>
 
         <service
@@ -160,32 +80,17 @@
       decorates="Shopware\Core\Content\Product\SalesChannel\CrossSelling\ProductCrossSellingRoute"
       decoration-on-invalid="ignore"
     >
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\CrossSelling\CrossSellingRoute.inner"
-      />
+            <argument type="service" id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\CrossSelling\CrossSellingRoute.inner" />
             <argument type="service" id="monolog.logger.makaira_frontend" />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Utils\PluginConfig"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\MakairaProductFetchingService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Service\ShopwareProductFetchingService"
-      />
+            <argument type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />
+            <argument type="service" id="MakairaConnectFrontend\Service\MakairaProductFetchingService" />
+            <argument type="service" id="MakairaConnectFrontend\Service\ShopwareProductFetchingService" />
             <argument type="service" id="event_dispatcher" />
         </service>
 
 
         <!-- Loader -->    
-        <service
-      id="MakairaConnectFrontend\Loader\SalesChannelLoader"
-      public="true"
-    >
+        <service id="MakairaConnectFrontend\Loader\SalesChannelLoader" public="true">
             <argument type="service" id="sales_channel.repository" />
             <argument type="service" id="language.repository" />
             <argument type="service" id="monolog.logger.makaira_frontend" />
@@ -194,77 +99,34 @@
 
         <!-- Utils -->
         <service id="MakairaConnectFrontend\Utils\PluginConfig" public="true">
-            <argument
-        type="service"
-        id="Shopware\Core\System\SystemConfig\SystemConfigService"
-      />
-            <argument
-        type="service"
-        id="MakairaConnectFrontend\Loader\SalesChannelLoader"
-      />
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
+            <argument type="service" id="MakairaConnectFrontend\Loader\SalesChannelLoader" />
         </service>
 
 
-        <service
-      id="MakairaConnectFrontend\Service\FilterExtractionService"
-      public="true"
-    />
-        <service
-      id="MakairaConnectFrontend\Service\SortingMappingService"
-      public="true"
-    />
-        <service
-      id="MakairaConnectFrontend\Service\MakairaProductFetchingService"
-      class="MakairaConnectFrontend\Service\MakairaProductFetchingService"
-    >
-          <argument
-        type="service"
-        id="MakairaConnectFrontend\Utils\PluginConfig"
-      />          
+        <service id="MakairaConnectFrontend\Service\FilterExtractionService" public="true" />
+        <service id="MakairaConnectFrontend\Service\SortingMappingService" public="true" />
+        <service id="MakairaConnectFrontend\Service\MakairaProductFetchingService" class="MakairaConnectFrontend\Service\MakairaProductFetchingService">
+          <argument type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />          
           <argument type="service" id="event_dispatcher" />
           <argument type="service" id="monolog.logger.makaira_frontend" />
-          <argument
-        type="service"
-        id="MakairaConnectFrontend\Loader\SalesChannelLoader"
-      />
-          <argument
-        type="service"
-        id="MakairaConnectFrontend\Makaira\Api\ApiGatewayFactory"
-      />
+          <argument type="service" id="MakairaConnectFrontend\Loader\SalesChannelLoader" />
+          <argument type="service" id="MakairaConnectFrontend\Makaira\Api\ApiGatewayFactory" />
         </service>
-        <service
-      id="MakairaConnectFrontend\Service\ShopwareProductFetchingService"
-      class="MakairaConnectFrontend\Service\ShopwareProductFetchingService"
-    >
+        <service id="MakairaConnectFrontend\Service\ShopwareProductFetchingService" class="MakairaConnectFrontend\Service\ShopwareProductFetchingService">
             <argument type="service" id="sales_channel.product.repository" />
-            <argument
-        type="service"
-        id="Shopware\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder"
-      />
-            <argument
-        type="service"
-        id="Shopware\Core\Content\Product\ProductDefinition"
-      />          
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder" />
+            <argument type="service" id="Shopware\Core\Content\Product\ProductDefinition" />          
             <argument type="service" id="monolog.logger.makaira_frontend" />
         </service>
 
          
             
-        <service
-      id="MakairaConnectFrontend\Service\AggregationProcessingService"
-      public="true"
-    >
+        <service id="MakairaConnectFrontend\Service\AggregationProcessingService" public="true">
 
         </service>
-        <service
-      id="MakairaConnectFrontend\Service\BannerProcessingService"
-      public="true"
-    >
-            <argument
-        key="$config"
-        type="service"
-        id="MakairaConnectFrontend\Utils\PluginConfig"
-      />
+        <service id="MakairaConnectFrontend\Service\BannerProcessingService" public="true">
+            <argument key="$config" type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />
         </service>
     </services>
 </container>

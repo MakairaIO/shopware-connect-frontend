@@ -32,16 +32,17 @@ class ShopwareProductFetchingService
     ): EntitySearchResult {
         $ids = $this->extractProductIdsFromMakairaResponse($makairaResponse);
 
+
+        $originalLimit = $criteria->getLimit();
+
         $criteria->resetFilters();
         $criteria->addFilter(new EqualsAnyFilter('id', $ids));
+        $criteria->setOffset(0);
 
         $shopwareResult = $this->salesChannelProductRepository->search($criteria, $context);
 
         // Restore original pagination
         $shopwareResult->getCriteria()->setOffset($criteria->getOffset());
-        $shopwareResult->getCriteria()->setLimit($criteria->getLimit());
-        $shopwareResult->setLimit($criteria->getLimit());
-
 
         if (isset($makairaResponse->items)) {
             $total = isset($makairaResponse->items) && is_array($makairaResponse->items) ? count($makairaResponse->items) : 0;

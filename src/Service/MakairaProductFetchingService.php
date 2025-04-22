@@ -52,17 +52,16 @@ class MakairaProductFetchingService
 
     public function fetchMakairaProductsFromCategory(SalesChannelContext $context, array $categoryIds, Criteria $criteria, array $filter, array $sorting): ?\stdClass
     {
-        $client = $this->getClient($context);
+        $client                           = $this->getClient($context);
+        $constraints                      = $this->getDefaultConstraints($context);
+        $constraints['query.category_id'] = $categoryIds;
 
         return $client->fetchMakairaProductsFromCategory($this->dispatchEvent(
             ModifierQueryRequestEvent::NAME_SEARCH_CATEGORY,
             [
                 'isSearch'           => false,
                 'enableAggregations' => true,
-                'constraints'        => array_merge(
-                    $this->getDefaultConstraints($context),
-                    ['query.category_id' => $categoryIds]
-                ),
+                'constraints'        => $constraints,
                 'count'              => $criteria->getLimit(),
                 'offset'             => $criteria->getOffset(),
                 'searchPhrase'       => '',

@@ -89,7 +89,7 @@ class ProductListingRoute extends AbstractProductListingRoute
         $streamId = $this->extendCriteria($context, $criteria, $category);
 
         $categoryIds = $this->fetchSubcategoryIds($categoryId, $context);
-        $this->logger->debug('[Makaira] Category IDs ', [$categoryIds]);
+        $this->logger->debug('[Makaira] Category IDs ', $categoryIds);
 
         try {
             $makairaSorting = $this->sortingMappingService->mapSortingCriteria($criteria);
@@ -175,13 +175,13 @@ class ProductListingRoute extends AbstractProductListingRoute
         $subcategories = $this->categoryRepository->search($criteria, $context->getContext());
 
         // Extract only the IDs of the subcategories
-        $subcategoryIds = array_map(
-            fn ($subcategory) => $subcategory->getId(),
+        $subcategoryIds = array_values(array_map(
+            fn ($subcategory) => (string) $subcategory->getId(),
             $subcategories->getElements()
-        );
+        ));
 
         // Include the current category ID
-        array_unshift($subcategoryIds, $categoryId);
+        array_unshift($subcategoryIds, (string) $categoryId);
 
         return $subcategoryIds;
     }

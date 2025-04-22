@@ -6,9 +6,13 @@
 	{% if page.searchResult.extensions.makairaCategories.all is empty and page.searchResult.extensions.makairaPages.all is empty and page.searchResult.extensions.makairaLinks.all is empty %}
 		<style>
 			@media (min-width: 768px) {		
-				.search-suggest-container {
-					width: 50%;
+				.search-suggest-container {					
+					width: 400px;			
 				}
+				.search-suggest-container-left {
+					flex: 0 0 100%;
+				}
+
 			}
 		</style>
 	{% endif %}
@@ -28,6 +32,8 @@
 				{% endblock %}
 			</ul>
 		</div>
+
+	{% if page.searchResult.extensions.makairaCategories.all is not empty or page.searchResult.extensions.makairaPages.all is not empty or page.searchResult.extensions.makairaLinks.all is not empty %}
 
 		<div class="search-suggest-container-right">
 			{% if page.searchResult.extensions.makairaCategories.all is not empty %}
@@ -100,5 +106,6 @@
 				</div>
 			{% endif %}
 		</div>
+	{% endif %}
 	</div>
 {% endblock %}
