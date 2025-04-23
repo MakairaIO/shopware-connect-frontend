@@ -47,7 +47,8 @@
           "package.json",
           "package-lock.json",
           "composer.json",
-          "composer.lock"
+          "composer.lock",
+          "src/MakairaConnectFrontend.php"
         ],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
