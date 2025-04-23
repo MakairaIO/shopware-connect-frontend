@@ -63,6 +63,6 @@ jobs:
         if: env.release_needed == 'true'
         id: release
         run: |
-          npx semantic-release
+          HUSKY=0 npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
