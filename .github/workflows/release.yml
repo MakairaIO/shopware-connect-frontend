@@ -66,14 +66,3 @@ jobs:
           npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push updated files
-        if: env.release_needed == 'true'
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add CHANGELOG.md package.json composer.json src/MakairaConnectFrontend.php
-          git commit -m "chore(release): update files for version ${{ env.NEXT_VERSION }}"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
