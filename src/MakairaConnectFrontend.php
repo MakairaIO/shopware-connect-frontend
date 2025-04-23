@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class MakairaConnectFrontend extends Plugin
 {
-    public const PLUGIN_VERSION = '1.0.0';
+    public const PLUGIN_VERSION = '1.1.4';
 
     public function build(ContainerBuilder $container): void
     {

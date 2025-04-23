@@ -1,3 +1,9 @@
+## [1.1.4](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.1.3...1.1.4) (2025-04-23)
+
+### Bug Fixes
+
+* add updated Pluginfile ([12cccd9](https://github.com/MakairaIO/shopware-connect-frontend/commit/12cccd98f17de45264d7df960feb200079ffe387))
+
 ## [1.1.3](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.1.2...1.1.3) (2025-04-23)
 
 ### Bug Fixes
