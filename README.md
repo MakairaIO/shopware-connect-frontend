@@ -1,6 +1,6 @@
 # Makaira Connect Frontend
 
-![Version](https://img.shields.io/github/v/tag/MakairaIO/shopware-connect-frontend?color=blue) [![Packagist Version](https://img.shields.io/packagist/v/makaira/shopware6-connect-frontend)](https://packagist.org/packages/makaira/shopware-connect-frontend)
+![Version](https://img.shields.io/github/v/tag/MakairaIO/shopware-connect-frontend?color=blue) [![Packagist Version](https://img.shields.io/packagist/v/makaira/shopware6-connect-frontend)](https://packagist.org/packages/makaira/shopware6-connect-frontend)
 
 ## 🎯 Purpose
 
@@ -192,3 +192,16 @@ class CustomQueryModifierSubscriber implements EventSubscriberInterface
 ```
 
 💡 **Note**: You can subscribe to these events in your custom plugin to modify the query dynamically.
+
+---
+
+## 🛠️ Shopware Compatibility
+
+The **Makaira Connect Frontend** module is compatible with the following Shopware versions:
+
+| Shopware Version | Supported    |
+| ---------------- | ------------ |
+| 6.5              | ✅ Supported |
+| 6.6              | ✅ Supported |
+
+💡 **Note**: Ensure your Shopware installation matches one of the supported versions for optimal compatibility.
