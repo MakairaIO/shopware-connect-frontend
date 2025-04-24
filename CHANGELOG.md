@@ -1,3 +1,9 @@
+## [1.1.5](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.1.4...1.1.5) (2025-04-24)
+
+### Bug Fixes
+
+* update dependency for shopware 6.5 ([b297d46](https://github.com/MakairaIO/shopware-connect-frontend/commit/b297d46cd20f074a4aa799a0fcb060cc7a773d42))
+
 ## [1.1.4](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.1.3...1.1.4) (2025-04-23)
 
 ### Bug Fixes
