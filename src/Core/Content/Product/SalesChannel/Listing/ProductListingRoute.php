@@ -123,6 +123,8 @@ class ProductListingRoute extends AbstractProductListingRoute
 
         $finalResult->setStreamId($streamId);
 
+        $this->logger->debug('[Makaira][Listing] Products total ', [$finalResult->getTotal()]);
+
         return new ProductListingRouteResponse($finalResult);
     }
 

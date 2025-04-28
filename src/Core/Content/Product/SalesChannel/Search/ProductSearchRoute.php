@@ -96,6 +96,8 @@ class ProductSearchRoute extends AbstractProductSearchRoute
 
         $this->eventDispatcher->dispatch(new ProductSearchResultEvent($request, $finalResult, $context), ProductEvents::PRODUCT_SEARCH_RESULT);
 
+        $this->logger->debug('[Makaira][Search] Products total ', [$finalResult->getTotal()]);
+
         return new ProductSearchRouteResponse($finalResult);
     }
 
