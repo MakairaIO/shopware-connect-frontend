@@ -1,3 +1,9 @@
+## [1.1.6](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.1.5...1.1.6) (2025-04-28)
+
+### Bug Fixes
+
+* log total number of products in listing and search routes ([4061434](https://github.com/MakairaIO/shopware-connect-frontend/commit/40614343679c72851b1be484d8f7562e5c11c7d9))
+
 ## [1.1.5](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.1.4...1.1.5) (2025-04-24)
 
 ### Bug Fixes
