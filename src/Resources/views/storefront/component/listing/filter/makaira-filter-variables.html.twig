@@ -1,0 +1,20 @@
+{% macro get_makaira_variables(context) %}
+    {% set isCategoryPage = context.context.extensions.route.name == 'frontend.navigation.page' %}
+    {% set isSearchPage = context.context.extensions.route.name == 'frontend.search.page' %}
+    {% set isMakairaListingEnabled = context.context.extensions.makairafrontend.isListingEnabled %}
+    {% set isMakairaSearchEnabled = context.context.extensions.makairafrontend.isSearchEnabled %}
+    {% set hasMakairaAggregations = context.context.extensions.makairafrontend.aggregations is defined and context.context.extensions.makairafrontend.aggregations|length > 0 %}
+
+    {# Determine if we should use Makaira filters #}
+    {% set useMakairaFilters = (isCategoryPage and isMakairaListingEnabled) or (isSearchPage and isMakairaSearchEnabled) %}
+
+    {# Return all variables as an array #}
+    {% return {
+        'isCategoryPage': isCategoryPage,
+        'isSearchPage': isSearchPage,
+        'isMakairaListingEnabled': isMakairaListingEnabled,
+        'isMakairaSearchEnabled': isMakairaSearchEnabled,
+        'hasMakairaAggregations': hasMakairaAggregations,
+        'useMakairaFilters': useMakairaFilters
+    } %}
+{% endmacro %} 

@@ -51,4 +51,5 @@ class MakairaConnectFrontend extends Plugin
             $systemConfigService->set(PluginConfig::KEY_PREFIX . PluginConfig::MAKAIRA_INSTANCE, '', $salesChannelId);
         }
     }
+
 }

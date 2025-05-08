@@ -13,7 +13,7 @@ class FilterExtractionService
         $makairaFilter = [];
         foreach ($request->query as $key => $value) {
             if (str_starts_with((string) $key, 'filter_')) {
-                $makairaFilter[str_replace('filter_', '', (string) $key)] = explode('|', (string) $value);
+                $makairaFilter[str_replace('filter_', '', (string) $key)] = explode('|', (string) urldecode($value));
             }
         }
 

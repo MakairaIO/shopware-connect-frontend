@@ -12,6 +12,7 @@ use MakairaConnectFrontend\Service\FilterExtractionService;
 use MakairaConnectFrontend\Service\MakairaProductFetchingService;
 use MakairaConnectFrontend\Service\ShopwareProductFetchingService;
 use MakairaConnectFrontend\Service\SortingMappingService;
+use MakairaConnectFrontend\Struct\MakairaConnectFrontendService;
 use MakairaConnectFrontend\Utils\PluginConfig;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Content\Product\Events\ProductSearchCriteriaEvent;
@@ -50,6 +51,19 @@ class ProductSearchRoute extends AbstractProductSearchRoute
 
     public function load(Request $request, SalesChannelContext $context, Criteria $criteria): ProductSearchRouteResponse
     {
+
+        $makairaFrontend = new MakairaConnectFrontendService(
+            $this->pluginConfig->get('makairaInstance', $context->getSalesChannel()->getId()),
+            $this->pluginConfig->get('useForProductLists', $context->getSalesChannel()->getId()),
+            $this->pluginConfig->get('useForSearch', $context->getSalesChannel()->getId()),
+            $this->pluginConfig->get('useForRecommendation', $context->getSalesChannel()->getId())
+        );
+
+        $context->getContext()->addExtension('makairafrontend', $makairaFrontend);
+        $context->getContext()->addExtension('route', new \Shopware\Core\Framework\Struct\ArrayStruct([
+            'name' => 'frontend.search.page',
+        ]));
+
         $this->logger->debug('[Makaira] Search on? ', [$this->pluginConfig->get('useForSearch', $context->getSalesChannel()->getId())]);
         // Check if the category setting is enabled
         if (!$this->pluginConfig->get('useForSearch', $context->getSalesChannel()->getId())) {
@@ -57,6 +71,9 @@ class ProductSearchRoute extends AbstractProductSearchRoute
         }
 
         $this->validateSearchRequest($request);
+
+
+
         $query = $request->query->get('search');
         $criteria->addState(Criteria::STATE_ELASTICSEARCH_AWARE);
 
@@ -69,6 +86,11 @@ class ProductSearchRoute extends AbstractProductSearchRoute
 
             if (null === $makairaResponse) {
                 throw new NoDataException('Keine Daten oder fehlerhaft vom Makaira Server.');
+            }
+
+            if (isset($makairaResponse->product->aggregations)) {
+                $makairaFrontend->setAggregations(json_decode(json_encode($makairaResponse->product->aggregations), true));
+                $makairaFrontend->setTotal($makairaResponse->product->total);
             }
         } catch (\Exception $exception) {
             $this->logger->error('[Makaira] ' . $exception->getMessage(), ['type' => __CLASS__]);
@@ -98,7 +120,18 @@ class ProductSearchRoute extends AbstractProductSearchRoute
 
         $this->logger->debug('[Makaira][Search] Products total ', [$finalResult->getTotal()]);
 
-        return new ProductSearchRouteResponse($finalResult);
+        $context->getContext()->addExtension('total', new \Shopware\Core\Framework\Struct\ArrayStruct([
+            'total' => $makairaResponse->product->total,
+        ]));
+
+
+
+
+
+        return new ProductSearchRouteResponse(
+            $finalResult,
+            $makairaFrontend
+        );
     }
 
     private function validateSearchRequest(Request $request): void

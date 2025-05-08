@@ -56,6 +56,7 @@ class MakairaProductFetchingService
         $constraints                      = $this->getDefaultConstraints($context);
         $constraints['query.category_id'] = $categoryIds;
 
+        $this->logger->debug('[Makaira] Filter ::', [$filter]);
         return $client->fetchMakairaProductsFromCategory($this->dispatchEvent(
             ModifierQueryRequestEvent::NAME_SEARCH_CATEGORY,
             [

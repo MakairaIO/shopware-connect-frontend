@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<config
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd"
->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
     <card>
         <title>Makaira API Configuration</title>
         <title lang="de-DE">Makaira API Konfiguration</title>
@@ -12,11 +9,8 @@
             <label>Base URL of Makaira API</label>
             <label lang="de-DE">Basis URL der Makaira API</label>
             <defaultValue>https://&lt;customer&gt;.makaira.io</defaultValue>
-            <helpText
-      >The URL of your Makaira account in the format https://&lt;customer&gt;.makaira.io.</helpText>
-            <helpText
-        lang="de-DE"
-      >Die URL Ihres Makaira Account im Format https://&lt;customer&gt;.makaira.io.</helpText>
+            <helpText>The URL of your Makaira account in the format https://&lt;customer&gt;.makaira.io.</helpText>
+            <helpText lang="de-DE">Die URL Ihres Makaira Account im Format https://&lt;customer&gt;.makaira.io.</helpText>
         </input-field>
 
         <input-field type="text">
@@ -25,11 +19,8 @@
             <label lang="de-DE">Makaira Instanz</label>
             <placeholder>e.g. live</placeholder>
             <placeholder lang="de-DE">z.B. live</placeholder>
-            <helpText
-      >Please set the Makaira instance name (e.g., live or staging) to connect the data provider.</helpText>
-            <helpText
-        lang="de-DE"
-      >Bitte geben Sie den Namen der Makaira-Instanz an (z.B. live oder staging) um die entsprechenden Datne zu nutzen.</helpText>
+            <helpText>Please set the Makaira instance name (e.g., live or staging) to connect the data provider.</helpText>
+            <helpText lang="de-DE">Bitte geben Sie den Namen der Makaira-Instanz an (z.B. live oder staging) um die entsprechenden Datne zu nutzen.</helpText>
         </input-field>
 
         
@@ -40,9 +31,7 @@
             <label lang="de-DE">API Timeout (Sekunden)</label>
             <defaultValue>5</defaultValue>
             <helpText>Set the timeout for API requests in seconds.</helpText>
-            <helpText
-        lang="de-DE"
-      >Legen Sie den Timeout für API-Anfragen in Sekunden fest.</helpText>
+            <helpText lang="de-DE">Legen Sie den Timeout für API-Anfragen in Sekunden fest.</helpText>
         </input-field>
 
         
@@ -59,11 +48,8 @@
             <label>Use for category lists</label>
             <label lang="de-DE">Für Kategorieslisten verwenden</label>
             <defaultValue>false</defaultValue>
-            <helpText
-      >Enable this option to use Makaira for category product listings.</helpText>
-            <helpText
-        lang="de-DE"
-      >Aktivieren Sie diese Option, um Makaira für Kategorielisten zu verwenden.</helpText>
+            <helpText>Enable this option to use Makaira for category product listings.</helpText>
+            <helpText lang="de-DE">Aktivieren Sie diese Option, um Makaira für Kategorielisten zu verwenden.</helpText>
         </input-field>
         
         <input-field type="bool">
@@ -71,11 +57,8 @@
             <label>Use for search</label>
             <label lang="de-DE">Für Suche verwenden</label>
             <defaultValue>false</defaultValue>
-            <helpText
-      >Enable this option to use Makaira for search functionality.</helpText>
-            <helpText
-        lang="de-DE"
-      >Aktivieren Sie diese Option, um Makaira für die Suche zu verwenden.</helpText>
+            <helpText>Enable this option to use Makaira for search functionality.</helpText>
+            <helpText lang="de-DE">Aktivieren Sie diese Option, um Makaira für die Suche zu verwenden.</helpText>
         </input-field>
 
         <input-field type="bool">
@@ -83,11 +66,8 @@
             <label>Use for autosuggest</label>
             <label lang="de-DE">Für Autosuggest verwenden</label>
             <defaultValue>false</defaultValue>
-            <helpText
-      >Enable this option to use Makaira for autosuggest functionality.</helpText>
-            <helpText
-        lang="de-DE"
-      >Aktivieren Sie diese Option, um Makaira für Autosuggest zu verwenden.</helpText>
+            <helpText>Enable this option to use Makaira for autosuggest functionality.</helpText>
+            <helpText lang="de-DE">Aktivieren Sie diese Option, um Makaira für Autosuggest zu verwenden.</helpText>
         </input-field>
 
     </card>
@@ -101,11 +81,8 @@
             <label>Use for Recommendations</label>
             <label lang="de-DE">Empfehlungen aktivieren</label>
             <defaultValue>false</defaultValue>
-            <helpText
-      >Enable this option to use Makaira for product recommendations.</helpText>
-            <helpText
-        lang="de-DE"
-      >Aktivieren Sie diese Option, um Makaira für Produktempfehlungen zu verwenden.</helpText>
+            <helpText>Enable this option to use Makaira for product recommendations.</helpText>
+            <helpText lang="de-DE">Aktivieren Sie diese Option, um Makaira für Produktempfehlungen zu verwenden.</helpText>
         </input-field>
 
         <input-field type="text">
@@ -114,11 +91,8 @@
             <label lang="de-DE">Recommendation-ID</label>
             <placeholder>Enter recommendation ID</placeholder>
             <placeholder lang="de-DE">Recommendation-ID eingeben</placeholder>
-            <helpText
-      >Provide the ID for the recommendation configuration which you want to use for the crossselling.</helpText>
-            <helpText
-        lang="de-DE"
-      >Geben Sie die ID für die Recommendation an, die Sie für das Cross-Selling verwenden möchten.</helpText>
+            <helpText>Provide the ID for the recommendation configuration which you want to use for the crossselling.</helpText>
+            <helpText lang="de-DE">Geben Sie die ID für die Recommendation an, die Sie für das Cross-Selling verwenden möchten.</helpText>
         </input-field>
 
         <input-field type="int">
@@ -127,11 +101,9 @@
             <label lang="de-DE">Recommendationproduktlimit</label>
             <defaultValue>10</defaultValue>
             <minValue>1</minValue>
-            <helpText
-      >Set the maximum number of products to return from the Makaira recommendation.</helpText>
-            <helpText
-        lang="de-DE"
-      >Legen Sie die maximale Anzahl von Produkten fest, die von der Makaira-Recommednation-API zurückgegeben werden sollen.</helpText>
+            <helpText>Set the maximum number of products to return from the Makaira recommendation.</helpText>
+            <helpText lang="de-DE">Legen Sie die maximale Anzahl von Produkten fest, die von der Makaira-Recommednation-API zurückgegeben werden sollen.</helpText>
         </input-field>
         </card>
+    
 </config>

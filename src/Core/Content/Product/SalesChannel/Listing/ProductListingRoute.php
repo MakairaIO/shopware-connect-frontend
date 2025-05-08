@@ -13,6 +13,7 @@ use MakairaConnectFrontend\Service\FilterExtractionService;
 use MakairaConnectFrontend\Service\MakairaProductFetchingService;
 use MakairaConnectFrontend\Service\ShopwareProductFetchingService;
 use MakairaConnectFrontend\Service\SortingMappingService;
+use MakairaConnectFrontend\Struct\MakairaConnectFrontendService;
 use MakairaConnectFrontend\Utils\PluginConfig;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Content\Category\CategoryDefinition;
@@ -70,13 +71,23 @@ class ProductListingRoute extends AbstractProductListingRoute
         Criteria $criteria,
     ): ProductListingRouteResponse {
 
-
-
         $this->logger->debug('[Makaira] Listing on? ', [$this->pluginConfig->get('useForProductLists', $context->getSalesChannel()->getId())]);
         // Check if the category setting is enabled
         if (!$this->pluginConfig->get('useForProductLists', $context->getSalesChannel()->getId())) {
             return $this->decorated->load($categoryId, $request, $context, $criteria);
         }
+
+        $makairaFrontend = new MakairaConnectFrontendService(
+            $this->pluginConfig->get('makairaInstance', $context->getSalesChannel()->getId()),
+            $this->pluginConfig->get('useForProductLists', $context->getSalesChannel()->getId()),
+            $this->pluginConfig->get('useForSearch', $context->getSalesChannel()->getId()),
+            $this->pluginConfig->get('useForRecommendation', $context->getSalesChannel()->getId())
+        );
+
+        $context->getContext()->addExtension('makairafrontend', $makairaFrontend);
+        $context->getContext()->addExtension('route', new \Shopware\Core\Framework\Struct\ArrayStruct([
+            'name' => 'frontend.navigation.page',
+        ]));
 
         $criteria->addFilter(
             new ProductAvailableFilter($context->getSalesChannel()->getId(), ProductVisibilityDefinition::VISIBILITY_ALL)
@@ -84,6 +95,7 @@ class ProductListingRoute extends AbstractProductListingRoute
         $criteria->setTitle('product-listing-route::loading');
 
         $makairaFilter = $this->filterExtractionService->extractMakairaFiltersFromRequest($request);
+        $this->logger->debug('[Makaira] Filter ', [$makairaFilter]);
 
         $category = $this->fetchCategory($categoryId, $context);
         $streamId = $this->extendCriteria($context, $criteria, $category);
@@ -100,8 +112,12 @@ class ProductListingRoute extends AbstractProductListingRoute
             if (null === $makairaResponse) {
                 throw new NoDataException('Keine Daten oder fehlerhaft vom Makaira Server.');
             }
-        } catch (\Exception $exception) {
 
+            if (isset($makairaResponse->product->aggregations)) {
+                $makairaFrontend->setAggregations(json_decode(json_encode($makairaResponse->product->aggregations), true));
+                $makairaFrontend->setTotal($makairaResponse->product->total);
+            }
+        } catch (\Exception $exception) {
             $this->logger->error('[Makaira] ' . $exception->getMessage(), ['type' => __CLASS__]);
 
             return $this->decorated->load($categoryId, $request, $context, $criteria);

@@ -15,6 +15,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 class AggregationProcessingService
 {
     public function __construct(
+        private readonly FilterDataTransformerService $filterDataTransformer,
         #private readonly ColorLogic $colorLogic,
     ) {
     }
@@ -45,6 +46,7 @@ class AggregationProcessingService
         switch ($aggregation->type) {
             case 'range_slider_price':
                 return new StatsResult('filter_' . $aggregation->key, $aggregation->min, $aggregation->max, ($aggregation->min + $aggregation->max) / 2, $aggregation->max);
+            case 'list':
             case 'list_multiselect':
             case 'list_multiselect_custom_1':
                 return $this->createCustomAggregationFilter($aggregation);
@@ -55,31 +57,29 @@ class AggregationProcessingService
 
     private function createCustomAggregationFilter($aggregation): ?EntityResult
     {
-        // we use this currently for Nachhaltigkeit and Sale
-        // they have 0 or 1 as their values
-        // we only want to show if there is a 1
-        $showFilter = false;
-        foreach ($aggregation->values as $value) {
-            if (1 == $value->key) {
-                $showFilter = true;
-            }
+        $transformedData = $this->filterDataTransformer->transformFilterData([
+            $aggregation->key => [
+                'type'           => 'list',
+                'key'            => $aggregation->key,
+                'title'          => $aggregation->title,
+                'values'         => (array)$aggregation->values,
+                'selectedValues' => $aggregation->selectedValues ?? null,
+            ],
+        ]);
+
+        if (empty($transformedData)) {
+            return null;
         }
 
-        if ($showFilter) {
-            $options = [];
-            $option  = new PropertyGroupOptionEntity();
-            $option->setName($aggregation->key);
-            $option->setId($aggregation->key);
-            $option->setTranslated(['name' => $aggregation->title]);
+        $options = [];
+        foreach ($transformedData[$aggregation->key]['elements'] as $key => $value) {
+            $option = new PropertyGroupOptionEntity();
+            $option->setName($key);
+            $option->setId($key);
+            $option->setTranslated(['name' => $key]);
             $options[] = $option;
-
-            $makFilter = new EntityResult('filter_' . $aggregation->key, new EntityCollection(
-                $options
-            ));
-
-            return $makFilter;
         }
 
-        return null;
+        return new EntityResult('filter_' . $aggregation->key, new EntityCollection($options));
     }
 }

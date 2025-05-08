@@ -16,6 +16,9 @@
             <argument type="service" id="monolog.logger.makaira_frontend" />
         </service>         
 
+        
+        
+
         <service
       id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\Search\ProductSearchRoute"
       decorates="Shopware\Core\Content\Product\SalesChannel\Search\ProductSearchRoute"
@@ -123,10 +126,16 @@
          
             
         <service id="MakairaConnectFrontend\Service\AggregationProcessingService" public="true">
-
+            <argument type="service" id="MakairaConnectFrontend\Service\FilterDataTransformerService" />
         </service>
+
         <service id="MakairaConnectFrontend\Service\BannerProcessingService" public="true">
             <argument key="$config" type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />
         </service>
+
+        <service id="MakairaConnectFrontend\Service\FilterDataTransformerService" public="true">
+            <argument type="service" id="monolog.logger.makaira_frontend" />
+        </service>
+       
     </services>
 </container>

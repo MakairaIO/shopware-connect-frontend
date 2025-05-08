@@ -1,0 +1,65 @@
+{% sw_extends '@Storefront/storefront/component/listing/filter-panel.html.twig' %}
+
+{% import '@MakairaConnectFrontend/storefront/component/listing/filter/makaira-filter-variables.html.twig' as makaira_vars %}
+
+{% block component_filter_panel_items %}       
+    
+    {% set makaira = makaira_vars.get_makaira_variables(context) %}
+
+    {% if not makaira.useMakairaFilters or not makaira.hasMakairaAggregations %}
+        {{ parent() }}
+    {% else %}
+        {% set makairaAggregations = context.context.extensions.makairafrontend.aggregations|default([]) %}
+
+        {% if not makairaAggregations %}
+            {{ parent() }}
+        {% else %}
+            {% for key, aggregation in makairaAggregations %}                
+                {% if aggregation.type == 'list_multiselect' %}
+                    {% sw_include '@MakairaConnectFrontend/storefront/component/listing/filter/mafilter-multi-select.html.twig' with {
+                        elements: aggregation.values,
+                        sidebar: sidebar,
+                        name: aggregation.key,
+                        hidden: false,
+                        displayName: aggregation.title,
+                        propertyName: aggregation.title,
+                        ariaLabel: aggregation.title
+                    } %}
+                {% endif %}
+
+                {% if aggregation.type == 'list' %}
+                    {% sw_include '@MakairaConnectFrontend/storefront/component/listing/filter/mafilter-multi-select.html.twig' with {
+                        elements: aggregation.values,
+                        sidebar: sidebar,
+                        name: aggregation.key,
+                        hidden: false,
+                        displayName: aggregation.title,
+                        propertyName: aggregation.title
+                    } %}
+                {% endif %}
+
+                {% if aggregation.type == 'range_slider' %}
+                    {% sw_include '@Storefront/storefront/component/listing/filter/filter-range.html.twig' with {
+                        range: {
+                            min: aggregation.min|default(0),
+                            max: aggregation.max|default(1000),
+                            step: 1
+                        },
+                        elements: [],
+                        sidebar: sidebar,
+                        name: aggregation.key,
+                        hidden: false,
+                        displayName: aggregation.title,
+                        displayType: 'slider',
+                        minKey: 'min-price',
+                        maxKey: 'max-price',
+                        pluginSelector: 'filter-range-slider',
+                        unit: '€',
+                        propertyName: aggregation.title
+                    } %}
+                {% endif %}
+
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
