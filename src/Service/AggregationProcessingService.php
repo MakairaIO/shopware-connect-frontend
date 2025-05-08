@@ -74,9 +74,9 @@ class AggregationProcessingService
         $options = [];
         foreach ($transformedData[$aggregation->key]['elements'] as $key => $value) {
             $option = new PropertyGroupOptionEntity();
-            $option->setName($key);
-            $option->setId($key);
-            $option->setTranslated(['name' => $key]);
+            $option->setName((string)$value);
+            $option->setId((string)$key);
+            $option->setTranslated(['name' => (string)$value]);
             $options[] = $option;
         }
 
