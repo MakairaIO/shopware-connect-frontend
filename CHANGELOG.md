@@ -1,3 +1,13 @@
+## [1.2.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.1.6...1.2.0) (2025-05-08)
+
+### Features
+
+* filtering based on Makaira ([136fca1](https://github.com/MakairaIO/shopware-connect-frontend/commit/136fca150bb12e18eeee2094757b939cc589cd76))
+
+### Bug Fixes
+
+* add composer author ([9272eb6](https://github.com/MakairaIO/shopware-connect-frontend/commit/9272eb6bc78defab2afe5a2b552f410ffab00844))
+
 ## [1.1.6](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.1.5...1.1.6) (2025-04-28)
 
 ### Bug Fixes
