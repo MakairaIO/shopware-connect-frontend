@@ -1,3 +1,9 @@
+## [1.2.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.2.0...1.2.1) (2025-05-08)
+
+### Bug Fixes
+
+* cast properties ([7ccb8fc](https://github.com/MakairaIO/shopware-connect-frontend/commit/7ccb8fc68fb7abce0ccf3ad3c8121c1542d8a541))
+
 ## [1.2.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.1.6...1.2.0) (2025-05-08)
 
 ### Features
