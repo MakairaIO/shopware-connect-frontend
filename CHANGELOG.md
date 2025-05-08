@@ -1,3 +1,9 @@
+## [1.2.2](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.2.1...1.2.2) (2025-05-08)
+
+### Bug Fixes
+
+* add error handling for aggregations ([3f401ec](https://github.com/MakairaIO/shopware-connect-frontend/commit/3f401ec498eaa6fae6300f5b6ffbde5129b6d8c3))
+
 ## [1.2.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.2.0...1.2.1) (2025-05-08)
 
 ### Bug Fixes
