@@ -127,6 +127,7 @@
             
         <service id="MakairaConnectFrontend\Service\AggregationProcessingService" public="true">
             <argument type="service" id="MakairaConnectFrontend\Service\FilterDataTransformerService" />
+            <argument type="service" id="monolog.logger.makaira_frontend" />
         </service>
 
         <service id="MakairaConnectFrontend\Service\BannerProcessingService" public="true">

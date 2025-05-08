@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MakairaConnectFrontend\Service;
 
 //use MakairaConnectFrontend\Utils\ColorLogic;
+use Psr\Log\LoggerInterface;
 use Shopware\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResult;
@@ -16,7 +17,7 @@ class AggregationProcessingService
 {
     public function __construct(
         private readonly FilterDataTransformerService $filterDataTransformer,
-        #private readonly ColorLogic $colorLogic,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -36,12 +37,6 @@ class AggregationProcessingService
 
     private function createAggregationFilter($aggregation): ?AggregationResult
     {
-        // Speziele aggregation gefunden über den nahmen
-        /*      switch ($aggregation->key) {
-                  case 'color':
-                      return $this->colorLogic->MakairaColorFilter($aggregation);
-              }*/
-
         // Generic aggregation die für alle gleich sind.
         switch ($aggregation->type) {
             case 'range_slider_price':
@@ -71,13 +66,25 @@ class AggregationProcessingService
             return null;
         }
 
+        $this->logger->debug('Transformed filter data', ['data' => $transformedData]);
+
         $options = [];
         foreach ($transformedData[$aggregation->key]['elements'] as $key => $value) {
-            $option = new PropertyGroupOptionEntity();
-            $option->setName((string)$value);
-            $option->setId((string)$key);
-            $option->setTranslated(['name' => (string)$value]);
-            $options[] = $option;
+            try {
+                $option = new PropertyGroupOptionEntity();
+                $option->setName((string)$value);
+                $option->setId((string)$key);
+                $option->setTranslated(['name' => (string)$value]);
+                $option->setPosition($value['position'] ?? 0);
+                $option->setGroupId($aggregation->key);
+                $options[] = $option;
+            } catch (\Exception $e) {
+                $this->logger->error('Error creating PropertyGroupOptionEntity', [
+                    'error' => $e->getMessage(),
+                    'key'   => $key,
+                    'value' => $value,
+                ]);
+            }
         }
 
         return new EntityResult('filter_' . $aggregation->key, new EntityCollection($options));
