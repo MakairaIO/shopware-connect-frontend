@@ -1,3 +1,9 @@
+## [1.2.3](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.2.2...1.2.3) (2025-05-17)
+
+### Bug Fixes
+
+* Update filter panel on AJAX calls ([ce106f8](https://github.com/MakairaIO/shopware-connect-frontend/commit/ce106f82c365cd5ea6edbcc1e0afa73dd5dc896f))
+
 ## [1.2.2](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.2.1...1.2.2) (2025-05-08)
 
 ### Bug Fixes
