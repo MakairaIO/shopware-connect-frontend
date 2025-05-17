@@ -1,0 +1,17 @@
+{
+  "name": "makaira-shopware6-storefront",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Makaira GmbH",
+  "devDependencies": {
+    "webpack-cli": "^6.0.1"
+  },
+  "license": "GPL-3.0",
+  "scripts": {
+    "build": "webpack"
+  },
+  "dependencies": {
+    "deepmerge": "^4.3.1",
+    "query-string": "^9.1.2"
+  }
+}

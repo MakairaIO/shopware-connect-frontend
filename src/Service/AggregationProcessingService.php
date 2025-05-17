@@ -28,7 +28,9 @@ class AggregationProcessingService
         foreach ($makairaResponse->product->aggregations as $aggregation) {
             $makFilter = $this->createAggregationFilter($aggregation);
             if ($makFilter) {
-                $shopwareResult->getAggregations()->add($makFilter);
+                if (!$shopwareResult->getAggregations()->has($makFilter->getName())) {
+                    $shopwareResult->getAggregations()->add($makFilter);
+                }
             }
         }
 

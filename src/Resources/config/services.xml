@@ -136,7 +136,18 @@
 
         <service id="MakairaConnectFrontend\Service\FilterDataTransformerService" public="true">
             <argument type="service" id="monolog.logger.makaira_frontend" />
+        </service>      
+
+        <!-- Storefront Controller -->
+        <service id="MakairaConnectFrontend\Storefront\Controller\CustomStorefrontController" public="true">
+            <argument type="service" id="Shopware\Core\Content\Category\SalesChannel\CategoryRoute" />
+            <argument type="service" id="Shopware\Core\Content\Cms\SalesChannel\CmsRoute" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <call method="setTwig">
+                <argument type="service" id="twig" />
+            </call>
         </service>
-       
     </services>
 </container>
