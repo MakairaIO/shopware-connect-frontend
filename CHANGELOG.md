@@ -1,3 +1,9 @@
+## [1.2.4](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.2.3...1.2.4) (2025-05-17)
+
+### Bug Fixes
+
+* consider ACCESSIBILITY_TWEAKS in filter ([fc34849](https://github.com/MakairaIO/shopware-connect-frontend/commit/fc34849d5f25b29572d288022799078e80f3f907))
+
 ## [1.2.3](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.2.2...1.2.3) (2025-05-17)
 
 ### Bug Fixes
