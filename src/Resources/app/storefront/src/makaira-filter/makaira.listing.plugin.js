@@ -112,9 +112,11 @@ export default class MakairaListing extends ListingPlugin {
 
     this.activeFilterContainer.innerHTML = labelHtml;
 
-    const resetButtons = this.activeFilterContainer.querySelectorAll(
-      ".filter-active-remove"
-    );
+    let filterActiveSelector = window.Feature.isActive("ACCESSIBILITY_TWEAKS")
+      ? ".filter-active"
+      : ".filter-active-remove";
+    const resetButtons =
+      this.activeFilterContainer.querySelectorAll(filterActiveSelector);
 
     if (labelHtml.length) {
       this._registerLabelEvents(resetButtons);

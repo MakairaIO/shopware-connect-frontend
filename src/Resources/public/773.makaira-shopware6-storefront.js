@@ -500,8 +500,8 @@
           r
         );
       }
-      const k = i,
-        q = Object.freeze(
+      const T = i,
+        k = Object.freeze(
           new (class {
             constructor() {
               this._domParser = new DOMParser();
@@ -555,12 +555,12 @@
             }
           })()
         );
-      class T {
+      class q {
         static replaceFromMarkup(e, t, r) {
-          q.replaceFromMarkup(e, t, r);
+          k.replaceFromMarkup(e, t, r);
         }
         static replaceElement(e, t, r) {
-          return q.replaceElement(e, t, r);
+          return k.replaceElement(e, t, r);
         }
       }
       class O {
@@ -608,7 +608,7 @@
         init() {
           (this._registry = []),
             (this.httpClient = new n()),
-            (this._urlFilterParams = k.parse(window.location.search)),
+            (this._urlFilterParams = T.parse(window.location.search)),
             (this._filterPanel = o.A.querySelector(
               document,
               this.options.filterPanelSelector,
@@ -710,13 +710,13 @@
             Object.entries(t).forEach(([e, t]) => {
               i[e] = t;
             });
-          let s = k.stringify(i);
+          let s = T.stringify(i);
           this.sendDataRequest(s),
             delete i.slots,
             delete i["no-aggregations"],
             delete i["reduce-aggregations"],
             delete i["only-aggregations"],
-            (s = k.stringify(i)),
+            (s = T.stringify(i)),
             e && this._updateHistory(s),
             this.options.scrollTopListingWrapper && this._scrollTopOfListing();
         }
@@ -851,7 +851,7 @@
             (this._allFiltersInitializedDebounce = () => {});
           const r = this._getDisabledFiltersParamsFromParams(t);
           this.httpClient.get(
-            `${this.options.filterUrl}?${k.stringify(r)}`,
+            `${this.options.filterUrl}?${T.stringify(r)}`,
             (e) => {
               const t = JSON.parse(e);
               this._registry.forEach((e) => {
@@ -862,7 +862,7 @@
           );
         }
         renderResponse(e) {
-          T.replaceFromMarkup(e, this.options.cmsProductListingSelector, !1),
+          q.replaceFromMarkup(e, this.options.cmsProductListingSelector, !1),
             this._registry.forEach((e) => {
               "function" == typeof e.afterContentChange &&
                 e.afterContentChange();
@@ -946,11 +946,12 @@
             n.includes(e) || (n += this.getLabelTemplate(e));
           }),
             (this.activeFilterContainer.innerHTML = n);
-          const a = this.activeFilterContainer.querySelectorAll(
-            ".filter-active-remove"
-          );
+          let a = window.Feature.isActive("ACCESSIBILITY_TWEAKS")
+            ? ".filter-active"
+            : ".filter-active-remove";
+          const o = this.activeFilterContainer.querySelectorAll(a);
           n.length &&
-            (this._registerLabelEvents(a), this.createResetAllButton());
+            (this._registerLabelEvents(o), this.createResetAllButton());
         }
         registerFilter(e) {
           this._registry.some((t) => t.options.name === e.options.name) ||
