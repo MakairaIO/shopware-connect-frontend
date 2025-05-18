@@ -18,9 +18,10 @@ final readonly class ApiGateway implements ApiGatewayInterface
     ) {
     }
 
-    public function fetchMakairaProductsFromCategory(array $payload): ?\stdClass
+    public function fetchMakairaProductsFromCategory(array $payload, bool $trace = false): ?\stdClass
     {
-        $response = $this->apiClient->request('POST', '/search/public', null, $payload);
+
+        $response = $this->apiClient->request('POST', '/search/public', null, $payload, $trace);
 
         // Check the responsecode
         if (200 !== $response->getStatusCode()) {
@@ -31,9 +32,9 @@ final readonly class ApiGateway implements ApiGatewayInterface
         return json_decode((string) $response->getContent(), false);
     }
 
-    public function fetchSuggestionsFromMakaira(array $payload): ?\stdClass
+    public function fetchSuggestionsFromMakaira(array $payload, bool $trace = false): ?\stdClass
     {
-        $response = $this->apiClient->request('POST', '/search/public', null, $payload);
+        $response = $this->apiClient->request('POST', '/search/public', null, $payload, $trace);
 
         // Check the responsecode
         if (200 !== $response->getStatusCode()) {
@@ -44,9 +45,10 @@ final readonly class ApiGateway implements ApiGatewayInterface
         return json_decode((string) $response->getContent(), false);
     }
 
-    public function fetchProductsFromMakaira(array $payload): ?\stdClass
+    public function fetchProductsFromMakaira(array $payload, bool $trace = false): ?\stdClass
     {
-        $response = $this->apiClient->request('POST', '/search/public', null, $payload);
+
+        $response = $this->apiClient->request('POST', '/search/public', null, $payload, $trace);
 
         // Check the responsecode
         if (200 !== $response->getStatusCode()) {
@@ -57,9 +59,9 @@ final readonly class ApiGateway implements ApiGatewayInterface
         return json_decode((string) $response->getContent(), false);
     }
 
-    public function fetchRecommendationFromMakaira(array $payload): ?\stdClass
+    public function fetchRecommendationFromMakaira(array $payload, bool $trace = false): ?\stdClass
     {
-        $response = $this->apiClient->request('POST', '/recommendation/public', null, $payload);
+        $response = $this->apiClient->request('POST', '/recommendation/public', null, $payload, $trace);
 
         // Check the responsecode
         if (200 !== $response->getStatusCode()) {

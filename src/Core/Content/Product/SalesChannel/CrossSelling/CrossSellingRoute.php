@@ -44,6 +44,9 @@ class CrossSellingRoute extends ProductCrossSellingRoute
         SalesChannelContext $context,
         Criteria $criteria
     ): ProductCrossSellingRouteResponse {
+
+        $doTrace = $request->headers->has('X-Makaira-Trace') ? $request->headers->get('X-Makaira-Trace') === 'true' || $request->headers->get('X-Makaira-Trace') === '1' : false;
+
         $this->logger->debug('[Makaira] Recommendation on? ', [$this->pluginConfig->get('useForRecommendation', $context->getSalesChannel()->getId())]);
         // Check if the category setting is enabled
         if (!$this->pluginConfig->get('useForRecommendation', $context->getSalesChannel()->getId())) {
@@ -58,7 +61,7 @@ class CrossSellingRoute extends ProductCrossSellingRoute
         $criteria->setLimit($this->pluginConfig->get('recommendationProductLimit', $context->getSalesChannel()->getId()));
 
         try {
-            $makairaResponse = $this->makairaProductFetchingService->fetchRecommendationFromMakaira($productId, $context, $criteria);
+            $makairaResponse = $this->makairaProductFetchingService->fetchRecommendationFromMakaira($productId, $context, $criteria, $doTrace);
 
             if (null === $makairaResponse || !isset($makairaResponse->items)) {
                 throw new NoDataException('Keine Daten oder fehlerhaft vom Makaira Server.');
@@ -91,5 +94,4 @@ class CrossSellingRoute extends ProductCrossSellingRoute
 
         return new ProductCrossSellingRouteResponse($elements);
     }
-
 }

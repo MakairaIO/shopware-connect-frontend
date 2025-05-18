@@ -71,6 +71,8 @@ class ProductListingRoute extends AbstractProductListingRoute
         Criteria $criteria,
     ): ProductListingRouteResponse {
 
+        $doTrace = $request->headers->has('X-Makaira-Trace') ? $request->headers->get('X-Makaira-Trace') === 'true' || $request->headers->get('X-Makaira-Trace') === '1' : false;
+
         $this->logger->debug('[Makaira] Listing on? ', [$this->pluginConfig->get('useForProductLists', $context->getSalesChannel()->getId())]);
         // Check if the category setting is enabled
         if (!$this->pluginConfig->get('useForProductLists', $context->getSalesChannel()->getId())) {
@@ -107,7 +109,7 @@ class ProductListingRoute extends AbstractProductListingRoute
             $makairaSorting = $this->sortingMappingService->mapSortingCriteria($criteria);
             $this->logger->debug('[Makaira] Sorting ', [$makairaSorting]);
 
-            $makairaResponse = $this->makairaProductFetchingService->fetchMakairaProductsFromCategory($context, $categoryIds, $criteria, $makairaFilter, $makairaSorting);
+            $makairaResponse = $this->makairaProductFetchingService->fetchMakairaProductsFromCategory($context, $categoryIds, $criteria, $makairaFilter, $makairaSorting, $doTrace);
 
             if (null === $makairaResponse) {
                 throw new NoDataException('Keine Daten oder fehlerhaft vom Makaira Server.');

@@ -51,6 +51,7 @@ class ProductSearchRoute extends AbstractProductSearchRoute
 
     public function load(Request $request, SalesChannelContext $context, Criteria $criteria): ProductSearchRouteResponse
     {
+        $doTrace = $request->headers->get('X-Makaira-Trace', 'false') === 'true';
 
         $makairaFrontend = new MakairaConnectFrontendService(
             $this->pluginConfig->get('makairaInstance', $context->getSalesChannel()->getId()),
@@ -82,7 +83,7 @@ class ProductSearchRoute extends AbstractProductSearchRoute
         try {
             $makairaSorting = $this->sortingMappingService->mapSortingCriteria($criteria);
 
-            $makairaResponse = $this->makairaProductFetchingService->fetchProductsFromMakaira($context, $query, $criteria, $makairaSorting, $makairaFilter);
+            $makairaResponse = $this->makairaProductFetchingService->fetchProductsFromMakaira($context, $query, $criteria, $makairaSorting, $makairaFilter, $doTrace);
 
             if (null === $makairaResponse) {
                 throw new NoDataException('Keine Daten oder fehlerhaft vom Makaira Server.');
@@ -123,10 +124,6 @@ class ProductSearchRoute extends AbstractProductSearchRoute
         $context->getContext()->addExtension('total', new \Shopware\Core\Framework\Struct\ArrayStruct([
             'total' => $makairaResponse->product->total,
         ]));
-
-
-
-
 
         return new ProductSearchRouteResponse(
             $finalResult,

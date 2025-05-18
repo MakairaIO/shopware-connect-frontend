@@ -66,6 +66,8 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
             throw new MissingRequestParameterException('search');
         }
 
+        $doTrace = $request->headers->has('X-Makaira-Trace') ? $request->headers->get('X-Makaira-Trace') === 'true' || $request->headers->get('X-Makaira-Trace') === '1' : false;
+
         $this->logger->debug('[Makaira][Suggest] on? ', [$this->pluginConfig->get('useForSuggest', $context->getSalesChannel()->getId())]);
         // Check if the suggest setting is enabled
         if (!$this->pluginConfig->get('useForSuggest', $context->getSalesChannel()->getId())) {
@@ -91,7 +93,7 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
 
         try {
 
-            $makairaResponse = $this->makairaProductFetchingService->fetchSuggestionsFromMakaira($context, $query);
+            $makairaResponse = $this->makairaProductFetchingService->fetchSuggestionsFromMakaira($context, $query, $doTrace);
             // add product, page count to the log
 
             $this->logger->debug('[Makaira][Suggest] Counts: ', [
