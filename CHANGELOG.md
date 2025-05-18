@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.2.4...1.3.0) (2025-05-18)
+
+### Features
+
+* add tracing capability to Makaira API requests ([7b8420a](https://github.com/MakairaIO/shopware-connect-frontend/commit/7b8420af75eb02fa181033c550455a18101d5564))
+
 ## [1.2.4](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.2.3...1.2.4) (2025-05-17)
 
 ### Bug Fixes
