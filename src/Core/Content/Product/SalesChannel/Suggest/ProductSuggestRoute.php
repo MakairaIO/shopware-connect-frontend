@@ -20,7 +20,9 @@ use Shopware\Core\Content\Product\SalesChannel\Suggest\AbstractProductSuggestRou
 use Shopware\Core\Content\Product\SalesChannel\Suggest\ProductSuggestRouteResponse;
 use Shopware\Core\Content\Product\SearchKeyword\ProductSearchBuilderInterface;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Shopware\Core\Framework\Feature;
 use Shopware\Core\Framework\Routing\Exception\MissingRequestParameterException;
@@ -45,6 +47,7 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
         private readonly ShopwareProductFetchingService $shopwareProductFetchingService,
         private readonly LoggerInterface $logger,
         private readonly PluginConfig $pluginConfig,
+        private readonly EntityRepository $categoryRepository,
     ) {
         $this->decorated                     = $decorated;
         $this->eventDispatcher               = $eventDispatcher;
@@ -114,6 +117,34 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
         $shopwareResult   = $this->shopwareProductFetchingService->fetchProductsFromShopware($makairaResponse, $criteria, $context);
         $result           = ProductListingResult::createFrom($shopwareResult);
         $categories       = $makairaResponse->category->items ?? [];
+
+        // Extract category IDs
+        $categoryIds = array_map(function ($category) {
+            return $category->fields->id;
+        }, $categories);
+
+        // Fetch SEO URLs for categories
+        if (!empty($categoryIds)) {
+            $categoryCriteria = new Criteria();
+            $categoryCriteria->addFilter(new EqualsAnyFilter('id', $categoryIds));
+            $categoryCriteria->addAssociation('seoUrls');
+
+            $categoryEntities = $this->categoryRepository->search($categoryCriteria, $context->getContext());
+
+            // Add SEO URLs to category objects
+            foreach ($categories as $category) {
+                $categoryEntity = $categoryEntities->get($category->fields->id);
+                if ($categoryEntity && $categoryEntity->getSeoUrls()) {
+                    $seoUrl = $categoryEntity->getSeoUrls()->first();
+                    if ($seoUrl) {
+                        $category->fields->url = $seoUrl->getSeoPathInfo();
+                        $this->logger->error('category', ['result' =>  print_r($category, true)]);
+                        break;
+                    }
+                }
+            }
+        }
+
         $categoriesEntity = new ArrayEntity(array_splice($categories, 0, 10));
         $result->addExtension('makairaCategories', $categoriesEntity);
 

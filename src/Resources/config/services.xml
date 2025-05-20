@@ -76,6 +76,7 @@
             <argument type="service" id="MakairaConnectFrontend\Service\ShopwareProductFetchingService" />
             <argument type="service" id="monolog.logger.makaira_frontend" />
             <argument type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />
+            <argument type="service" id="category.repository" />
         </service>
 
         <service
