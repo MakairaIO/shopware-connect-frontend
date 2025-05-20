@@ -9,7 +9,7 @@ module.exports = (params = {}) => {
     mode: "production",
     entry: "./src/main.js",
     output: {
-      path: resolve(__dirname, "..", "..", "public"),
+      path: resolve(__dirname, "dist"),
       filename: "makaira-shopware6-storefront.js",
     },
     resolve: {
