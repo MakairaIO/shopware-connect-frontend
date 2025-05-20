@@ -138,8 +138,6 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
                     $seoUrl = $categoryEntity->getSeoUrls()->first();
                     if ($seoUrl) {
                         $category->fields->url = $seoUrl->getSeoPathInfo();
-                        $this->logger->error('category', ['result' =>  print_r($category, true)]);
-                        break;
                     }
                 }
             }
