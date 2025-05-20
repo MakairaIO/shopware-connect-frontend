@@ -42,7 +42,8 @@
 					<ul class="search-suggest-list">
 						{% for category in page.searchResult.extensions.makairaCategories.all %}
 							<li class=" js-result">
-								<a href="{{category.fields.url}}" title="{{ category.fields.category_title }}" class="search-suggest-product-link">
+							{% set url = seoUrl('frontend.navigation.page', { navigationId: category.fields.id }) %}
+								<a href="{{url}}" title="{{ category.fields.category_title }}" class="search-suggest-product-link">
 									<div class="row align-items-center {{ gridNoGuttersClass }}">
 										{% if category.fields.category_parent %}
 											<span class="search-suggest-category-parent">
