@@ -1,3 +1,9 @@
+## [1.3.2](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.1...1.3.2) (2025-05-20)
+
+### Bug Fixes
+
+* move JS distributed files ([724576f](https://github.com/MakairaIO/shopware-connect-frontend/commit/724576ff4245b0bc277198f400064f77aedf8744))
+
 ## [1.3.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.0...1.3.1) (2025-05-20)
 
 ### Bug Fixes

@@ -2,7 +2,7 @@
   "name": "makaira/shopware6-connect-frontend",
   "description": "Makaira Connect Frontend",
   "type": "shopware-platform-plugin",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "license": "GPL-3.0",
   "authors": [
     {
