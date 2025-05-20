@@ -1,3 +1,9 @@
+## [1.3.3](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.2...1.3.3) (2025-05-20)
+
+### Bug Fixes
+
+* add seourl for all categories ([7c6c7eb](https://github.com/MakairaIO/shopware-connect-frontend/commit/7c6c7eb9616c7c86957b961afb36efdda2742446))
+
 ## [1.3.2](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.1...1.3.2) (2025-05-20)
 
 ### Bug Fixes
