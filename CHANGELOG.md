@@ -1,3 +1,9 @@
+## [1.3.4](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.3...1.3.4) (2025-05-20)
+
+### Bug Fixes
+
+* update category URL generation in search suggest template ([121cc9a](https://github.com/MakairaIO/shopware-connect-frontend/commit/121cc9aee7dc9bb8c5bf9d04511803c6cbfbe398))
+
 ## [1.3.3](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.2...1.3.3) (2025-05-20)
 
 ### Bug Fixes
