@@ -1,3 +1,9 @@
+## [1.3.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.0...1.3.1) (2025-05-20)
+
+### Bug Fixes
+
+* add SEOurls for suggest categories ([e12eed6](https://github.com/MakairaIO/shopware-connect-frontend/commit/e12eed672242c8f424447a4de2416d4315404e55))
+
 ## [1.3.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.2.4...1.3.0) (2025-05-18)
 
 ### Features
