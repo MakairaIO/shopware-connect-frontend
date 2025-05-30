@@ -1,3 +1,9 @@
+## [1.3.5](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.4...1.3.5) (2025-05-30)
+
+### Bug Fixes
+
+* improve handling of filter option names in aggregation processing ([aa42443](https://github.com/MakairaIO/shopware-connect-frontend/commit/aa424439599cb66bb148ba76fb0c028f18111668))
+
 ## [1.3.4](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.3...1.3.4) (2025-05-20)
 
 ### Bug Fixes
