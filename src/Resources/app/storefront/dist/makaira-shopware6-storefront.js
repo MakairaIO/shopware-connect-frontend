@@ -572,11 +572,12 @@
   }
   document.addEventListener("DOMContentLoaded", () => {
     window.PluginManager &&
-      (window.PluginManager.register(
-        "ListingListener",
-        s,
-        "[data-listing-listener]"
-      ),
+      (window.PluginManager.getPlugin("ListingListener") ||
+        window.PluginManager.register(
+          "ListingListener",
+          s,
+          "[data-listing-listener]"
+        ),
       window.PluginManager.getPlugin("Listing") &&
         window.PluginManager.override(
           "Listing",
