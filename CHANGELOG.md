@@ -1,3 +1,9 @@
+## [1.3.6](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.5...1.3.6) (2025-06-03)
+
+### Bug Fixes
+
+* Register listener only when needed ([4df6987](https://github.com/MakairaIO/shopware-connect-frontend/commit/4df6987215a723941daa9c28f6328ae667926809))
+
 ## [1.3.5](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.4...1.3.5) (2025-05-30)
 
 ### Bug Fixes
