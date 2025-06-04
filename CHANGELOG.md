@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.6...1.4.0) (2025-06-04)
+
+### Features
+
+* remove js filtering ([0cc0e1e](https://github.com/MakairaIO/shopware-connect-frontend/commit/0cc0e1ef26e549bf2278070394f403f962e9c026))
+
 ## [1.3.6](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.5...1.3.6) (2025-06-03)
 
 ### Bug Fixes
