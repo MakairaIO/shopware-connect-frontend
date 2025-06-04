@@ -1,5 +1,0 @@
-{
-  "compilerOptions": {
-    "types": ["@shopware-ag/storefront-types"]
-  }
-}
