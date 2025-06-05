@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.4.0...1.5.0) (2025-06-05)
+
+### Features
+
+* enhance cache state detection and context extension handling ([6cf32bd](https://github.com/MakairaIO/shopware-connect-frontend/commit/6cf32bde9c6e0efa611b9a025c28191715266dc6))
+
 ## [1.4.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.3.6...1.4.0) (2025-06-04)
 
 ### Features
