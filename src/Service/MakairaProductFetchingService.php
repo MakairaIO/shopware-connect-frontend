@@ -123,7 +123,7 @@ class MakairaProductFetchingService
         // get the locale from the language
         $language = $this->loader->getLocaleCode($context->getContext());
         return [
-            'query.shop_id'   => intval($context->getSalesChannelId()),
+            'query.shop_id'   => 1, // Use legacy shop ID 1 for Makaira
             'query.use_stock' => true,
             'query.language'  => $language,
         ];
