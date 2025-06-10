@@ -1,6 +1,6 @@
 {
   "name": "ShopwareConnectFrontend",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "A Shopware plugin for connecting Makaira with Shopware. The module porvides a api client that uses Makaira for search, listings, recommendations in Shopware.",
   "main": "src/index.js",
   "scripts": {

@@ -1,3 +1,9 @@
+## [1.6.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.5.0...1.6.0) (2025-06-10)
+
+### Features
+
+* use legacy shop ID 1 for Makaira in product fetching service ([f2daff4](https://github.com/MakairaIO/shopware-connect-frontend/commit/f2daff45ba636a1cc9dd46ba483e4a2577c0663b))
+
 ## [1.5.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.4.0...1.5.0) (2025-06-05)
 
 ### Features
