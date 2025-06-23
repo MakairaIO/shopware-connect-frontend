@@ -1,3 +1,13 @@
+## [1.7.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.6.0...1.7.0) (2025-06-23)
+
+### Features
+
+* integrate copy-webpack-plugin for asset management ([29c281d](https://github.com/MakairaIO/shopware-connect-frontend/commit/29c281dcda2abf8a5977f43c22b8079ae0a403f7))
+
+### Reverts
+
+* Revert "feat: remove js filtering" ([8c19bb5](https://github.com/MakairaIO/shopware-connect-frontend/commit/8c19bb50235e96e902094eb8424fdd9afb142dbf))
+
 ## [1.6.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.5.0...1.6.0) (2025-06-10)
 
 ### Features
