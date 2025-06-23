@@ -3,11 +3,6 @@ import ListingPlugin from "src/plugin/listing/listing.plugin";
 export default class MakairaListing extends ListingPlugin {
   init() {
     super.init();
-    this.initMakairaFilter();
-  }
-
-  initMakairaFilter() {
-    console.log("MakairaListing initMakairaFilter");
   }
 
   _buildRequest(pushHistory = true, overrideParams = {}) {

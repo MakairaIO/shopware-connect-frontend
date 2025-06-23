@@ -1,5 +1,6 @@
 const { tr } = require("date-fns/locale");
 const { resolve, join } = require("path");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = (params = {}) => {
   // Provide a fallback for basePath if it's not defined
@@ -37,5 +38,18 @@ module.exports = (params = {}) => {
         ".twig",
       ],
     },
+    plugins: [
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: resolve(__dirname, "dist"),
+            to: resolve(__dirname, "..", "..", "public"),
+            globOptions: {
+              ignore: ["**/node_modules/**"],
+            },
+          },
+        ],
+      }),
+    ],
   };
 };

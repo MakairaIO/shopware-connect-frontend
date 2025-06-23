@@ -4,7 +4,8 @@
   "description": "",
   "author": "Makaira GmbH",
   "devDependencies": {
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^6.0.1",
+    "copy-webpack-plugin": "^11.0.0"
   },
   "license": "GPL-3.0",
   "scripts": {
