@@ -1,0 +1,7 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_body_script %}
+    {{ parent() }}  
+    <script type="text/javascript" src="{{ asset('bundles/makairaconnectfrontend/makaira-shopware6-storefront.js', 'asset') }}"></script>
+
+{% endblock %} 
