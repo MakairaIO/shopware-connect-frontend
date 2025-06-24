@@ -1,3 +1,9 @@
+## [1.7.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.7.0...1.7.1) (2025-06-24)
+
+### Bug Fixes
+
+* do not break the template extensibility ([094a014](https://github.com/MakairaIO/shopware-connect-frontend/commit/094a014bef2c42ee17ac3f40ab938b2dcc491ca8))
+
 ## [1.7.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.6.0...1.7.0) (2025-06-23)
 
 ### Features
