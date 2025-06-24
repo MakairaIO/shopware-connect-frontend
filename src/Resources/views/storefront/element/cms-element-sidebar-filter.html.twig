@@ -1,3 +1,5 @@
+{% sw_extends '@Storefront/storefront/element/cms-element-sidebar-filter.html.twig' %}
+
 {% block element_sidebar_filter %}
     {# Use values from cms data if context is a cmsPage, otherwise `listing` and `sidebar` must be set manually #}
     {% if cmsPage is defined %}
