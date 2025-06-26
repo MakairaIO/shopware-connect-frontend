@@ -107,6 +107,12 @@
             <argument type="service" id="MakairaConnectFrontend\Loader\SalesChannelLoader" />
         </service>
 
+        <!-- Subscribers -->
+        <service id="MakairaConnectFrontend\Subscriber\FilterListenerConfigSubscriber">
+            <argument type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
 
         <service id="MakairaConnectFrontend\Service\FilterExtractionService" public="true" />
         <service id="MakairaConnectFrontend\Service\SortingMappingService" public="true" />

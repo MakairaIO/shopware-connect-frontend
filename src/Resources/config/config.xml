@@ -105,5 +105,44 @@
             <helpText lang="de-DE">Legen Sie die maximale Anzahl von Produkten fest, die von der Makaira-Recommednation-API zurückgegeben werden sollen.</helpText>
         </input-field>
         </card>
+
+    <card>
+        <title>Filter Listener Configuration</title>
+        <title lang="de-DE">Filter Listener Konfiguration</title>
+
+        <input-field type="bool">
+            <name>enableFilterListener</name>
+            <label>Enable Makaira Filter</label>
+            <label lang="de-DE">Makaira Filter aktivieren</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Enable automatic filter synchronization for better user experience.</helpText>
+            <helpText lang="de-DE">Aktivieren Sie die automatische Filtersynchronisation für eine bessere Benutzererfahrung.</helpText>
+        </input-field>
+
+        <input-field type="textarea">
+            <name>filterContainerSelectors</name>
+            <label>Container Selectors where Makaira Filter should NOT be applied</label>
+            <label lang="de-DE">Container Selektoren, wo Makaira Filter NICHT angewendet werden soll</label>
+            <defaultValue>.filter-panel-items-container
+[data-off-canvas-filter-content="true"]
+.filter-panel-wrapper
+.cms-element-sidebar-filter .filter-panel-items-container
+.cms-element-sidebar-filter [data-off-canvas-filter-content="true"]</defaultValue>
+            <helpText>CSS selectors for filter panel containers (one per line). These selectors define which elements should NOT be treated as filter containers.</helpText>
+            <helpText
+        lang="de-DE"
+      >CSS-Selektoren für Filter-Panel-Container (einer pro Zeile). Diese Selektoren definieren, welche Elemente NICHT als Filter-Container behandelt werden sollen.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>enableFallbackContainer</name>
+            <label>Enable Fallback Container Detection</label>
+            <label lang="de-DE">Fallback Container Erkennung aktivieren</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Enable automatic fallback container detection when configured selectors don't match.</helpText>
+            <helpText lang="de-DE">Aktivieren Sie die automatische Fallback-Container-Erkennung, wenn konfigurierte Selektoren nicht passen.</helpText>
+        </input-field>
+        
+    </card>
     
 </config>

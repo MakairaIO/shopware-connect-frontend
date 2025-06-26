@@ -6,7 +6,8 @@
          data-listing-pagination-options="{{ paginationConfig|json_encode }}"
          data-listing="true"
          data-listing-options="{{ listingPagination|json_encode }}"
-         data-listing-listener="false">
+         data-listing-listener="{{ filterListenerConfig.enabled ? 'true' : 'false' }}"
+         {% if filterListenerConfig.enabled %}data-listing-listener-options="{{ filterListenerConfig|json_encode }}"{% endif %}>
         {% block element_product_listing_wrapper_content %}
             {{ parent() }}
         {% endblock %}

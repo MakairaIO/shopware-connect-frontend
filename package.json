@@ -8,8 +8,8 @@
     "release": "semantic-release",
     "prepare": "husky",
     "build": "npm run build:js",
-    "build:js": "webpack --config src/Resources/app/storefront/build/webpack.config.js",
-    "watch": "webpack --config src/Resources/app/storefront/build/webpack.config.js --watch"
+    "build:js": "webpack --config src/Resources/app/storefront/webpack.config.js",
+    "watch": "webpack --config src/Resources/app/storefront/webpack.config.js --watch"
   },
   "repository": {
     "type": "git",

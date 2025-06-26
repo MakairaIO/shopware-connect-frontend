@@ -8,9 +8,10 @@ module.exports = (params = {}) => {
 
   return {
     mode: "production",
-    entry: "./src/main.js",
+    devtool: "eval-source-map",
+    entry: resolve(__dirname, "src/main.js"),
     output: {
-      path: resolve(__dirname, "dist"),
+      path: resolve(__dirname, "dist/"),
       filename: "makaira-shopware6-storefront.js",
     },
     resolve: {

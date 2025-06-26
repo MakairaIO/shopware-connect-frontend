@@ -6,10 +6,6 @@ export default class MakairaListing extends ListingPlugin {
   }
 
   _buildRequest(pushHistory = true, overrideParams = {}) {
-    super._buildRequest(pushHistory, overrideParams);
-  }
-
-  _buildRequest(pushHistory = true, overrideParams = {}) {
     const filters = this._fetchValuesOfRegisteredFilters();
     const mapped = this._mapFilters(filters);
 
