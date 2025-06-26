@@ -15,10 +15,8 @@ class PluginConfig
     public const API_TIMEOUT      = 'apiTimeout';
 
     // Filter Listener Configuration
-    public const ENABLE_FILTER_LISTENER     = 'enableFilterListener';
-    public const FILTER_CONTAINER_SELECTORS = 'filterContainerSelectors';
-    public const ENABLE_FALLBACK_CONTAINER  = 'enableFallbackContainer';
-    public const UPDATE_STRATEGY            = 'updateStrategy';
+    public const ENABLE_FILTER_LISTENER           = 'enableFilterListener';
+    public const HIDE_ITEMS_WHEN_OFFCANVAS_HIDDEN = 'hideItemsWhenOffcanvasHidden';
 
     public const KEY_PREFIX = 'MakairaConnectFrontend.config.';
 
@@ -56,28 +54,9 @@ class PluginConfig
     {
         $enabled = $this->get(self::ENABLE_FILTER_LISTENER, $salesChannelId);
 
-        // If filter listener is disabled, return minimal config
-        if (!$enabled) {
-            return [
-                'enabled'                 => false,
-                'enableFallbackContainer' => false,
-                'excludeSelectors'        => [],
-            ];
-        }
-
-        // Parse container selectors from textarea (one per line)
-        $selectorString     = $this->get(self::FILTER_CONTAINER_SELECTORS, $salesChannelId) ?? '';
-        $containerSelectors = array_filter(
-            array_map('trim', explode("\n", $selectorString)),
-            function ($selector) {
-                return !empty($selector);
-            }
-        );
-
         return [
-            'enabled'                 => true,
-            'excludeSelectors'        => $containerSelectors,
-            'enableFallbackContainer' => (bool) $this->get(self::ENABLE_FALLBACK_CONTAINER, $salesChannelId),
+            'enabled'                      => (bool) $enabled,
+            'hideItemsWhenOffcanvasHidden' => (bool) $this->get(self::HIDE_ITEMS_WHEN_OFFCANVAS_HIDDEN, $salesChannelId),
         ];
     }
 }

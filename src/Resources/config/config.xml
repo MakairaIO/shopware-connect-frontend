@@ -119,28 +119,16 @@
             <helpText lang="de-DE">Aktivieren Sie die automatische Filtersynchronisation für eine bessere Benutzererfahrung.</helpText>
         </input-field>
 
-        <input-field type="textarea">
-            <name>filterContainerSelectors</name>
-            <label>Container Selectors where Makaira Filter should NOT be applied</label>
-            <label lang="de-DE">Container Selektoren, wo Makaira Filter NICHT angewendet werden soll</label>
-            <defaultValue>.filter-panel-items-container
-[data-off-canvas-filter-content="true"]
-.filter-panel-wrapper
-.cms-element-sidebar-filter .filter-panel-items-container
-.cms-element-sidebar-filter [data-off-canvas-filter-content="true"]</defaultValue>
-            <helpText>CSS selectors for filter panel containers (one per line). These selectors define which elements should NOT be treated as filter containers.</helpText>
+        <input-field type="bool">
+            <name>hideItemsWhenOffcanvasHidden</name>
+            <label>Hide Filter Items When Offcanvas is Hidden</label>
+            <label lang="de-DE">Filter-Elemente ausblenden, wenn Offcanvas ausgeblendet ist</label>
+            <defaultValue>false</defaultValue>
+            <helpText
+      >When enabled, all filter items will be hidden when the offcanvas filter is not visible. Filter items will only be shown/hidden based on server response when offcanvas is open.</helpText>
             <helpText
         lang="de-DE"
-      >CSS-Selektoren für Filter-Panel-Container (einer pro Zeile). Diese Selektoren definieren, welche Elemente NICHT als Filter-Container behandelt werden sollen.</helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>enableFallbackContainer</name>
-            <label>Enable Fallback Container Detection</label>
-            <label lang="de-DE">Fallback Container Erkennung aktivieren</label>
-            <defaultValue>true</defaultValue>
-            <helpText>Enable automatic fallback container detection when configured selectors don't match.</helpText>
-            <helpText lang="de-DE">Aktivieren Sie die automatische Fallback-Container-Erkennung, wenn konfigurierte Selektoren nicht passen.</helpText>
+      >Wenn aktiviert, werden alle Filter-Elemente ausgeblendet, wenn der Offcanvas-Filter nicht sichtbar ist. Filter-Elemente werden nur basierend auf der Server-Antwort ein-/ausgeblendet, wenn das Offcanvas geöffnet ist.</helpText>
         </input-field>
         
     </card>

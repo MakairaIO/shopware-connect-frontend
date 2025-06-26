@@ -9,31 +9,19 @@ import Plugin from "src/plugin-system/plugin.class";
  * Updates all matching containers except those specified in excludeSelectors.
  *
  * Configuration options:
- * - containerSelectors: Array of CSS selectors to find filter panel containers
- * - excludeSelectors: Array of CSS selectors to exclude from updates
- * - enableFallbackContainer: Whether to use fallback container detection
- * - updateStrategy: Update strategy ('selective' is recommended)
+ * - hideItemsWhenOffcanvasHidden: Hide all filter items when offcanvas is not visible
+ * - enabled: Whether the plugin is enabled
  *
  * Usage:
  * new ListingListener(element, {
- *   containerSelectors: ['.my-custom-filter-container', '.another-container'],
- *   excludeSelectors: ['.no-update', '.static-filter'],
- *   enableFallbackContainer: false
+ *   hideItemsWhenOffcanvasHidden: true
  * });
  */
 export default class ListingListener extends Plugin {
   static sidebarFilterSelector = ".cms-element-sidebar-filter";
 
   static options = {
-    excludeSelectors: [],
-    containerSelectors: [
-      ".filter-panel-items-container",
-      '[data-off-canvas-filter-content="true"]',
-      ".filter-panel-wrapper",
-      ".cms-element-sidebar-filter .filter-panel-items-container",
-      '.cms-element-sidebar-filter [data-off-canvas-filter-content="true"]',
-    ],
-    enableFallbackContainer: true,
+    hideItemsWhenOffcanvasHidden: false,
     enabled: false,
   };
 
@@ -59,16 +47,9 @@ export default class ListingListener extends Plugin {
           this.options.enabled = pluginConfig.enabled;
         }
 
-        if (
-          pluginConfig.excludeSelectors &&
-          Array.isArray(pluginConfig.excludeSelectors)
-        ) {
-          this.options.excludeSelectors = pluginConfig.excludeSelectors;
-        }
-
-        if (pluginConfig.enableFallbackContainer !== undefined) {
-          this.options.enableFallbackContainer =
-            pluginConfig.enableFallbackContainer;
+        if (pluginConfig.hideItemsWhenOffcanvasHidden !== undefined) {
+          this.options.hideItemsWhenOffcanvasHidden =
+            pluginConfig.hideItemsWhenOffcanvasHidden;
         }
       } catch (e) {
         console.warn(
@@ -83,6 +64,11 @@ export default class ListingListener extends Plugin {
     // Only register events if the filter listener is enabled
     if (this._isEnabled()) {
       this._registerEvents();
+
+      // Set up offcanvas visibility monitoring if needed
+      if (this.options.hideItemsWhenOffcanvasHidden) {
+        this._setupOffcanvasMonitoring();
+      }
     }
   }
 
@@ -106,46 +92,68 @@ export default class ListingListener extends Plugin {
   }
 
   /**
-   * Find all filter panel containers, excluding those that match excludeSelectors
+   * Find all filter panel containers
    */
   _findFilterPanelContainers(doc = document) {
-    const selectors =
-      this.options.containerSelectors ||
-      this.constructor.options.containerSelectors;
-    const excludeSelectors = this.options.excludeSelectors || [];
-    const containers = [];
+    return Array.from(doc.querySelectorAll(".filter-panel-items-container"));
+  }
 
-    // Find all containers that match our target selectors
-    for (const selector of selectors) {
-      const foundContainers = doc.querySelectorAll(selector);
-      foundContainers.forEach((container) => {
-        if (!containers.includes(container)) {
-          containers.push(container);
-        }
-      });
-    }
+  /**
+   * Set up monitoring for offcanvas visibility changes
+   */
+  _setupOffcanvasMonitoring() {
+    // Monitor for offcanvas show/hide events
+    document.addEventListener("shown.bs.offcanvas", () => {
+      this._onOffcanvasVisibilityChange(true);
+    });
 
-    // Use fallback container if enabled and no containers found
-    if (
-      containers.length === 0 &&
-      this.options.enableFallbackContainer !== false
-    ) {
-      const fallbackContainer = doc.querySelector(".filter-panel-item")
-        ? doc.querySelector(".filter-panel-item").closest("div, section, aside")
-        : null;
+    document.addEventListener("hidden.bs.offcanvas", () => {
+      this._onOffcanvasVisibilityChange(false);
+    });
 
-      if (fallbackContainer) {
-        containers.push(fallbackContainer);
+    // Also monitor for modal backdrop clicks and ESC key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this._isOffcanvasVisible()) {
+        setTimeout(() => this._onOffcanvasVisibilityChange(false), 100);
       }
-    }
+    });
+  }
 
-    // Filter out any containers that match excludeSelectors
-    return containers.filter((container) => {
-      return !excludeSelectors.some((excludeSelector) => {
-        return (
-          container.matches(excludeSelector) ||
-          container.querySelector(excludeSelector)
-        );
+  /**
+   * Handle offcanvas visibility changes
+   */
+  _onOffcanvasVisibilityChange(isVisible) {
+    if (!isVisible && this.options.hideItemsWhenOffcanvasHidden) {
+      this._hideAllFilterItems();
+    }
+  }
+
+  /**
+   * Check if any offcanvas is currently visible
+   */
+  _isOffcanvasVisible() {
+    const offcanvasElements = document.querySelectorAll(".offcanvas");
+    return Array.from(offcanvasElements).some((offcanvas) => {
+      return (
+        offcanvas.classList.contains("show") ||
+        getComputedStyle(offcanvas).display !== "none"
+      );
+    });
+  }
+
+  /**
+   * Hide all filter panel items containers
+   */
+  _hideAllFilterItems() {
+    const containers = document.querySelectorAll(
+      ".filter-panel-items-container"
+    );
+    containers.forEach((container) => {
+      const items = container.querySelectorAll(
+        ".filter-panel-item, .filter-multi-select-list-item"
+      );
+      items.forEach((item) => {
+        this._hideFilterItem(item);
       });
     });
   }
@@ -209,6 +217,15 @@ export default class ListingListener extends Plugin {
     this._isUpdating = true;
 
     try {
+      // Check if we should hide items based on offcanvas visibility
+      if (
+        this.options.hideItemsWhenOffcanvasHidden &&
+        !this._isOffcanvasVisible()
+      ) {
+        this._hideAllFilterItems();
+        return;
+      }
+
       const doc = new DOMParser().parseFromString(data, "text/html");
       const oldFilterPanels = this._findFilterPanelContainers();
       const newFilterPanels = this._findFilterPanelContainers(doc);
