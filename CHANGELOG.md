@@ -1,3 +1,9 @@
+## [1.8.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.8.0...1.8.1) (2025-06-26)
+
+### Bug Fixes
+
+* switch to offcanvas settings ([0b43f79](https://github.com/MakairaIO/shopware-connect-frontend/commit/0b43f791a891229e9205d8fd0c8347e1d2d1d144))
+
 ## [1.8.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.7.1...1.8.0) (2025-06-26)
 
 ### Features
