@@ -1,3 +1,9 @@
+## [1.8.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.7.1...1.8.0) (2025-06-26)
+
+### Features
+
+* introduce settings for Makaira filtering ([3f63969](https://github.com/MakairaIO/shopware-connect-frontend/commit/3f639695ed7d9f28361affa4ec6c4a78c2793f5c))
+
 ## [1.7.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.7.0...1.7.1) (2025-06-24)
 
 ### Bug Fixes
