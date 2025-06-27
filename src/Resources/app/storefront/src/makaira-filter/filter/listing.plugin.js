@@ -99,6 +99,129 @@ export default class ListingListener extends Plugin {
   }
 
   /**
+   * Extract filters from new panel and merge with existing filters in localStorage
+   */
+  _extractAndMergeFilters(doc) {
+    try {
+      // Extract filters from the new document
+      const newFilters = this._getAvailableFiltersFromDocument(doc);
+
+      if (newFilters.length === 0) {
+        return; // No new filters to merge
+      }
+
+      // Store current response filters to "macurrfi"
+      this._storeCurrentFiltersToLocalStorage(newFilters);
+
+      // Get existing filters from localStorage
+      const existingFilters = this._getStoredFilters();
+
+      // Merge filters (create union with no duplicates)
+      const mergedFilters = [...new Set([...existingFilters, ...newFilters])];
+
+      // Store merged filters back to localStorage
+      this._storeFiltersToLocalStorage(mergedFilters);
+
+      console.log("ListingListener: Processed filters from new panel:", {
+        existing: existingFilters,
+        current: newFilters,
+        merged: mergedFilters,
+      });
+    } catch (e) {
+      console.error("ListingListener: Failed to extract and merge filters:", e);
+    }
+  }
+
+  /**
+   * Get available filters from a document
+   */
+  _getAvailableFiltersFromDocument(doc) {
+    const filterItems = doc.querySelectorAll(
+      ".filter-panel-item[data-filter-multi-select-options]"
+    );
+    const availableFilters = [];
+
+    filterItems.forEach((filterItem) => {
+      try {
+        const optionsData = filterItem.getAttribute(
+          "data-filter-multi-select-options"
+        );
+        if (optionsData) {
+          const options = JSON.parse(optionsData);
+          if (options.name) {
+            availableFilters.push(options.name);
+          }
+        }
+      } catch (e) {
+        // Ignore parsing errors and continue with next item
+        console.warn(
+          "ListingListener: Failed to parse filter options for item:",
+          filterItem,
+          e
+        );
+      }
+    });
+
+    return availableFilters;
+  }
+
+  /**
+   * Get stored filters from localStorage
+   */
+  _getStoredFilters() {
+    try {
+      const data = localStorage.getItem("macatfiall");
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      console.error(
+        "ListingListener: Failed to retrieve filters from localStorage:",
+        e
+      );
+      return [];
+    }
+  }
+
+  /**
+   * Store filters array to localStorage
+   */
+  _storeFiltersToLocalStorage(filtersArray) {
+    try {
+      const storageValue = JSON.stringify(filtersArray);
+      localStorage.setItem("macatfiall", storageValue);
+
+      console.log(
+        'ListingListener: Updated filters in localStorage with key "macatfiall":',
+        filtersArray
+      );
+    } catch (e) {
+      console.error(
+        "ListingListener: Failed to store filters to localStorage:",
+        e
+      );
+    }
+  }
+
+  /**
+   * Store current response filters to localStorage
+   */
+  _storeCurrentFiltersToLocalStorage(filtersArray) {
+    try {
+      const storageValue = JSON.stringify(filtersArray);
+      localStorage.setItem("macurrfi", storageValue);
+
+      console.log(
+        'ListingListener: Updated current filters in localStorage with key "macurrfi":',
+        filtersArray
+      );
+    } catch (e) {
+      console.error(
+        "ListingListener: Failed to store current filters to localStorage:",
+        e
+      );
+    }
+  }
+
+  /**
    * Set up monitoring for offcanvas visibility changes
    */
   _setupOffcanvasMonitoring() {
@@ -125,6 +248,8 @@ export default class ListingListener extends Plugin {
   _onOffcanvasVisibilityChange(isVisible) {
     if (!isVisible && this.options.hideItemsWhenOffcanvasHidden) {
       this._hideAllFilterItems();
+    } else {
+      this._showAllActiveFilters();
     }
   }
 
@@ -145,17 +270,174 @@ export default class ListingListener extends Plugin {
    * Hide all filter panel items containers
    */
   _hideAllFilterItems() {
+    // Get the available filters from localStorage
+    const availableFilters = this._getAvailableFiltersFromLocalStorage();
+
+    if (!availableFilters || availableFilters.length === 0) {
+      return;
+    }
+
     const containers = document.querySelectorAll(
       ".filter-panel-items-container"
     );
+
     containers.forEach((container) => {
       const items = container.querySelectorAll(
         ".filter-panel-item, .filter-multi-select-list-item"
       );
+
       items.forEach((item) => {
-        this._hideFilterItem(item);
+        // Check if this item's filter name is in the available filters list
+        const filterName = this._getFilterNameFromItem(item);
+        if (filterName && availableFilters.includes(filterName)) {
+          this._hideFilterItem(item);
+        }
       });
     });
+  }
+
+  /**
+   * Show only active filters based on localStorage macurrfi
+   */
+  _showAllActiveFilters() {
+    // Get the current filters from localStorage
+    const currentFilters = this._getCurrentFiltersFromLocalStorage();
+
+    if (!currentFilters || currentFilters.length === 0) {
+      // If no current filters are set, show all available filters
+      this._showAllAvailableFilters();
+      return;
+    }
+
+    const containers = document.querySelectorAll(
+      ".filter-panel-items-container"
+    );
+
+    containers.forEach((container) => {
+      const items = container.querySelectorAll(
+        ".filter-panel-item, .filter-multi-select-list-item"
+      );
+
+      items.forEach((item) => {
+        const filterName = this._getFilterNameFromItem(item);
+        if (filterName) {
+          if (currentFilters.includes(filterName)) {
+            // Show items that are in the current filters list
+            this._showFilterItem(item);
+          } else {
+            // Hide items that are not in the current filters list
+            this._hideFilterItem(item);
+          }
+        }
+      });
+    });
+
+    console.log(
+      "ListingListener: Showed active filters based on macurrfi:",
+      currentFilters
+    );
+  }
+
+  /**
+   * Show all available filters (fallback when no current filters are set)
+   */
+  _showAllAvailableFilters() {
+    const availableFilters = this._getAvailableFiltersFromLocalStorage();
+
+    if (!availableFilters || availableFilters.length === 0) {
+      return;
+    }
+
+    const containers = document.querySelectorAll(
+      ".filter-panel-items-container"
+    );
+
+    containers.forEach((container) => {
+      const items = container.querySelectorAll(
+        ".filter-panel-item, .filter-multi-select-list-item"
+      );
+
+      items.forEach((item) => {
+        const filterName = this._getFilterNameFromItem(item);
+        if (filterName && availableFilters.includes(filterName)) {
+          this._showFilterItem(item);
+        }
+      });
+    });
+
+    console.log(
+      "ListingListener: Showed all available filters (fallback):",
+      availableFilters
+    );
+  }
+
+  /**
+   * Get available filters from localStorage using macatfiall key
+   */
+  _getAvailableFiltersFromLocalStorage() {
+    try {
+      const data = localStorage.getItem("macatfiall");
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      console.error(
+        "ListingListener: Failed to retrieve filters from localStorage:",
+        e
+      );
+      return [];
+    }
+  }
+
+  /**
+   * Get current filters from localStorage using macurrfi key
+   */
+  _getCurrentFiltersFromLocalStorage() {
+    try {
+      const data = localStorage.getItem("macurrfi");
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      console.error(
+        "ListingListener: Failed to retrieve current filters from localStorage:",
+        e
+      );
+      return [];
+    }
+  }
+
+  /**
+   * Extract filter name from a filter item element
+   */
+  _getFilterNameFromItem(item) {
+    try {
+      // Try to get the filter name from data attribute
+      const optionsData = item.getAttribute("data-filter-multi-select-options");
+      if (optionsData) {
+        const options = JSON.parse(optionsData);
+        return options.name;
+      }
+
+      // Fallback: try to get from parent container
+      const parentContainer = item.closest(
+        "[data-filter-multi-select-options]"
+      );
+      if (parentContainer) {
+        const parentOptionsData = parentContainer.getAttribute(
+          "data-filter-multi-select-options"
+        );
+        if (parentOptionsData) {
+          const parentOptions = JSON.parse(parentOptionsData);
+          return parentOptions.name;
+        }
+      }
+
+      return null;
+    } catch (e) {
+      console.warn(
+        "ListingListener: Failed to extract filter name from item:",
+        item,
+        e
+      );
+      return null;
+    }
   }
 
   /**
@@ -229,6 +511,9 @@ export default class ListingListener extends Plugin {
       const doc = new DOMParser().parseFromString(data, "text/html");
       const oldFilterPanels = this._findFilterPanelContainers();
       const newFilterPanels = this._findFilterPanelContainers(doc);
+
+      // Extract and merge filters from new panels
+      this._extractAndMergeFilters(doc);
 
       // Create a map of new panels by their selector or position for matching
       const newPanelsMap = new Map();

@@ -1,4 +1,5 @@
 import ListingListener from "./makaira-filter/filter/listing.plugin";
+import CategoryLocalStorage from "./makaira-filter/category-local-storage.plugin";
 
 document.addEventListener("DOMContentLoaded", () => {
   if (window.PluginManager) {
@@ -7,6 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
       "ListingListener",
       ListingListener,
       "[data-listing-listener]"
+    );
+
+    // Register CategoryLocalStorage plugin
+    window.PluginManager.register(
+      "CategoryLocalStorage",
+      CategoryLocalStorage,
+      "[data-category-local-storage]"
     );
 
     if (window.PluginManager.getPlugin("Listing")) {

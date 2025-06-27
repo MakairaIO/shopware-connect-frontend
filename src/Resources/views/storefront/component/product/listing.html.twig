@@ -7,7 +7,9 @@
          data-listing="true"
          data-listing-options="{{ listingPagination|json_encode }}"
          data-listing-listener="{{ filterListenerConfig.enabled ? 'true' : 'false' }}"
-         {% if filterListenerConfig.enabled %}data-listing-listener-options="{{ filterListenerConfig|json_encode }}"{% endif %}>
+         {% if filterListenerConfig.enabled %}data-listing-listener-options="{{ filterListenerConfig|json_encode }}"{% endif %}
+         data-category-local-storage="true"
+         data-category-local-storage-options='{"enabled": true, "storageKey": "macatfiall"}'>
         {% block element_product_listing_wrapper_content %}
             {{ parent() }}
         {% endblock %}
