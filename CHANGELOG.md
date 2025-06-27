@@ -1,3 +1,9 @@
+## [1.9.2](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.1...1.9.2) (2025-06-27)
+
+### Bug Fixes
+
+* bind custom onCloseOffcanvas event to hide offcanvas ([6aba186](https://github.com/MakairaIO/shopware-connect-frontend/commit/6aba18643dfa34975f7e624a1a984d083f2c2504))
+
 ## [1.9.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.0...1.9.1) (2025-06-27)
 
 ### Bug Fixes
