@@ -1,3 +1,9 @@
+## [1.9.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.8.1...1.9.0) (2025-06-27)
+
+### Features
+
+* enhance filter management with localStorage integration ([bbcca2d](https://github.com/MakairaIO/shopware-connect-frontend/commit/bbcca2de34f517c3e4f4918b09bd3331638dff57))
+
 ## [1.8.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.8.0...1.8.1) (2025-06-26)
 
 ### Bug Fixes
