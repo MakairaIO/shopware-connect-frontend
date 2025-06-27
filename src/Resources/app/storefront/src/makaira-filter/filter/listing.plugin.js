@@ -282,9 +282,7 @@ export default class ListingListener extends Plugin {
     );
 
     containers.forEach((container) => {
-      const items = container.querySelectorAll(
-        ".filter-panel-item, .filter-multi-select-list-item"
-      );
+      const items = container.querySelectorAll(".filter-panel-item");
 
       items.forEach((item) => {
         // Check if this item's filter name is in the available filters list
