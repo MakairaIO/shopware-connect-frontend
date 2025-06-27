@@ -1,3 +1,9 @@
+## [1.9.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.0...1.9.1) (2025-06-27)
+
+### Bug Fixes
+
+* simplify filter item selection in ListingListener ([ef218a2](https://github.com/MakairaIO/shopware-connect-frontend/commit/ef218a2075cc4b06d097522bed6a1bee7431989d))
+
 ## [1.9.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.8.1...1.9.0) (2025-06-27)
 
 ### Features
