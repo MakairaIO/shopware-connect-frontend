@@ -1,3 +1,9 @@
+## [1.9.4](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.3...1.9.4) (2025-06-27)
+
+### Bug Fixes
+
+* update dist files ([d6da2bc](https://github.com/MakairaIO/shopware-connect-frontend/commit/d6da2bc6bce39ea62968f2e3ba34b55cc62d1ced))
+
 ## [1.9.3](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.2...1.9.3) (2025-06-27)
 
 ### Bug Fixes
