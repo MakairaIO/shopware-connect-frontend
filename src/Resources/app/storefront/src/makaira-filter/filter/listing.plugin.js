@@ -234,6 +234,13 @@ export default class ListingListener extends Plugin {
       this._onOffcanvasVisibilityChange(false);
     });
 
+    // Bind to custom onCloseOffcanvas event if $emitter is available
+    if (document.$emitter) {
+      document.$emitter.subscribe("onCloseOffcanvas", () => {
+        this._onOffcanvasVisibilityChange(false);
+      });
+    }
+
     // Also monitor for modal backdrop clicks and ESC key
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && this._isOffcanvasVisible()) {
