@@ -23,7 +23,7 @@ export default class MakairaListing extends ListingPlugin {
       mapped[paramKey] = paramValue;
     });
 
-    this._registry = [];
+    //this._registry = [];
 
     let query = new URLSearchParams(mapped).toString();
     this.sendDataRequest(query);
