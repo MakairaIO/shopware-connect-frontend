@@ -1,3 +1,9 @@
+## [1.9.6](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.5...1.9.6) (2025-06-30)
+
+### Bug Fixes
+
+* remove unused registry initialization in MakairaListing plugin ([b66082f](https://github.com/MakairaIO/shopware-connect-frontend/commit/b66082fdc7aca3ddfb46b1be36d89cf381cb3ef0))
+
 ## [1.9.5](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.4...1.9.5) (2025-06-30)
 
 ### Bug Fixes
