@@ -1,3 +1,9 @@
+## [1.9.5](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.4...1.9.5) (2025-06-30)
+
+### Bug Fixes
+
+* respect enabled in a correct manner ([29ee92c](https://github.com/MakairaIO/shopware-connect-frontend/commit/29ee92cf899d429ff9e5fe3c130cf6f39408eeca))
+
 ## [1.9.4](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.3...1.9.4) (2025-06-27)
 
 ### Bug Fixes
