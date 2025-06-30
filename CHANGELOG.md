@@ -1,3 +1,9 @@
+## [1.9.8](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.7...1.9.8) (2025-06-30)
+
+### Bug Fixes
+
+* refactor filter swap method ([2cd41e0](https://github.com/MakairaIO/shopware-connect-frontend/commit/2cd41e0465dbdb8f61b582aebae49df5b7d744a7))
+
 ## [1.9.7](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.6...1.9.7) (2025-06-30)
 
 ### Bug Fixes
