@@ -62,13 +62,9 @@ export default class ListingListener extends Plugin {
 
   init() {
     // Only register events if the filter listener is enabled
-    if (this._isEnabled()) {
-      this._registerEvents();
-
-      // Set up offcanvas visibility monitoring if needed
-      if (this.options.hideItemsWhenOffcanvasHidden) {
-        this._setupOffcanvasMonitoring();
-      }
+    this._registerEvents();
+    if (this.options.hideItemsWhenOffcanvasHidden) {
+      this._setupOffcanvasMonitoring();
     }
   }
 
@@ -577,8 +573,10 @@ export default class ListingListener extends Plugin {
   _updateFilterPanelSelectively(oldPanel, newPanel) {
     const inputStates = this._getInputStates(oldPanel);
 
-    this._updateFilterMultiSelectElements(oldPanel, newPanel);
-    this._updateFilterListItemElements(oldPanel, newPanel);
+    if (this.options.enabled) {
+      this._updateFilterMultiSelectElements(oldPanel, newPanel);
+      this._updateFilterListItemElements(oldPanel, newPanel);
+    }
 
     this._reregisterExistingFilters(oldPanel);
     this._restoreInputStates(oldPanel, inputStates, false);
