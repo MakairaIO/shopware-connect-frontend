@@ -230,11 +230,6 @@ export default class CategoryLocalStorage extends Plugin {
     try {
       const storageValue = JSON.stringify(filtersArray);
       localStorage.setItem(this.options.storageKey, storageValue);
-
-      console.log(
-        `CategoryLocalStorage: Stored available filters to localStorage with key "${this.options.storageKey}":`,
-        filtersArray
-      );
     } catch (e) {
       console.error(
         "CategoryLocalStorage: Failed to store filters to localStorage:",
@@ -250,11 +245,6 @@ export default class CategoryLocalStorage extends Plugin {
     try {
       const storageValue = JSON.stringify(filtersArray);
       localStorage.setItem("macurrfi", storageValue);
-
-      console.log(
-        'CategoryLocalStorage: Stored current filters to localStorage with key "macurrfi":',
-        filtersArray
-      );
     } catch (e) {
       console.error(
         "CategoryLocalStorage: Failed to store current filters to localStorage:",
@@ -314,9 +304,6 @@ export default class CategoryLocalStorage extends Plugin {
   clearStoredFilters() {
     try {
       localStorage.removeItem(this.options.storageKey);
-      console.log(
-        `CategoryLocalStorage: Cleared filters from localStorage key "${this.options.storageKey}"`
-      );
     } catch (e) {
       console.error(
         "CategoryLocalStorage: Failed to clear filters from localStorage:",

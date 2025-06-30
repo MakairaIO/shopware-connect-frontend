@@ -66,6 +66,28 @@ export default class ListingListener extends Plugin {
     if (this.options.hideItemsWhenOffcanvasHidden) {
       this._setupOffcanvasMonitoring();
     }
+
+    // Establish connection to the main listing plugin
+    this._connectToListingPlugin();
+  }
+
+  /**
+   * Connect to the main listing plugin instance
+   */
+  _connectToListingPlugin() {
+    // Try to find the listing plugin instance
+    const listingElement = document.querySelector("[data-listing]");
+    if (listingElement) {
+      const listingPlugin = window.PluginManager.getPluginInstanceFromElement(
+        listingElement,
+        "Listing"
+      );
+
+      if (listingPlugin) {
+        // Store reference to the listing plugin
+        this.listing = listingPlugin;
+      }
+    }
   }
 
   /**
@@ -117,12 +139,6 @@ export default class ListingListener extends Plugin {
 
       // Store merged filters back to localStorage
       this._storeFiltersToLocalStorage(mergedFilters);
-
-      console.log("ListingListener: Processed filters from new panel:", {
-        existing: existingFilters,
-        current: newFilters,
-        merged: mergedFilters,
-      });
     } catch (e) {
       console.error("ListingListener: Failed to extract and merge filters:", e);
     }
@@ -184,11 +200,6 @@ export default class ListingListener extends Plugin {
     try {
       const storageValue = JSON.stringify(filtersArray);
       localStorage.setItem("macatfiall", storageValue);
-
-      console.log(
-        'ListingListener: Updated filters in localStorage with key "macatfiall":',
-        filtersArray
-      );
     } catch (e) {
       console.error(
         "ListingListener: Failed to store filters to localStorage:",
@@ -204,11 +215,6 @@ export default class ListingListener extends Plugin {
     try {
       const storageValue = JSON.stringify(filtersArray);
       localStorage.setItem("macurrfi", storageValue);
-
-      console.log(
-        'ListingListener: Updated current filters in localStorage with key "macurrfi":',
-        filtersArray
-      );
     } catch (e) {
       console.error(
         "ListingListener: Failed to store current filters to localStorage:",
@@ -332,11 +338,6 @@ export default class ListingListener extends Plugin {
         }
       });
     });
-
-    console.log(
-      "ListingListener: Showed active filters based on macurrfi:",
-      currentFilters
-    );
   }
 
   /**
@@ -365,11 +366,6 @@ export default class ListingListener extends Plugin {
         }
       });
     });
-
-    console.log(
-      "ListingListener: Showed all available filters (fallback):",
-      availableFilters
-    );
   }
 
   /**
@@ -570,16 +566,216 @@ export default class ListingListener extends Plugin {
   /**
    * Selectively update filter panel by hiding/showing elements
    */
+
   _updateFilterPanelSelectively(oldPanel, newPanel) {
     const inputStates = this._getInputStates(oldPanel);
 
     if (this.options.enabled) {
-      this._updateFilterMultiSelectElements(oldPanel, newPanel);
-      this._updateFilterListItemElements(oldPanel, newPanel);
+      // First, preserve existing section-item relationships
+      const existingSectionMap = this._createExistingSectionMap(oldPanel);
+
+      // Create a complete structural replacement approach
+      this._replaceFilterStructureCompletely(
+        oldPanel,
+        newPanel,
+        existingSectionMap
+      );
     }
 
     this._reregisterExistingFilters(oldPanel);
     this._restoreInputStates(oldPanel, inputStates, false);
+  }
+
+  /**
+   * Synchronize the structural elements between old and new filter panels
+   * This handles elements that appear between filter containers and their lists
+   */
+  _synchronizeFilterStructure(oldPanel, newPanel) {
+    // Get all filter elements from both panels
+    const oldFilters = oldPanel.querySelectorAll(
+      "[data-filter-multi-select-options]"
+    );
+    const newFilters = newPanel.querySelectorAll(
+      "[data-filter-multi-select-options]"
+    );
+
+    // Create maps for comparison using filter names
+    const oldFiltersMap = this._createFilterElementsMap(oldFilters);
+    const newFiltersMap = this._createFilterElementsMap(newFilters);
+
+    // Synchronize structure for each filter
+    Object.keys(newFiltersMap).forEach((filterName) => {
+      const oldFilter = oldFiltersMap[filterName];
+      const newFilter = newFiltersMap[filterName];
+
+      if (oldFilter && newFilter) {
+        this._synchronizeFilterDropdownStructure(oldFilter, newFilter);
+      }
+    });
+  }
+
+  /**
+   * Synchronize the dropdown structure for a specific filter
+   */
+  _synchronizeFilterDropdownStructure(oldFilter, newFilter) {
+    const oldDropdown = oldFilter.querySelector(".filter-panel-item-dropdown");
+    const newDropdown = newFilter.querySelector(".filter-panel-item-dropdown");
+
+    if (!oldDropdown || !newDropdown) return;
+
+    // Get the structure map for both dropdowns
+    const oldStructure = this._getDropdownStructureMap(oldDropdown);
+    const newStructure = this._getDropdownStructureMap(newDropdown);
+
+    // Add missing structural elements
+    this._addMissingStructuralElements(oldDropdown, newStructure, oldStructure);
+  }
+
+  /**
+   * Create a map of filter elements keyed by their filter name
+   */
+  _createFilterElementsMap(elements) {
+    const map = {};
+    elements.forEach((element) => {
+      const options = element.getAttribute("data-filter-multi-select-options");
+      if (options) {
+        try {
+          const parsedOptions = JSON.parse(options);
+          if (parsedOptions.name) {
+            map[parsedOptions.name] = element;
+          }
+        } catch (e) {
+          console.warn("ListingListener: Failed to parse filter options", e);
+        }
+      }
+    });
+    return map;
+  }
+
+  /**
+   * Get the structural map of a dropdown container
+   * Returns an array of structural elements in order
+   */
+  _getDropdownStructureMap(dropdown) {
+    const structure = [];
+    const children = Array.from(dropdown.children);
+
+    children.forEach((child, index) => {
+      const elementInfo = {
+        index,
+        element: child,
+        tagName: child.tagName.toLowerCase(),
+        classes: Array.from(child.classList),
+        textContent: this._getElementTextSignature(child),
+        isList:
+          child.tagName.toLowerCase() === "ul" &&
+          child.classList.contains("filter-multi-select-list"),
+        isStructural: !child.classList.contains(
+          "filter-multi-select-list-item"
+        ),
+      };
+
+      structure.push(elementInfo);
+    });
+
+    return structure;
+  }
+
+  /**
+   * Get a text signature for an element (useful for matching)
+   */
+  _getElementTextSignature(element) {
+    if (element.tagName.toLowerCase() === "ul") {
+      return ""; // Lists don't have meaningful text content for matching
+    }
+
+    // Get direct text content, not from children
+    let textContent = "";
+    element.childNodes.forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        textContent += node.textContent.trim();
+      }
+    });
+
+    return textContent.trim();
+  }
+
+  /**
+   * Add missing structural elements to the old dropdown
+   */
+  _addMissingStructuralElements(oldDropdown, newStructure, oldStructure) {
+    // Create a map of existing elements by their signature
+    const existingElements = new Map();
+    oldStructure.forEach((info) => {
+      const signature = this._createElementSignature(info);
+      existingElements.set(signature, info);
+    });
+
+    // Track where to insert new elements
+    let insertPosition = 0;
+
+    newStructure.forEach((newElementInfo, newIndex) => {
+      const signature = this._createElementSignature(newElementInfo);
+
+      if (!existingElements.has(signature) && newElementInfo.isStructural) {
+        // This is a new structural element, clone and insert it
+        const clonedElement = newElementInfo.element.cloneNode(true);
+
+        // Find the correct insertion point
+        const insertBeforeElement = this._findInsertionPoint(
+          oldDropdown,
+          newStructure,
+          newIndex,
+          existingElements
+        );
+
+        if (insertBeforeElement) {
+          oldDropdown.insertBefore(clonedElement, insertBeforeElement);
+        } else {
+          oldDropdown.appendChild(clonedElement);
+        }
+      }
+    });
+  }
+
+  /**
+   * Create a signature for an element to match between old and new structures
+   */
+  _createElementSignature(elementInfo) {
+    if (elementInfo.isList) {
+      // For lists, create signature based on position and context
+      return `list-${elementInfo.classes.join("-")}`;
+    }
+
+    // For other elements, use tag + classes + text content
+    const classSignature = elementInfo.classes.join("-");
+    const textSignature = elementInfo.textContent.replace(/\s+/g, " ").trim();
+
+    return `${elementInfo.tagName}-${classSignature}-${textSignature}`;
+  }
+
+  /**
+   * Find the correct insertion point for a new structural element
+   */
+  _findInsertionPoint(
+    oldDropdown,
+    newStructure,
+    newElementIndex,
+    existingElements
+  ) {
+    // Look for the next existing element after the new element position
+    for (let i = newElementIndex + 1; i < newStructure.length; i++) {
+      const nextElementInfo = newStructure[i];
+      const nextSignature = this._createElementSignature(nextElementInfo);
+
+      if (existingElements.has(nextSignature)) {
+        // Find this element in the old dropdown
+        const existingInfo = existingElements.get(nextSignature);
+        return existingInfo.element;
+      }
+    }
+
+    return null; // Insert at the end
   }
 
   /**
@@ -649,16 +845,24 @@ export default class ListingListener extends Plugin {
   }
 
   /**
-   * Create a map of filter-multi-select elements keyed by their options
+   * Create a map of filter-multi-select elements keyed by their filter name
    */
   _createFilterMultiSelectMap(elements) {
     const map = {};
     elements.forEach((element) => {
       const options = element.getAttribute("data-filter-multi-select-options");
       if (options) {
-        // Parse the options to create a unique key
-        const key = `filter-multi-select-${options}`;
-        map[key] = element;
+        try {
+          // Parse the options to get the filter name for a reliable key
+          const parsedOptions = JSON.parse(options);
+          if (parsedOptions.name) {
+            const key = `filter-multi-select-${parsedOptions.name}`;
+            map[key] = element;
+          }
+        } catch (e) {
+          // Skip elements with invalid JSON
+          console.warn("ListingListener: Failed to parse filter options", e);
+        }
       }
     });
     return map;
@@ -676,10 +880,27 @@ export default class ListingListener extends Plugin {
       if (label) {
         // Include parent filter info to make key more unique
         const parentFilter = item.closest("[data-filter-multi-select]");
-        const parentOptions = parentFilter
-          ? parentFilter.getAttribute("data-filter-multi-select-options")
-          : "unknown";
-        const key = `${parentOptions}-${label}`;
+        let parentFilterName = "unknown";
+
+        if (parentFilter) {
+          const parentOptions = parentFilter.getAttribute(
+            "data-filter-multi-select-options"
+          );
+          if (parentOptions) {
+            try {
+              const parsedOptions = JSON.parse(parentOptions);
+              parentFilterName = parsedOptions.name || "unknown";
+            } catch (e) {
+              // Use fallback if parsing fails
+              console.warn(
+                "ListingListener: Failed to parse parent filter options",
+                e
+              );
+            }
+          }
+        }
+
+        const key = `${parentFilterName}-${label}`;
         map[key] = item;
       }
     });
@@ -731,6 +952,177 @@ export default class ListingListener extends Plugin {
   }
 
   /**
+   * Find a filter element by its name (extracted from data-filter-multi-select-options)
+   */
+  _findFilterElementByName(panel, filterName) {
+    const filterElements = panel.querySelectorAll(
+      "[data-filter-multi-select-options]"
+    );
+
+    for (const element of filterElements) {
+      try {
+        const optionsJson = element.getAttribute(
+          "data-filter-multi-select-options"
+        );
+        if (optionsJson) {
+          const options = JSON.parse(optionsJson);
+          if (options.name === filterName) {
+            return element;
+          }
+        }
+      } catch (e) {
+        // Skip elements with invalid JSON
+        continue;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Find the target list (ul element) where a new filter item should be added
+   */
+  _findTargetListForNewItem(dropdownInOldPanel, newItem, clonedItem) {
+    // Find the proper container to search in
+    const newDropdown = newItem.closest(".filter-panel-item-dropdown");
+    const targetContainer = newDropdown
+      ? this._findTargetContainer(newDropdown, dropdownInOldPanel)
+      : dropdownInOldPanel;
+
+    // First, try to find the section where this item belongs in the new panel structure
+    const newItemParentList = newItem.closest("ul.filter-multi-select-list");
+
+    if (newItemParentList) {
+      // Look for a preceding structural element to identify the section
+      let sectionElement = null;
+      let sectionText = null;
+      let currentElement = newItemParentList.previousElementSibling;
+
+      // Walk backwards to find the section identifier
+      while (currentElement && !sectionElement) {
+        // Check if this is a structural element (not a list item)
+        if (
+          currentElement.tagName &&
+          !currentElement.classList.contains("filter-multi-select-list-item") &&
+          currentElement.textContent.trim()
+        ) {
+          sectionElement = currentElement;
+          sectionText = currentElement.textContent.trim();
+          break;
+        }
+        currentElement = currentElement.previousElementSibling;
+      }
+
+      // If we found a section element, try to find the matching section in the target container
+      if (sectionElement && sectionText) {
+        const matchingSection = this._findSectionByText(
+          targetContainer,
+          sectionText,
+          sectionElement.tagName
+        );
+        if (matchingSection) {
+          return matchingSection;
+        }
+      }
+    }
+
+    // Fallback: try to find the best matching list based on item position or content
+    const allLists = targetContainer.querySelectorAll(
+      "ul.filter-multi-select-list"
+    );
+
+    if (allLists.length === 1) {
+      // If there's only one list, use it
+      return allLists[0];
+    }
+
+    if (allLists.length > 1) {
+      // Try to find a list that already contains similar items
+      const newItemLabel = clonedItem
+        .querySelector("input[data-label]")
+        ?.getAttribute("data-label");
+
+      if (newItemLabel) {
+        for (const list of allLists) {
+          const existingItems = list.querySelectorAll("input[data-label]");
+          for (const existing of existingItems) {
+            const existingLabel = existing.getAttribute("data-label");
+
+            // Simple heuristic: if labels have similar patterns, they might belong together
+            if (this._labelsSeemRelated(newItemLabel, existingLabel)) {
+              return list;
+            }
+          }
+        }
+      }
+
+      // If no good match found, use the first list
+      return allLists[0];
+    }
+
+    // No lists found, return null
+    return null;
+  }
+
+  /**
+   * Find a section's ul element by matching text content and tag name
+   */
+  _findSectionByText(container, sectionText, tagName) {
+    // Find all elements with the same tag name
+    const elements = container.querySelectorAll(tagName.toLowerCase());
+
+    for (const element of elements) {
+      if (element.textContent.trim() === sectionText) {
+        // Find the next ul element after this section element
+        let nextElement = element.nextElementSibling;
+        while (nextElement) {
+          if (
+            nextElement.tagName.toLowerCase() === "ul" &&
+            nextElement.classList.contains("filter-multi-select-list")
+          ) {
+            return nextElement;
+          }
+          nextElement = nextElement.nextElementSibling;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Simple heuristic to check if two filter labels seem related
+   */
+  _labelsSeemRelated(label1, label2) {
+    if (!label1 || !label2) return false;
+
+    // Check if both are numeric ranges (e.g., "41-42", "43-44")
+    const rangePattern = /^\d+(-\d+)?$/;
+    if (rangePattern.test(label1) && rangePattern.test(label2)) {
+      return true;
+    }
+
+    // Check if both are size indicators (e.g., "XL", "XXL", "3XL")
+    const sizePattern = /^\d*XL[K]?$/;
+    if (sizePattern.test(label1) && sizePattern.test(label2)) {
+      return true;
+    }
+
+    // Check if both are waist/length combinations (e.g., "40/30", "42/32")
+    const waistLengthPattern = /^\d+\/\d+$/;
+    if (waistLengthPattern.test(label1) && waistLengthPattern.test(label2)) {
+      return true;
+    }
+
+    // Check if both start with "W" (waist sizes like "W40", "W42")
+    if (label1.startsWith("W") && label2.startsWith("W")) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Add a new filter list item to the appropriate parent
    */
   _addNewFilterListItem(oldPanel, newItem) {
@@ -740,8 +1132,22 @@ export default class ListingListener extends Plugin {
       ?.getAttribute("data-filter-multi-select-options");
     if (!parentOptions) return;
 
-    const parentInOldPanel = oldPanel.querySelector(
-      `[data-filter-multi-select-options="${parentOptions}"]`
+    // Parse the options to get the filter name
+    let filterName;
+    try {
+      const parsedOptions = JSON.parse(parentOptions);
+      filterName = parsedOptions.name;
+    } catch (e) {
+      console.warn("ListingListener: Failed to parse parent options", e);
+      return;
+    }
+
+    if (!filterName) return;
+
+    // Find the matching parent in old panel by filter name
+    const parentInOldPanel = this._findFilterElementByName(
+      oldPanel,
+      filterName
     );
     if (!parentInOldPanel) return;
 
@@ -750,9 +1156,31 @@ export default class ListingListener extends Plugin {
     );
     if (!dropdownInOldPanel) return;
 
-    // Clone and add the new item
+    // Clone the new item
     const clonedItem = newItem.cloneNode(true);
-    dropdownInOldPanel.appendChild(clonedItem);
+
+    // First, ensure the section structure exists
+    const sectionStructure = this._ensureSectionStructureExists(
+      newItem,
+      dropdownInOldPanel
+    );
+
+    // Then find the appropriate target list within the existing/created section
+    const targetList = this._findTargetListForNewItem(
+      dropdownInOldPanel,
+      newItem,
+      clonedItem
+    );
+
+    if (targetList) {
+      targetList.appendChild(clonedItem);
+    } else if (sectionStructure && sectionStructure.list) {
+      // Use the list from the newly created section structure
+      sectionStructure.list.appendChild(clonedItem);
+    } else {
+      // Ultimate fallback: append to the main dropdown
+      dropdownInOldPanel.appendChild(clonedItem);
+    }
 
     // Ensure event handlers are attached
     this._attachEventHandlersToNewItem(clonedItem, dropdownInOldPanel);
@@ -864,10 +1292,6 @@ export default class ListingListener extends Plugin {
    * Restore input states after content update
    */
   _restoreInputStates(panel, inputStates, triggerEvents = true) {
-    console.log(
-      "_restoreInputStates called with triggerEvents =",
-      triggerEvents
-    );
     const inputs = panel.querySelectorAll("input");
 
     inputs.forEach((input) => {
@@ -886,7 +1310,6 @@ export default class ListingListener extends Plugin {
 
         // Trigger appropriate event only if requested
         if (triggerEvents) {
-          console.log("Triggering event for input:", input.name, input.value);
           input.dispatchEvent(
             new Event(
               input.type === "checkbox" || input.type === "radio"
@@ -894,12 +1317,6 @@ export default class ListingListener extends Plugin {
                 : "input",
               { bubbles: true }
             )
-          );
-        } else {
-          console.log(
-            "Skipping event trigger for input:",
-            input.name,
-            input.value
           );
         }
       }
@@ -955,7 +1372,6 @@ export default class ListingListener extends Plugin {
 
       if (oldItems[key]) {
         // Item exists, reuse the old DOM element but update its content
-        console.log("Reusing existing item:", key);
         const oldItemElement = oldItems[key];
 
         // Update content if needed
@@ -986,7 +1402,6 @@ export default class ListingListener extends Plugin {
         tempContainer.appendChild(oldItemElement);
       } else {
         // New item, clone and add it
-        console.log("Adding new item:", key);
         const clonedItem = newItemElement.cloneNode(true);
         tempContainer.appendChild(clonedItem);
 
@@ -1046,11 +1461,47 @@ export default class ListingListener extends Plugin {
    * Attach event handlers to newly added filter items
    */
   _attachEventHandlersToNewItem(newItem, dropdown) {
-    // For now, let's just mark that we need to reinitialize this specific dropdown
-    // This is a simpler approach than trying to manually attach event handlers
-    const parentFilterItem = dropdown.closest(".filter-panel-item");
-    if (parentFilterItem) {
-      parentFilterItem.setAttribute("data-needs-reinit", "true");
+    // Find all inputs in the new item that need event handlers
+    const inputs = newItem.querySelectorAll(
+      'input[type="checkbox"], input[type="radio"]'
+    );
+
+    inputs.forEach((input, index) => {
+      // Add change event listener that calls the filter change handler
+      input.addEventListener("change", (event) => {
+        this._onChangeFilter(event);
+      });
+    });
+  }
+
+  /**
+   * Handle filter change events for dynamically added items
+   */
+  _onChangeFilter(event) {
+    // Check if we have access to the main listing plugin
+    if (this.listing && typeof this.listing.changeListing === "function") {
+      this.listing.changeListing(true, { p: 1 });
+    } else {
+      // Try to find the listing plugin instance
+      const listingElement = document.querySelector("[data-listing]");
+      if (listingElement) {
+        const listingPlugin = window.PluginManager.getPluginInstanceFromElement(
+          listingElement,
+          "Listing"
+        );
+        if (
+          listingPlugin &&
+          typeof listingPlugin.changeListing === "function"
+        ) {
+          listingPlugin.changeListing(true, { p: 1 });
+        } else {
+          console.warn(
+            "ListingListener: Could not find listing plugin or changeListing method"
+          );
+        }
+      } else {
+        console.warn("ListingListener: Could not find listing element");
+      }
     }
   }
 
@@ -1062,47 +1513,42 @@ export default class ListingListener extends Plugin {
     const newElements = panel.querySelectorAll('[data-needs-init="true"]');
 
     newElements.forEach((element) => {
-      // Initialize plugins for the new element and its children
-      if (element.dataset.pluginName) {
-        window.PluginManager.initializePlugin(
-          element,
-          element.dataset.pluginName
-        );
-      }
-
-      // Also initialize plugins for child elements that might need it
-      const childElements = element.querySelectorAll("*");
-      childElements.forEach((child) => {
-        if (child.dataset.pluginName) {
+      try {
+        // Initialize plugins for the new element and its children
+        if (
+          element.dataset.pluginName &&
+          typeof element.dataset.pluginName === "string"
+        ) {
           window.PluginManager.initializePlugin(
-            child,
-            child.dataset.pluginName
+            element,
+            element.dataset.pluginName
           );
         }
-      });
+
+        // Also initialize plugins for child elements that might need it
+        const childElements = element.querySelectorAll("[data-plugin-name]");
+        childElements.forEach((child) => {
+          if (
+            child.dataset.pluginName &&
+            typeof child.dataset.pluginName === "string"
+          ) {
+            window.PluginManager.initializePlugin(
+              child,
+              child.dataset.pluginName
+            );
+          }
+        });
+      } catch (e) {
+        console.warn(
+          "ListingListener: Failed to reinitialize plugin for element:",
+          element,
+          e
+        );
+      }
 
       // Remove the initialization flag
       element.removeAttribute("data-needs-init");
     });
-
-    // If no specific elements needed initialization, try a broader approach for any new dropdowns
-    if (newElements.length === 0) {
-      const dropdowns = panel.querySelectorAll(".filter-panel-item-dropdown");
-      dropdowns.forEach((dropdown) => {
-        const parentItem = dropdown.closest(".filter-panel-item");
-        if (parentItem && parentItem.dataset.pluginName) {
-          window.PluginManager.initializePlugin(
-            parentItem,
-            parentItem.dataset.pluginName
-          );
-        }
-      });
-    }
-  }
-
-  _onAfterRenderResponse({ response }) {
-    //console.log('Listing/afterRenderResponse fired!', response);
-    //console.log(response);
   }
 
   /**
@@ -1164,36 +1610,864 @@ export default class ListingListener extends Plugin {
       ];
 
       for (const pluginName of pluginNames) {
-        const filterPlugin = window.PluginManager.getPluginInstanceFromElement(
-          element,
-          pluginName
-        );
-        if (filterPlugin) {
-          // Re-register this filter plugin with the main listing
-          listingPlugin.registerFilter(filterPlugin);
-
-          // If this element needs reinitialization, reinitialize the plugin
-          if (needsReinit) {
-            console.log(
-              `Reinitializing ${pluginName} plugin for element with new content`
+        try {
+          const filterPlugin =
+            window.PluginManager.getPluginInstanceFromElement(
+              element,
+              pluginName
             );
-            // Reinitialize the plugin to ensure new DOM elements get proper event handlers
-            window.PluginManager.initializePlugin(element, pluginName);
-            element.removeAttribute("data-needs-reinit");
+          if (filterPlugin) {
+            // Re-register this filter plugin with the main listing
+            if (typeof listingPlugin.registerFilter === "function") {
+              listingPlugin.registerFilter(filterPlugin);
+            }
+
+            // Skip automatic reinitialization to avoid conflicts
+            // Our manual event handlers should be sufficient
+            if (needsReinit) {
+              element.removeAttribute("data-needs-reinit");
+            }
+            break;
           }
-          break;
+        } catch (e) {
+          console.warn(
+            `ListingListener: Error processing ${pluginName} plugin:`,
+            e
+          );
         }
       }
     });
   }
 
-  afterContentChange() {
-    console.log("ListingListener afterContentChange");
+  /**
+   * Create missing section structure for a new filter item
+   */
+  _createMissingSectionStructure(newItem, dropdownInOldPanel) {
+    // Find the section structure that this item belongs to in the new panel
+    const newItemParentList = newItem.closest("ul.filter-multi-select-list");
+    if (!newItemParentList) {
+      return { list: null };
+    }
 
-    /*if (this.buttons && this._pageChanged) {
-            this._resumeFocusState();
+    // Find the new panel dropdown that contains this structure
+    const newDropdown = newItem.closest(".filter-panel-item-dropdown");
+    if (!newDropdown) {
+      return { list: null };
+    }
+
+    // First, ensure we have the complete wrapper structure
+    const targetContainer = this._ensureWrapperStructureExists(
+      newDropdown,
+      dropdownInOldPanel
+    );
+
+    // Find all elements that come before this list in the new structure
+    const elementsToClone = [];
+    let currentElement = newItemParentList.previousElementSibling;
+
+    // Walk backwards to collect all structural elements that belong to this section
+    while (currentElement) {
+      // Check if this is a structural element (not a list item)
+      if (
+        currentElement.tagName &&
+        !currentElement.classList.contains("filter-multi-select-list-item")
+      ) {
+        // Check if this element is already in the target container
+        const signature =
+          this._createElementSignatureFromElement(currentElement);
+        if (!this._elementExistsInContainer(targetContainer, signature)) {
+          elementsToClone.unshift(currentElement); // Add to beginning to maintain order
+        } else {
+          // If we found an existing element, we've reached the boundary of this section
+          break;
         }
+      }
+      currentElement = currentElement.previousElementSibling;
+    }
 
-        this._pageChanged = false;*/
+    // Find the insertion point in the target container
+    const insertionPoint = this._findSectionInsertionPoint(
+      targetContainer,
+      newDropdown,
+      newItemParentList
+    );
+
+    // Clone and insert the structural elements
+    let lastInsertedElement = null;
+    elementsToClone.forEach((elementToClone) => {
+      const clonedElement = elementToClone.cloneNode(true);
+
+      if (insertionPoint) {
+        targetContainer.insertBefore(clonedElement, insertionPoint);
+      } else {
+        targetContainer.appendChild(clonedElement);
+      }
+
+      lastInsertedElement = clonedElement;
+    });
+
+    // Create and insert the new list
+    const newList = newItemParentList.cloneNode(false); // Clone without children
+    newList.innerHTML = ""; // Ensure it's empty
+
+    if (lastInsertedElement) {
+      // Insert the list right after the last structural element
+      lastInsertedElement.parentNode.insertBefore(
+        newList,
+        lastInsertedElement.nextSibling
+      );
+    } else if (insertionPoint) {
+      targetContainer.insertBefore(newList, insertionPoint);
+    } else {
+      targetContainer.appendChild(newList);
+    }
+
+    return { list: newList };
+  }
+
+  /**
+   * Create element signature from an actual element
+   */
+  _createElementSignatureFromElement(element) {
+    const elementInfo = {
+      tagName: element.tagName.toLowerCase(),
+      classes: Array.from(element.classList),
+      textContent: this._getElementTextSignature(element),
+      isList:
+        element.tagName.toLowerCase() === "ul" &&
+        element.classList.contains("filter-multi-select-list"),
+      isStructural: !element.classList.contains(
+        "filter-multi-select-list-item"
+      ),
+    };
+
+    return this._createElementSignature(elementInfo);
+  }
+
+  /**
+   * Find the insertion point for a new section in the target container
+   */
+  _findSectionInsertionPoint(targetContainer, newDropdown, newItemParentList) {
+    // Find elements that come after this list in the new structure
+    let nextElement = newItemParentList.nextElementSibling;
+
+    while (nextElement) {
+      if (
+        nextElement.tagName &&
+        !nextElement.classList.contains("filter-multi-select-list-item")
+      ) {
+        // Check if this element exists in the target container
+        const signature = this._createElementSignatureFromElement(nextElement);
+
+        // Find this element in the target container
+        const children = Array.from(targetContainer.children);
+        for (const child of children) {
+          const childSignature = this._createElementSignatureFromElement(child);
+          if (childSignature === signature) {
+            return child; // Insert before this element
+          }
+        }
+      }
+      nextElement = nextElement.nextElementSibling;
+    }
+
+    return null; // Insert at the end
+  }
+
+  /**
+   * Ensure that the section structure exists for a new filter item
+   * Returns the created structure if it was created, null if it already existed
+   */
+  _ensureSectionStructureExists(newItem, dropdownInOldPanel) {
+    // First check if the section already exists
+    if (this._sectionExistsForItem(newItem, dropdownInOldPanel)) {
+      return null; // Section already exists, no need to create
+    }
+
+    // Section doesn't exist, create it
+    return this._createMissingSectionStructure(newItem, dropdownInOldPanel);
+  }
+
+  /**
+   * Check if the section structure already exists for a given item
+   */
+  _sectionExistsForItem(newItem, dropdownInOldPanel) {
+    // Find the section structure that this item belongs to in the new panel
+    const newItemParentList = newItem.closest("ul.filter-multi-select-list");
+    if (!newItemParentList) {
+      return true; // If no parent list, assume structure exists
+    }
+
+    // First, ensure we know where to look (find the proper container)
+    const newDropdown = newItem.closest(".filter-panel-item-dropdown");
+    if (!newDropdown) {
+      return true;
+    }
+
+    // Get the target container where we should check for the section
+    const targetContainer = this._findTargetContainer(
+      newDropdown,
+      dropdownInOldPanel
+    );
+
+    // Look for the preceding structural element to identify the section
+    let sectionElement = null;
+    let sectionText = null;
+    let currentElement = newItemParentList.previousElementSibling;
+
+    // Walk backwards to find the section identifier
+    while (currentElement && !sectionElement) {
+      // Check if this is a structural element (not a list item)
+      if (
+        currentElement.tagName &&
+        !currentElement.classList.contains("filter-multi-select-list-item") &&
+        currentElement.textContent.trim()
+      ) {
+        sectionElement = currentElement;
+        sectionText = currentElement.textContent.trim();
+        break;
+      }
+      currentElement = currentElement.previousElementSibling;
+    }
+
+    // If no section element found, assume structure exists
+    if (!sectionElement || !sectionText) {
+      return true;
+    }
+
+    // Check if this section element exists in the target container
+    const signature = this._createElementSignatureFromElement(sectionElement);
+    const exists = this._elementExistsInContainer(targetContainer, signature);
+
+    return exists;
+  }
+
+  /**
+   * Find the target container where content should be checked/added
+   * (handles wrapper structure)
+   */
+  _findTargetContainer(newDropdown, oldDropdown) {
+    // Get the structural path from the new dropdown
+    const structuralPath = this._getStructuralPath(newDropdown);
+
+    // Navigate through existing structure in old dropdown
+    let currentContainer = oldDropdown;
+
+    structuralPath.forEach((wrapperInfo) => {
+      const existingWrapper = this._findWrapperInContainer(
+        currentContainer,
+        wrapperInfo
+      );
+      if (existingWrapper) {
+        currentContainer = existingWrapper;
+      }
+      // If wrapper doesn't exist, we'll stay at the current level
+      // The section creation will handle creating missing wrappers
+    });
+
+    return currentContainer;
+  }
+
+  /**
+   * Ensure the complete wrapper structure exists from dropdown to content level
+   * Returns the target container where content should be added
+   */
+  _ensureWrapperStructureExists(newDropdown, oldDropdown) {
+    // Get the structural path from the new dropdown to the content
+    const structuralPath = this._getStructuralPath(newDropdown);
+
+    // Build the same structure in the old dropdown if it doesn't exist
+    let currentContainer = oldDropdown;
+
+    structuralPath.forEach((wrapperInfo) => {
+      const existingWrapper = this._findWrapperInContainer(
+        currentContainer,
+        wrapperInfo
+      );
+
+      if (existingWrapper) {
+        // Wrapper already exists, use it
+        currentContainer = existingWrapper;
+      } else {
+        // Create the missing wrapper
+        const newWrapper = this._createWrapperElement(wrapperInfo);
+        currentContainer.appendChild(newWrapper);
+        currentContainer = newWrapper;
+      }
+    });
+
+    return currentContainer;
+  }
+
+  /**
+   * Get the structural path from dropdown to content level
+   */
+  _getStructuralPath(dropdown) {
+    const path = [];
+    const directChildren = Array.from(dropdown.children);
+
+    // Look for wrapper elements that contain the content
+    directChildren.forEach((child) => {
+      if (this._isWrapperElement(child)) {
+        const wrapperInfo = {
+          tagName: child.tagName.toLowerCase(),
+          classes: Array.from(child.classList),
+          signature: this._createElementSignatureFromElement(child),
+        };
+        path.push(wrapperInfo);
+      }
+    });
+
+    return path;
+  }
+
+  /**
+   * Check if an element is a wrapper element (contains content but isn't content itself)
+   */
+  _isWrapperElement(element) {
+    // Skip list items and individual lists
+    if (
+      element.classList.contains("filter-multi-select-list-item") ||
+      (element.tagName.toLowerCase() === "ul" &&
+        element.classList.contains("filter-multi-select-list"))
+    ) {
+      return false;
+    }
+
+    // Check if it contains multiple structural elements or lists
+    const childLists = element.querySelectorAll("ul.filter-multi-select-list");
+    const childStructural = element.querySelectorAll(
+      ":scope > *:not(.filter-multi-select-list-item)"
+    );
+
+    return childLists.length > 0 || childStructural.length > 1;
+  }
+
+  /**
+   * Find a wrapper element in a container by its info
+   */
+  _findWrapperInContainer(container, wrapperInfo) {
+    const children = Array.from(container.children);
+
+    return children.find((child) => {
+      const childSignature = this._createElementSignatureFromElement(child);
+      return childSignature === wrapperInfo.signature;
+    });
+  }
+
+  /**
+   * Create a wrapper element from wrapper info
+   */
+  _createWrapperElement(wrapperInfo) {
+    const element = document.createElement(wrapperInfo.tagName);
+    wrapperInfo.classes.forEach((className) => {
+      element.classList.add(className);
+    });
+    return element;
+  }
+
+  /**
+   * Check if an element with the given signature exists in the container
+   */
+  _elementExistsInContainer(container, signature) {
+    const children = Array.from(container.children);
+
+    return children.some((child) => {
+      const childSignature = this._createElementSignatureFromElement(child);
+      return childSignature === signature;
+    });
+  }
+
+  /**
+   * Create a map of existing section-item relationships before structural changes
+   */
+  _createExistingSectionMap(oldPanel) {
+    const sectionMap = new Map();
+
+    // Find all filter elements in the old panel
+    const filterElements = oldPanel.querySelectorAll(
+      "[data-filter-multi-select-options]"
+    );
+
+    filterElements.forEach((filterElement) => {
+      const dropdown = filterElement.querySelector(
+        ".filter-panel-item-dropdown"
+      );
+      if (!dropdown) return;
+
+      // Find the target container
+      const targetContainer = this._findTargetContainerInExisting(dropdown);
+
+      // Find all structural elements that could be section headers
+      const structuralElements = targetContainer.querySelectorAll("*");
+
+      structuralElements.forEach((element) => {
+        // Check if this looks like a section header (has text content and is followed by a list)
+        if (
+          element.textContent.trim() &&
+          !element.classList.contains("filter-multi-select-list-item") &&
+          element.tagName.toLowerCase() !== "ul"
+        ) {
+          const sectionText = element.textContent.trim();
+          let nextElement = element.nextElementSibling;
+
+          // Look for the associated list
+          while (nextElement) {
+            if (
+              nextElement.tagName.toLowerCase() === "ul" &&
+              nextElement.classList.contains("filter-multi-select-list")
+            ) {
+              // Collect all items from this list
+              const items = Array.from(
+                nextElement.querySelectorAll(".filter-multi-select-list-item")
+              );
+              const itemsCloned = items.map((item) => item.cloneNode(true));
+
+              if (itemsCloned.length > 0) {
+                if (!sectionMap.has(sectionText)) {
+                  sectionMap.set(sectionText, []);
+                }
+                sectionMap.get(sectionText).push(...itemsCloned);
+              }
+              break;
+            }
+
+            // Stop if we hit another section header
+            if (
+              nextElement.textContent.trim() &&
+              !nextElement.classList.contains(
+                "filter-multi-select-list-item"
+              ) &&
+              nextElement.tagName.toLowerCase() !== "ul"
+            ) {
+              break;
+            }
+
+            nextElement = nextElement.nextElementSibling;
+          }
+        }
+      });
+    });
+
+    return sectionMap;
+  }
+
+  /**
+   * Find the target container in existing structure (before changes)
+   */
+  _findTargetContainerInExisting(dropdown) {
+    // Look for wrapper elements in the existing structure
+    const children = Array.from(dropdown.children);
+
+    for (const child of children) {
+      if (this._isWrapperElement(child)) {
+        return child;
+      }
+    }
+
+    // If no wrapper found, use the dropdown itself
+    return dropdown;
+  }
+
+  /**
+   * Restore existing items to their correct sections after structural changes
+   */
+  _restoreExistingSectionAssociations(oldPanel, sectionMap) {
+    if (sectionMap.size === 0) return;
+
+    // Find all filter elements in the updated panel
+    const filterElements = oldPanel.querySelectorAll(
+      "[data-filter-multi-select-options]"
+    );
+
+    filterElements.forEach((filterElement) => {
+      const dropdown = filterElement.querySelector(
+        ".filter-panel-item-dropdown"
+      );
+      if (!dropdown) return;
+
+      const targetContainer =
+        this._findTargetContainer(null, dropdown) || dropdown;
+
+      // For each preserved section, try to restore its items
+      sectionMap.forEach((preservedItems, sectionText) => {
+        const sectionList = this._findSectionByTextInContainer(
+          targetContainer,
+          sectionText
+        );
+
+        if (sectionList) {
+          // Clear any incorrectly placed items first
+          this._removeItemsFromIncorrectSections(
+            targetContainer,
+            preservedItems,
+            sectionText
+          );
+
+          // Add the preserved items to the correct section
+          preservedItems.forEach((item) => {
+            // Check if this item is already in the correct section
+            if (!this._itemExistsInList(sectionList, item)) {
+              sectionList.appendChild(item.cloneNode(true));
+            }
+          });
+        }
+      });
+    });
+  }
+
+  /**
+   * Find a section list by section text in a container
+   */
+  _findSectionByTextInContainer(container, sectionText) {
+    const elements = container.querySelectorAll("*");
+
+    for (const element of elements) {
+      if (
+        element.textContent.trim() === sectionText &&
+        !element.classList.contains("filter-multi-select-list-item") &&
+        element.tagName.toLowerCase() !== "ul"
+      ) {
+        // Find the next list after this section header
+        let nextElement = element.nextElementSibling;
+        while (nextElement) {
+          if (
+            nextElement.tagName.toLowerCase() === "ul" &&
+            nextElement.classList.contains("filter-multi-select-list")
+          ) {
+            return nextElement;
+          }
+          nextElement = nextElement.nextElementSibling;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Remove items from incorrect sections (cleanup before restoration)
+   */
+  _removeItemsFromIncorrectSections(
+    container,
+    preservedItems,
+    correctSectionText
+  ) {
+    const allLists = container.querySelectorAll("ul.filter-multi-select-list");
+
+    allLists.forEach((list) => {
+      // Skip if this is the correct section
+      const sectionText = this._getSectionTextForList(list);
+      if (sectionText === correctSectionText) return;
+
+      // Remove any items that belong to the correct section
+      const listItems = Array.from(
+        list.querySelectorAll(".filter-multi-select-list-item")
+      );
+
+      listItems.forEach((listItem) => {
+        const itemLabel = this._getItemLabel(listItem);
+
+        // Check if this item should be in the preserved section
+        const shouldBeInPreservedSection = preservedItems.some(
+          (preservedItem) => {
+            const preservedLabel = this._getItemLabel(preservedItem);
+            return preservedLabel === itemLabel;
+          }
+        );
+
+        if (shouldBeInPreservedSection) {
+          listItem.remove();
+        }
+      });
+    });
+  }
+
+  /**
+   * Get the section text for a given list
+   */
+  _getSectionTextForList(list) {
+    let prevElement = list.previousElementSibling;
+
+    while (prevElement) {
+      if (
+        prevElement.textContent.trim() &&
+        !prevElement.classList.contains("filter-multi-select-list-item") &&
+        prevElement.tagName.toLowerCase() !== "ul"
+      ) {
+        return prevElement.textContent.trim();
+      }
+      prevElement = prevElement.previousElementSibling;
+    }
+
+    return null;
+  }
+
+  /**
+   * Check if an item already exists in a list
+   */
+  _itemExistsInList(list, item) {
+    const itemLabel = this._getItemLabel(item);
+    const existingItems = list.querySelectorAll(
+      ".filter-multi-select-list-item"
+    );
+
+    return Array.from(existingItems).some((existingItem) => {
+      const existingLabel = this._getItemLabel(existingItem);
+      return existingLabel === itemLabel;
+    });
+  }
+
+  /**
+   * Get the label from a filter item
+   */
+  _getItemLabel(item) {
+    const input = item.querySelector("input[data-label]");
+    return input ? input.getAttribute("data-label") : null;
+  }
+
+  /**
+   * Replace the filter structure completely while preserving existing items
+   */
+  _replaceFilterStructureCompletely(oldPanel, newPanel, existingSectionMap) {
+    // Find all filter elements in both panels
+    const oldFilters = oldPanel.querySelectorAll(
+      "[data-filter-multi-select-options]"
+    );
+    const newFilters = newPanel.querySelectorAll(
+      "[data-filter-multi-select-options]"
+    );
+
+    // Create maps for comparison using filter names
+    const oldFiltersMap = this._createFilterElementsMap(oldFilters);
+    const newFiltersMap = this._createFilterElementsMap(newFilters);
+
+    // Process each filter
+    Object.keys(newFiltersMap).forEach((filterName) => {
+      const oldFilter = oldFiltersMap[filterName];
+      const newFilter = newFiltersMap[filterName];
+
+      if (oldFilter && newFilter) {
+        this._replaceFilterDropdownStructure(
+          oldFilter,
+          newFilter,
+          existingSectionMap
+        );
+      }
+    });
+  }
+
+  /**
+   * Replace the dropdown structure for a specific filter
+   */
+  _replaceFilterDropdownStructure(oldFilter, newFilter, existingSectionMap) {
+    const oldDropdown = oldFilter.querySelector(".filter-panel-item-dropdown");
+    const newDropdown = newFilter.querySelector(".filter-panel-item-dropdown");
+
+    if (!oldDropdown || !newDropdown) return;
+
+    // Build the complete new structure from the new panel
+    const newStructure = this._buildCompleteStructureFromNew(
+      newDropdown,
+      existingSectionMap
+    );
+
+    // Replace the old dropdown content with the new structure
+    oldDropdown.innerHTML = "";
+
+    // Add the new structure to the old dropdown
+    newStructure.forEach((element) => {
+      oldDropdown.appendChild(element);
+    });
+
+    // Attach event handlers to all new items
+    this._attachEventHandlersToNewDropdown(oldDropdown);
+  }
+
+  /**
+   * Attach event handlers to all items in a dropdown
+   */
+  _attachEventHandlersToNewDropdown(dropdown) {
+    const allItems = dropdown.querySelectorAll(
+      ".filter-multi-select-list-item"
+    );
+
+    allItems.forEach((item) => {
+      this._attachEventHandlersToNewItem(item, dropdown);
+    });
+  }
+
+  /**
+   * Build the complete structure from the new panel, placing existing items correctly
+   */
+  _buildCompleteStructureFromNew(newDropdown, existingSectionMap) {
+    const structure = [];
+    const newChildren = Array.from(newDropdown.children);
+
+    newChildren.forEach((child) => {
+      if (this._isWrapperElement(child)) {
+        // This is a wrapper, process its contents
+        const wrapper = child.cloneNode(false); // Clone without children
+        const wrapperContent = this._buildWrapperContent(
+          child,
+          existingSectionMap
+        );
+
+        wrapperContent.forEach((contentElement) => {
+          wrapper.appendChild(contentElement);
+        });
+
+        structure.push(wrapper);
+      } else {
+        // Direct child element
+        const clonedChild = this._processStructuralElement(
+          child,
+          existingSectionMap
+        );
+        if (clonedChild) {
+          structure.push(clonedChild);
+        }
+      }
+    });
+
+    return structure;
+  }
+
+  /**
+   * Build the content for a wrapper element
+   */
+  _buildWrapperContent(wrapperElement, existingSectionMap) {
+    const content = [];
+    const children = Array.from(wrapperElement.children);
+    let currentSection = null;
+    let currentSectionList = null;
+
+    children.forEach((child) => {
+      if (
+        child.tagName.toLowerCase() === "ul" &&
+        child.classList.contains("filter-multi-select-list")
+      ) {
+        // This is a list - populate it with the correct items
+        if (currentSection) {
+          currentSectionList = this._createListForSection(
+            child,
+            currentSection,
+            existingSectionMap
+          );
+          content.push(currentSectionList);
+        } else {
+          // List without a section - clone as is but check for existing items
+          currentSectionList = this._createListWithExistingItems(
+            child,
+            existingSectionMap
+          );
+          content.push(currentSectionList);
+        }
+      } else if (
+        child.textContent.trim() &&
+        !child.classList.contains("filter-multi-select-list-item")
+      ) {
+        // This is a section header
+        currentSection = child.textContent.trim();
+        const clonedHeader = child.cloneNode(true);
+        content.push(clonedHeader);
+      } else {
+        // Other structural element
+        const clonedElement = child.cloneNode(true);
+        content.push(clonedElement);
+      }
+    });
+
+    return content;
+  }
+
+  /**
+   * Create a list for a specific section, using existing items if available
+   */
+  _createListForSection(templateList, sectionText, existingSectionMap) {
+    const list = templateList.cloneNode(false); // Clone without children
+
+    // First, add existing items for this section
+    if (existingSectionMap.has(sectionText)) {
+      const existingItems = existingSectionMap.get(sectionText);
+      existingItems.forEach((item) => {
+        list.appendChild(item.cloneNode(true));
+      });
+    }
+
+    // Then, add any new items from the template that don't already exist
+    const templateItems = Array.from(templateList.children);
+    templateItems.forEach((templateItem) => {
+      const templateLabel = this._getItemLabel(templateItem);
+
+      // Check if this item already exists in our list
+      const existsInList = Array.from(list.children).some((existingItem) => {
+        const existingLabel = this._getItemLabel(existingItem);
+        return existingLabel === templateLabel;
+      });
+
+      if (!existsInList) {
+        const newItem = templateItem.cloneNode(true);
+        list.appendChild(newItem);
+      }
+    });
+
+    return list;
+  }
+
+  /**
+   * Create a list with existing items (for lists without clear section headers)
+   */
+  _createListWithExistingItems(templateList, existingSectionMap) {
+    const list = templateList.cloneNode(false);
+
+    // Try to determine which section this list belongs to by looking at its items
+    const templateItems = Array.from(templateList.children);
+    let matchedSection = null;
+
+    // Look for the section that contains most of these items
+    existingSectionMap.forEach((existingItems, sectionText) => {
+      const matchCount = templateItems.reduce((count, templateItem) => {
+        const templateLabel = this._getItemLabel(templateItem);
+        const hasMatch = existingItems.some((existingItem) => {
+          const existingLabel = this._getItemLabel(existingItem);
+          return existingLabel === templateLabel;
+        });
+        return hasMatch ? count + 1 : count;
+      }, 0);
+
+      if (
+        matchCount > 0 &&
+        (!matchedSection || matchCount > matchedSection.count)
+      ) {
+        matchedSection = { section: sectionText, count: matchCount };
+      }
+    });
+
+    if (matchedSection) {
+      // Use the matched section's items
+      return this._createListForSection(
+        templateList,
+        matchedSection.section,
+        existingSectionMap
+      );
+    }
+
+    // No match found, just clone the template
+    return templateList.cloneNode(true);
+  }
+
+  /**
+   * Process a structural element (non-wrapper)
+   */
+  _processStructuralElement(element, existingSectionMap) {
+    if (
+      element.tagName.toLowerCase() === "ul" &&
+      element.classList.contains("filter-multi-select-list")
+    ) {
+      return this._createListWithExistingItems(element, existingSectionMap);
+    }
+
+    return element.cloneNode(true);
   }
 }
