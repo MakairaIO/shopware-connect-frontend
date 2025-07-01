@@ -2387,29 +2387,38 @@ export default class ListingListener extends Plugin {
   _createListForSection(templateList, sectionText, existingSectionMap) {
     const list = templateList.cloneNode(false); // Clone without children
 
-    // First, add existing items for this section
+    // Create a map of existing items by their labels to preserve checked states
+    const existingItemsMap = new Map();
     if (existingSectionMap.has(sectionText)) {
       const existingItems = existingSectionMap.get(sectionText);
       existingItems.forEach((item) => {
-        list.appendChild(item.cloneNode(true));
+        const label = this._getItemLabel(item);
+        if (label) {
+          const input = item.querySelector("input");
+          existingItemsMap.set(label, {
+            element: item,
+            checked: input ? input.checked : false,
+          });
+        }
       });
     }
 
-    // Then, add any new items from the template that don't already exist
+    // Use items from the new template (server response) as the source of truth
     const templateItems = Array.from(templateList.children);
     templateItems.forEach((templateItem) => {
       const templateLabel = this._getItemLabel(templateItem);
+      const newItem = templateItem.cloneNode(true);
 
-      // Check if this item already exists in our list
-      const existsInList = Array.from(list.children).some((existingItem) => {
-        const existingLabel = this._getItemLabel(existingItem);
-        return existingLabel === templateLabel;
-      });
-
-      if (!existsInList) {
-        const newItem = templateItem.cloneNode(true);
-        list.appendChild(newItem);
+      // If we have an existing item with the same label, preserve its checked state
+      if (templateLabel && existingItemsMap.has(templateLabel)) {
+        const existingInfo = existingItemsMap.get(templateLabel);
+        const newInput = newItem.querySelector("input");
+        if (newInput && existingInfo.checked) {
+          newInput.checked = true;
+        }
       }
+
+      list.appendChild(newItem);
     });
 
     return list;
@@ -2453,8 +2462,39 @@ export default class ListingListener extends Plugin {
       );
     }
 
-    // No match found, just clone the template
-    return templateList.cloneNode(true);
+    // No section match found - create a map of all existing items to preserve checked states
+    const existingItemsMap = new Map();
+    existingSectionMap.forEach((existingItems, sectionText) => {
+      existingItems.forEach((item) => {
+        const label = this._getItemLabel(item);
+        if (label) {
+          const input = item.querySelector("input");
+          existingItemsMap.set(label, {
+            element: item,
+            checked: input ? input.checked : false,
+          });
+        }
+      });
+    });
+
+    // Use items from the template (server response) as the source of truth
+    templateItems.forEach((templateItem) => {
+      const templateLabel = this._getItemLabel(templateItem);
+      const newItem = templateItem.cloneNode(true);
+
+      // If we have an existing item with the same label, preserve its checked state
+      if (templateLabel && existingItemsMap.has(templateLabel)) {
+        const existingInfo = existingItemsMap.get(templateLabel);
+        const newInput = newItem.querySelector("input");
+        if (newInput && existingInfo.checked) {
+          newInput.checked = true;
+        }
+      }
+
+      list.appendChild(newItem);
+    });
+
+    return list;
   }
 
   /**
