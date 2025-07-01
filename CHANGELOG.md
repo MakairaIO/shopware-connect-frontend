@@ -1,3 +1,9 @@
+## [1.9.9](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.8...1.9.9) (2025-07-01)
+
+### Bug Fixes
+
+* filter values list optimization ([46d496f](https://github.com/MakairaIO/shopware-connect-frontend/commit/46d496f2227b96900598dc33828d5a5f21b8f102))
+
 ## [1.9.8](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.7...1.9.8) (2025-06-30)
 
 ### Bug Fixes
