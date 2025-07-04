@@ -92,6 +92,19 @@
             <argument type="service" id="event_dispatcher" />
         </service>
 
+        <service
+      id="MakairaConnectFrontend\Core\Content\Category\SalesChannel\CategoryRoute"
+      decorates="Shopware\Core\Content\Category\SalesChannel\CategoryRoute"
+      decoration-priority="-1100"
+      decoration-on-invalid="ignore"
+    >
+            <argument type="service" id="MakairaConnectFrontend\Core\Content\Category\SalesChannel\CategoryRoute.inner" />
+            <argument type="service" id="Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoader" />
+            <argument type="service" id="category.repository" />
+            <argument type="service" id="Shopware\Core\Content\Category\CategoryDefinition" />
+            <argument type="service" id="monolog.logger.makaira_frontend" />
+        </service>
+
 
         <!-- Loader -->    
         <service id="MakairaConnectFrontend\Loader\SalesChannelLoader" public="true">
@@ -112,7 +125,6 @@
             <argument type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />
             <tag name="kernel.event_subscriber" />
         </service>
-
 
         <service id="MakairaConnectFrontend\Service\FilterExtractionService" public="true" />
         <service id="MakairaConnectFrontend\Service\SortingMappingService" public="true" />
