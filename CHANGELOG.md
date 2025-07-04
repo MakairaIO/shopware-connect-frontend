@@ -1,3 +1,9 @@
+## [1.9.10](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.9...1.9.10) (2025-07-04)
+
+### Bug Fixes
+
+* add CategoryRoute decorator for enhanced category loading with caching control ([314887c](https://github.com/MakairaIO/shopware-connect-frontend/commit/314887cff4956e82eb4b19088e6f6af9444a595e))
+
 ## [1.9.9](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.8...1.9.9) (2025-07-01)
 
 ### Bug Fixes
