@@ -1,3 +1,9 @@
+## [1.9.11](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.10...1.9.11) (2025-07-21)
+
+### Bug Fixes
+
+* respect "show doument count" setting ([fb05e19](https://github.com/MakairaIO/shopware-connect-frontend/commit/fb05e190b1aed19bc914d35f6b096bb9cb98b21e))
+
 ## [1.9.10](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.9...1.9.10) (2025-07-04)
 
 ### Bug Fixes
