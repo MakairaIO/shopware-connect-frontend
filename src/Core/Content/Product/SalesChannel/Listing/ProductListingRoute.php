@@ -142,7 +142,11 @@ class ProductListingRoute extends AbstractProductListingRoute
             }
 
             if (isset($makairaResponse->product->aggregations)) {
-                $makairaFrontend->setAggregations(json_decode(json_encode($makairaResponse->product->aggregations), true));
+                // Convert aggregations to array and ensure showDocCount is available
+                $aggregations = json_decode(json_encode($makairaResponse->product->aggregations), true);
+                $aggregations = $this->enrichAggregationsWithShowDocCount($aggregations);
+
+                $makairaFrontend->setAggregations($aggregations);
                 $makairaFrontend->setTotal($makairaResponse->product->total);
                 $this->logger->debug('[Makaira] Aggregations set from response', [
                     'aggregations' => $makairaResponse->product->aggregations,
@@ -325,5 +329,29 @@ class ProductListingRoute extends AbstractProductListingRoute
                 usleep(1000); // 1ms delay
             }
         }
+    }
+
+    /**
+     * Enrich aggregations with showDocCount for template usage
+     */
+    private function enrichAggregationsWithShowDocCount(array $aggregations): array
+    {
+        foreach ($aggregations as &$aggregation) {
+            // Set showDocCount at aggregation level if not present
+            if (!isset($aggregation['showDocCount'])) {
+                $aggregation['showDocCount'] = true; // Default to showing doc count
+            }
+
+            // Ensure each value/element has showDocCount
+            if (isset($aggregation['values']) && is_array($aggregation['values'])) {
+                foreach ($aggregation['values'] as &$value) {
+                    if (is_array($value) && !isset($value['showDocCount'])) {
+                        $value['showDocCount'] = $aggregation['showDocCount'];
+                    }
+                }
+            }
+        }
+
+        return $aggregations;
     }
 }

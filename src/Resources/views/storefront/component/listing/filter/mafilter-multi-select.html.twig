@@ -63,9 +63,12 @@
                     <ul class="filter-multi-select-list" aria-label="{{ displayName }}">
                         {% for element in elements %}
                             {% block component_filter_multi_select_list_item %}
+
                                 <li class="filter-multi-select-list-item">
                                     {% block component_filter_multi_select_list_item_inner %}                                    
-                                        {% sw_include '@Storefront/storefront/component/listing/filter/mafilter-multi-select-list-item.html.twig' %}
+                                        {% sw_include '@Storefront/storefront/component/listing/filter/mafilter-multi-select-list-item.html.twig' with {
+                                            showDocCount: element.showDocCount
+                                        } %}
                                     {% endblock %}
                                 </li>
                             {% endblock %}

@@ -13,7 +13,11 @@
     
         <label class="filter-multi-select-item-label form-check-label" for="{{ id }}">
             {% block component_multi_select_list_item_label %}
-                {{ name }} ({{cnt}})
+                {% if showDocCount %}
+                    {{ name }} ({{cnt}})
+                {% else %}
+                    {{ name }}
+                {% endif %}
             {% endblock %}
         </label>
     </div>

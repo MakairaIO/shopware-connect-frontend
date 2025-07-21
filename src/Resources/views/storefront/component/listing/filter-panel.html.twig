@@ -14,7 +14,7 @@
         {% if not makairaAggregations %}
             {{ parent() }}
         {% else %}
-            {% for key, aggregation in makairaAggregations %}                
+            {% for key, aggregation in makairaAggregations %}
                 {% if aggregation.type == 'list_multiselect' %}
                     {% sw_include '@MakairaConnectFrontend/storefront/component/listing/filter/mafilter-multi-select.html.twig' with {
                         elements: aggregation.values,
@@ -23,7 +23,8 @@
                         hidden: false,
                         displayName: aggregation.title,
                         propertyName: aggregation.title,
-                        ariaLabel: aggregation.title
+                        ariaLabel: aggregation.title,
+                        showDocCount: aggregation.showDocCount
                     } %}
                 {% endif %}
 
@@ -34,7 +35,8 @@
                         name: aggregation.key,
                         hidden: false,
                         displayName: aggregation.title,
-                        propertyName: aggregation.title
+                        propertyName: aggregation.title,
+                        showDocCount: aggregation.showDocCount
                     } %}
                 {% endif %}
 
