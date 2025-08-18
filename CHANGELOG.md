@@ -1,3 +1,10 @@
+## [1.9.12](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.11...1.9.12) (2025-08-18)
+
+### Bug Fixes
+
+* set correct filter visibility ([e110dc7](https://github.com/MakairaIO/shopware-connect-frontend/commit/e110dc7d0873d109292331d0e973ee54be49c1b8))
+* sorting parameter ([70e789d](https://github.com/MakairaIO/shopware-connect-frontend/commit/70e789d3e0e832b7a507fc48415a130b15180fc2))
+
 ## [1.9.11](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.10...1.9.11) (2025-07-21)
 
 ### Bug Fixes
