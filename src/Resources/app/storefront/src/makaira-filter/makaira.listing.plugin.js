@@ -9,6 +9,18 @@ export default class MakairaListing extends ListingPlugin {
     const filters = this._fetchValuesOfRegisteredFilters();
     const mapped = this._mapFilters(filters);
 
+    const sortingElement = document.querySelector(
+      '[data-listing-sorting="true"]'
+    );
+    if (sortingElement) {
+      const selectElement = sortingElement.querySelector("select");
+      if (selectElement && selectElement.value) {
+        // Determine the parameter name from the select element
+        const paramName = selectElement.name || "order";
+        mapped[paramName] = selectElement.value;
+      }
+    }
+
     if (this._filterPanelActive) {
       this._showResetAll = !!Object.keys(mapped).length;
     }
