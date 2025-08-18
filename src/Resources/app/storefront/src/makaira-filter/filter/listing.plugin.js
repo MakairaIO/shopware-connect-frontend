@@ -2253,6 +2253,23 @@ export default class ListingListener extends Plugin {
           newFilter,
           existingSectionMap
         );
+      } else if (newFilter && !oldFilter) {
+        // Add new filters that don't exist in the old panel
+        oldPanel.appendChild(newFilter);
+        //this._attachEventHandlersToNewFilter(newFilter);
+      }
+    });
+
+    // Remove filters that no longer exist in the new panel
+    Object.keys(oldFiltersMap).forEach((filterName) => {
+      if (!newFiltersMap[filterName]) {
+        const obsoleteFilter = oldFiltersMap[filterName];
+        obsoleteFilter.classList.add("filter-panel-item-hidden");
+      } else {
+        const obsoleteFilter = oldFiltersMap[filterName];
+        if (obsoleteFilter.classList.contains("filter-panel-item-hidden")) {
+          obsoleteFilter.classList.remove("filter-panel-item-hidden");
+        }
       }
     });
   }
