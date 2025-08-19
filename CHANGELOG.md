@@ -1,3 +1,9 @@
+## [1.9.19](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.18...1.9.19) (2025-08-19)
+
+### Bug Fixes
+
+* streamline plugin registration and initialization process ([32e9e99](https://github.com/MakairaIO/shopware-connect-frontend/commit/32e9e9979633b4fc47fbbbeac645f0eec684c26b))
+
 ## [1.9.18](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.17...1.9.18) (2025-08-19)
 
 ### Bug Fixes
