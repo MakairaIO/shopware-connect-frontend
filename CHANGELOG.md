@@ -1,3 +1,9 @@
+## [1.9.15](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.14...1.9.15) (2025-08-19)
+
+### Bug Fixes
+
+* optimize webpack ([dbe649a](https://github.com/MakairaIO/shopware-connect-frontend/commit/dbe649a3cb6a63920f379d051a97755137a9ced9))
+
 ## [1.9.14](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.13...1.9.14) (2025-08-19)
 
 ### Bug Fixes
