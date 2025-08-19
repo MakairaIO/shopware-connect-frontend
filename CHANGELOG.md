@@ -1,3 +1,9 @@
+## [1.9.14](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.13...1.9.14) (2025-08-19)
+
+### Bug Fixes
+
+* rebuild assets ([bb6b1bf](https://github.com/MakairaIO/shopware-connect-frontend/commit/bb6b1bf27e2af501bb9652bdb7470048864a4c5a))
+
 ## [1.9.13](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.12...1.9.13) (2025-08-18)
 
 ### Bug Fixes
