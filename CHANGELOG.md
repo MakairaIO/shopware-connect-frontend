@@ -1,3 +1,9 @@
+## [1.9.16](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.15...1.9.16) (2025-08-19)
+
+### Bug Fixes
+
+* adjust plugin loading ([04b6d26](https://github.com/MakairaIO/shopware-connect-frontend/commit/04b6d26003a0fcc9e93deef18023b8392b715a88))
+
 ## [1.9.15](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.14...1.9.15) (2025-08-19)
 
 ### Bug Fixes
