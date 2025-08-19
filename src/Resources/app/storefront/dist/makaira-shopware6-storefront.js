@@ -1,114 +1,114 @@
 (() => {
   "use strict";
-  var e,
-    t,
+  var t,
+    e,
     i = {
-      139: (e, t, i) => {
-        i.d(t, { A: () => n });
+      139: (t, e, i) => {
+        i.d(e, { A: () => n });
         var r = i(747);
         class n {
-          static isNode(e) {
+          static isNode(t) {
             return (
-              "object" == typeof e &&
-              null !== e &&
-              (e === document || e === window || e instanceof Node)
+              "object" == typeof t &&
+              null !== t &&
+              (t === document || t === window || t instanceof Node)
             );
           }
-          static hasAttribute(e, t) {
-            if (!n.isNode(e))
+          static hasAttribute(t, e) {
+            if (!n.isNode(t))
               throw new Error("The element must be a valid HTML Node!");
-            return "function" == typeof e.hasAttribute && e.hasAttribute(t);
+            return "function" == typeof t.hasAttribute && t.hasAttribute(e);
           }
-          static getAttribute(e, t, i = !0) {
-            if (i && !1 === n.hasAttribute(e, t))
-              throw new Error(`The required property "${t}" does not exist!`);
-            if ("function" == typeof e.getAttribute) return e.getAttribute(t);
+          static getAttribute(t, e, i = !0) {
+            if (i && !1 === n.hasAttribute(t, e))
+              throw new Error(`The required property "${e}" does not exist!`);
+            if ("function" == typeof t.getAttribute) return t.getAttribute(e);
             if (i)
               throw new Error(
                 "This node doesn't support the getAttribute function!"
               );
           }
-          static getDataAttribute(e, t, i = !0) {
-            const s = t.replace(/^data(|-)/, ""),
+          static getDataAttribute(t, e, i = !0) {
+            const s = e.replace(/^data(|-)/, ""),
               l = r.A.toLowerCamelCase(s, "-");
-            if (!n.isNode(e)) {
+            if (!n.isNode(t)) {
               if (i)
                 throw new Error("The passed node is not a valid HTML Node!");
               return;
             }
-            if (void 0 === e.dataset) {
+            if (void 0 === t.dataset) {
               if (i)
                 throw new Error(
                   "This node doesn't support the dataset attribute!"
                 );
               return;
             }
-            const o = e.dataset[l];
+            const o = t.dataset[l];
             if (void 0 === o) {
               if (i)
                 throw new Error(
-                  `The required data attribute "${t}" does not exist on ${e}!`
+                  `The required data attribute "${e}" does not exist on ${t}!`
                 );
               return o;
             }
             return r.A.parsePrimitive(o);
           }
-          static querySelector(e, t, i = !0) {
-            if (i && !n.isNode(e))
+          static querySelector(t, e, i = !0) {
+            if (i && !n.isNode(t))
               throw new Error("The parent node is not a valid HTML Node!");
-            const r = e.querySelector(t) || !1;
+            const r = t.querySelector(e) || !1;
             if (i && !1 === r)
               throw new Error(
-                `The required element "${t}" does not exist in parent node!`
+                `The required element "${e}" does not exist in parent node!`
               );
             return r;
           }
-          static querySelectorAll(e, t, i = !0) {
-            if (i && !n.isNode(e))
+          static querySelectorAll(t, e, i = !0) {
+            if (i && !n.isNode(t))
               throw new Error("The parent node is not a valid HTML Node!");
-            let r = e.querySelectorAll(t);
+            let r = t.querySelectorAll(e);
             if ((0 === r.length && (r = !1), i && !1 === r))
               throw new Error(
-                `At least one item of "${t}" must exist in parent node!`
+                `At least one item of "${e}" must exist in parent node!`
               );
             return r;
           }
-          static getFocusableElements(e = document.body) {
-            return e.querySelectorAll(
+          static getFocusableElements(t = document.body) {
+            return t.querySelectorAll(
               '\n            input:not([tabindex^="-"]):not([disabled]):not([type="hidden"]),\n            select:not([tabindex^="-"]):not([disabled]),\n            textarea:not([tabindex^="-"]):not([disabled]),\n            button:not([tabindex^="-"]):not([disabled]),\n            a[href]:not([tabindex^="-"]):not([disabled]),\n            [tabindex]:not([tabindex^="-"]):not([disabled])\n        '
             );
           }
-          static getFirstFocusableElement(e = document.body) {
-            return this.getFocusableElements(e)[0];
+          static getFirstFocusableElement(t = document.body) {
+            return this.getFocusableElements(t)[0];
           }
-          static getLastFocusableElement(e = document) {
-            const t = this.getFocusableElements(e);
-            return t[t.length - 1];
+          static getLastFocusableElement(t = document) {
+            const e = this.getFocusableElements(t);
+            return e[e.length - 1];
           }
         }
       },
-      194: (e, t, i) => {
-        i.d(t, { A: () => a });
+      194: (t, e, i) => {
+        i.d(e, { A: () => a });
         var r = i(744),
           n = i.n(r),
           s = i(139),
           l = i(747);
         class o {
-          constructor(e = document) {
-            (this._el = e), (e.$emitter = this), (this._listeners = []);
+          constructor(t = document) {
+            (this._el = t), (t.$emitter = this), (this._listeners = []);
           }
-          publish(e, t = {}, i = !1) {
-            const r = new CustomEvent(e, { detail: t, cancelable: i });
+          publish(t, e = {}, i = !1) {
+            const r = new CustomEvent(t, { detail: e, cancelable: i });
             return this.el.dispatchEvent(r), r;
           }
-          subscribe(e, t, i = {}) {
+          subscribe(t, e, i = {}) {
             const r = this,
-              n = e.split(".");
-            let s = i.scope ? t.bind(i.scope) : t;
+              n = t.split(".");
+            let s = i.scope ? e.bind(i.scope) : e;
             if (i.once && !0 === i.once) {
-              const t = s;
+              const e = s;
               s = function (i) {
-                r.unsubscribe(e), t(i);
+                r.unsubscribe(t), e(i);
               };
             }
             return (
@@ -117,16 +117,16 @@
               !0
             );
           }
-          unsubscribe(e) {
-            const t = e.split(".");
+          unsubscribe(t) {
+            const e = t.split(".");
             return (
               (this.listeners = this.listeners.reduce(
-                (e, i) =>
+                (t, i) =>
                   [...i.splitEventName].sort().toString() ===
-                  t.sort().toString()
+                  e.sort().toString()
                     ? (this.el.removeEventListener(i.splitEventName[0], i.cb),
-                      e)
-                    : (e.push(i), e),
+                      t)
+                    : (t.push(i), t),
                 []
               )),
               !0
@@ -134,8 +134,8 @@
           }
           reset() {
             return (
-              this.listeners.forEach((e) => {
-                this.el.removeEventListener(e.splitEventName[0], e.cb);
+              this.listeners.forEach((t) => {
+                this.el.removeEventListener(t.splitEventName[0], t.cb);
               }),
               (this.listeners = []),
               !0
@@ -144,24 +144,24 @@
           get el() {
             return this._el;
           }
-          set el(e) {
-            this._el = e;
+          set el(t) {
+            this._el = t;
           }
           get listeners() {
             return this._listeners;
           }
-          set listeners(e) {
-            this._listeners = e;
+          set listeners(t) {
+            this._listeners = t;
           }
         }
         class a {
-          constructor(e, t = {}, i = !1) {
-            if (!s.A.isNode(e))
+          constructor(t, e = {}, i = !1) {
+            if (!s.A.isNode(t))
               throw new Error("There is no valid element given.");
-            (this.el = e),
+            (this.el = t),
               (this.$emitter = new o(this.el)),
               (this._pluginName = this._getPluginName(i)),
-              (this.options = this._mergeOptions(t)),
+              (this.options = this._mergeOptions(e)),
               (this._initialized = !1),
               this._registerInstance(),
               this._init();
@@ -178,26 +178,26 @@
           _update() {
             this._initialized && this.update();
           }
-          _mergeOptions(e) {
-            const t = l.A.toDashCase(this._pluginName),
-              i = s.A.getDataAttribute(this.el, `data-${t}-config`, !1),
-              r = s.A.getAttribute(this.el, `data-${t}-options`, !1),
-              o = [this.constructor.options, this.options, e];
+          _mergeOptions(t) {
+            const e = l.A.toDashCase(this._pluginName),
+              i = s.A.getDataAttribute(this.el, `data-${e}-config`, !1),
+              r = s.A.getAttribute(this.el, `data-${e}-options`, !1),
+              o = [this.constructor.options, this.options, t];
             i && o.push(window.PluginConfigManager.get(this._pluginName, i));
             try {
               r && o.push(JSON.parse(r));
-            } catch (e) {
+            } catch (t) {
               throw (
                 (console.error(this.el),
                 new Error(
-                  `The data attribute "data-${t}-options" could not be parsed to json: ${e.message}`
+                  `The data attribute "data-${e}-options" could not be parsed to json: ${t.message}`
                 ))
               );
             }
             return n().all(
               o
-                .filter((e) => e instanceof Object && !(e instanceof Array))
-                .map((e) => e || {})
+                .filter((t) => t instanceof Object && !(t instanceof Array))
+                .map((t) => t || {})
             );
           }
           _registerInstance() {
@@ -209,185 +209,185 @@
                 .get("instances")
                 .push(this);
           }
-          _getPluginName(e) {
-            return e || (e = this.constructor.name), e;
+          _getPluginName(t) {
+            return t || (t = this.constructor.name), t;
           }
         }
       },
-      744: (e) => {
-        var t = function (e) {
+      744: (t) => {
+        var e = function (t) {
             return (
-              (function (e) {
-                return !!e && "object" == typeof e;
-              })(e) &&
-              !(function (e) {
-                var t = Object.prototype.toString.call(e);
+              (function (t) {
+                return !!t && "object" == typeof t;
+              })(t) &&
+              !(function (t) {
+                var e = Object.prototype.toString.call(t);
                 return (
-                  "[object RegExp]" === t ||
-                  "[object Date]" === t ||
-                  (function (e) {
-                    return e.$$typeof === i;
-                  })(e)
+                  "[object RegExp]" === e ||
+                  "[object Date]" === e ||
+                  (function (t) {
+                    return t.$$typeof === i;
+                  })(t)
                 );
-              })(e)
+              })(t)
             );
           },
           i =
             "function" == typeof Symbol && Symbol.for
               ? Symbol.for("react.element")
               : 60103;
-        function r(e, t) {
-          return !1 !== t.clone && t.isMergeableObject(e)
-            ? o(((i = e), Array.isArray(i) ? [] : {}), e, t)
-            : e;
+        function r(t, e) {
+          return !1 !== e.clone && e.isMergeableObject(t)
+            ? o(((i = t), Array.isArray(i) ? [] : {}), t, e)
+            : t;
           var i;
         }
-        function n(e, t, i) {
-          return e.concat(t).map(function (e) {
-            return r(e, i);
+        function n(t, e, i) {
+          return t.concat(e).map(function (t) {
+            return r(t, i);
           });
         }
-        function s(e) {
-          return Object.keys(e).concat(
-            (function (e) {
+        function s(t) {
+          return Object.keys(t).concat(
+            (function (t) {
               return Object.getOwnPropertySymbols
-                ? Object.getOwnPropertySymbols(e).filter(function (t) {
-                    return Object.propertyIsEnumerable.call(e, t);
+                ? Object.getOwnPropertySymbols(t).filter(function (e) {
+                    return Object.propertyIsEnumerable.call(t, e);
                   })
                 : [];
-            })(e)
+            })(t)
           );
         }
-        function l(e, t) {
+        function l(t, e) {
           try {
-            return t in e;
-          } catch (e) {
+            return e in t;
+          } catch (t) {
             return !1;
           }
         }
-        function o(e, i, a) {
+        function o(t, i, a) {
           ((a = a || {}).arrayMerge = a.arrayMerge || n),
-            (a.isMergeableObject = a.isMergeableObject || t),
+            (a.isMergeableObject = a.isMergeableObject || e),
             (a.cloneUnlessOtherwiseSpecified = r);
           var c = Array.isArray(i);
-          return c === Array.isArray(e)
+          return c === Array.isArray(t)
             ? c
-              ? a.arrayMerge(e, i, a)
-              : (function (e, t, i) {
+              ? a.arrayMerge(t, i, a)
+              : (function (t, e, i) {
                   var n = {};
                   return (
-                    i.isMergeableObject(e) &&
-                      s(e).forEach(function (t) {
-                        n[t] = r(e[t], i);
+                    i.isMergeableObject(t) &&
+                      s(t).forEach(function (e) {
+                        n[e] = r(t[e], i);
                       }),
-                    s(t).forEach(function (s) {
-                      (function (e, t) {
+                    s(e).forEach(function (s) {
+                      (function (t, e) {
                         return (
-                          l(e, t) &&
+                          l(t, e) &&
                           !(
-                            Object.hasOwnProperty.call(e, t) &&
-                            Object.propertyIsEnumerable.call(e, t)
+                            Object.hasOwnProperty.call(t, e) &&
+                            Object.propertyIsEnumerable.call(t, e)
                           )
                         );
-                      })(e, s) ||
-                        (l(e, s) && i.isMergeableObject(t[s])
-                          ? (n[s] = (function (e, t) {
-                              if (!t.customMerge) return o;
-                              var i = t.customMerge(e);
+                      })(t, s) ||
+                        (l(t, s) && i.isMergeableObject(e[s])
+                          ? (n[s] = (function (t, e) {
+                              if (!e.customMerge) return o;
+                              var i = e.customMerge(t);
                               return "function" == typeof i ? i : o;
-                            })(s, i)(e[s], t[s], i))
-                          : (n[s] = r(t[s], i)));
+                            })(s, i)(t[s], e[s], i))
+                          : (n[s] = r(e[s], i)));
                     }),
                     n
                   );
-                })(e, i, a)
+                })(t, i, a)
             : r(i, a);
         }
-        o.all = function (e, t) {
-          if (!Array.isArray(e))
+        o.all = function (t, e) {
+          if (!Array.isArray(t))
             throw new Error("first argument should be an array");
-          return e.reduce(function (e, i) {
-            return o(e, i, t);
+          return t.reduce(function (t, i) {
+            return o(t, i, e);
           }, {});
         };
         var a = o;
-        e.exports = a;
+        t.exports = a;
       },
-      747: (e, t, i) => {
-        i.d(t, { A: () => r });
+      747: (t, e, i) => {
+        i.d(e, { A: () => r });
         class r {
-          static ucFirst(e) {
-            return e.charAt(0).toUpperCase() + e.slice(1);
+          static ucFirst(t) {
+            return t.charAt(0).toUpperCase() + t.slice(1);
           }
-          static lcFirst(e) {
-            return e.charAt(0).toLowerCase() + e.slice(1);
+          static lcFirst(t) {
+            return t.charAt(0).toLowerCase() + t.slice(1);
           }
-          static toDashCase(e) {
-            return e
+          static toDashCase(t) {
+            return t
               .replace(/([A-Z])/g, "-$1")
               .replace(/^-/, "")
               .toLowerCase();
           }
-          static toLowerCamelCase(e, t) {
-            const i = r.toUpperCamelCase(e, t);
+          static toLowerCamelCase(t, e) {
+            const i = r.toUpperCamelCase(t, e);
             return r.lcFirst(i);
           }
-          static toUpperCamelCase(e, t) {
-            return t
-              ? e
-                  .split(t)
-                  .map((e) => r.ucFirst(e.toLowerCase()))
+          static toUpperCamelCase(t, e) {
+            return e
+              ? t
+                  .split(e)
+                  .map((t) => r.ucFirst(t.toLowerCase()))
                   .join("")
-              : r.ucFirst(e.toLowerCase());
+              : r.ucFirst(t.toLowerCase());
           }
-          static parsePrimitive(e) {
+          static parsePrimitive(t) {
             try {
               return (
-                /^\d+(.|,)\d+$/.test(e) && (e = e.replace(",", ".")),
-                JSON.parse(e)
+                /^\d+(.|,)\d+$/.test(t) && (t = t.replace(",", ".")),
+                JSON.parse(t)
               );
-            } catch (t) {
-              return e.toString();
+            } catch (e) {
+              return t.toString();
             }
           }
         }
       },
     },
     r = {};
-  function n(e) {
-    var t = r[e];
-    if (void 0 !== t) return t.exports;
-    var s = (r[e] = { exports: {} });
-    return i[e](s, s.exports, n), s.exports;
+  function n(t) {
+    var e = r[t];
+    if (void 0 !== e) return e.exports;
+    var s = (r[t] = { exports: {} });
+    return i[t](s, s.exports, n), s.exports;
   }
   (n.m = i),
-    (n.n = (e) => {
-      var t = e && e.__esModule ? () => e.default : () => e;
-      return n.d(t, { a: t }), t;
+    (n.n = (t) => {
+      var e = t && t.__esModule ? () => t.default : () => t;
+      return n.d(e, { a: e }), e;
     }),
-    (n.d = (e, t) => {
-      for (var i in t)
-        n.o(t, i) &&
-          !n.o(e, i) &&
-          Object.defineProperty(e, i, { enumerable: !0, get: t[i] });
+    (n.d = (t, e) => {
+      for (var i in e)
+        n.o(e, i) &&
+          !n.o(t, i) &&
+          Object.defineProperty(t, i, { enumerable: !0, get: e[i] });
     }),
     (n.f = {}),
-    (n.e = (e) =>
-      Promise.all(Object.keys(n.f).reduce((t, i) => (n.f[i](e, t), t), []))),
-    (n.u = (e) => e + ".makaira-shopware6-storefront.js"),
+    (n.e = (t) =>
+      Promise.all(Object.keys(n.f).reduce((e, i) => (n.f[i](t, e), e), []))),
+    (n.u = (t) => t + ".makaira-shopware6-storefront.js"),
     (n.g = (function () {
       if ("object" == typeof globalThis) return globalThis;
       try {
         return this || new Function("return this")();
-      } catch (e) {
+      } catch (t) {
         if ("object" == typeof window) return window;
       }
     })()),
-    (n.o = (e, t) => Object.prototype.hasOwnProperty.call(e, t)),
-    (e = {}),
-    (t = "makaira-shopware6-storefront:"),
+    (n.o = (t, e) => Object.prototype.hasOwnProperty.call(t, e)),
+    (t = {}),
+    (e = "makaira-shopware6-storefront:"),
     (n.l = (i, r, s, l) => {
-      if (e[i]) e[i].push(r);
+      if (t[i]) t[i].push(r);
       else {
         var o, a;
         if (void 0 !== s)
@@ -399,7 +399,7 @@
             var d = c[u];
             if (
               d.getAttribute("src") == i ||
-              d.getAttribute("data-webpack") == t + s
+              d.getAttribute("data-webpack") == e + s
             ) {
               o = d;
               break;
@@ -410,19 +410,19 @@
           ((o = document.createElement("script")).charset = "utf-8"),
           (o.timeout = 120),
           n.nc && o.setAttribute("nonce", n.nc),
-          o.setAttribute("data-webpack", t + s),
+          o.setAttribute("data-webpack", e + s),
           (o.src = i)),
-          (e[i] = [r]);
-        var m = (t, r) => {
+          (t[i] = [r]);
+        var m = (e, r) => {
             (o.onerror = o.onload = null), clearTimeout(f);
-            var n = e[i];
+            var n = t[i];
             if (
-              (delete e[i],
+              (delete t[i],
               o.parentNode && o.parentNode.removeChild(o),
-              n && n.forEach((e) => e(r)),
-              t)
+              n && n.forEach((t) => t(r)),
+              e)
             )
-              return t(r);
+              return e(r);
           },
           f = setTimeout(
             m.bind(null, void 0, { type: "timeout", target: o }),
@@ -433,106 +433,106 @@
           a && document.head.appendChild(o);
       }
     }),
-    (n.r = (e) => {
+    (n.r = (t) => {
       "undefined" != typeof Symbol &&
         Symbol.toStringTag &&
-        Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }),
-        Object.defineProperty(e, "__esModule", { value: !0 });
+        Object.defineProperty(t, Symbol.toStringTag, { value: "Module" }),
+        Object.defineProperty(t, "__esModule", { value: !0 });
     }),
     (() => {
-      var e;
-      n.g.importScripts && (e = n.g.location + "");
-      var t = n.g.document;
+      var t;
+      n.g.importScripts && (t = n.g.location + "");
+      var e = n.g.document;
       if (
-        !e &&
-        t &&
-        (t.currentScript &&
-          "SCRIPT" === t.currentScript.tagName.toUpperCase() &&
-          (e = t.currentScript.src),
-        !e)
+        !t &&
+        e &&
+        (e.currentScript &&
+          "SCRIPT" === e.currentScript.tagName.toUpperCase() &&
+          (t = e.currentScript.src),
+        !t)
       ) {
-        var i = t.getElementsByTagName("script");
+        var i = e.getElementsByTagName("script");
         if (i.length)
-          for (var r = i.length - 1; r > -1 && (!e || !/^http(s?):/.test(e)); )
-            e = i[r--].src;
+          for (var r = i.length - 1; r > -1 && (!t || !/^http(s?):/.test(t)); )
+            t = i[r--].src;
       }
-      if (!e)
+      if (!t)
         throw new Error(
           "Automatic publicPath is not supported in this browser"
         );
-      (e = e
+      (t = t
         .replace(/^blob:/, "")
         .replace(/#.*$/, "")
         .replace(/\?.*$/, "")
         .replace(/\/[^\/]+$/, "/")),
-        (n.p = e);
+        (n.p = t);
     })(),
     (() => {
-      var e = { 792: 0 };
-      n.f.j = (t, i) => {
-        var r = n.o(e, t) ? e[t] : void 0;
+      var t = { 792: 0 };
+      n.f.j = (e, i) => {
+        var r = n.o(t, e) ? t[e] : void 0;
         if (0 !== r)
           if (r) i.push(r[2]);
           else {
-            var s = new Promise((i, n) => (r = e[t] = [i, n]));
+            var s = new Promise((i, n) => (r = t[e] = [i, n]));
             i.push((r[2] = s));
-            var l = n.p + n.u(t),
+            var l = n.p + n.u(e),
               o = new Error();
             n.l(
               l,
               (i) => {
-                if (n.o(e, t) && (0 !== (r = e[t]) && (e[t] = void 0), r)) {
+                if (n.o(t, e) && (0 !== (r = t[e]) && (t[e] = void 0), r)) {
                   var s = i && ("load" === i.type ? "missing" : i.type),
                     l = i && i.target && i.target.src;
                   (o.message =
-                    "Loading chunk " + t + " failed.\n(" + s + ": " + l + ")"),
+                    "Loading chunk " + e + " failed.\n(" + s + ": " + l + ")"),
                     (o.name = "ChunkLoadError"),
                     (o.type = s),
                     (o.request = l),
                     r[1](o);
                 }
               },
-              "chunk-" + t,
-              t
+              "chunk-" + e,
+              e
             );
           }
       };
-      var t = (t, i) => {
+      var e = (e, i) => {
           var r,
             s,
             [l, o, a] = i,
             c = 0;
-          if (l.some((t) => 0 !== e[t])) {
+          if (l.some((e) => 0 !== t[e])) {
             for (r in o) n.o(o, r) && (n.m[r] = o[r]);
             a && a(n);
           }
-          for (t && t(i); c < l.length; c++)
-            (s = l[c]), n.o(e, s) && e[s] && e[s][0](), (e[s] = 0);
+          for (e && e(i); c < l.length; c++)
+            (s = l[c]), n.o(t, s) && t[s] && t[s][0](), (t[s] = 0);
         },
         i = (self.webpackChunkmakaira_shopware6_storefront =
           self.webpackChunkmakaira_shopware6_storefront || []);
-      i.forEach(t.bind(null, 0)), (i.push = t.bind(null, i.push.bind(i)));
+      i.forEach(e.bind(null, 0)), (i.push = e.bind(null, i.push.bind(i)));
     })();
   var s = n(194);
   class l extends s.A {
     static sidebarFilterSelector = ".cms-element-sidebar-filter";
     static options = { hideItemsWhenOffcanvasHidden: !1, enabled: !1 };
-    constructor(e, t, i) {
-      super(e, t, i), (this._isUpdating = !1), this._mergeConfigFromElement(e);
+    constructor(t, e, i) {
+      super(t, e, i), (this._isUpdating = !1), this._mergeConfigFromElement(t);
     }
-    _mergeConfigFromElement(e) {
-      const t = e.getAttribute("data-listing-listener-options");
-      if (t)
+    _mergeConfigFromElement(t) {
+      const e = t.getAttribute("data-listing-listener-options");
+      if (e)
         try {
-          const e = JSON.parse(t);
-          void 0 !== e.enabled && (this.options.enabled = e.enabled),
-            void 0 !== e.hideItemsWhenOffcanvasHidden &&
+          const t = JSON.parse(e);
+          void 0 !== t.enabled && (this.options.enabled = t.enabled),
+            void 0 !== t.hideItemsWhenOffcanvasHidden &&
               (this.options.hideItemsWhenOffcanvasHidden =
-                e.hideItemsWhenOffcanvasHidden);
-        } catch (e) {
+                t.hideItemsWhenOffcanvasHidden);
+        } catch (t) {
           console.warn(
             "ListingListener: Failed to parse configuration from data attribute",
-            e
+            t
           );
         }
     }
@@ -543,59 +543,59 @@
         this._connectToListingPlugin();
     }
     _connectToListingPlugin() {
-      const e = document.querySelector("[data-listing]");
-      if (e) {
-        const t = window.PluginManager.getPluginInstanceFromElement(
-          e,
+      const t = document.querySelector("[data-listing]");
+      if (t) {
+        const e = window.PluginManager.getPluginInstanceFromElement(
+          t,
           "Listing"
         );
-        t && (this.listing = t);
+        e && (this.listing = e);
       }
     }
     _isEnabled() {
       return !1 !== this.options.enabled && !1 !== this.options.enabled;
     }
     _registerEvents() {
-      this.$emitter.subscribe("Listing/afterRenderResponse", (e) => {
-        this._swapContent(e.detail.response);
+      this.$emitter.subscribe("Listing/afterRenderResponse", (t) => {
+        this._swapContent(t.detail.response);
       });
     }
-    _findFilterPanelContainers(e = document) {
-      return Array.from(e.querySelectorAll(".filter-panel-items-container"));
+    _findFilterPanelContainers(t = document) {
+      return Array.from(t.querySelectorAll(".filter-panel-items-container"));
     }
-    _extractAndMergeFilters(e) {
+    _extractAndMergeFilters(t) {
       try {
-        const t = this._getAvailableFiltersFromDocument(e);
-        if (0 === t.length) return;
-        this._storeCurrentFiltersToLocalStorage(t);
+        const e = this._getAvailableFiltersFromDocument(t);
+        if (0 === e.length) return;
+        this._storeCurrentFiltersToLocalStorage(e);
         const i = this._getStoredFilters(),
-          r = [...new Set([...i, ...t])];
+          r = [...new Set([...i, ...e])];
         this._storeFiltersToLocalStorage(r);
-      } catch (e) {
+      } catch (t) {
         console.error(
           "ListingListener: Failed to extract and merge filters:",
-          e
+          t
         );
       }
     }
-    _getAvailableFiltersFromDocument(e) {
-      const t = e.querySelectorAll(
+    _getAvailableFiltersFromDocument(t) {
+      const e = t.querySelectorAll(
           ".filter-panel-item[data-filter-multi-select-options]"
         ),
         i = [];
       return (
-        t.forEach((e) => {
+        e.forEach((t) => {
           try {
-            const t = e.getAttribute("data-filter-multi-select-options");
-            if (t) {
-              const e = JSON.parse(t);
-              e.name && i.push(e.name);
+            const e = t.getAttribute("data-filter-multi-select-options");
+            if (e) {
+              const t = JSON.parse(e);
+              t.name && i.push(t.name);
             }
-          } catch (t) {
+          } catch (e) {
             console.warn(
               "ListingListener: Failed to parse filter options for item:",
-              e,
-              t
+              t,
+              e
             );
           }
         }),
@@ -604,37 +604,37 @@
     }
     _getStoredFilters() {
       try {
-        const e = localStorage.getItem("macatfiall");
-        return e ? JSON.parse(e) : [];
-      } catch (e) {
+        const t = localStorage.getItem("macatfiall");
+        return t ? JSON.parse(t) : [];
+      } catch (t) {
         return (
           console.error(
             "ListingListener: Failed to retrieve filters from localStorage:",
-            e
+            t
           ),
           []
         );
       }
     }
-    _storeFiltersToLocalStorage(e) {
+    _storeFiltersToLocalStorage(t) {
       try {
-        const t = JSON.stringify(e);
-        localStorage.setItem("macatfiall", t);
-      } catch (e) {
+        const e = JSON.stringify(t);
+        localStorage.setItem("macatfiall", e);
+      } catch (t) {
         console.error(
           "ListingListener: Failed to store filters to localStorage:",
-          e
+          t
         );
       }
     }
-    _storeCurrentFiltersToLocalStorage(e) {
+    _storeCurrentFiltersToLocalStorage(t) {
       try {
-        const t = JSON.stringify(e);
-        localStorage.setItem("macurrfi", t);
-      } catch (e) {
+        const e = JSON.stringify(t);
+        localStorage.setItem("macurrfi", e);
+      } catch (t) {
         console.error(
           "ListingListener: Failed to store current filters to localStorage:",
-          e
+          t
         );
       }
     }
@@ -649,79 +649,79 @@
           document.$emitter.subscribe("onCloseOffcanvas", () => {
             this._onOffcanvasVisibilityChange(!1);
           }),
-        document.addEventListener("keydown", (e) => {
-          "Escape" === e.key &&
+        document.addEventListener("keydown", (t) => {
+          "Escape" === t.key &&
             this._isOffcanvasVisible() &&
             setTimeout(() => this._onOffcanvasVisibilityChange(!1), 100);
         });
     }
-    _onOffcanvasVisibilityChange(e) {
-      !e && this.options.hideItemsWhenOffcanvasHidden
+    _onOffcanvasVisibilityChange(t) {
+      !t && this.options.hideItemsWhenOffcanvasHidden
         ? this._hideAllFilterItems()
         : this._showAllActiveFilters();
     }
     _isOffcanvasVisible() {
-      const e = document.querySelectorAll(".offcanvas");
-      return Array.from(e).some(
-        (e) =>
-          e.classList.contains("show") || "none" !== getComputedStyle(e).display
+      const t = document.querySelectorAll(".offcanvas");
+      return Array.from(t).some(
+        (t) =>
+          t.classList.contains("show") || "none" !== getComputedStyle(t).display
       );
     }
     _hideAllFilterItems() {
-      const e = this._getAvailableFiltersFromLocalStorage();
-      e &&
-        0 !== e.length &&
+      const t = this._getAvailableFiltersFromLocalStorage();
+      t &&
+        0 !== t.length &&
         document
           .querySelectorAll(".filter-panel-items-container")
-          .forEach((t) => {
-            t.querySelectorAll(".filter-panel-item").forEach((t) => {
-              const i = this._getFilterNameFromItem(t);
-              i && e.includes(i) && this._hideFilterItem(t);
+          .forEach((e) => {
+            e.querySelectorAll(".filter-panel-item").forEach((e) => {
+              const i = this._getFilterNameFromItem(e);
+              i && t.includes(i) && this._hideFilterItem(e);
             });
           });
     }
     _showAllActiveFilters() {
-      const e = this._getCurrentFiltersFromLocalStorage();
-      e && 0 !== e.length
+      const t = this._getCurrentFiltersFromLocalStorage();
+      t && 0 !== t.length
         ? document
             .querySelectorAll(".filter-panel-items-container")
-            .forEach((t) => {
-              t.querySelectorAll(
+            .forEach((e) => {
+              e.querySelectorAll(
                 ".filter-panel-item, .filter-multi-select-list-item"
-              ).forEach((t) => {
-                const i = this._getFilterNameFromItem(t);
+              ).forEach((e) => {
+                const i = this._getFilterNameFromItem(e);
                 i &&
-                  (e.includes(i)
-                    ? this._showFilterItem(t)
-                    : this._hideFilterItem(t));
+                  (t.includes(i)
+                    ? this._showFilterItem(e)
+                    : this._hideFilterItem(e));
               });
             })
         : this._showAllAvailableFilters();
     }
     _showAllAvailableFilters() {
-      const e = this._getAvailableFiltersFromLocalStorage();
-      e &&
-        0 !== e.length &&
+      const t = this._getAvailableFiltersFromLocalStorage();
+      t &&
+        0 !== t.length &&
         document
           .querySelectorAll(".filter-panel-items-container")
-          .forEach((t) => {
-            t.querySelectorAll(
+          .forEach((e) => {
+            e.querySelectorAll(
               ".filter-panel-item, .filter-multi-select-list-item"
-            ).forEach((t) => {
-              const i = this._getFilterNameFromItem(t);
-              i && e.includes(i) && this._showFilterItem(t);
+            ).forEach((e) => {
+              const i = this._getFilterNameFromItem(e);
+              i && t.includes(i) && this._showFilterItem(e);
             });
           });
     }
     _getAvailableFiltersFromLocalStorage() {
       try {
-        const e = localStorage.getItem("macatfiall");
-        return e ? JSON.parse(e) : [];
-      } catch (e) {
+        const t = localStorage.getItem("macatfiall");
+        return t ? JSON.parse(t) : [];
+      } catch (t) {
         return (
           console.error(
             "ListingListener: Failed to retrieve filters from localStorage:",
-            e
+            t
           ),
           []
         );
@@ -729,67 +729,67 @@
     }
     _getCurrentFiltersFromLocalStorage() {
       try {
-        const e = localStorage.getItem("macurrfi");
-        return e ? JSON.parse(e) : [];
-      } catch (e) {
+        const t = localStorage.getItem("macurrfi");
+        return t ? JSON.parse(t) : [];
+      } catch (t) {
         return (
           console.error(
             "ListingListener: Failed to retrieve current filters from localStorage:",
-            e
+            t
           ),
           []
         );
       }
     }
-    _getFilterNameFromItem(e) {
+    _getFilterNameFromItem(t) {
       try {
-        const t = e.getAttribute("data-filter-multi-select-options");
-        if (t) return JSON.parse(t).name;
-        const i = e.closest("[data-filter-multi-select-options]");
+        const e = t.getAttribute("data-filter-multi-select-options");
+        if (e) return JSON.parse(e).name;
+        const i = t.closest("[data-filter-multi-select-options]");
         if (i) {
-          const e = i.getAttribute("data-filter-multi-select-options");
-          if (e) return JSON.parse(e).name;
+          const t = i.getAttribute("data-filter-multi-select-options");
+          if (t) return JSON.parse(t).name;
         }
         return null;
-      } catch (t) {
+      } catch (e) {
         return (
           console.warn(
             "ListingListener: Failed to extract filter name from item:",
-            e,
-            t
+            t,
+            e
           ),
           null
         );
       }
     }
-    _findFilterPanelContainer(e = document) {
-      const t = this._findFilterPanelContainers(e);
-      return t.length > 0 ? t[0] : null;
+    _findFilterPanelContainer(t = document) {
+      const e = this._findFilterPanelContainers(t);
+      return e.length > 0 ? e[0] : null;
     }
-    _getContainerIdentifier(e) {
-      if (e.id) return `id-${e.id}`;
-      if (e.dataset.filterType) return `filter-type-${e.dataset.filterType}`;
-      if (e.className) {
-        const t = e.className
+    _getContainerIdentifier(t) {
+      if (t.id) return `id-${t.id}`;
+      if (t.dataset.filterType) return `filter-type-${t.dataset.filterType}`;
+      if (t.className) {
+        const e = t.className
           .split(" ")
           .filter(
-            (e) =>
-              e.includes("filter") ||
-              e.includes("sidebar") ||
-              e.includes("offcanvas")
+            (t) =>
+              t.includes("filter") ||
+              t.includes("sidebar") ||
+              t.includes("offcanvas")
           )
           .sort()
           .join("-");
-        if (t) return `classes-${t}`;
+        if (e) return `classes-${e}`;
       }
-      const t = e.closest("[id], [data-filter-type]");
-      if (t) {
-        const e = t.id || t.dataset.filterType;
-        if (e) return `parent-${e}`;
+      const e = t.closest("[id], [data-filter-type]");
+      if (e) {
+        const t = e.id || e.dataset.filterType;
+        if (t) return `parent-${t}`;
       }
       return null;
     }
-    _swapContent(e) {
+    _swapContent(t) {
       if (!this._isUpdating) {
         this._isUpdating = !0;
         try {
@@ -798,22 +798,22 @@
             !this._isOffcanvasVisible()
           )
             return void this._hideAllFilterItems();
-          const t = new DOMParser().parseFromString(e, "text/html"),
+          const e = new DOMParser().parseFromString(t, "text/html"),
             i = this._findFilterPanelContainers(),
-            r = this._findFilterPanelContainers(t);
-          this._extractAndMergeFilters(t);
+            r = this._findFilterPanelContainers(e);
+          this._extractAndMergeFilters(e);
           const n = new Map();
-          r.forEach((e, t) => {
-            const i = this._getContainerIdentifier(e) || `panel-${t}`;
-            n.set(i, e);
+          r.forEach((t, e) => {
+            const i = this._getContainerIdentifier(t) || `panel-${e}`;
+            n.set(i, t);
           }),
-            i.forEach((e, t) => {
-              const i = this._getContainerIdentifier(e) || `panel-${t}`,
+            i.forEach((t, e) => {
+              const i = this._getContainerIdentifier(t) || `panel-${e}`,
                 s = n.get(i);
-              if (s) this._updateFilterPanelSelectively(e, s);
+              if (s) this._updateFilterPanelSelectively(t, s);
               else {
-                const i = r[t];
-                i && this._updateFilterPanelSelectively(e, i);
+                const i = r[e];
+                i && this._updateFilterPanelSelectively(t, i);
               }
             });
         } finally {
@@ -823,326 +823,326 @@
         }
       }
     }
-    _updateFilterPanelWithInnerHTML(e, t) {
-      const i = this._getInputStates(e);
-      (e.innerHTML = t.innerHTML),
-        this._restoreInputStates(e, i),
+    _updateFilterPanelWithInnerHTML(t, e) {
+      const i = this._getInputStates(t);
+      (t.innerHTML = e.innerHTML),
+        this._restoreInputStates(t, i),
         this._buildLabels();
     }
-    _updateFilterPanelSelectively(e, t) {
-      const i = this._getInputStates(e);
+    _updateFilterPanelSelectively(t, e) {
+      const i = this._getInputStates(t);
       if (this.options.enabled) {
-        const i = this._createExistingSectionMap(e);
-        this._replaceFilterStructureCompletely(e, t, i);
+        const i = this._createExistingSectionMap(t);
+        this._replaceFilterStructureCompletely(t, e, i);
       }
-      this._reregisterExistingFilters(e), this._restoreInputStates(e, i, !1);
+      this._reregisterExistingFilters(t), this._restoreInputStates(t, i, !1);
     }
-    _synchronizeFilterStructure(e, t) {
-      const i = e.querySelectorAll("[data-filter-multi-select-options]"),
-        r = t.querySelectorAll("[data-filter-multi-select-options]"),
+    _synchronizeFilterStructure(t, e) {
+      const i = t.querySelectorAll("[data-filter-multi-select-options]"),
+        r = e.querySelectorAll("[data-filter-multi-select-options]"),
         n = this._createFilterElementsMap(i),
         s = this._createFilterElementsMap(r);
-      Object.keys(s).forEach((e) => {
-        const t = n[e],
-          i = s[e];
-        t && i && this._synchronizeFilterDropdownStructure(t, i);
+      Object.keys(s).forEach((t) => {
+        const e = n[t],
+          i = s[t];
+        e && i && this._synchronizeFilterDropdownStructure(e, i);
       });
     }
-    _synchronizeFilterDropdownStructure(e, t) {
-      const i = e.querySelector(".filter-panel-item-dropdown"),
-        r = t.querySelector(".filter-panel-item-dropdown");
+    _synchronizeFilterDropdownStructure(t, e) {
+      const i = t.querySelector(".filter-panel-item-dropdown"),
+        r = e.querySelector(".filter-panel-item-dropdown");
       if (!i || !r) return;
       const n = this._getDropdownStructureMap(i),
         s = this._getDropdownStructureMap(r);
       this._addMissingStructuralElements(i, s, n);
     }
-    _createFilterElementsMap(e) {
-      const t = {};
+    _createFilterElementsMap(t) {
+      const e = {};
       return (
-        e.forEach((e) => {
-          const i = e.getAttribute("data-filter-multi-select-options");
+        t.forEach((t) => {
+          const i = t.getAttribute("data-filter-multi-select-options");
           if (i)
             try {
               const r = JSON.parse(i);
-              r.name && (t[r.name] = e);
-            } catch (e) {
+              r.name && (e[r.name] = t);
+            } catch (t) {
               console.warn(
                 "ListingListener: Failed to parse filter options",
-                e
+                t
               );
             }
         }),
-        t
+        e
       );
     }
-    _getDropdownStructureMap(e) {
-      const t = [];
+    _getDropdownStructureMap(t) {
+      const e = [];
       return (
-        Array.from(e.children).forEach((e, i) => {
+        Array.from(t.children).forEach((t, i) => {
           const r = {
             index: i,
-            element: e,
-            tagName: e.tagName.toLowerCase(),
-            classes: Array.from(e.classList),
-            textContent: this._getElementTextSignature(e),
+            element: t,
+            tagName: t.tagName.toLowerCase(),
+            classes: Array.from(t.classList),
+            textContent: this._getElementTextSignature(t),
             isList:
-              "ul" === e.tagName.toLowerCase() &&
-              e.classList.contains("filter-multi-select-list"),
-            isStructural: !e.classList.contains(
+              "ul" === t.tagName.toLowerCase() &&
+              t.classList.contains("filter-multi-select-list"),
+            isStructural: !t.classList.contains(
               "filter-multi-select-list-item"
             ),
           };
-          t.push(r);
+          e.push(r);
         }),
-        t
+        e
       );
     }
-    _getElementTextSignature(e) {
-      if ("ul" === e.tagName.toLowerCase()) return "";
-      let t = "";
+    _getElementTextSignature(t) {
+      if ("ul" === t.tagName.toLowerCase()) return "";
+      let e = "";
       return (
-        e.childNodes.forEach((e) => {
-          e.nodeType === Node.TEXT_NODE && (t += e.textContent.trim());
+        t.childNodes.forEach((t) => {
+          t.nodeType === Node.TEXT_NODE && (e += t.textContent.trim());
         }),
-        t.trim()
+        e.trim()
       );
     }
-    _addMissingStructuralElements(e, t, i) {
+    _addMissingStructuralElements(t, e, i) {
       const r = new Map();
-      i.forEach((e) => {
-        const t = this._createElementSignature(e);
-        r.set(t, e);
+      i.forEach((t) => {
+        const e = this._createElementSignature(t);
+        r.set(e, t);
       }),
-        t.forEach((i, n) => {
+        e.forEach((i, n) => {
           const s = this._createElementSignature(i);
           if (!r.has(s) && i.isStructural) {
             const s = i.element.cloneNode(!0),
-              l = this._findInsertionPoint(e, t, n, r);
-            l ? e.insertBefore(s, l) : e.appendChild(s);
+              l = this._findInsertionPoint(t, e, n, r);
+            l ? t.insertBefore(s, l) : t.appendChild(s);
           }
         });
     }
-    _createElementSignature(e) {
-      if (e.isList) return `list-${e.classes.join("-")}`;
-      const t = e.classes.join("-"),
-        i = e.textContent.replace(/\s+/g, " ").trim();
-      return `${e.tagName}-${t}-${i}`;
+    _createElementSignature(t) {
+      if (t.isList) return `list-${t.classes.join("-")}`;
+      const e = t.classes.join("-"),
+        i = t.textContent.replace(/\s+/g, " ").trim();
+      return `${t.tagName}-${e}-${i}`;
     }
-    _findInsertionPoint(e, t, i, r) {
-      for (let e = i + 1; e < t.length; e++) {
-        const i = t[e],
+    _findInsertionPoint(t, e, i, r) {
+      for (let t = i + 1; t < e.length; t++) {
+        const i = e[t],
           n = this._createElementSignature(i);
         if (r.has(n)) return r.get(n).element;
       }
       return null;
     }
-    _updateFilterMultiSelectElements(e, t) {
-      const i = e.querySelectorAll("[data-filter-multi-select]"),
-        r = t.querySelectorAll("[data-filter-multi-select]"),
+    _updateFilterMultiSelectElements(t, e) {
+      const i = t.querySelectorAll("[data-filter-multi-select]"),
+        r = e.querySelectorAll("[data-filter-multi-select]"),
         n = this._createFilterMultiSelectMap(i),
         s = this._createFilterMultiSelectMap(r);
-      Object.keys(n).forEach((e) => {
-        s[e] || this._hideFilterItem(n[e]);
+      Object.keys(n).forEach((t) => {
+        s[t] || this._hideFilterItem(n[t]);
       }),
-        Object.keys(s).forEach((t) => {
-          if (n[t]) this._showFilterItem(n[t]);
+        Object.keys(s).forEach((e) => {
+          if (n[e]) this._showFilterItem(n[e]);
           else {
-            const i = s[t].cloneNode(!0);
-            e.appendChild(i), i.setAttribute("data-needs-init", "true");
+            const i = s[e].cloneNode(!0);
+            t.appendChild(i), i.setAttribute("data-needs-init", "true");
           }
         });
     }
-    _updateFilterListItemElements(e, t) {
-      const i = e.querySelectorAll(".filter-multi-select-list-item"),
-        r = t.querySelectorAll(".filter-multi-select-list-item"),
+    _updateFilterListItemElements(t, e) {
+      const i = t.querySelectorAll(".filter-multi-select-list-item"),
+        r = e.querySelectorAll(".filter-multi-select-list-item"),
         n = this._createFilterListItemMap(i),
         s = this._createFilterListItemMap(r);
-      Object.keys(n).forEach((e) => {
-        s[e] || this._hideFilterItem(n[e]);
+      Object.keys(n).forEach((t) => {
+        s[t] || this._hideFilterItem(n[t]);
       }),
-        Object.keys(s).forEach((t) => {
-          n[t]
-            ? (this._showFilterItem(n[t]),
-              this._updateFilterListItemContent(n[t], s[t]))
-            : this._addNewFilterListItem(e, s[t]);
+        Object.keys(s).forEach((e) => {
+          n[e]
+            ? (this._showFilterItem(n[e]),
+              this._updateFilterListItemContent(n[e], s[e]))
+            : this._addNewFilterListItem(t, s[e]);
         });
     }
-    _createFilterMultiSelectMap(e) {
-      const t = {};
+    _createFilterMultiSelectMap(t) {
+      const e = {};
       return (
-        e.forEach((e) => {
-          const i = e.getAttribute("data-filter-multi-select-options");
+        t.forEach((t) => {
+          const i = t.getAttribute("data-filter-multi-select-options");
           if (i)
             try {
               const r = JSON.parse(i);
               if (r.name) {
                 const i = `filter-multi-select-${r.name}`;
-                t[i] = e;
+                e[i] = t;
               }
-            } catch (e) {
+            } catch (t) {
               console.warn(
                 "ListingListener: Failed to parse filter options",
-                e
+                t
               );
             }
         }),
-        t
+        e
       );
     }
-    _createFilterListItemMap(e) {
-      const t = {};
+    _createFilterListItemMap(t) {
+      const e = {};
       return (
-        e.forEach((e) => {
-          const i = e.querySelector("input[data-label]"),
+        t.forEach((t) => {
+          const i = t.querySelector("input[data-label]"),
             r = i ? i.getAttribute("data-label") : null;
           if (r) {
-            const i = e.closest("[data-filter-multi-select]");
+            const i = t.closest("[data-filter-multi-select]");
             let n = "unknown";
             if (i) {
-              const e = i.getAttribute("data-filter-multi-select-options");
-              if (e)
+              const t = i.getAttribute("data-filter-multi-select-options");
+              if (t)
                 try {
-                  n = JSON.parse(e).name || "unknown";
-                } catch (e) {
+                  n = JSON.parse(t).name || "unknown";
+                } catch (t) {
                   console.warn(
                     "ListingListener: Failed to parse parent filter options",
-                    e
+                    t
                   );
                 }
             }
-            t[`${n}-${r}`] = e;
+            e[`${n}-${r}`] = t;
           }
         }),
-        t
+        e
       );
     }
-    _updateFilterDropdownContent(e, t) {
-      const i = e.querySelector(".filter-panel-item-dropdown"),
-        r = t.querySelector(".filter-panel-item-dropdown");
+    _updateFilterDropdownContent(t, e) {
+      const i = t.querySelector(".filter-panel-item-dropdown"),
+        r = e.querySelector(".filter-panel-item-dropdown");
       if (i && r) {
-        const e = this._getInputStates(i);
-        this._mergeDropdownContent(i, r), this._restoreInputStates(i, e, !1);
+        const t = this._getInputStates(i);
+        this._mergeDropdownContent(i, r), this._restoreInputStates(i, t, !1);
       }
     }
-    _updateFilterListItemContent(e, t) {
-      const i = e.querySelector("label"),
-        r = t.querySelector("label");
+    _updateFilterListItemContent(t, e) {
+      const i = t.querySelector("label"),
+        r = e.querySelector("label");
       i &&
         r &&
         i.textContent !== r.textContent &&
         (i.textContent = r.textContent);
-      const n = e.querySelector("input"),
-        s = t.querySelector("input");
+      const n = t.querySelector("input"),
+        s = e.querySelector("input");
       n &&
         s &&
-        ["value", "name", "data-count"].forEach((e) => {
-          n.getAttribute(e) !== s.getAttribute(e) &&
-            n.setAttribute(e, s.getAttribute(e) || "");
+        ["value", "name", "data-count"].forEach((t) => {
+          n.getAttribute(t) !== s.getAttribute(t) &&
+            n.setAttribute(t, s.getAttribute(t) || "");
         });
     }
-    _findFilterElementByName(e, t) {
-      const i = e.querySelectorAll("[data-filter-multi-select-options]");
-      for (const e of i)
+    _findFilterElementByName(t, e) {
+      const i = t.querySelectorAll("[data-filter-multi-select-options]");
+      for (const t of i)
         try {
-          const i = e.getAttribute("data-filter-multi-select-options");
-          if (i && JSON.parse(i).name === t) return e;
-        } catch (e) {
+          const i = t.getAttribute("data-filter-multi-select-options");
+          if (i && JSON.parse(i).name === e) return t;
+        } catch (t) {
           continue;
         }
       return null;
     }
-    _findTargetListForNewItem(e, t, i) {
-      const r = t.closest(".filter-panel-item-dropdown"),
-        n = r ? this._findTargetContainer(r, e) : e,
-        s = t.closest("ul.filter-multi-select-list");
+    _findTargetListForNewItem(t, e, i) {
+      const r = e.closest(".filter-panel-item-dropdown"),
+        n = r ? this._findTargetContainer(r, t) : t,
+        s = e.closest("ul.filter-multi-select-list");
       if (s) {
-        let e = null,
-          t = null,
+        let t = null,
+          e = null,
           i = s.previousElementSibling;
-        for (; i && !e; ) {
+        for (; i && !t; ) {
           if (
             i.tagName &&
             !i.classList.contains("filter-multi-select-list-item") &&
             i.textContent.trim()
           ) {
-            (e = i), (t = i.textContent.trim());
+            (t = i), (e = i.textContent.trim());
             break;
           }
           i = i.previousElementSibling;
         }
-        if (e && t) {
-          const i = this._findSectionByText(n, t, e.tagName);
+        if (t && e) {
+          const i = this._findSectionByText(n, e, t.tagName);
           if (i) return i;
         }
       }
       const l = n.querySelectorAll("ul.filter-multi-select-list");
       if (1 === l.length) return l[0];
       if (l.length > 1) {
-        const e = i
+        const t = i
           .querySelector("input[data-label]")
           ?.getAttribute("data-label");
-        if (e)
-          for (const t of l) {
-            const i = t.querySelectorAll("input[data-label]");
+        if (t)
+          for (const e of l) {
+            const i = e.querySelectorAll("input[data-label]");
             for (const r of i) {
               const i = r.getAttribute("data-label");
-              if (this._labelsSeemRelated(e, i)) return t;
+              if (this._labelsSeemRelated(t, i)) return e;
             }
           }
         return l[0];
       }
       return null;
     }
-    _findSectionByText(e, t, i) {
-      const r = e.querySelectorAll(i.toLowerCase());
-      for (const e of r)
-        if (e.textContent.trim() === t) {
-          let t = e.nextElementSibling;
-          for (; t; ) {
+    _findSectionByText(t, e, i) {
+      const r = t.querySelectorAll(i.toLowerCase());
+      for (const t of r)
+        if (t.textContent.trim() === e) {
+          let e = t.nextElementSibling;
+          for (; e; ) {
             if (
-              "ul" === t.tagName.toLowerCase() &&
-              t.classList.contains("filter-multi-select-list")
+              "ul" === e.tagName.toLowerCase() &&
+              e.classList.contains("filter-multi-select-list")
             )
-              return t;
-            t = t.nextElementSibling;
+              return e;
+            e = e.nextElementSibling;
           }
         }
       return null;
     }
-    _labelsSeemRelated(e, t) {
-      if (!e || !t) return !1;
+    _labelsSeemRelated(t, e) {
+      if (!t || !e) return !1;
       const i = /^\d+(-\d+)?$/;
-      if (i.test(e) && i.test(t)) return !0;
+      if (i.test(t) && i.test(e)) return !0;
       const r = /^\d*XL[K]?$/;
-      if (r.test(e) && r.test(t)) return !0;
+      if (r.test(t) && r.test(e)) return !0;
       const n = /^\d+\/\d+$/;
       return (
-        !(!n.test(e) || !n.test(t)) ||
-        !(!e.startsWith("W") || !t.startsWith("W"))
+        !(!n.test(t) || !n.test(e)) ||
+        !(!t.startsWith("W") || !e.startsWith("W"))
       );
     }
-    _addNewFilterListItem(e, t) {
-      const i = t
+    _addNewFilterListItem(t, e) {
+      const i = e
         .closest("[data-filter-multi-select]")
         ?.getAttribute("data-filter-multi-select-options");
       if (!i) return;
       let r;
       try {
         r = JSON.parse(i).name;
-      } catch (e) {
+      } catch (t) {
         return void console.warn(
           "ListingListener: Failed to parse parent options",
-          e
+          t
         );
       }
       if (!r) return;
-      const n = this._findFilterElementByName(e, r);
+      const n = this._findFilterElementByName(t, r);
       if (!n) return;
       const s = n.querySelector(".filter-panel-item-dropdown");
       if (!s) return;
-      const l = t.cloneNode(!0),
-        o = this._ensureSectionStructureExists(t, s),
-        a = this._findTargetListForNewItem(s, t, l);
+      const l = e.cloneNode(!0),
+        o = this._ensureSectionStructureExists(e, s),
+        a = this._findTargetListForNewItem(s, e, l);
       a
         ? a.appendChild(l)
         : o && o.list
@@ -1150,71 +1150,71 @@
           : s.appendChild(l),
         this._attachEventHandlersToNewItem(l, s);
     }
-    _hideFilterItem(e) {
-      (e.style.display = "none"), e.classList.add("filter-item-hidden");
+    _hideFilterItem(t) {
+      (t.style.display = "none"), t.classList.add("filter-item-hidden");
     }
-    _showFilterItem(e) {
-      if (e.classList.contains("filter-item-hidden")) {
-        e.classList.remove("filter-item-hidden");
-        const t = this._getAppropriateDisplayStyle(e);
-        e.style.display = t;
+    _showFilterItem(t) {
+      if (t.classList.contains("filter-item-hidden")) {
+        t.classList.remove("filter-item-hidden");
+        const e = this._getAppropriateDisplayStyle(t);
+        t.style.display = e;
       }
     }
-    _getAppropriateDisplayStyle(e) {
-      return e.closest(".filter-panel-item.d-grid") ||
-        e.closest(".filter-panel-item.dropdown")
+    _getAppropriateDisplayStyle(t) {
+      return t.closest(".filter-panel-item.d-grid") ||
+        t.closest(".filter-panel-item.dropdown")
         ? "block"
-        : e.classList.contains("filter-multi-select-list-item")
+        : t.classList.contains("filter-multi-select-list-item")
           ? "inline-block"
           : "block";
     }
-    _getFilterItemsMap(e) {
-      const t = {};
+    _getFilterItemsMap(t) {
+      const e = {};
       return (
-        e.querySelectorAll(".filter-panel-item").forEach((e) => {
-          const i = this._getFilterItemKey(e);
-          i && (t[i] = e);
+        t.querySelectorAll(".filter-panel-item").forEach((t) => {
+          const i = this._getFilterItemKey(t);
+          i && (e[i] = t);
         }),
-        t
+        e
       );
     }
-    _getFilterItemKey(e) {
-      const t = e.querySelector("input[name]"),
-        i = e.querySelector(".filter-panel-item-toggle");
-      return t
-        ? `input-${t.name}`
+    _getFilterItemKey(t) {
+      const e = t.querySelector("input[name]"),
+        i = t.querySelector(".filter-panel-item-toggle");
+      return e
+        ? `input-${e.name}`
         : i
           ? `toggle-${i.textContent.trim()}`
           : null;
     }
-    _getInputStates(e) {
-      const t = new Map();
+    _getInputStates(t) {
+      const e = new Map();
       return (
-        e.querySelectorAll("input").forEach((e) => {
+        t.querySelectorAll("input").forEach((t) => {
           const i =
-            "checkbox" === e.type || "radio" === e.type
-              ? e.name + "_" + e.value
-              : e.name;
-          t.set(i, { checked: e.checked, value: e.value });
+            "checkbox" === t.type || "radio" === t.type
+              ? t.name + "_" + t.value
+              : t.name;
+          e.set(i, { checked: t.checked, value: t.value });
         }),
-        t
+        e
       );
     }
-    _restoreInputStates(e, t, i = !0) {
-      e.querySelectorAll("input").forEach((e) => {
+    _restoreInputStates(t, e, i = !0) {
+      t.querySelectorAll("input").forEach((t) => {
         const r =
-          "checkbox" === e.type || "radio" === e.type
-            ? e.name + "_" + e.value
-            : e.name;
-        if (t.has(r)) {
-          const n = t.get(r);
-          "checkbox" === e.type || "radio" === e.type
-            ? (e.checked = n.checked)
-            : (e.value = n.value),
+          "checkbox" === t.type || "radio" === t.type
+            ? t.name + "_" + t.value
+            : t.name;
+        if (e.has(r)) {
+          const n = e.get(r);
+          "checkbox" === t.type || "radio" === t.type
+            ? (t.checked = n.checked)
+            : (t.value = n.value),
             i &&
-              e.dispatchEvent(
+              t.dispatchEvent(
                 new Event(
-                  "checkbox" === e.type || "radio" === e.type
+                  "checkbox" === t.type || "radio" === t.type
                     ? "change"
                     : "input",
                   { bubbles: !0 }
@@ -1223,158 +1223,158 @@
         }
       });
     }
-    _updateFilterItemContent(e, t) {
-      const i = e.querySelectorAll(".filter-multi-select-list-item"),
-        r = t.querySelectorAll(".filter-multi-select-list-item");
+    _updateFilterItemContent(t, e) {
+      const i = t.querySelectorAll(".filter-multi-select-list-item"),
+        r = e.querySelectorAll(".filter-multi-select-list-item");
       if (i.length !== r.length) {
-        const i = e.querySelector(".filter-panel-item-dropdown"),
-          r = t.querySelector(".filter-panel-item-dropdown");
+        const i = t.querySelector(".filter-panel-item-dropdown"),
+          r = e.querySelector(".filter-panel-item-dropdown");
         if (i && r) {
-          const e = this._getInputStates(i);
-          this._mergeDropdownContent(i, r), this._restoreInputStates(i, e, !1);
+          const t = this._getInputStates(i);
+          this._mergeDropdownContent(i, r), this._restoreInputStates(i, t, !1);
         }
       }
     }
-    _mergeDropdownContent(e, t) {
-      const i = this._getDropdownItemsMap(e),
-        r = (this._getDropdownItemsMap(t), document.createElement("div"));
+    _mergeDropdownContent(t, e) {
+      const i = this._getDropdownItemsMap(t),
+        r = (this._getDropdownItemsMap(e), document.createElement("div"));
       for (
-        t.querySelectorAll(".filter-multi-select-list-item").forEach((t, n) => {
-          const s = this._getDropdownItemKey(t);
+        e.querySelectorAll(".filter-multi-select-list-item").forEach((e, n) => {
+          const s = this._getDropdownItemKey(e);
           if (i[s]) {
-            const e = i[s],
-              n = e.querySelector("label"),
-              l = t.querySelector("label");
+            const t = i[s],
+              n = t.querySelector("label"),
+              l = e.querySelector("label");
             n &&
               l &&
               n.textContent !== l.textContent &&
               (n.textContent = l.textContent);
-            const o = e.querySelector("input"),
-              a = t.querySelector("input");
+            const o = t.querySelector("input"),
+              a = e.querySelector("input");
             o &&
               a &&
-              ["value", "name", "data-count"].forEach((e) => {
-                o.getAttribute(e) !== a.getAttribute(e) &&
-                  o.setAttribute(e, a.getAttribute(e) || "");
+              ["value", "name", "data-count"].forEach((t) => {
+                o.getAttribute(t) !== a.getAttribute(t) &&
+                  o.setAttribute(t, a.getAttribute(t) || "");
               }),
-              r.appendChild(e);
+              r.appendChild(t);
           } else {
-            const i = t.cloneNode(!0);
-            r.appendChild(i), this._attachEventHandlersToNewItem(i, e);
+            const i = e.cloneNode(!0);
+            r.appendChild(i), this._attachEventHandlersToNewItem(i, t);
           }
         }),
-          e.innerHTML = "";
+          t.innerHTML = "";
         r.firstChild;
 
       )
-        e.appendChild(r.firstChild);
+        t.appendChild(r.firstChild);
     }
-    _getDropdownItemsMap(e) {
-      const t = {};
+    _getDropdownItemsMap(t) {
+      const e = {};
       return (
-        e.querySelectorAll(".filter-multi-select-list-item").forEach((e) => {
-          const i = this._getDropdownItemKey(e);
-          i && (t[i] = e);
+        t.querySelectorAll(".filter-multi-select-list-item").forEach((t) => {
+          const i = this._getDropdownItemKey(t);
+          i && (e[i] = t);
         }),
-        t
+        e
       );
     }
-    _getDropdownItemKey(e) {
-      const t = e.querySelector("input");
-      if (t) {
-        const e = t.getAttribute("data-label") || t.value;
-        if (e && t.name) return `${t.name}-${e}`;
+    _getDropdownItemKey(t) {
+      const e = t.querySelector("input");
+      if (e) {
+        const t = e.getAttribute("data-label") || e.value;
+        if (t && e.name) return `${e.name}-${t}`;
       }
-      const i = e.querySelector("label");
+      const i = t.querySelector("label");
       return i ? `label-${i.textContent.trim()}` : null;
     }
-    _attachEventHandlersToNewItem(e, t) {
-      e.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(
-        (e, t) => {
-          e.addEventListener("change", (e) => {
-            this._onChangeFilter(e);
+    _attachEventHandlersToNewItem(t, e) {
+      t.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(
+        (t, e) => {
+          t.addEventListener("change", (t) => {
+            this._onChangeFilter(t);
           });
         }
       );
     }
-    _onChangeFilter(e) {
+    _onChangeFilter(t) {
       if (this.listing && "function" == typeof this.listing.changeListing)
         this.listing.changeListing(!0, { p: 1 });
       else {
-        const e = document.querySelector("[data-listing]");
-        if (e) {
-          const t = window.PluginManager.getPluginInstanceFromElement(
-            e,
+        const t = document.querySelector("[data-listing]");
+        if (t) {
+          const e = window.PluginManager.getPluginInstanceFromElement(
+            t,
             "Listing"
           );
-          t && "function" == typeof t.changeListing
-            ? t.changeListing(!0, { p: 1 })
+          e && "function" == typeof e.changeListing
+            ? e.changeListing(!0, { p: 1 })
             : console.warn(
                 "ListingListener: Could not find listing plugin or changeListing method"
               );
         } else console.warn("ListingListener: Could not find listing element");
       }
     }
-    _reinitializePluginsSelectively(e) {
-      e.querySelectorAll('[data-needs-init="true"]').forEach((e) => {
+    _reinitializePluginsSelectively(t) {
+      t.querySelectorAll('[data-needs-init="true"]').forEach((t) => {
         try {
-          e.dataset.pluginName &&
-            "string" == typeof e.dataset.pluginName &&
-            window.PluginManager.initializePlugin(e, e.dataset.pluginName),
-            e.querySelectorAll("[data-plugin-name]").forEach((e) => {
-              e.dataset.pluginName &&
-                "string" == typeof e.dataset.pluginName &&
-                window.PluginManager.initializePlugin(e, e.dataset.pluginName);
+          t.dataset.pluginName &&
+            "string" == typeof t.dataset.pluginName &&
+            window.PluginManager.initializePlugin(t, t.dataset.pluginName),
+            t.querySelectorAll("[data-plugin-name]").forEach((t) => {
+              t.dataset.pluginName &&
+                "string" == typeof t.dataset.pluginName &&
+                window.PluginManager.initializePlugin(t, t.dataset.pluginName);
             });
-        } catch (t) {
+        } catch (e) {
           console.warn(
             "ListingListener: Failed to reinitialize plugin for element:",
-            e,
-            t
+            t,
+            e
           );
         }
-        e.removeAttribute("data-needs-init");
+        t.removeAttribute("data-needs-init");
       });
     }
     _buildLabels() {}
-    _reregisterExistingFilters(e) {
-      const t = document.querySelector("[data-listing]");
-      if (!t) return;
-      const i = window.PluginManager.getPluginInstanceFromElement(t, "Listing");
+    _reregisterExistingFilters(t) {
+      const e = document.querySelector("[data-listing]");
+      if (!e) return;
+      const i = window.PluginManager.getPluginInstanceFromElement(e, "Listing");
       i &&
         i.registerFilter &&
-        e
+        t
           .querySelectorAll(
             "[data-filter-multi-select], [data-filter-range-slider], [data-filter-boolean]"
           )
-          .forEach((e) => {
-            const t = e.hasAttribute("data-needs-reinit"),
+          .forEach((t) => {
+            const e = t.hasAttribute("data-needs-reinit"),
               r = ["FilterMultiSelect", "FilterRangeSlider", "FilterBoolean"];
             for (const n of r)
               try {
                 const r = window.PluginManager.getPluginInstanceFromElement(
-                  e,
+                  t,
                   n
                 );
                 if (r) {
                   "function" == typeof i.registerFilter && i.registerFilter(r),
-                    t && e.removeAttribute("data-needs-reinit");
+                    e && t.removeAttribute("data-needs-reinit");
                   break;
                 }
-              } catch (e) {
+              } catch (t) {
                 console.warn(
                   `ListingListener: Error processing ${n} plugin:`,
-                  e
+                  t
                 );
               }
           });
     }
-    _createMissingSectionStructure(e, t) {
-      const i = e.closest("ul.filter-multi-select-list");
+    _createMissingSectionStructure(t, e) {
+      const i = t.closest("ul.filter-multi-select-list");
       if (!i) return { list: null };
-      const r = e.closest(".filter-panel-item-dropdown");
+      const r = t.closest(".filter-panel-item-dropdown");
       if (!r) return { list: null };
-      const n = this._ensureWrapperStructureExists(r, t),
+      const n = this._ensureWrapperStructureExists(r, e),
         s = [];
       let l = i.previousElementSibling;
       for (; l; ) {
@@ -1382,17 +1382,17 @@
           l.tagName &&
           !l.classList.contains("filter-multi-select-list-item")
         ) {
-          const e = this._createElementSignatureFromElement(l);
-          if (this._elementExistsInContainer(n, e)) break;
+          const t = this._createElementSignatureFromElement(l);
+          if (this._elementExistsInContainer(n, t)) break;
           s.unshift(l);
         }
         l = l.previousElementSibling;
       }
       const o = this._findSectionInsertionPoint(n, r, i);
       let a = null;
-      s.forEach((e) => {
-        const t = e.cloneNode(!0);
-        o ? n.insertBefore(t, o) : n.appendChild(t), (a = t);
+      s.forEach((t) => {
+        const e = t.cloneNode(!0);
+        o ? n.insertBefore(e, o) : n.appendChild(e), (a = e);
       });
       const c = i.cloneNode(!1);
       return (
@@ -1405,45 +1405,45 @@
         { list: c }
       );
     }
-    _createElementSignatureFromElement(e) {
-      const t = {
-        tagName: e.tagName.toLowerCase(),
-        classes: Array.from(e.classList),
-        textContent: this._getElementTextSignature(e),
+    _createElementSignatureFromElement(t) {
+      const e = {
+        tagName: t.tagName.toLowerCase(),
+        classes: Array.from(t.classList),
+        textContent: this._getElementTextSignature(t),
         isList:
-          "ul" === e.tagName.toLowerCase() &&
-          e.classList.contains("filter-multi-select-list"),
-        isStructural: !e.classList.contains("filter-multi-select-list-item"),
+          "ul" === t.tagName.toLowerCase() &&
+          t.classList.contains("filter-multi-select-list"),
+        isStructural: !t.classList.contains("filter-multi-select-list-item"),
       };
-      return this._createElementSignature(t);
+      return this._createElementSignature(e);
     }
-    _findSectionInsertionPoint(e, t, i) {
+    _findSectionInsertionPoint(t, e, i) {
       let r = i.nextElementSibling;
       for (; r; ) {
         if (
           r.tagName &&
           !r.classList.contains("filter-multi-select-list-item")
         ) {
-          const t = this._createElementSignatureFromElement(r),
-            i = Array.from(e.children);
-          for (const e of i)
-            if (this._createElementSignatureFromElement(e) === t) return e;
+          const e = this._createElementSignatureFromElement(r),
+            i = Array.from(t.children);
+          for (const t of i)
+            if (this._createElementSignatureFromElement(t) === e) return t;
         }
         r = r.nextElementSibling;
       }
       return null;
     }
-    _ensureSectionStructureExists(e, t) {
-      return this._sectionExistsForItem(e, t)
+    _ensureSectionStructureExists(t, e) {
+      return this._sectionExistsForItem(t, e)
         ? null
-        : this._createMissingSectionStructure(e, t);
+        : this._createMissingSectionStructure(t, e);
     }
-    _sectionExistsForItem(e, t) {
-      const i = e.closest("ul.filter-multi-select-list");
+    _sectionExistsForItem(t, e) {
+      const i = t.closest("ul.filter-multi-select-list");
       if (!i) return !0;
-      const r = e.closest(".filter-panel-item-dropdown");
+      const r = t.closest(".filter-panel-item-dropdown");
       if (!r) return !0;
-      const n = this._findTargetContainer(r, t);
+      const n = this._findTargetContainer(r, e);
       let s = null,
         l = null,
         o = i.previousElementSibling;
@@ -1462,108 +1462,108 @@
       const a = this._createElementSignatureFromElement(s);
       return this._elementExistsInContainer(n, a);
     }
-    _findTargetContainer(e, t) {
-      const i = this._getStructuralPath(e);
-      let r = t;
+    _findTargetContainer(t, e) {
+      const i = this._getStructuralPath(t);
+      let r = e;
       return (
-        i.forEach((e) => {
-          const t = this._findWrapperInContainer(r, e);
-          t && (r = t);
+        i.forEach((t) => {
+          const e = this._findWrapperInContainer(r, t);
+          e && (r = e);
         }),
         r
       );
     }
-    _ensureWrapperStructureExists(e, t) {
-      const i = this._getStructuralPath(e);
-      let r = t;
+    _ensureWrapperStructureExists(t, e) {
+      const i = this._getStructuralPath(t);
+      let r = e;
       return (
-        i.forEach((e) => {
-          const t = this._findWrapperInContainer(r, e);
-          if (t) r = t;
+        i.forEach((t) => {
+          const e = this._findWrapperInContainer(r, t);
+          if (e) r = e;
           else {
-            const t = this._createWrapperElement(e);
-            r.appendChild(t), (r = t);
+            const e = this._createWrapperElement(t);
+            r.appendChild(e), (r = e);
           }
         }),
         r
       );
     }
-    _getStructuralPath(e) {
-      const t = [];
+    _getStructuralPath(t) {
+      const e = [];
       return (
-        Array.from(e.children).forEach((e) => {
-          if (this._isWrapperElement(e)) {
+        Array.from(t.children).forEach((t) => {
+          if (this._isWrapperElement(t)) {
             const i = {
-              tagName: e.tagName.toLowerCase(),
-              classes: Array.from(e.classList),
-              signature: this._createElementSignatureFromElement(e),
+              tagName: t.tagName.toLowerCase(),
+              classes: Array.from(t.classList),
+              signature: this._createElementSignatureFromElement(t),
             };
-            t.push(i);
+            e.push(i);
           }
         }),
-        t
+        e
       );
     }
-    _isWrapperElement(e) {
+    _isWrapperElement(t) {
       if (
-        e.classList.contains("filter-multi-select-list-item") ||
-        ("ul" === e.tagName.toLowerCase() &&
-          e.classList.contains("filter-multi-select-list"))
+        t.classList.contains("filter-multi-select-list-item") ||
+        ("ul" === t.tagName.toLowerCase() &&
+          t.classList.contains("filter-multi-select-list"))
       )
         return !1;
-      const t = e.querySelectorAll("ul.filter-multi-select-list"),
-        i = e.querySelectorAll(
+      const e = t.querySelectorAll("ul.filter-multi-select-list"),
+        i = t.querySelectorAll(
           ":scope > *:not(.filter-multi-select-list-item)"
         );
-      return t.length > 0 || i.length > 1;
+      return e.length > 0 || i.length > 1;
     }
-    _findWrapperInContainer(e, t) {
-      return Array.from(e.children).find(
-        (e) => this._createElementSignatureFromElement(e) === t.signature
+    _findWrapperInContainer(t, e) {
+      return Array.from(t.children).find(
+        (t) => this._createElementSignatureFromElement(t) === e.signature
       );
     }
-    _createWrapperElement(e) {
-      const t = document.createElement(e.tagName);
+    _createWrapperElement(t) {
+      const e = document.createElement(t.tagName);
       return (
-        e.classes.forEach((e) => {
-          t.classList.add(e);
+        t.classes.forEach((t) => {
+          e.classList.add(t);
         }),
-        t
-      );
-    }
-    _elementExistsInContainer(e, t) {
-      return Array.from(e.children).some(
-        (e) => this._createElementSignatureFromElement(e) === t
-      );
-    }
-    _createExistingSectionMap(e) {
-      const t = new Map();
-      return (
         e
+      );
+    }
+    _elementExistsInContainer(t, e) {
+      return Array.from(t.children).some(
+        (t) => this._createElementSignatureFromElement(t) === e
+      );
+    }
+    _createExistingSectionMap(t) {
+      const e = new Map();
+      return (
+        t
           .querySelectorAll("[data-filter-multi-select-options]")
-          .forEach((e) => {
-            const i = e.querySelector(".filter-panel-item-dropdown");
+          .forEach((t) => {
+            const i = t.querySelector(".filter-panel-item-dropdown");
             i &&
               this._findTargetContainerInExisting(i)
                 .querySelectorAll("*")
-                .forEach((e) => {
+                .forEach((t) => {
                   if (
-                    e.textContent.trim() &&
-                    !e.classList.contains("filter-multi-select-list-item") &&
-                    "ul" !== e.tagName.toLowerCase()
+                    t.textContent.trim() &&
+                    !t.classList.contains("filter-multi-select-list-item") &&
+                    "ul" !== t.tagName.toLowerCase()
                   ) {
-                    const i = e.textContent.trim();
-                    let r = e.nextElementSibling;
+                    const i = t.textContent.trim();
+                    let r = t.nextElementSibling;
                     for (; r; ) {
                       if (
                         "ul" === r.tagName.toLowerCase() &&
                         r.classList.contains("filter-multi-select-list")
                       ) {
-                        const e = Array.from(
+                        const t = Array.from(
                           r.querySelectorAll(".filter-multi-select-list-item")
-                        ).map((e) => e.cloneNode(!0));
-                        e.length > 0 &&
-                          (t.has(i) || t.set(i, []), t.get(i).push(...e));
+                        ).map((t) => t.cloneNode(!0));
+                        t.length > 0 &&
+                          (e.has(i) || e.set(i, []), e.get(i).push(...t));
                         break;
                       }
                       if (
@@ -1579,368 +1579,300 @@
                   }
                 });
           }),
-        t
+        e
       );
     }
-    _findTargetContainerInExisting(e) {
-      const t = Array.from(e.children);
-      for (const e of t) if (this._isWrapperElement(e)) return e;
-      return e;
+    _findTargetContainerInExisting(t) {
+      const e = Array.from(t.children);
+      for (const t of e) if (this._isWrapperElement(t)) return t;
+      return t;
     }
-    _restoreExistingSectionAssociations(e, t) {
-      0 !== t.size &&
-        e
+    _restoreExistingSectionAssociations(t, e) {
+      0 !== e.size &&
+        t
           .querySelectorAll("[data-filter-multi-select-options]")
-          .forEach((e) => {
-            const i = e.querySelector(".filter-panel-item-dropdown");
+          .forEach((t) => {
+            const i = t.querySelector(".filter-panel-item-dropdown");
             if (!i) return;
             const r = this._findTargetContainer(null, i) || i;
-            t.forEach((e, t) => {
-              const i = this._findSectionByTextInContainer(r, t);
+            e.forEach((t, e) => {
+              const i = this._findSectionByTextInContainer(r, e);
               i &&
-                (this._removeItemsFromIncorrectSections(r, e, t),
-                e.forEach((e) => {
-                  this._itemExistsInList(i, e) ||
-                    i.appendChild(e.cloneNode(!0));
+                (this._removeItemsFromIncorrectSections(r, t, e),
+                t.forEach((t) => {
+                  this._itemExistsInList(i, t) ||
+                    i.appendChild(t.cloneNode(!0));
                 }));
             });
           });
     }
-    _findSectionByTextInContainer(e, t) {
-      const i = e.querySelectorAll("*");
-      for (const e of i)
+    _findSectionByTextInContainer(t, e) {
+      const i = t.querySelectorAll("*");
+      for (const t of i)
         if (
-          e.textContent.trim() === t &&
-          !e.classList.contains("filter-multi-select-list-item") &&
-          "ul" !== e.tagName.toLowerCase()
+          t.textContent.trim() === e &&
+          !t.classList.contains("filter-multi-select-list-item") &&
+          "ul" !== t.tagName.toLowerCase()
         ) {
-          let t = e.nextElementSibling;
-          for (; t; ) {
+          let e = t.nextElementSibling;
+          for (; e; ) {
             if (
-              "ul" === t.tagName.toLowerCase() &&
-              t.classList.contains("filter-multi-select-list")
+              "ul" === e.tagName.toLowerCase() &&
+              e.classList.contains("filter-multi-select-list")
             )
-              return t;
-            t = t.nextElementSibling;
+              return e;
+            e = e.nextElementSibling;
           }
         }
       return null;
     }
-    _removeItemsFromIncorrectSections(e, t, i) {
-      e.querySelectorAll("ul.filter-multi-select-list").forEach((e) => {
-        this._getSectionTextForList(e) !== i &&
+    _removeItemsFromIncorrectSections(t, e, i) {
+      t.querySelectorAll("ul.filter-multi-select-list").forEach((t) => {
+        this._getSectionTextForList(t) !== i &&
           Array.from(
-            e.querySelectorAll(".filter-multi-select-list-item")
-          ).forEach((e) => {
-            const i = this._getItemLabel(e);
-            t.some((e) => this._getItemLabel(e) === i) && e.remove();
+            t.querySelectorAll(".filter-multi-select-list-item")
+          ).forEach((t) => {
+            const i = this._getItemLabel(t);
+            e.some((t) => this._getItemLabel(t) === i) && t.remove();
           });
       });
     }
-    _getSectionTextForList(e) {
-      let t = e.previousElementSibling;
-      for (; t; ) {
+    _getSectionTextForList(t) {
+      let e = t.previousElementSibling;
+      for (; e; ) {
         if (
-          t.textContent.trim() &&
-          !t.classList.contains("filter-multi-select-list-item") &&
-          "ul" !== t.tagName.toLowerCase()
+          e.textContent.trim() &&
+          !e.classList.contains("filter-multi-select-list-item") &&
+          "ul" !== e.tagName.toLowerCase()
         )
-          return t.textContent.trim();
-        t = t.previousElementSibling;
+          return e.textContent.trim();
+        e = e.previousElementSibling;
       }
       return null;
     }
-    _itemExistsInList(e, t) {
-      const i = this._getItemLabel(t),
-        r = e.querySelectorAll(".filter-multi-select-list-item");
-      return Array.from(r).some((e) => this._getItemLabel(e) === i);
+    _itemExistsInList(t, e) {
+      const i = this._getItemLabel(e),
+        r = t.querySelectorAll(".filter-multi-select-list-item");
+      return Array.from(r).some((t) => this._getItemLabel(t) === i);
     }
-    _getItemLabel(e) {
-      const t = e.querySelector("input[data-label]");
-      return t ? t.getAttribute("data-label") : null;
+    _getItemLabel(t) {
+      const e = t.querySelector("input[data-label]");
+      return e ? e.getAttribute("data-label") : null;
     }
-    _replaceFilterStructureCompletely(e, t, i) {
-      const r = e.querySelectorAll("[data-filter-multi-select-options]"),
-        n = t.querySelectorAll("[data-filter-multi-select-options]"),
+    _replaceFilterStructureCompletely(t, e, i) {
+      const r = t.querySelectorAll("[data-filter-multi-select-options]"),
+        n = e.querySelectorAll("[data-filter-multi-select-options]"),
         s = this._createFilterElementsMap(r),
         l = this._createFilterElementsMap(n);
-      Object.keys(l).forEach((t) => {
-        const r = s[t],
-          n = l[t];
+      Object.keys(l).forEach((e) => {
+        const r = s[e],
+          n = l[e];
         r && n
           ? this._replaceFilterDropdownStructure(r, n, i)
-          : n && !r && e.appendChild(n);
+          : n && !r && t.appendChild(n);
       }),
-        Object.keys(s).forEach((e) => {
-          if (l[e]) {
-            const t = s[e];
-            t.classList.contains("filter-panel-item-hidden") &&
-              t.classList.remove("filter-panel-item-hidden");
-          } else s[e].classList.add("filter-panel-item-hidden");
+        Object.keys(s).forEach((t) => {
+          if (l[t]) {
+            const e = s[t];
+            e.classList.contains("filter-panel-item-hidden") &&
+              e.classList.remove("filter-panel-item-hidden");
+          } else s[t].classList.add("filter-panel-item-hidden");
         });
     }
-    _replaceFilterDropdownStructure(e, t, i) {
-      const r = e.querySelector(".filter-panel-item-dropdown"),
-        n = t.querySelector(".filter-panel-item-dropdown");
+    _replaceFilterDropdownStructure(t, e, i) {
+      const r = t.querySelector(".filter-panel-item-dropdown"),
+        n = e.querySelector(".filter-panel-item-dropdown");
       if (!r || !n) return;
       const s = this._buildCompleteStructureFromNew(n, i);
       (r.innerHTML = ""),
-        s.forEach((e) => {
-          r.appendChild(e);
+        s.forEach((t) => {
+          r.appendChild(t);
         }),
         this._attachEventHandlersToNewDropdown(r);
     }
-    _attachEventHandlersToNewDropdown(e) {
-      e.querySelectorAll(".filter-multi-select-list-item").forEach((t) => {
-        this._attachEventHandlersToNewItem(t, e);
+    _attachEventHandlersToNewDropdown(t) {
+      t.querySelectorAll(".filter-multi-select-list-item").forEach((e) => {
+        this._attachEventHandlersToNewItem(e, t);
       });
     }
-    _buildCompleteStructureFromNew(e, t) {
+    _buildCompleteStructureFromNew(t, e) {
       const i = [];
       return (
-        Array.from(e.children).forEach((e) => {
-          if (this._isWrapperElement(e)) {
-            const r = e.cloneNode(!1);
-            this._buildWrapperContent(e, t).forEach((e) => {
-              r.appendChild(e);
+        Array.from(t.children).forEach((t) => {
+          if (this._isWrapperElement(t)) {
+            const r = t.cloneNode(!1);
+            this._buildWrapperContent(t, e).forEach((t) => {
+              r.appendChild(t);
             }),
               i.push(r);
           } else {
-            const r = this._processStructuralElement(e, t);
+            const r = this._processStructuralElement(t, e);
             r && i.push(r);
           }
         }),
         i
       );
     }
-    _buildWrapperContent(e, t) {
+    _buildWrapperContent(t, e) {
       const i = [],
-        r = Array.from(e.children);
+        r = Array.from(t.children);
       let n = null,
         s = null;
       return (
-        r.forEach((e) => {
+        r.forEach((t) => {
           if (
-            "ul" === e.tagName.toLowerCase() &&
-            e.classList.contains("filter-multi-select-list")
+            "ul" === t.tagName.toLowerCase() &&
+            t.classList.contains("filter-multi-select-list")
           )
             n
-              ? ((s = this._createListForSection(e, n, t)), i.push(s))
-              : ((s = this._createListWithExistingItems(e, t)), i.push(s));
+              ? ((s = this._createListForSection(t, n, e)), i.push(s))
+              : ((s = this._createListWithExistingItems(t, e)), i.push(s));
           else if (
-            e.textContent.trim() &&
-            !e.classList.contains("filter-multi-select-list-item")
+            t.textContent.trim() &&
+            !t.classList.contains("filter-multi-select-list-item")
           ) {
-            n = e.textContent.trim();
-            const t = e.cloneNode(!0);
-            i.push(t);
+            n = t.textContent.trim();
+            const e = t.cloneNode(!0);
+            i.push(e);
           } else {
-            const t = e.cloneNode(!0);
-            i.push(t);
+            const e = t.cloneNode(!0);
+            i.push(e);
           }
         }),
         i
       );
     }
-    _createListForSection(e, t, i) {
-      const r = e.cloneNode(!1),
+    _createListForSection(t, e, i) {
+      const r = t.cloneNode(!1),
         n = new Map();
       return (
-        i.has(t) &&
-          i.get(t).forEach((e) => {
-            const t = this._getItemLabel(e);
-            if (t) {
-              const i = e.querySelector("input");
-              n.set(t, { element: e, checked: !!i && i.checked });
+        i.has(e) &&
+          i.get(e).forEach((t) => {
+            const e = this._getItemLabel(t);
+            if (e) {
+              const i = t.querySelector("input");
+              n.set(e, { element: t, checked: !!i && i.checked });
             }
           }),
-        Array.from(e.children).forEach((e) => {
-          const t = this._getItemLabel(e),
-            i = e.cloneNode(!0);
-          if (t && n.has(t)) {
-            const e = n.get(t),
+        Array.from(t.children).forEach((t) => {
+          const e = this._getItemLabel(t),
+            i = t.cloneNode(!0);
+          if (e && n.has(e)) {
+            const t = n.get(e),
               r = i.querySelector("input");
-            r && e.checked && (r.checked = !0);
+            r && t.checked && (r.checked = !0);
           }
           r.appendChild(i);
         }),
         r
       );
     }
-    _createListWithExistingItems(e, t) {
-      const i = e.cloneNode(!1),
-        r = Array.from(e.children);
+    _createListWithExistingItems(t, e) {
+      const i = t.cloneNode(!1),
+        r = Array.from(t.children);
       let n = null;
       if (
-        (t.forEach((e, t) => {
-          const i = r.reduce((t, i) => {
+        (e.forEach((t, e) => {
+          const i = r.reduce((e, i) => {
             const r = this._getItemLabel(i);
-            return e.some((e) => this._getItemLabel(e) === r) ? t + 1 : t;
+            return t.some((t) => this._getItemLabel(t) === r) ? e + 1 : e;
           }, 0);
-          i > 0 && (!n || i > n.count) && (n = { section: t, count: i });
+          i > 0 && (!n || i > n.count) && (n = { section: e, count: i });
         }),
         n)
       )
-        return this._createListForSection(e, n.section, t);
+        return this._createListForSection(t, n.section, e);
       const s = new Map();
       return (
-        t.forEach((e, t) => {
-          e.forEach((e) => {
-            const t = this._getItemLabel(e);
-            if (t) {
-              const i = e.querySelector("input");
-              s.set(t, { element: e, checked: !!i && i.checked });
+        e.forEach((t, e) => {
+          t.forEach((t) => {
+            const e = this._getItemLabel(t);
+            if (e) {
+              const i = t.querySelector("input");
+              s.set(e, { element: t, checked: !!i && i.checked });
             }
           });
         }),
-        r.forEach((e) => {
-          const t = this._getItemLabel(e),
-            r = e.cloneNode(!0);
-          if (t && s.has(t)) {
-            const e = s.get(t),
+        r.forEach((t) => {
+          const e = this._getItemLabel(t),
+            r = t.cloneNode(!0);
+          if (e && s.has(e)) {
+            const t = s.get(e),
               i = r.querySelector("input");
-            i && e.checked && (i.checked = !0);
+            i && t.checked && (i.checked = !0);
           }
           i.appendChild(r);
         }),
         i
       );
     }
-    _processStructuralElement(e, t) {
-      return "ul" === e.tagName.toLowerCase() &&
-        e.classList.contains("filter-multi-select-list")
-        ? this._createListWithExistingItems(e, t)
-        : e.cloneNode(!0);
+    _processStructuralElement(t, e) {
+      return "ul" === t.tagName.toLowerCase() &&
+        t.classList.contains("filter-multi-select-list")
+        ? this._createListWithExistingItems(t, e)
+        : t.cloneNode(!0);
     }
   }
   let o = !1;
-  function a(e) {
+  function a(t) {
     if (!window.PluginManager) return !1;
     try {
-      return !!window.PluginManager.getPlugin(e);
-    } catch (t) {
-      if (window.PluginManager.plugins && window.PluginManager.plugins[e])
+      return !!window.PluginManager.getPlugin(t);
+    } catch (e) {
+      if (window.PluginManager.plugins && window.PluginManager.plugins[t])
         return !0;
-      const i = document.querySelectorAll(`[data-${e.toLowerCase()}]`);
+      const i = document.querySelectorAll(`[data-${t.toLowerCase()}]`);
       if (i.length > 0)
-        for (const t of i)
+        for (const e of i)
           try {
-            if (window.PluginManager.getPluginInstanceFromElement(t, e))
+            if (window.PluginManager.getPluginInstanceFromElement(e, t))
               return !0;
-          } catch (e) {}
+          } catch (t) {}
       return !1;
     }
   }
   let c = null,
     u = !1;
-  const d = new Map(),
-    m = { "makaira.listing.plugin": () => n.e(773).then(n.bind(n, 773)) },
-    f = (e) => d.get(e);
-  (window.MakairaModules = {
-    get: f,
-    has: (e) => d.has(e),
-    list: () => Array.from(d.keys()),
-    cache: d,
-  }),
-    document.addEventListener("DOMContentLoaded", () => {
-      if (window.PluginManager && !o) {
-        if (
-          !c &&
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.PluginManager && !o) {
+      if (
+        (c ||
           ((c = window.PluginManager.initializePlugins),
-          (window.PluginManager.initializePlugins = () => {
-            console.log("Preventing early plugin initialization...");
-          }),
-          window.PluginManager._fetchAsyncPlugins)
-        ) {
-          const e = window.PluginManager._fetchAsyncPlugins;
-          window.PluginManager._fetchAsyncPlugins = async function (...t) {
-            console.log(
-              "Intercepting async plugin fetch, checking cache first..."
-            );
-            const i = t[0];
-            if (i && "string" == typeof i) {
-              const e = f(i);
-              if (e)
-                return (
-                  console.log(
-                    `✅ Found module "${i}" in cache, returning immediately`
-                  ),
-                  e
-                );
-            }
-            return (
-              console.log(
-                "Module not in cache, falling back to original async fetch..."
-              ),
-              e.apply(this, t)
-            );
-          };
-        }
-        if (a("ListingListener")) return void (o = !0);
-        try {
-          window.PluginManager.register(
-            "ListingListener",
-            l,
-            "[data-listing-listener]"
-          ),
-            (o = !0);
-        } catch (e) {
-          console.error("Failed to register ListingListener plugin:", e);
-        }
-        const e = async () => {
-          console.log("Preloading all modules from import map...");
-          const e = Object.entries(m).map(async ([e, t]) => {
-              try {
-                const i = await t();
-                return (
-                  d.set(e, i),
-                  console.log(`✅ Module "${e}" preloaded successfully`),
-                  { key: e, success: !0 }
-                );
-              } catch (t) {
-                return (
-                  console.error(`❌ Failed to preload module "${e}":`, t),
-                  { key: e, success: !1, error: t }
-                );
-              }
-            }),
-            t = await Promise.allSettled(e),
-            i = t.filter(
-              (e) => "fulfilled" === e.status && e.value.success
-            ).length,
-            r = t.length - i;
-          console.log(
-            `📦 Module preloading complete: ${i} successful, ${r} failed`
-          );
-        };
-        setTimeout(async () => {
-          try {
-            await e();
-            const t = d.get("makaira.listing.plugin");
-            if (!t)
-              throw new Error(
-                "MakairaListing module not found in cache after preloading"
-              );
-            const i = t.default;
-            a("MakairaListing") ||
-              window.PluginManager.register(
-                "MakairaListing",
-                i,
-                "[data-listing]"
-              );
-          } catch (e) {
-            console.error("Failed to register MakairaListing plugin:", e);
-          }
-          if (!u && c)
-            try {
-              (window.PluginManager.initializePlugins = c),
-                window.PluginManager.initializePlugins(),
-                (u = !0);
-            } catch (e) {
-              console.error("Failed to initialize plugins:", e);
-            }
-        }, 50);
+          (window.PluginManager.initializePlugins = () => {})),
+        a("ListingListener"))
+      )
+        return void (o = !0);
+      try {
+        window.PluginManager.register(
+          "ListingListener",
+          l,
+          "[data-listing-listener]"
+        ),
+          (o = !0);
+      } catch (t) {
+        console.error("Failed to register ListingListener plugin:", t);
       }
-    });
+      setTimeout(async () => {
+        try {
+          const t = (await n.e(773).then(n.bind(n, 773))).default;
+          a("MakairaListing") ||
+            window.PluginManager.register(
+              "MakairaListing",
+              t,
+              "[data-listing]"
+            );
+        } catch (t) {
+          console.error("Failed to register MakairaListing plugin:", t);
+        }
+        if (!u && c)
+          try {
+            (window.PluginManager.initializePlugins = c),
+              window.PluginManager.initializePlugins(),
+              (u = !0);
+          } catch (t) {
+            console.error("Failed to initialize plugins:", t);
+          }
+      }, 50);
+    }
+  });
 })();
-//# sourceMappingURL=makaira-shopware6-storefront.js.map

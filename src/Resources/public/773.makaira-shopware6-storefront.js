@@ -965,4 +965,3 @@
     },
   },
 ]);
-//# sourceMappingURL=773.makaira-shopware6-storefront.js.map

@@ -7,7 +7,7 @@ module.exports = (params = {}) => {
 
   return {
     mode: "production",
-    devtool: "source-map",
+    devtool: false,
     entry: resolve(__dirname, "src/main.js"),
     output: {
       path: resolve(__dirname, "dist/"),
