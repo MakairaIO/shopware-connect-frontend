@@ -3,14 +3,966 @@
   self.webpackChunkmakaira_shopware6_storefront || []).push([
   [773],
   {
-    773: (
-      __unused_webpack_module,
-      __webpack_exports__,
-      __webpack_require__
-    ) => {
-      eval(
-        "// ESM COMPAT FLAG\n__webpack_require__.r(__webpack_exports__);\n\n// EXPORTS\n__webpack_require__.d(__webpack_exports__, {\n  \"default\": () => (/* binding */ MakairaListing)\n});\n\n// NAMESPACE OBJECT: ./node_modules/query-string/base.js\nvar base_namespaceObject = {};\n__webpack_require__.r(base_namespaceObject);\n__webpack_require__.d(base_namespaceObject, {\n  exclude: () => (exclude),\n  extract: () => (extract),\n  parse: () => (parse),\n  parseUrl: () => (parseUrl),\n  pick: () => (pick),\n  stringify: () => (stringify),\n  stringifyUrl: () => (stringifyUrl)\n});\n\n// EXTERNAL MODULE: ./vendor/shopware/storefront/Resources/app/storefront/src/plugin-system/plugin.class.js + 1 modules\nvar plugin_class = __webpack_require__(194);\n;// ./vendor/shopware/storefront/Resources/app/storefront/src/service/http-client.service.js\n/**\n * @sw-package framework\n */\nclass HttpClient {\n    constructor() {\n        this._request = null;\n        this._errorHandlingInternal = false;\n    }\n\n    /**\n     * Request GET\n     *\n     * @param {string} url\n     * @param {function} callback\n     * @param {string} contentType\n     *\n     * @returns {XMLHttpRequest}\n     */\n    get(url, callback, contentType = 'application/json') {\n        const request = this._createPreparedRequest('GET', url, contentType);\n\n        return this._sendRequest(request, null, callback);\n    }\n\n    /**\n     * Request POST\n     *\n     * @param {string} url\n     * @param {object|null} data\n     * @param {function} callback\n     * @param {string} contentType\n     *\n     * @returns {XMLHttpRequest}\n     */\n    post(\n        url,\n        data,\n        callback,\n        contentType = 'application/json'\n    ) {\n        contentType = this._getContentType(data, contentType);\n        const request = this._createPreparedRequest('POST', url, contentType);\n\n        return this._sendRequest(request, data, callback);\n    }\n\n\n    /**\n     * Request DELETE\n     *\n     * @param {string} url\n     * @param {object|null} data\n     * @param {function} callback\n     * @param {string} contentType\n     *\n     * @returns {XMLHttpRequest}\n     */\n    delete(\n        url,\n        data,\n        callback,\n        contentType = 'application/json'\n    ) {\n        contentType = this._getContentType(data, contentType);\n        const request = this._createPreparedRequest('DELETE', url, contentType);\n\n        return this._sendRequest(request, data, callback);\n    }\n\n    /**\n     * Request PATCH\n     *\n     * @param {string} url\n     * @param {object|null} data\n     * @param {function} callback\n     * @param {string} contentType\n     *\n     * @returns {XMLHttpRequest}\n     */\n    patch(\n        url,\n        data,\n        callback,\n        contentType = 'application/json'\n    ) {\n        contentType = this._getContentType(data, contentType);\n        const request = this._createPreparedRequest('PATCH', url, contentType);\n\n        return this._sendRequest(request, data, callback);\n    }\n\n    /**\n     * Abort running Request\n     *\n     * @returns {*}\n     */\n    abort() {\n        if (this._request) {\n            return this._request.abort();\n        }\n    }\n\n    /**\n     * Set the error handling\n     *\n     * @param {boolean} errorHandlingInternal\n     */\n    setErrorHandlingInternal(errorHandlingInternal) {\n        this._errorHandlingInternal = errorHandlingInternal;\n    }\n\n    /**\n     * @private\n     * Register event listener, which executes the given callback, when the request has finished\n     *\n     * @param {XMLHttpRequest} request\n     * @param {function} callback\n     */\n    _registerOnLoaded(request, callback) {\n        if (!callback) {\n            return;\n        }\n\n        if (this._errorHandlingInternal === true) {\n            request.addEventListener('load', () => {\n                callback(request.responseText, request);\n            });\n            request.addEventListener('abort', () => {\n                console.warn(`the request to ${request.responseURL} was aborted`);\n            });\n            request.addEventListener('error', () => {\n                console.warn(`the request to ${request.responseURL} failed with status ${request.status}`);\n            });\n            request.addEventListener('timeout', () => {\n                console.warn(`the request to ${request.responseURL} timed out`);\n            });\n        } else {\n            request.addEventListener('loadend', () => {\n                callback(request.responseText, request);\n            });\n        }\n    }\n\n    _sendRequest(request, data, callback) {\n        this._registerOnLoaded(request, callback);\n        request.send(data);\n        return request;\n    }\n\n    /**\n     * @private\n     * Returns the appropriate content type for the request\n     *\n     * @param {*} data\n     * @param {string} contentType\n     *\n     * @returns {string|boolean}\n     */\n    _getContentType(data, contentType) {\n\n        // when sending form data,\n        // the content-type has to be automatically set,\n        // to use the correct content-disposition\n        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition\n        if (data instanceof FormData) {\n            contentType = false;\n        }\n\n        return contentType;\n    }\n\n    /**\n     * @private\n     * Returns a new and configured XMLHttpRequest object\n     *\n     * @param {'GET'|'POST'|'DELETE'|'PATCH'} type\n     * @param {string} url\n     * @param {string} contentType\n     *\n     * @returns {XMLHttpRequest}\n     */\n    _createPreparedRequest(type, url, contentType) {\n        this._request = new XMLHttpRequest();\n\n        this._request.open(type, url);\n        this._request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');\n\n        if (contentType) {\n            this._request.setRequestHeader('Content-type', contentType);\n        }\n\n        return this._request;\n    }\n}\n\n;// ./vendor/shopware/storefront/Resources/app/storefront/src/helper/iterator.helper.js\n/**\n * @sw-package framework\n */\nclass Iterator {\n\n    /**\n     * This callback is displayed as a global member.\n     * @callback ObjectIterateCallback\n     * @param {value} value\n     * @param {key} key\n     */\n\n    /**\n     * Iterates over an object\n     *\n     * @param {Array|Object} source\n     * @param {ObjectIterateCallback} callback\n     *\n     * @returns {*}\n     */\n    static iterate(source, callback) {\n        if (source instanceof Map) {\n            return source.forEach(callback);\n        }\n\n        if (Array.isArray(source)) {\n            return source.forEach(callback);\n        }\n\n        if (source instanceof FormData) {\n            for (var entry of source.entries()) {\n                callback(entry[1], entry[0]);\n            }\n            return;\n        }\n\n        if (source instanceof NodeList) {\n            return source.forEach(callback);\n        }\n\n        if (source instanceof HTMLCollection) {\n            return Array.from(source).forEach(callback);\n        }\n\n        if (source instanceof Object) {\n            return Object.keys(source).forEach(key => {\n                callback(source[key], key);\n            });\n        }\n\n        throw new Error(`The element type ${typeof source} is not iterable!`);\n    }\n}\n\n// EXTERNAL MODULE: ./vendor/shopware/storefront/Resources/app/storefront/src/helper/dom-access.helper.js\nvar dom_access_helper = __webpack_require__(139);\n;// ./node_modules/decode-uri-component/index.js\nconst token = '%[a-f0-9]{2}';\nconst singleMatcher = new RegExp('(' + token + ')|([^%]+?)', 'gi');\nconst multiMatcher = new RegExp('(' + token + ')+', 'gi');\n\nfunction decodeComponents(components, split) {\n\ttry {\n\t\t// Try to decode the entire string first\n\t\treturn [decodeURIComponent(components.join(''))];\n\t} catch {\n\t\t// Do nothing\n\t}\n\n\tif (components.length === 1) {\n\t\treturn components;\n\t}\n\n\tsplit = split || 1;\n\n\t// Split the array in 2 parts\n\tconst left = components.slice(0, split);\n\tconst right = components.slice(split);\n\n\treturn Array.prototype.concat.call([], decodeComponents(left), decodeComponents(right));\n}\n\nfunction decode(input) {\n\ttry {\n\t\treturn decodeURIComponent(input);\n\t} catch {\n\t\tlet tokens = input.match(singleMatcher) || [];\n\n\t\tfor (let i = 1; i < tokens.length; i++) {\n\t\t\tinput = decodeComponents(tokens, i).join('');\n\n\t\t\ttokens = input.match(singleMatcher) || [];\n\t\t}\n\n\t\treturn input;\n\t}\n}\n\nfunction customDecodeURIComponent(input) {\n\t// Keep track of all the replacements and prefill the map with the `BOM`\n\tconst replaceMap = {\n\t\t'%FE%FF': '\\uFFFD\\uFFFD',\n\t\t'%FF%FE': '\\uFFFD\\uFFFD',\n\t};\n\n\tlet match = multiMatcher.exec(input);\n\twhile (match) {\n\t\ttry {\n\t\t\t// Decode as big chunks as possible\n\t\t\treplaceMap[match[0]] = decodeURIComponent(match[0]);\n\t\t} catch {\n\t\t\tconst result = decode(match[0]);\n\n\t\t\tif (result !== match[0]) {\n\t\t\t\treplaceMap[match[0]] = result;\n\t\t\t}\n\t\t}\n\n\t\tmatch = multiMatcher.exec(input);\n\t}\n\n\t// Add `%C2` at the end of the map to make sure it does not replace the combinator before everything else\n\treplaceMap['%C2'] = '\\uFFFD';\n\n\tconst entries = Object.keys(replaceMap);\n\n\tfor (const key of entries) {\n\t\t// Replace all decoded components\n\t\tinput = input.replace(new RegExp(key, 'g'), replaceMap[key]);\n\t}\n\n\treturn input;\n}\n\nfunction decodeUriComponent(encodedURI) {\n\tif (typeof encodedURI !== 'string') {\n\t\tthrow new TypeError('Expected `encodedURI` to be of type `string`, got `' + typeof encodedURI + '`');\n\t}\n\n\ttry {\n\t\t// Try the built in decoder first\n\t\treturn decodeURIComponent(encodedURI);\n\t} catch {\n\t\t// Fallback to a more advanced decoder\n\t\treturn customDecodeURIComponent(encodedURI);\n\t}\n}\n\n;// ./node_modules/filter-obj/index.js\nfunction includeKeys(object, predicate) {\n\tconst result = {};\n\n\tif (Array.isArray(predicate)) {\n\t\tfor (const key of predicate) {\n\t\t\tconst descriptor = Object.getOwnPropertyDescriptor(object, key);\n\t\t\tif (descriptor?.enumerable) {\n\t\t\t\tObject.defineProperty(result, key, descriptor);\n\t\t\t}\n\t\t}\n\t} else {\n\t\t// `Reflect.ownKeys()` is required to retrieve symbol properties\n\t\tfor (const key of Reflect.ownKeys(object)) {\n\t\t\tconst descriptor = Object.getOwnPropertyDescriptor(object, key);\n\t\t\tif (descriptor.enumerable) {\n\t\t\t\tconst value = object[key];\n\t\t\t\tif (predicate(key, value, object)) {\n\t\t\t\t\tObject.defineProperty(result, key, descriptor);\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\treturn result;\n}\n\nfunction excludeKeys(object, predicate) {\n\tif (Array.isArray(predicate)) {\n\t\tconst set = new Set(predicate);\n\t\treturn includeKeys(object, key => !set.has(key));\n\t}\n\n\treturn includeKeys(object, (key, value, object) => !predicate(key, value, object));\n}\n\n;// ./node_modules/split-on-first/index.js\nfunction splitOnFirst(string, separator) {\n\tif (!(typeof string === 'string' && typeof separator === 'string')) {\n\t\tthrow new TypeError('Expected the arguments to be of type `string`');\n\t}\n\n\tif (string === '' || separator === '') {\n\t\treturn [];\n\t}\n\n\tconst separatorIndex = string.indexOf(separator);\n\n\tif (separatorIndex === -1) {\n\t\treturn [];\n\t}\n\n\treturn [\n\t\tstring.slice(0, separatorIndex),\n\t\tstring.slice(separatorIndex + separator.length)\n\t];\n}\n\n;// ./node_modules/query-string/base.js\n\n\n\n\nconst isNullOrUndefined = value => value === null || value === undefined;\n\n// eslint-disable-next-line unicorn/prefer-code-point\nconst strictUriEncode = string => encodeURIComponent(string).replaceAll(/[!'()*]/g, x => `%${x.charCodeAt(0).toString(16).toUpperCase()}`);\n\nconst encodeFragmentIdentifier = Symbol('encodeFragmentIdentifier');\n\nfunction encoderForArrayFormat(options) {\n\tswitch (options.arrayFormat) {\n\t\tcase 'index': {\n\t\t\treturn key => (result, value) => {\n\t\t\t\tconst index = result.length;\n\n\t\t\t\tif (\n\t\t\t\t\tvalue === undefined\n\t\t\t\t\t|| (options.skipNull && value === null)\n\t\t\t\t\t|| (options.skipEmptyString && value === '')\n\t\t\t\t) {\n\t\t\t\t\treturn result;\n\t\t\t\t}\n\n\t\t\t\tif (value === null) {\n\t\t\t\t\treturn [\n\t\t\t\t\t\t...result, [encode(key, options), '[', index, ']'].join(''),\n\t\t\t\t\t];\n\t\t\t\t}\n\n\t\t\t\treturn [\n\t\t\t\t\t...result,\n\t\t\t\t\t[encode(key, options), '[', encode(index, options), ']=', encode(value, options)].join(''),\n\t\t\t\t];\n\t\t\t};\n\t\t}\n\n\t\tcase 'bracket': {\n\t\t\treturn key => (result, value) => {\n\t\t\t\tif (\n\t\t\t\t\tvalue === undefined\n\t\t\t\t\t|| (options.skipNull && value === null)\n\t\t\t\t\t|| (options.skipEmptyString && value === '')\n\t\t\t\t) {\n\t\t\t\t\treturn result;\n\t\t\t\t}\n\n\t\t\t\tif (value === null) {\n\t\t\t\t\treturn [\n\t\t\t\t\t\t...result,\n\t\t\t\t\t\t[encode(key, options), '[]'].join(''),\n\t\t\t\t\t];\n\t\t\t\t}\n\n\t\t\t\treturn [\n\t\t\t\t\t...result,\n\t\t\t\t\t[encode(key, options), '[]=', encode(value, options)].join(''),\n\t\t\t\t];\n\t\t\t};\n\t\t}\n\n\t\tcase 'colon-list-separator': {\n\t\t\treturn key => (result, value) => {\n\t\t\t\tif (\n\t\t\t\t\tvalue === undefined\n\t\t\t\t\t|| (options.skipNull && value === null)\n\t\t\t\t\t|| (options.skipEmptyString && value === '')\n\t\t\t\t) {\n\t\t\t\t\treturn result;\n\t\t\t\t}\n\n\t\t\t\tif (value === null) {\n\t\t\t\t\treturn [\n\t\t\t\t\t\t...result,\n\t\t\t\t\t\t[encode(key, options), ':list='].join(''),\n\t\t\t\t\t];\n\t\t\t\t}\n\n\t\t\t\treturn [\n\t\t\t\t\t...result,\n\t\t\t\t\t[encode(key, options), ':list=', encode(value, options)].join(''),\n\t\t\t\t];\n\t\t\t};\n\t\t}\n\n\t\tcase 'comma':\n\t\tcase 'separator':\n\t\tcase 'bracket-separator': {\n\t\t\tconst keyValueSeparator = options.arrayFormat === 'bracket-separator'\n\t\t\t\t? '[]='\n\t\t\t\t: '=';\n\n\t\t\treturn key => (result, value) => {\n\t\t\t\tif (\n\t\t\t\t\tvalue === undefined\n\t\t\t\t\t|| (options.skipNull && value === null)\n\t\t\t\t\t|| (options.skipEmptyString && value === '')\n\t\t\t\t) {\n\t\t\t\t\treturn result;\n\t\t\t\t}\n\n\t\t\t\t// Translate null to an empty string so that it doesn't serialize as 'null'\n\t\t\t\tvalue = value === null ? '' : value;\n\n\t\t\t\tif (result.length === 0) {\n\t\t\t\t\treturn [[encode(key, options), keyValueSeparator, encode(value, options)].join('')];\n\t\t\t\t}\n\n\t\t\t\treturn [[result, encode(value, options)].join(options.arrayFormatSeparator)];\n\t\t\t};\n\t\t}\n\n\t\tdefault: {\n\t\t\treturn key => (result, value) => {\n\t\t\t\tif (\n\t\t\t\t\tvalue === undefined\n\t\t\t\t\t|| (options.skipNull && value === null)\n\t\t\t\t\t|| (options.skipEmptyString && value === '')\n\t\t\t\t) {\n\t\t\t\t\treturn result;\n\t\t\t\t}\n\n\t\t\t\tif (value === null) {\n\t\t\t\t\treturn [\n\t\t\t\t\t\t...result,\n\t\t\t\t\t\tencode(key, options),\n\t\t\t\t\t];\n\t\t\t\t}\n\n\t\t\t\treturn [\n\t\t\t\t\t...result,\n\t\t\t\t\t[encode(key, options), '=', encode(value, options)].join(''),\n\t\t\t\t];\n\t\t\t};\n\t\t}\n\t}\n}\n\nfunction parserForArrayFormat(options) {\n\tlet result;\n\n\tswitch (options.arrayFormat) {\n\t\tcase 'index': {\n\t\t\treturn (key, value, accumulator) => {\n\t\t\t\tresult = /\\[(\\d*)]$/.exec(key);\n\n\t\t\t\tkey = key.replace(/\\[\\d*]$/, '');\n\n\t\t\t\tif (!result) {\n\t\t\t\t\taccumulator[key] = value;\n\t\t\t\t\treturn;\n\t\t\t\t}\n\n\t\t\t\tif (accumulator[key] === undefined) {\n\t\t\t\t\taccumulator[key] = {};\n\t\t\t\t}\n\n\t\t\t\taccumulator[key][result[1]] = value;\n\t\t\t};\n\t\t}\n\n\t\tcase 'bracket': {\n\t\t\treturn (key, value, accumulator) => {\n\t\t\t\tresult = /(\\[])$/.exec(key);\n\t\t\t\tkey = key.replace(/\\[]$/, '');\n\n\t\t\t\tif (!result) {\n\t\t\t\t\taccumulator[key] = value;\n\t\t\t\t\treturn;\n\t\t\t\t}\n\n\t\t\t\tif (accumulator[key] === undefined) {\n\t\t\t\t\taccumulator[key] = [value];\n\t\t\t\t\treturn;\n\t\t\t\t}\n\n\t\t\t\taccumulator[key] = [...accumulator[key], value];\n\t\t\t};\n\t\t}\n\n\t\tcase 'colon-list-separator': {\n\t\t\treturn (key, value, accumulator) => {\n\t\t\t\tresult = /(:list)$/.exec(key);\n\t\t\t\tkey = key.replace(/:list$/, '');\n\n\t\t\t\tif (!result) {\n\t\t\t\t\taccumulator[key] = value;\n\t\t\t\t\treturn;\n\t\t\t\t}\n\n\t\t\t\tif (accumulator[key] === undefined) {\n\t\t\t\t\taccumulator[key] = [value];\n\t\t\t\t\treturn;\n\t\t\t\t}\n\n\t\t\t\taccumulator[key] = [...accumulator[key], value];\n\t\t\t};\n\t\t}\n\n\t\tcase 'comma':\n\t\tcase 'separator': {\n\t\t\treturn (key, value, accumulator) => {\n\t\t\t\tconst isArray = typeof value === 'string' && value.includes(options.arrayFormatSeparator);\n\t\t\t\tconst isEncodedArray = (typeof value === 'string' && !isArray && base_decode(value, options).includes(options.arrayFormatSeparator));\n\t\t\t\tvalue = isEncodedArray ? base_decode(value, options) : value;\n\t\t\t\tconst newValue = isArray || isEncodedArray ? value.split(options.arrayFormatSeparator).map(item => base_decode(item, options)) : (value === null ? value : base_decode(value, options));\n\t\t\t\taccumulator[key] = newValue;\n\t\t\t};\n\t\t}\n\n\t\tcase 'bracket-separator': {\n\t\t\treturn (key, value, accumulator) => {\n\t\t\t\tconst isArray = /(\\[])$/.test(key);\n\t\t\t\tkey = key.replace(/\\[]$/, '');\n\n\t\t\t\tif (!isArray) {\n\t\t\t\t\taccumulator[key] = value ? base_decode(value, options) : value;\n\t\t\t\t\treturn;\n\t\t\t\t}\n\n\t\t\t\tconst arrayValue = value === null\n\t\t\t\t\t? []\n\t\t\t\t\t: base_decode(value, options).split(options.arrayFormatSeparator);\n\n\t\t\t\tif (accumulator[key] === undefined) {\n\t\t\t\t\taccumulator[key] = arrayValue;\n\t\t\t\t\treturn;\n\t\t\t\t}\n\n\t\t\t\taccumulator[key] = [...accumulator[key], ...arrayValue];\n\t\t\t};\n\t\t}\n\n\t\tdefault: {\n\t\t\treturn (key, value, accumulator) => {\n\t\t\t\tif (accumulator[key] === undefined) {\n\t\t\t\t\taccumulator[key] = value;\n\t\t\t\t\treturn;\n\t\t\t\t}\n\n\t\t\t\taccumulator[key] = [...[accumulator[key]].flat(), value];\n\t\t\t};\n\t\t}\n\t}\n}\n\nfunction validateArrayFormatSeparator(value) {\n\tif (typeof value !== 'string' || value.length !== 1) {\n\t\tthrow new TypeError('arrayFormatSeparator must be single character string');\n\t}\n}\n\nfunction encode(value, options) {\n\tif (options.encode) {\n\t\treturn options.strict ? strictUriEncode(value) : encodeURIComponent(value);\n\t}\n\n\treturn value;\n}\n\nfunction base_decode(value, options) {\n\tif (options.decode) {\n\t\treturn decodeUriComponent(value);\n\t}\n\n\treturn value;\n}\n\nfunction keysSorter(input) {\n\tif (Array.isArray(input)) {\n\t\treturn input.sort();\n\t}\n\n\tif (typeof input === 'object') {\n\t\treturn keysSorter(Object.keys(input))\n\t\t\t.sort((a, b) => Number(a) - Number(b))\n\t\t\t.map(key => input[key]);\n\t}\n\n\treturn input;\n}\n\nfunction removeHash(input) {\n\tconst hashStart = input.indexOf('#');\n\tif (hashStart !== -1) {\n\t\tinput = input.slice(0, hashStart);\n\t}\n\n\treturn input;\n}\n\nfunction getHash(url) {\n\tlet hash = '';\n\tconst hashStart = url.indexOf('#');\n\tif (hashStart !== -1) {\n\t\thash = url.slice(hashStart);\n\t}\n\n\treturn hash;\n}\n\nfunction parseValue(value, options, type) {\n\tif (type === 'string' && typeof value === 'string') {\n\t\treturn value;\n\t}\n\n\tif (typeof type === 'function' && typeof value === 'string') {\n\t\treturn type(value);\n\t}\n\n\tif (type === 'string[]' && options.arrayFormat !== 'none' && typeof value === 'string') {\n\t\treturn [value];\n\t}\n\n\tif (type === 'number[]' && options.arrayFormat !== 'none' && !Number.isNaN(Number(value)) && (typeof value === 'string' && value.trim() !== '')) {\n\t\treturn [Number(value)];\n\t}\n\n\tif (type === 'number' && !Number.isNaN(Number(value)) && (typeof value === 'string' && value.trim() !== '')) {\n\t\treturn Number(value);\n\t}\n\n\tif (options.parseBooleans && value !== null && (value.toLowerCase() === 'true' || value.toLowerCase() === 'false')) {\n\t\treturn value.toLowerCase() === 'true';\n\t}\n\n\tif (options.parseNumbers && !Number.isNaN(Number(value)) && (typeof value === 'string' && value.trim() !== '')) {\n\t\treturn Number(value);\n\t}\n\n\treturn value;\n}\n\nfunction extract(input) {\n\tinput = removeHash(input);\n\tconst queryStart = input.indexOf('?');\n\tif (queryStart === -1) {\n\t\treturn '';\n\t}\n\n\treturn input.slice(queryStart + 1);\n}\n\nfunction parse(query, options) {\n\toptions = {\n\t\tdecode: true,\n\t\tsort: true,\n\t\tarrayFormat: 'none',\n\t\tarrayFormatSeparator: ',',\n\t\tparseNumbers: false,\n\t\tparseBooleans: false,\n\t\ttypes: Object.create(null),\n\t\t...options,\n\t};\n\n\tvalidateArrayFormatSeparator(options.arrayFormatSeparator);\n\n\tconst formatter = parserForArrayFormat(options);\n\n\t// Create an object with no prototype\n\tconst returnValue = Object.create(null);\n\n\tif (typeof query !== 'string') {\n\t\treturn returnValue;\n\t}\n\n\tquery = query.trim().replace(/^[?#&]/, '');\n\n\tif (!query) {\n\t\treturn returnValue;\n\t}\n\n\tfor (const parameter of query.split('&')) {\n\t\tif (parameter === '') {\n\t\t\tcontinue;\n\t\t}\n\n\t\tconst parameter_ = options.decode ? parameter.replaceAll('+', ' ') : parameter;\n\n\t\tlet [key, value] = splitOnFirst(parameter_, '=');\n\n\t\tif (key === undefined) {\n\t\t\tkey = parameter_;\n\t\t}\n\n\t\t// Missing `=` should be `null`:\n\t\t// http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters\n\t\tvalue = value === undefined ? null : (['comma', 'separator', 'bracket-separator'].includes(options.arrayFormat) ? value : base_decode(value, options));\n\t\tformatter(base_decode(key, options), value, returnValue);\n\t}\n\n\tfor (const [key, value] of Object.entries(returnValue)) {\n\t\tif (typeof value === 'object' && value !== null && options.types[key] !== 'string') {\n\t\t\tfor (const [key2, value2] of Object.entries(value)) {\n\t\t\t\tconst type = options.types[key] ? options.types[key].replace('[]', '') : undefined;\n\t\t\t\tvalue[key2] = parseValue(value2, options, type);\n\t\t\t}\n\t\t} else if (typeof value === 'object' && value !== null && options.types[key] === 'string') {\n\t\t\treturnValue[key] = Object.values(value).join(options.arrayFormatSeparator);\n\t\t} else {\n\t\t\treturnValue[key] = parseValue(value, options, options.types[key]);\n\t\t}\n\t}\n\n\tif (options.sort === false) {\n\t\treturn returnValue;\n\t}\n\n\t// TODO: Remove the use of `reduce`.\n\t// eslint-disable-next-line unicorn/no-array-reduce\n\treturn (options.sort === true ? Object.keys(returnValue).sort() : Object.keys(returnValue).sort(options.sort)).reduce((result, key) => {\n\t\tconst value = returnValue[key];\n\t\tresult[key] = Boolean(value) && typeof value === 'object' && !Array.isArray(value) ? keysSorter(value) : value;\n\t\treturn result;\n\t}, Object.create(null));\n}\n\nfunction stringify(object, options) {\n\tif (!object) {\n\t\treturn '';\n\t}\n\n\toptions = {\n\t\tencode: true,\n\t\tstrict: true,\n\t\tarrayFormat: 'none',\n\t\tarrayFormatSeparator: ',',\n\t\t...options,\n\t};\n\n\tvalidateArrayFormatSeparator(options.arrayFormatSeparator);\n\n\tconst shouldFilter = key => (\n\t\t(options.skipNull && isNullOrUndefined(object[key]))\n\t\t|| (options.skipEmptyString && object[key] === '')\n\t);\n\n\tconst formatter = encoderForArrayFormat(options);\n\n\tconst objectCopy = {};\n\n\tfor (const [key, value] of Object.entries(object)) {\n\t\tif (!shouldFilter(key)) {\n\t\t\tobjectCopy[key] = value;\n\t\t}\n\t}\n\n\tconst keys = Object.keys(objectCopy);\n\n\tif (options.sort !== false) {\n\t\tkeys.sort(options.sort);\n\t}\n\n\treturn keys.map(key => {\n\t\tconst value = object[key];\n\n\t\tif (value === undefined) {\n\t\t\treturn '';\n\t\t}\n\n\t\tif (value === null) {\n\t\t\treturn encode(key, options);\n\t\t}\n\n\t\tif (Array.isArray(value)) {\n\t\t\tif (value.length === 0 && options.arrayFormat === 'bracket-separator') {\n\t\t\t\treturn encode(key, options) + '[]';\n\t\t\t}\n\n\t\t\treturn value\n\t\t\t\t.reduce(formatter(key), [])\n\t\t\t\t.join('&');\n\t\t}\n\n\t\treturn encode(key, options) + '=' + encode(value, options);\n\t}).filter(x => x.length > 0).join('&');\n}\n\nfunction parseUrl(url, options) {\n\toptions = {\n\t\tdecode: true,\n\t\t...options,\n\t};\n\n\tlet [url_, hash] = splitOnFirst(url, '#');\n\n\tif (url_ === undefined) {\n\t\turl_ = url;\n\t}\n\n\treturn {\n\t\turl: url_?.split('?')?.[0] ?? '',\n\t\tquery: parse(extract(url), options),\n\t\t...(options && options.parseFragmentIdentifier && hash ? {fragmentIdentifier: base_decode(hash, options)} : {}),\n\t};\n}\n\nfunction stringifyUrl(object, options) {\n\toptions = {\n\t\tencode: true,\n\t\tstrict: true,\n\t\t[encodeFragmentIdentifier]: true,\n\t\t...options,\n\t};\n\n\tconst url = removeHash(object.url).split('?')[0] || '';\n\tconst queryFromUrl = extract(object.url);\n\n\tconst query = {\n\t\t...parse(queryFromUrl, {sort: false}),\n\t\t...object.query,\n\t};\n\n\tlet queryString = stringify(query, options);\n\tqueryString &&= `?${queryString}`;\n\n\tlet hash = getHash(object.url);\n\tif (typeof object.fragmentIdentifier === 'string') {\n\t\tconst urlObjectForFragmentEncode = new URL(url);\n\t\turlObjectForFragmentEncode.hash = object.fragmentIdentifier;\n\t\thash = options[encodeFragmentIdentifier] ? urlObjectForFragmentEncode.hash : `#${object.fragmentIdentifier}`;\n\t}\n\n\treturn `${url}${queryString}${hash}`;\n}\n\nfunction pick(input, filter, options) {\n\toptions = {\n\t\tparseFragmentIdentifier: true,\n\t\t[encodeFragmentIdentifier]: false,\n\t\t...options,\n\t};\n\n\tconst {url, query, fragmentIdentifier} = parseUrl(input, options);\n\n\treturn stringifyUrl({\n\t\turl,\n\t\tquery: includeKeys(query, filter),\n\t\tfragmentIdentifier,\n\t}, options);\n}\n\nfunction exclude(input, filter, options) {\n\tconst exclusionFilter = Array.isArray(filter) ? key => !filter.includes(key) : (key, value) => !filter(key, value);\n\n\treturn pick(input, exclusionFilter, options);\n}\n\n;// ./node_modules/query-string/index.js\n\n\n/* harmony default export */ const query_string = (base_namespaceObject);\n\n;// ./vendor/shopware/storefront/Resources/app/storefront/src/helper/element-replace.helper.js\n\n\n\n/**\n * @sw-package framework\n */\nclass ElementReplaceHelperSingleton {\n\n    constructor() {\n        this._domParser = new DOMParser();\n    }\n\n    /**\n     * replace all elements from the target\n     *\n     * @param {string|HTMLElement} markup\n     * @param {array|string} selectors\n     * @param {boolean} strict\n     *\n     * @private\n     */\n    replaceFromMarkup(markup, selectors, strict = true) {\n        let src = markup;\n        if (typeof src === 'string') {\n            src = this._createMarkupFromString(src);\n        }\n\n        if (typeof selectors === 'string') {\n            selectors = [selectors];\n        }\n\n        this._replaceSelectors(src, selectors, strict);\n    }\n\n    /**\n     * replaces the target with the src elements\n     *\n     * @param {NodeList|HTMLElement|string} src\n     * @param {NodeList|HTMLElement|string} target\n     * @param {boolean} strict\n     *\n     * @returns {boolean}\n     */\n    replaceElement(src, target, strict = true) {\n        if (typeof src === 'string') {\n            src = dom_access_helper/* default */.A.querySelectorAll(document, src, strict);\n        }\n\n        if (typeof target === 'string') {\n            target = dom_access_helper/* default */.A.querySelectorAll(document, target, strict);\n        }\n\n        if (src instanceof NodeList && target instanceof NodeList && target.length > src.length) {\n            Iterator.iterate(target, (targetEl) => {\n                Iterator.iterate(src, (srcEl) => {\n                    if (srcEl.innerHTML && srcEl.className === targetEl.className) {\n                        targetEl.innerHTML = srcEl.innerHTML;\n                    }\n                });\n            });\n\n            return true;\n        }\n\n        if (src instanceof NodeList) {\n            Iterator.iterate(src, (srcEl, index) => {\n                if (srcEl.innerHTML) {\n                    target[index].innerHTML = srcEl.innerHTML;\n                }\n            });\n            return true;\n        }\n\n        if (target instanceof NodeList) {\n            Iterator.iterate(target, (targetEl) => {\n                if (src.innerHTML) {\n                    targetEl.innerHTML = src.innerHTML;\n                }\n            });\n            return true;\n        }\n\n        if (!target || !src || !src.innerHTML) {\n            return false;\n        }\n\n        target.innerHTML = src.innerHTML;\n        return true;\n    }\n\n    /**\n     * replaces all found selectors in the document\n     * with the ones in the source\n     *\n     * @param {HTMLElement} src\n     * @param {Array} selectors\n     * @param {boolean} strict\n     *\n     * @private\n     */\n    _replaceSelectors(src, selectors, strict) {\n        Iterator.iterate(selectors, (selector) => {\n            const srcElements = dom_access_helper/* default */.A.querySelectorAll(src, selector, strict);\n            const targetElements = dom_access_helper/* default */.A.querySelectorAll(document, selector, strict);\n\n            this.replaceElement(srcElements, targetElements, strict);\n        });\n    }\n\n    /**\n     * returns a dom element parsed from the passed string\n     *\n     * @param {string} string\n     *\n     * @returns {HTMLElement}\n     *\n     * @private\n     */\n    _createMarkupFromString(string) {\n        return this._domParser.parseFromString(string, 'text/html');\n    }\n}\n\n/**\n * Create the ElementReplaceHelper instance.\n * @type {Readonly<ElementReplaceHelperSingleton>}\n */\nconst ElementReplaceHelperInstance = Object.freeze(new ElementReplaceHelperSingleton());\n\nclass ElementReplaceHelper {\n\n    /**\n     * replace all elements from the target\n     *\n     * @param {string|HTMLElement} markup\n     * @param {array|string} selectors\n     * @param {boolean} strict\n     *\n     */\n    static replaceFromMarkup(markup, selectors, strict) {\n        ElementReplaceHelperInstance.replaceFromMarkup(markup, selectors, strict);\n    }\n\n    /**\n     * replaces the target with the src elements\n     *\n     * @param {NodeList|HTMLElement|string} src\n     * @param {NodeList|HTMLElement|string} target\n     * @param {boolean} strict\n     *\n     * @returns {boolean}\n     */\n    static replaceElement(src, target, strict) {\n        return ElementReplaceHelperInstance.replaceElement(src, target, strict);\n    }\n}\n\n;// ./vendor/shopware/storefront/Resources/app/storefront/src/helper/debouncer.helper.js\n/**\n * Debouncer\n * @sw-package framework\n */\nclass Debouncer {\n\n    /**\n     * Debounce any given function\n     *\n     * @param {Function} callback\n     * @param {int} delay\n     * @param {boolean} immediate\n     *\n     * @returns {Function}\n     */\n    static debounce(callback, delay, immediate = false) {\n        let timeout;\n\n        return (...args) => {\n            if (immediate &&  !timeout) {\n                setTimeout(callback.bind(callback, ...args), 0);\n            }\n\n            clearTimeout(timeout);\n            timeout = setTimeout(callback.bind(callback, ...args), delay);\n        };\n    }\n}\n\n;// ./vendor/shopware/storefront/Resources/app/storefront/src/plugin/listing/listing.plugin.js\n/*\n * @sw-package inventory\n */\n\n\n\n\n\n\n\n\n\nclass ListingPlugin extends plugin_class/* default */.A {\n\n    static options = {\n        dataUrl: '',\n        filterUrl: '',\n        params: {},\n        filterPanelSelector: '.filter-panel',\n        cmsProductListingSelector: '.cms-element-product-listing',\n        cmsProductListingWrapperSelector: '.cms-element-product-listing-wrapper',\n        cmsProductListingResultsSelector: '.js-listing-wrapper',\n        activeFilterContainerSelector: '.filter-panel-active-container',\n        /** @deprecated tag:v6.7.0 - Option `activeFilterLabelClass` is deprecated. Use `activeFilterLabelClasses` to render the label classes and `activeFilterLabelSelector` as the selector for events. */\n        activeFilterLabelClass: 'filter-active',\n        activeFilterLabelClasses: 'filter-active btn',\n        activeFilterLabelSelector: '.filter-active',\n        /** @deprecated tag:v6.7.0 - Option `activeFilterLabelRemoveClass` is deprecated. Selector `activeFilterLabelClass` will be used to query the remove button. */\n        activeFilterLabelRemoveClass: 'filter-active-remove',\n        activeFilterLabelPreviewClass: 'filter-active-preview',\n        resetAllFilterButtonClasses: 'filter-reset-all btn btn-outline-danger',\n        resetAllFilterButtonSelector: '.filter-reset-all',\n        loadingIndicatorClass: 'is-loading',\n        loadingElementLoaderClass: 'has-element-loader',\n        ariaLiveSelector: '.filter-panel-aria-live',\n        ariaLiveUpdates: true,\n        disableEmptyFilter: false,\n        snippets: {\n            resetAllButtonText: 'Reset all',\n            resetAllFiltersAriaLabel: 'Reset all filters',\n            removeFilterAriaLabel: 'Remove filter',\n        },\n        //if the window should be scrolled to top of to the listingWrapper element\n        scrollTopListingWrapper: true,\n        // how much px the scrolling should be offset\n        scrollOffset: 15,\n    };\n\n    init() {\n        this._registry = [];\n\n        this.httpClient = new HttpClient();\n\n        this._urlFilterParams = query_string.parse(window.location.search);\n\n        this._filterPanel = dom_access_helper/* default */.A.querySelector(document, this.options.filterPanelSelector, false);\n        this._filterPanelActive = !!this._filterPanel;\n\n        // Init functionality for the filter panel\n        if (this._filterPanelActive) {\n            this._showResetAll = false;\n            this.activeFilterContainer = dom_access_helper/* default */.A.querySelector(\n                document,\n                this.options.activeFilterContainerSelector\n            );\n            this.ariaLiveContainer = dom_access_helper/* default */.A.querySelector(document, this.options.ariaLiveSelector, false);\n        }\n\n        this._cmsProductListingWrapper = dom_access_helper/* default */.A.querySelector(document, this.options.cmsProductListingWrapperSelector, false);\n        this._cmsProductListingWrapperActive = !!this._cmsProductListingWrapper;\n\n        this._allFiltersInitializedDebounce = Debouncer.debounce(this.sendDisabledFiltersRequest.bind(this), 100);\n\n        this._registerEvents();\n    }\n\n    /**\n     * @public\n     */\n    refreshRegistry() {\n        // get only the registrations which are visible in the document\n        const visibleRegistrations = this._registry.filter((entry) => document.body.contains(entry.el));\n\n        // reinitialize the listing plugin\n        this.init();\n\n        // replace empty registry with existing visible registries\n        this._registry = visibleRegistrations;\n\n        // initialize plugins which are not registered yet\n        window.PluginManager.initializePlugins();\n    }\n\n    /**\n     * @param pushHistory\n     * @param overrideParams\n     * @public\n     */\n    changeListing(pushHistory = true, overrideParams = {}) {\n        this._buildRequest(pushHistory, overrideParams);\n\n        if (this._filterPanelActive) {\n            this._buildLabels();\n        }\n    }\n\n    /**\n     * @param filterItem\n     * @public\n     */\n    registerFilter(filterItem) {\n        this._registry.push(filterItem);\n\n        this._setFilterState(filterItem);\n\n        if (this.options.disableEmptyFilter) {\n            this._allFiltersInitializedDebounce();\n        }\n    }\n\n    _setFilterState(filterItem) {\n        if (Object.keys(this._urlFilterParams).length > 0 && typeof filterItem.setValuesFromUrl === 'function' ) {\n            const stateChanged = filterItem.setValuesFromUrl(this._urlFilterParams);\n\n            // Return if state of filter has not changed or filter panel is not active\n            if (!stateChanged || !this._filterPanelActive) return;\n\n            this._showResetAll = true;\n            this._buildLabels();\n        }\n    }\n\n    /**\n     * @param filterItem\n     * @public\n     */\n    deregisterFilter(filterItem) {\n        this._registry = this._registry.filter((item) => {\n            return (item !== filterItem);\n        });\n    }\n\n    /**\n     * @private\n     */\n    _fetchValuesOfRegisteredFilters() {\n        const filters = {};\n\n        this._registry.forEach((filterPlugin) => {\n            const values = filterPlugin.getValues();\n\n            Object.keys(values).forEach((key) => {\n                if (Object.prototype.hasOwnProperty.call(filters, key)) {\n                    Object.values(values[key]).forEach((value) => {\n                        filters[key].push(value);\n                    });\n                } else {\n                    filters[key] = values[key];\n                }\n            });\n        });\n\n        return filters;\n    }\n\n    /**\n     * @private\n     */\n    _mapFilters(filters) {\n        const mapped = {};\n        Object.keys(filters).forEach((key) => {\n            let value = filters[key];\n\n            if (Array.isArray(value)) {\n                value = value.join('|');\n            }\n\n            const string = `${value}`;\n            if (string.length) {\n                mapped[key] = value;\n            }\n        });\n\n        return mapped;\n    }\n\n    /**\n     * @param pushHistory\n     * @param overrideParams\n     * @private\n     */\n    _buildRequest(pushHistory = true, overrideParams = {}) {\n        const filters = this._fetchValuesOfRegisteredFilters();\n        const mapped = this._mapFilters(filters);\n\n        if (this._filterPanelActive) {\n            this._showResetAll = !!Object.keys(mapped).length;\n        }\n\n        if (this.options.params) {\n            Object.keys(this.options.params).forEach((key) => {\n                mapped[key] = this.options.params[key];\n            });\n        }\n\n        Object.entries(overrideParams).forEach(([paramKey, paramValue]) => {\n            mapped[paramKey] = paramValue;\n        });\n\n        let query = query_string.stringify(mapped);\n        this.sendDataRequest(query);\n\n        delete mapped['slots'];\n        delete mapped['no-aggregations'];\n        delete mapped['reduce-aggregations'];\n        delete mapped['only-aggregations'];\n        query = query_string.stringify(mapped);\n\n        if (pushHistory) {\n            this._updateHistory(query);\n        }\n\n        if (this.options.scrollTopListingWrapper) {\n            this._scrollTopOfListing();\n        }\n    }\n\n    _scrollTopOfListing() {\n        const elemRect = this._cmsProductListingWrapper.getBoundingClientRect();\n        if (elemRect.top >= 0) {\n            return;\n        }\n\n        const top = elemRect.top + window.scrollY - this.options.scrollOffset;\n        window.scrollTo({\n            top: top,\n            behavior: 'smooth',\n        });\n    }\n\n    /**\n     * @private\n     */\n    _getDisabledFiltersParamsFromParams(params) {\n        const filterParams = Object.assign({}, {'only-aggregations': 1, 'reduce-aggregations': 1}, params);\n        delete filterParams['p'];\n        delete filterParams['order'];\n        delete filterParams['no-aggregations'];\n\n        return filterParams;\n    }\n\n    _updateHistory(query) {\n        window.history.pushState({}, '', `${window.location.pathname}?${query}`);\n    }\n\n    /**\n     * Build all labels for the currently active filters.\n     */\n    _buildLabels() {\n        let labelHtml = '';\n\n        this._registry.forEach((filterPlugin) => {\n            const labels = filterPlugin.getLabels();\n\n            if (labels.length) {\n                labels.forEach((label) => {\n                    labelHtml += this.getLabelTemplate(label);\n                });\n            }\n        });\n\n        this.activeFilterContainer.innerHTML = labelHtml;\n\n        /** @deprecated tag:v6.7.0 - The whole button will be click-able to remove a filter instead of the additional remove button `filter-active-remove`. */\n        const resetButtons = window.Feature.isActive('ACCESSIBILITY_TWEAKS')\n            ? dom_access_helper/* default */.A.querySelectorAll(this.activeFilterContainer, this.options.activeFilterLabelSelector, false)\n            : dom_access_helper/* default */.A.querySelectorAll(this.activeFilterContainer, `.${this.options.activeFilterLabelRemoveClass}`, false);\n\n        if (labelHtml.length) {\n            this._registerLabelEvents(resetButtons);\n            this.createResetAllButton();\n        }\n    }\n\n    _registerLabelEvents(resetButtons) {\n        Iterator.iterate(resetButtons, (label) => {\n            label.addEventListener('click', () => this.resetFilter(label));\n        });\n    }\n\n    /**\n     * Create the button to reset all active filters.\n     * Register event listener to remove a single filter.\n     */\n    createResetAllButton() {\n        this.activeFilterContainer.insertAdjacentHTML('beforeend', this.getResetAllButtonTemplate());\n\n        const resetAllButtonEl = dom_access_helper/* default */.A.querySelector(\n            this.activeFilterContainer,\n            this.options.resetAllFilterButtonSelector\n        );\n\n        resetAllButtonEl.removeEventListener('click', this.resetAllFilter.bind(this));\n        resetAllButtonEl.addEventListener('click', this.resetAllFilter.bind(this));\n\n        if (!this._showResetAll) {\n            resetAllButtonEl.remove();\n        }\n    }\n\n    /**\n     * Remove the given filter from the filter map.\n     *\n     * @param {Object} label\n     */\n    resetFilter(label) {\n        this._registry.forEach((filterPlugin) => {\n            filterPlugin.reset(label.dataset.id);\n        });\n\n        this._buildRequest();\n        this._buildLabels();\n    }\n\n    /**\n     * Reset all active filters.\n     */\n    resetAllFilter() {\n        this._registry.forEach((filterPlugin) => {\n            filterPlugin.resetAll();\n        });\n\n        this._buildRequest();\n        this._buildLabels();\n    }\n\n    /**\n     * Template for an active filter label.\n     *\n     * @param {Object} label\n     * @returns {string}\n     */\n    getLabelTemplate(label) {\n        /** @deprecated tag:v6.7.0 - The `filter-active` label will be a Bootstrap button instead of a span element */\n        if (window.Feature.isActive('ACCESSIBILITY_TWEAKS')) {\n            return `\n            <button\n                class=\"${this.options.activeFilterLabelClasses}\"\n                data-id=\"${label.id}\"\n                title=\"${this.options.snippets.removeFilterAriaLabel}: ${label.label}\"\n                aria-label=\"${this.options.snippets.removeFilterAriaLabel}: ${label.label}\">\n                ${this.getLabelPreviewTemplate(label)}\n                ${label.label}\n                <span aria-hidden=\"true\" class=\"ms-1 fs-4\">&times;</span>\n            </button>\n            `;\n        }\n\n        return `\n        <span class=\"${this.options.activeFilterLabelClass}\">\n            ${this.getLabelPreviewTemplate(label)}\n            <span aria-hidden=\"true\">${label.label}</span>\n            <button class=\"${this.options.activeFilterLabelRemoveClass}\"\n                    data-id=\"${label.id}\"\n                    title=\"${this.options.snippets.removeFilterAriaLabel}: ${label.label}\"\n                    aria-label=\"${this.options.snippets.removeFilterAriaLabel}: ${label.label}\">\n                &times;\n            </button>\n        </span>\n        `;\n    }\n\n    getLabelPreviewTemplate(label) {\n        const previewClass = this.options.activeFilterLabelPreviewClass;\n\n        if (label.previewHex) {\n            return `\n                <span class=\"${previewClass}\" style=\"background-color: ${label.previewHex};\"></span>\n            `;\n        }\n\n        if (label.previewImageUrl) {\n            return `\n                <span class=\"${previewClass}\" style=\"background-image: url('${label.previewImageUrl}');\"></span>\n            `;\n        }\n\n        return '';\n    }\n\n    getResetAllButtonTemplate() {\n        return `\n        <button class=\"${this.options.resetAllFilterButtonClasses}\" aria-label=\"${this.options.snippets.resetAllFiltersAriaLabel}\">\n            ${this.options.snippets.resetAllButtonText}\n        </button>\n        `;\n    }\n\n    /**\n     * Add classes to add loading styling.\n     * Prevents the user from clicking filter labels during filter request.\n     */\n    addLoadingIndicatorClass() {\n        this._filterPanel.classList.add(this.options.loadingIndicatorClass);\n    }\n\n    /**\n     * Remove loading styling classes.\n     */\n    removeLoadingIndicatorClass() {\n        this._filterPanel.classList.remove(this.options.loadingIndicatorClass);\n    }\n\n    /**\n     * Add classes to add loading styling for product listing\n     */\n    addLoadingElementLoaderClass() {\n        this._cmsProductListingWrapper.classList.add(this.options.loadingElementLoaderClass);\n    }\n\n    /**\n     * Remove loading styling classes for product listing\n     */\n    removeLoadingElementLoaderClass() {\n        this._cmsProductListingWrapper.classList.remove(this.options.loadingElementLoaderClass);\n    }\n\n    /**\n     * Send request to get filtered product data.\n     *\n     * @param {String} filterParams - active filters as querystring\n     */\n    sendDataRequest(filterParams) {\n        if (this._filterPanelActive) {\n            this.addLoadingIndicatorClass();\n        }\n\n        if (this._cmsProductListingWrapperActive) {\n            this.addLoadingElementLoaderClass();\n        }\n\n        if (this.options.disableEmptyFilter) {\n            this.sendDisabledFiltersRequest();\n        }\n\n        this.httpClient.get(`${this.options.dataUrl}?${filterParams}`, (response) => {\n            this.renderResponse(response);\n\n            if (this._filterPanelActive) {\n                this.removeLoadingIndicatorClass();\n                this._updateAriaLive();\n            }\n\n            if (this._cmsProductListingWrapperActive) {\n                this.removeLoadingElementLoaderClass();\n            }\n        });\n    }\n\n    /**\n     * Send request to get disabled filters data\n     */\n    sendDisabledFiltersRequest() {\n        const filters = this._fetchValuesOfRegisteredFilters();\n        const mapped = this._mapFilters(filters);\n        if (this.options.params) {\n            Object.keys(this.options.params).forEach((key) => {\n                mapped[key] = this.options.params[key];\n            });\n        }\n\n        // unset the debounce function after first execution\n        this._allFiltersInitializedDebounce = () => {};\n\n        const filterParams = this._getDisabledFiltersParamsFromParams(mapped);\n\n        this.httpClient.get(`${this.options.filterUrl}?${query_string.stringify(filterParams)}`, (response) => {\n            const filter =  JSON.parse(response);\n\n            this._registry.forEach((item) => {\n                if (typeof item.refreshDisabledState === 'function') {\n                    item.refreshDisabledState(filter, filterParams);\n                }\n            });\n        });\n    }\n\n    /**\n     * Inject the HTML of the filtered products to the page.\n     *\n     * @param {String} response - HTML of filtered product data.\n     */\n    renderResponse(response) {\n        ElementReplaceHelper.replaceFromMarkup(response, this.options.cmsProductListingSelector, false);\n\n        this._registry.forEach((item) => {\n            if (typeof item.afterContentChange === 'function') {\n                item.afterContentChange();\n            }\n        });\n\n        window.PluginManager.initializePlugins();\n\n        this.$emitter.publish('Listing/afterRenderResponse', { response });\n    }\n\n    /**\n     * Update the aria-live region with the current listing results.\n     *\n     * @private\n     */\n    _updateAriaLive() {\n        if (!this.options.ariaLiveUpdates) {\n            return;\n        }\n\n        if (!this.ariaLiveContainer) {\n            return;\n        }\n\n        const listingResultsEl = this.el.querySelector(this.options.cmsProductListingResultsSelector);\n        this.ariaLiveContainer.innerHTML = listingResultsEl.dataset.ariaLiveText;\n    }\n\n    /**\n     * @private\n     */\n    _registerEvents() {\n        window.onpopstate = this._onWindowPopstate.bind(this);\n    }\n\n    /**\n     * @private\n     */\n    _onWindowPopstate() {\n        this.refreshRegistry();\n\n        this._registry.forEach(filterItem => {\n            if (Object.keys(this._urlFilterParams).length === 0) {\n                this._urlFilterParams.p = 1;\n            }\n            this._setFilterState(filterItem);\n        });\n\n        if (this.options.disableEmptyFilter) {\n            this._allFiltersInitializedDebounce();\n        }\n\n        this.changeListing(false);\n    }\n}\n\n;// ./src/makaira-filter/makaira.listing.plugin.js\n\n\nclass MakairaListing extends ListingPlugin {\n  init() {\n    super.init();\n  }\n\n  _buildRequest(pushHistory = true, overrideParams = {}) {\n    const filters = this._fetchValuesOfRegisteredFilters();\n    const mapped = this._mapFilters(filters);\n\n    const sortingElement = document.querySelector(\n      '[data-listing-sorting=\"true\"]'\n    );\n    if (sortingElement) {\n      const selectElement = sortingElement.querySelector(\"select\");\n      if (selectElement && selectElement.value) {\n        // Determine the parameter name from the select element\n        const paramName = selectElement.name || \"order\";\n        mapped[paramName] = selectElement.value;\n      }\n    }\n\n    if (this._filterPanelActive) {\n      this._showResetAll = !!Object.keys(mapped).length;\n    }\n\n    if (this.options.params) {\n      Object.keys(this.options.params).forEach((key) => {\n        mapped[key] = this.options.params[key];\n      });\n    }\n\n    Object.entries(overrideParams).forEach(([paramKey, paramValue]) => {\n      mapped[paramKey] = paramValue;\n    });\n\n    //this._registry = [];\n\n    let query = new URLSearchParams(mapped).toString();\n    this.sendDataRequest(query);\n\n    delete mapped[\"slots\"];\n    delete mapped[\"no-aggregations\"];\n    delete mapped[\"reduce-aggregations\"];\n    delete mapped[\"only-aggregations\"];\n    query = new URLSearchParams(mapped).toString();\n\n    if (pushHistory) {\n      this._updateHistory(query);\n    }\n\n    if (this.options.scrollTopListingWrapper) {\n      this._scrollTopOfListing();\n    }\n  }\n\n  _buildLabels() {\n    //extract the labels from this._cmsProductListingWrapper.baseURI that looks like \"http://localhost/Clothing/?filter_size=M&p=1\"\n    const baseURI = this._cmsProductListingWrapper.baseURI;\n    const url = new URL(baseURI);\n    const params = url.searchParams;\n    const labels = [];\n    //use only keys that start with filter_\n    params.forEach((value, key) => {\n      //mutliple values are separated by &\n      const values = value.split(\"|\");\n      values.forEach((value) => {\n        if (key.startsWith(\"filter_\")) {\n          labels.push({\n            id: value,\n            label: value,\n          });\n        }\n      });\n    });\n\n    //add the labels for those url params min-price=40&max-price=100\n    const minPrice = params.get(\"min-price\");\n    const maxPrice = params.get(\"max-price\");\n\n    if (minPrice) {\n      labels.push({\n        id: \"min-price\",\n        label: \"Preis ab \" + minPrice,\n      });\n    }\n    if (maxPrice) {\n      labels.push({\n        id: \"max-price\",\n        label: \"Preis bis \" + maxPrice,\n      });\n    }\n\n    let labelHtml = \"\";\n    labels.forEach((label) => {\n      if (!labelHtml.includes(label)) {\n        labelHtml += this.getLabelTemplate(label);\n      }\n    });\n\n    /*let labelHtml = '';\n\n\n\n        this._registry.forEach((filterPlugin) => {\n            const labels = filterPlugin.getLabels();\n\n            if (labels.length) {\n                labels.forEach((label) => {\n                    labelHtml += this.getLabelTemplate(label);\n                });\n            }\n        });*/\n\n    this.activeFilterContainer.innerHTML = labelHtml;\n\n    let filterActiveSelector = window.Feature.isActive(\"ACCESSIBILITY_TWEAKS\")\n      ? \".filter-active\"\n      : \".filter-active-remove\";\n    const resetButtons =\n      this.activeFilterContainer.querySelectorAll(filterActiveSelector);\n\n    if (labelHtml.length) {\n      this._registerLabelEvents(resetButtons);\n      this.createResetAllButton();\n    }\n  }\n\n  registerFilter(filterItem) {\n    // check if the item is already in the _registry and skip if so\n    if (\n      this._registry.some(\n        (item) => item.options.name === filterItem.options.name\n      )\n    ) {\n      return;\n    }\n\n    this._registry.push(filterItem);\n    this._setFilterState(filterItem);\n\n    if (this.options.disableEmptyFilter) {\n      this._allFiltersInitializedDebounce();\n    }\n  }\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,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RUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQSxxRUFBcUUsV0FBTTtBQUMzRSw2QkFBNkIsV0FBTTtBQUNuQyx1R0FBdUcsV0FBTSw2Q0FBNkMsV0FBTTtBQUNoSztBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQSxnQ0FBZ0MsV0FBTTtBQUN0QztBQUNBOztBQUVBO0FBQ0E7QUFDQSxPQUFPLFdBQU07O0FBRWI7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQSxTQUFTLFdBQU07QUFDZjtBQUNBLFNBQVMsa0JBQWU7QUFDeEI7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRU87QUFDUDtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRU87QUFDUDtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTs7QUFFQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7O0FBRUEscUJBQXFCLFlBQVk7O0FBRWpDO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsNEhBQTRILFdBQU07QUFDbEksWUFBWSxXQUFNO0FBQ2xCOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLElBQUk7QUFDSjtBQUNBLElBQUk7QUFDSjtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEVBQUU7QUFDRjs7QUFFTztBQUNQO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTs7QUFFQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FB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QUNBO0FBQ0E7QUFDQSxPQUFPO0FBQ1A7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7O0FBRUw7Ozs7QUFJQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLGlCQUFpQjtBQUNqQjtBQUNBLFNBQVMsRUFBRTs7QUFFWDs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsInNvdXJjZXMiOlsid2VicGFjazovL21ha2FpcmEtc2hvcHdhcmU2LXN0b3JlZnJvbnQvLi92ZW5kb3Ivc2hvcHdhcmUvc3RvcmVmcm9udC9SZXNvdXJjZXMvYXBwL3N0b3JlZnJvbnQvc3JjL3NlcnZpY2UvaHR0cC1jbGllbnQuc2VydmljZS5qcz82YTM2Iiwid2VicGFjazovL21ha2FpcmEtc2hvcHdhcmU2LXN0b3JlZnJvbnQvLi92ZW5kb3Ivc2hvcHdhcmUvc3RvcmVmcm9udC9SZXNvdXJjZXMvYXBwL3N0b3JlZnJvbnQvc3JjL2hlbHBlci9pdGVyYXRvci5oZWxwZXIuanM/ZDFjNCIsIndlYnBhY2s6Ly9tYWthaXJhLXNob3B3YXJlNi1zdG9yZWZyb250Ly4vbm9kZV9tb2R1bGVzL2RlY29kZS11cmktY29tcG9uZW50L2luZGV4LmpzPzJhYjIiLCJ3ZWJwYWNrOi8vbWFrYWlyYS1zaG9wd2FyZTYtc3RvcmVmcm9udC8uL25vZGVfbW9kdWxlcy9maWx0ZXItb2JqL2luZGV4LmpzPzY1NjYiLCJ3ZWJwYWNrOi8vbWFrYWlyYS1zaG9wd2FyZTYtc3RvcmVmcm9udC8uL25vZGVfbW9kdWxlcy9zcGxpdC1vbi1maXJzdC9pbmRleC5qcz84OGUwIiwid2VicGFjazovL21ha2FpcmEtc2hvcHdhcmU2LXN0b3JlZnJvbnQvLi9ub2RlX21vZHVsZXMvcXVlcnktc3RyaW5nL2Jhc2UuanM/NTBlMyIsIndlYnBhY2s6Ly9tYWthaXJhLXNob3B3YXJlNi1zdG9yZWZyb250Ly4vbm9kZV9tb2R1bGVzL3F1ZXJ5LXN0cmluZy9pbmRleC5qcz81NDI5Iiwid2VicGFjazovL21ha2FpcmEtc2hvcHdhcmU2LXN0b3JlZnJvbnQvLi92ZW5kb3Ivc2hvcHdhcmUvc3RvcmVmcm9udC9SZXNvdXJjZXMvYXBwL3N0b3JlZnJvbnQvc3JjL2hlbHBlci9lbGVtZW50LXJlcGxhY2UuaGVscGVyLmpzP2ZhMzgiLCJ3ZWJwYWNrOi8vbWFrYWlyYS1zaG9wd2FyZTYtc3RvcmVmcm9udC8uL3ZlbmRvci9zaG9wd2FyZS9zdG9yZWZyb250L1Jlc291cmNlcy9hcHAvc3RvcmVmcm9udC9zcmMvaGVscGVyL2RlYm91bmNlci5oZWxwZXIuanM/ZDcwYyIsIndlYnBhY2s6Ly9tYWthaXJhLXNob3B3YXJlNi1zdG9yZWZyb250Ly4vdmVuZG9yL3Nob3B3YXJlL3N0b3JlZnJvbnQvUmVzb3VyY2VzL2FwcC9zdG9yZWZyb250L3NyYy9wbHVnaW4vbGlzdGluZy9saXN0aW5nLnBsdWdpbi5qcz9lYmI5Iiwid2VicGFjazovL21ha2FpcmEtc2hvcHdhcmU2LXN0b3JlZnJvbnQvLi9zcmMvbWFrYWlyYS1maWx0ZXIvbWFrYWlyYS5saXN0aW5nLnBsdWdpbi5qcz8wYjBmIl0sInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQHN3LXBhY2thZ2UgZnJhbWV3b3JrXG4gKi9cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIEh0dHBDbGllbnQge1xuICAgIGNvbnN0cnVjdG9yKCkge1xuICAgICAgICB0aGlzLl9yZXF1ZXN0ID0gbnVsbDtcbiAgICAgICAgdGhpcy5fZXJyb3JIYW5kbGluZ0ludGVybmFsID0gZmFsc2U7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogUmVxdWVzdCBHRVRcbiAgICAgKlxuICAgICAqIEBwYXJhbSB7c3RyaW5nfSB1cmxcbiAgICAgKiBAcGFyYW0ge2Z1bmN0aW9ufSBjYWxsYmFja1xuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBjb250ZW50VHlwZVxuICAgICAqXG4gICAgICogQHJldHVybnMge1hNTEh0dHBSZXF1ZXN0fVxuICAgICAqL1xuICAgIGdldCh1cmwsIGNhbGxiYWNrLCBjb250ZW50VHlwZSA9ICdhcHBsaWNhdGlvbi9qc29uJykge1xuICAgICAgICBjb25zdCByZXF1ZXN0ID0gdGhpcy5fY3JlYXRlUHJlcGFyZWRSZXF1ZXN0KCdHRVQnLCB1cmwsIGNvbnRlbnRUeXBlKTtcblxuICAgICAgICByZXR1cm4gdGhpcy5fc2VuZFJlcXVlc3QocmVxdWVzdCwgbnVsbCwgY2FsbGJhY2spO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIFJlcXVlc3QgUE9TVFxuICAgICAqXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IHVybFxuICAgICAqIEBwYXJhbSB7b2JqZWN0fG51bGx9IGRhdGFcbiAgICAgKiBAcGFyYW0ge2Z1bmN0aW9ufSBjYWxsYmFja1xuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBjb250ZW50VHlwZVxuICAgICAqXG4gICAgICogQHJldHVybnMge1hNTEh0dHBSZXF1ZXN0fVxuICAgICAqL1xuICAgIHBvc3QoXG4gICAgICAgIHVybCxcbiAgICAgICAgZGF0YSxcbiAgICAgICAgY2FsbGJhY2ssXG4gICAgICAgIGNvbnRlbnRUeXBlID0gJ2FwcGxpY2F0aW9uL2pzb24nXG4gICAgKSB7XG4gICAgICAgIGNvbnRlbnRUeXBlID0gdGhpcy5fZ2V0Q29udGVudFR5cGUoZGF0YSwgY29udGVudFR5cGUpO1xuICAgICAgICBjb25zdCByZXF1ZXN0ID0gdGhpcy5fY3JlYXRlUHJlcGFyZWRSZXF1ZXN0KCdQT1NUJywgdXJsLCBjb250ZW50VHlwZSk7XG5cbiAgICAgICAgcmV0dXJuIHRoaXMuX3NlbmRSZXF1ZXN0KHJlcXVlc3QsIGRhdGEsIGNhbGxiYWNrKTtcbiAgICB9XG5cblxuICAgIC8qKlxuICAgICAqIFJlcXVlc3QgREVMRVRFXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gdXJsXG4gICAgICogQHBhcmFtIHtvYmplY3R8bnVsbH0gZGF0YVxuICAgICAqIEBwYXJhbSB7ZnVuY3Rpb259IGNhbGxiYWNrXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGNvbnRlbnRUeXBlXG4gICAgICpcbiAgICAgKiBAcmV0dXJucyB7WE1MSHR0cFJlcXVlc3R9XG4gICAgICovXG4gICAgZGVsZXRlKFxuICAgICAgICB1cmwsXG4gICAgICAgIGRhdGEsXG4gICAgICAgIGNhbGxiYWNrLFxuICAgICAgICBjb250ZW50VHlwZSA9ICdhcHBsaWNhdGlvbi9qc29uJ1xuICAgICkge1xuICAgICAgICBjb250ZW50VHlwZSA9IHRoaXMuX2dldENvbnRlbnRUeXBlKGRhdGEsIGNvbnRlbnRUeXBlKTtcbiAgICAgICAgY29uc3QgcmVxdWVzdCA9IHRoaXMuX2NyZWF0ZVByZXBhcmVkUmVxdWVzdCgnREVMRVRFJywgdXJsLCBjb250ZW50VHlwZSk7XG5cbiAgICAgICAgcmV0dXJuIHRoaXMuX3NlbmRSZXF1ZXN0KHJlcXVlc3QsIGRhdGEsIGNhbGxiYWNrKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBSZXF1ZXN0IFBBVENIXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gdXJsXG4gICAgICogQHBhcmFtIHtvYmplY3R8bnVsbH0gZGF0YVxuICAgICAqIEBwYXJhbSB7ZnVuY3Rpb259IGNhbGxiYWNrXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGNvbnRlbnRUeXBlXG4gICAgICpcbiAgICAgKiBAcmV0dXJucyB7WE1MSHR0cFJlcXVlc3R9XG4gICAgICovXG4gICAgcGF0Y2goXG4gICAgICAgIHVybCxcbiAgICAgICAgZGF0YSxcbiAgICAgICAgY2FsbGJhY2ssXG4gICAgICAgIGNvbnRlbnRUeXBlID0gJ2FwcGxpY2F0aW9uL2pzb24nXG4gICAgKSB7XG4gICAgICAgIGNvbnRlbnRUeXBlID0gdGhpcy5fZ2V0Q29udGVudFR5cGUoZGF0YSwgY29udGVudFR5cGUpO1xuICAgICAgICBjb25zdCByZXF1ZXN0ID0gdGhpcy5fY3JlYXRlUHJlcGFyZWRSZXF1ZXN0KCdQQVRDSCcsIHVybCwgY29udGVudFR5cGUpO1xuXG4gICAgICAgIHJldHVybiB0aGlzLl9zZW5kUmVxdWVzdChyZXF1ZXN0LCBkYXRhLCBjYWxsYmFjayk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQWJvcnQgcnVubmluZyBSZXF1ZXN0XG4gICAgICpcbiAgICAgKiBAcmV0dXJucyB7Kn1cbiAgICAgKi9cbiAgICBhYm9ydCgpIHtcbiAgICAgICAgaWYgKHRoaXMuX3JlcXVlc3QpIHtcbiAgICAgICAgICAgIHJldHVybiB0aGlzLl9yZXF1ZXN0LmFib3J0KCk7XG4gICAgICAgIH1cbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBTZXQgdGhlIGVycm9yIGhhbmRsaW5nXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge2Jvb2xlYW59IGVycm9ySGFuZGxpbmdJbnRlcm5hbFxuICAgICAqL1xuICAgIHNldEVycm9ySGFuZGxpbmdJbnRlcm5hbChlcnJvckhhbmRsaW5nSW50ZXJuYWwpIHtcbiAgICAgICAgdGhpcy5fZXJyb3JIYW5kbGluZ0ludGVybmFsID0gZXJyb3JIYW5kbGluZ0ludGVybmFsO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEBwcml2YXRlXG4gICAgICogUmVnaXN0ZXIgZXZlbnQgbGlzdGVuZXIsIHdoaWNoIGV4ZWN1dGVzIHRoZSBnaXZlbiBjYWxsYmFjaywgd2hlbiB0aGUgcmVxdWVzdCBoYXMgZmluaXNoZWRcbiAgICAgKlxuICAgICAqIEBwYXJhbSB7WE1MSHR0cFJlcXVlc3R9IHJlcXVlc3RcbiAgICAgKiBAcGFyYW0ge2Z1bmN0aW9ufSBjYWxsYmFja1xuICAgICAqL1xuICAgIF9yZWdpc3Rlck9uTG9hZGVkKHJlcXVlc3QsIGNhbGxiYWNrKSB7XG4gICAgICAgIGlmICghY2FsbGJhY2spIHtcbiAgICAgICAgICAgIHJldHVybjtcbiAgICAgICAgfVxuXG4gICAgICAgIGlmICh0aGlzLl9lcnJvckhhbmRsaW5nSW50ZXJuYWwgPT09IHRydWUpIHtcbiAgICAgICAgICAgIHJlcXVlc3QuYWRkRXZlbnRMaXN0ZW5lcignbG9hZCcsICgpID0+IHtcbiAgICAgICAgICAgICAgICBjYWxsYmFjayhyZXF1ZXN0LnJlc3BvbnNlVGV4dCwgcmVxdWVzdCk7XG4gICAgICAgICAgICB9KTtcbiAgICAgICAgICAgIHJlcXVlc3QuYWRkRXZlbnRMaXN0ZW5lcignYWJvcnQnLCAoKSA9PiB7XG4gICAgICAgICAgICAgICAgY29uc29sZS53YXJuKGB0aGUgcmVxdWVzdCB0byAke3JlcXVlc3QucmVzcG9uc2VVUkx9IHdhcyBhYm9ydGVkYCk7XG4gICAgICAgICAgICB9KTtcbiAgICAgICAgICAgIHJlcXVlc3QuYWRkRXZlbnRMaXN0ZW5lcignZXJyb3InLCAoKSA9PiB7XG4gICAgICAgICAgICAgICAgY29uc29sZS53YXJuKGB0aGUgcmVxdWVzdCB0byAke3JlcXVlc3QucmVzcG9uc2VVUkx9IGZhaWxlZCB3aXRoIHN0YXR1cyAke3JlcXVlc3Quc3RhdHVzfWApO1xuICAgICAgICAgICAgfSk7XG4gICAgICAgICAgICByZXF1ZXN0LmFkZEV2ZW50TGlzdGVuZXIoJ3RpbWVvdXQnLCAoKSA9PiB7XG4gICAgICAgICAgICAgICAgY29uc29sZS53YXJuKGB0aGUgcmVxdWVzdCB0byAke3JlcXVlc3QucmVzcG9uc2VVUkx9IHRpbWVkIG91dGApO1xuICAgICAgICAgICAgfSk7XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgICByZXF1ZXN0LmFkZEV2ZW50TGlzdGVuZXIoJ2xvYWRlbmQnLCAoKSA9PiB7XG4gICAgICAgICAgICAgICAgY2FsbGJhY2socmVxdWVzdC5yZXNwb25zZVRleHQsIHJlcXVlc3QpO1xuICAgICAgICAgICAgfSk7XG4gICAgICAgIH1cbiAgICB9XG5cbiAgICBfc2VuZFJlcXVlc3QocmVxdWVzdCwgZGF0YSwgY2FsbGJhY2spIHtcbiAgICAgICAgdGhpcy5fcmVnaXN0ZXJPbkxvYWRlZChyZXF1ZXN0LCBjYWxsYmFjayk7XG4gICAgICAgIHJlcXVlc3Quc2VuZChkYXRhKTtcbiAgICAgICAgcmV0dXJuIHJlcXVlc3Q7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHByaXZhdGVcbiAgICAgKiBSZXR1cm5zIHRoZSBhcHByb3ByaWF0ZSBjb250ZW50IHR5cGUgZm9yIHRoZSByZXF1ZXN0XG4gICAgICpcbiAgICAgKiBAcGFyYW0geyp9IGRhdGFcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gY29udGVudFR5cGVcbiAgICAgKlxuICAgICAqIEByZXR1cm5zIHtzdHJpbmd8Ym9vbGVhbn1cbiAgICAgKi9cbiAgICBfZ2V0Q29udGVudFR5cGUoZGF0YSwgY29udGVudFR5cGUpIHtcblxuICAgICAgICAvLyB3aGVuIHNlbmRpbmcgZm9ybSBkYXRhLFxuICAgICAgICAvLyB0aGUgY29udGVudC10eXBlIGhhcyB0byBiZSBhdXRvbWF0aWNhbGx5IHNldCxcbiAgICAgICAgLy8gdG8gdXNlIHRoZSBjb3JyZWN0IGNvbnRlbnQtZGlzcG9zaXRpb25cbiAgICAgICAgLy8gaHR0cHM6Ly9kZXZlbG9wZXIubW96aWxsYS5vcmcvZW4tVVMvZG9jcy9XZWIvSFRUUC9IZWFkZXJzL0NvbnRlbnQtRGlzcG9zaXRpb25cbiAgICAgICAgaWYgKGRhdGEgaW5zdGFuY2VvZiBGb3JtRGF0YSkge1xuICAgICAgICAgICAgY29udGVudFR5cGUgPSBmYWxzZTtcbiAgICAgICAgfVxuXG4gICAgICAgIHJldHVybiBjb250ZW50VHlwZTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqIFJldHVybnMgYSBuZXcgYW5kIGNvbmZpZ3VyZWQgWE1MSHR0cFJlcXVlc3Qgb2JqZWN0XG4gICAgICpcbiAgICAgKiBAcGFyYW0geydHRVQnfCdQT1NUJ3wnREVMRVRFJ3wnUEFUQ0gnfSB0eXBlXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IHVybFxuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBjb250ZW50VHlwZVxuICAgICAqXG4gICAgICogQHJldHVybnMge1hNTEh0dHBSZXF1ZXN0fVxuICAgICAqL1xuICAgIF9jcmVhdGVQcmVwYXJlZFJlcXVlc3QodHlwZSwgdXJsLCBjb250ZW50VHlwZSkge1xuICAgICAgICB0aGlzLl9yZXF1ZXN0ID0gbmV3IFhNTEh0dHBSZXF1ZXN0KCk7XG5cbiAgICAgICAgdGhpcy5fcmVxdWVzdC5vcGVuKHR5cGUsIHVybCk7XG4gICAgICAgIHRoaXMuX3JlcXVlc3Quc2V0UmVxdWVzdEhlYWRlcignWC1SZXF1ZXN0ZWQtV2l0aCcsICdYTUxIdHRwUmVxdWVzdCcpO1xuXG4gICAgICAgIGlmIChjb250ZW50VHlwZSkge1xuICAgICAgICAgICAgdGhpcy5fcmVxdWVzdC5zZXRSZXF1ZXN0SGVhZGVyKCdDb250ZW50LXR5cGUnLCBjb250ZW50VHlwZSk7XG4gICAgICAgIH1cblxuICAgICAgICByZXR1cm4gdGhpcy5fcmVxdWVzdDtcbiAgICB9XG59XG4iLCIvKipcbiAqIEBzdy1wYWNrYWdlIGZyYW1ld29ya1xuICovXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBJdGVyYXRvciB7XG5cbiAgICAvKipcbiAgICAgKiBUaGlzIGNhbGxiYWNrIGlzIGRpc3BsYXllZCBhcyBhIGdsb2JhbCBtZW1iZXIuXG4gICAgICogQGNhbGxiYWNrIE9iamVjdEl0ZXJhdGVDYWxsYmFja1xuICAgICAqIEBwYXJhbSB7dmFsdWV9IHZhbHVlXG4gICAgICogQHBhcmFtIHtrZXl9IGtleVxuICAgICAqL1xuXG4gICAgLyoqXG4gICAgICogSXRlcmF0ZXMgb3ZlciBhbiBvYmplY3RcbiAgICAgKlxuICAgICAqIEBwYXJhbSB7QXJyYXl8T2JqZWN0fSBzb3VyY2VcbiAgICAgKiBAcGFyYW0ge09iamVjdEl0ZXJhdGVDYWxsYmFja30gY2FsbGJhY2tcbiAgICAgKlxuICAgICAqIEByZXR1cm5zIHsqfVxuICAgICAqL1xuICAgIHN0YXRpYyBpdGVyYXRlKHNvdXJjZSwgY2FsbGJhY2spIHtcbiAgICAgICAgaWYgKHNvdXJjZSBpbnN0YW5jZW9mIE1hcCkge1xuICAgICAgICAgICAgcmV0dXJuIHNvdXJjZS5mb3JFYWNoKGNhbGxiYWNrKTtcbiAgICAgICAgfVxuXG4gICAgICAgIGlmIChBcnJheS5pc0FycmF5KHNvdXJjZSkpIHtcbiAgICAgICAgICAgIHJldHVybiBzb3VyY2UuZm9yRWFjaChjYWxsYmFjayk7XG4gICAgICAgIH1cblxuICAgICAgICBpZiAoc291cmNlIGluc3RhbmNlb2YgRm9ybURhdGEpIHtcbiAgICAgICAgICAgIGZvciAodmFyIGVudHJ5IG9mIHNvdXJjZS5lbnRyaWVzKCkpIHtcbiAgICAgICAgICAgICAgICBjYWxsYmFjayhlbnRyeVsxXSwgZW50cnlbMF0pO1xuICAgICAgICAgICAgfVxuICAgICAgICAgICAgcmV0dXJuO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKHNvdXJjZSBpbnN0YW5jZW9mIE5vZGVMaXN0KSB7XG4gICAgICAgICAgICByZXR1cm4gc291cmNlLmZvckVhY2goY2FsbGJhY2spO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKHNvdXJjZSBpbnN0YW5jZW9mIEhUTUxDb2xsZWN0aW9uKSB7XG4gICAgICAgICAgICByZXR1cm4gQXJyYXkuZnJvbShzb3VyY2UpLmZvckVhY2goY2FsbGJhY2spO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKHNvdXJjZSBpbnN0YW5jZW9mIE9iamVjdCkge1xuICAgICAgICAgICAgcmV0dXJuIE9iamVjdC5rZXlzKHNvdXJjZSkuZm9yRWFjaChrZXkgPT4ge1xuICAgICAgICAgICAgICAgIGNhbGxiYWNrKHNvdXJjZVtrZXldLCBrZXkpO1xuICAgICAgICAgICAgfSk7XG4gICAgICAgIH1cblxuICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYFRoZSBlbGVtZW50IHR5cGUgJHt0eXBlb2Ygc291cmNlfSBpcyBub3QgaXRlcmFibGUhYCk7XG4gICAgfVxufVxuIiwiY29uc3QgdG9rZW4gPSAnJVthLWYwLTldezJ9JztcbmNvbnN0IHNpbmdsZU1hdGNoZXIgPSBuZXcgUmVnRXhwKCcoJyArIHRva2VuICsgJyl8KFteJV0rPyknLCAnZ2knKTtcbmNvbnN0IG11bHRpTWF0Y2hlciA9IG5ldyBSZWdFeHAoJygnICsgdG9rZW4gKyAnKSsnLCAnZ2knKTtcblxuZnVuY3Rpb24gZGVjb2RlQ29tcG9uZW50cyhjb21wb25lbnRzLCBzcGxpdCkge1xuXHR0cnkge1xuXHRcdC8vIFRyeSB0byBkZWNvZGUgdGhlIGVudGlyZSBzdHJpbmcgZmlyc3Rcblx0XHRyZXR1cm4gW2RlY29kZVVSSUNvbXBvbmVudChjb21wb25lbnRzLmpvaW4oJycpKV07XG5cdH0gY2F0Y2gge1xuXHRcdC8vIERvIG5vdGhpbmdcblx0fVxuXG5cdGlmIChjb21wb25lbnRzLmxlbmd0aCA9PT0gMSkge1xuXHRcdHJldHVybiBjb21wb25lbnRzO1xuXHR9XG5cblx0c3BsaXQgPSBzcGxpdCB8fCAxO1xuXG5cdC8vIFNwbGl0IHRoZSBhcnJheSBpbiAyIHBhcnRzXG5cdGNvbnN0IGxlZnQgPSBjb21wb25lbnRzLnNsaWNlKDAsIHNwbGl0KTtcblx0Y29uc3QgcmlnaHQgPSBjb21wb25lbnRzLnNsaWNlKHNwbGl0KTtcblxuXHRyZXR1cm4gQXJyYXkucHJvdG90eXBlLmNvbmNhdC5jYWxsKFtdLCBkZWNvZGVDb21wb25lbnRzKGxlZnQpLCBkZWNvZGVDb21wb25lbnRzKHJpZ2h0KSk7XG59XG5cbmZ1bmN0aW9uIGRlY29kZShpbnB1dCkge1xuXHR0cnkge1xuXHRcdHJldHVybiBkZWNvZGVVUklDb21wb25lbnQoaW5wdXQpO1xuXHR9IGNhdGNoIHtcblx0XHRsZXQgdG9rZW5zID0gaW5wdXQubWF0Y2goc2luZ2xlTWF0Y2hlcikgfHwgW107XG5cblx0XHRmb3IgKGxldCBpID0gMTsgaSA8IHRva2Vucy5sZW5ndGg7IGkrKykge1xuXHRcdFx0aW5wdXQgPSBkZWNvZGVDb21wb25lbnRzKHRva2VucywgaSkuam9pbignJyk7XG5cblx0XHRcdHRva2VucyA9IGlucHV0Lm1hdGNoKHNpbmdsZU1hdGNoZXIpIHx8IFtdO1xuXHRcdH1cblxuXHRcdHJldHVybiBpbnB1dDtcblx0fVxufVxuXG5mdW5jdGlvbiBjdXN0b21EZWNvZGVVUklDb21wb25lbnQoaW5wdXQpIHtcblx0Ly8gS2VlcCB0cmFjayBvZiBhbGwgdGhlIHJlcGxhY2VtZW50cyBhbmQgcHJlZmlsbCB0aGUgbWFwIHdpdGggdGhlIGBCT01gXG5cdGNvbnN0IHJlcGxhY2VNYXAgPSB7XG5cdFx0JyVGRSVGRic6ICdcXHVGRkZEXFx1RkZGRCcsXG5cdFx0JyVGRiVGRSc6ICdcXHVGRkZEXFx1RkZGRCcsXG5cdH07XG5cblx0bGV0IG1hdGNoID0gbXVsdGlNYXRjaGVyLmV4ZWMoaW5wdXQpO1xuXHR3aGlsZSAobWF0Y2gpIHtcblx0XHR0cnkge1xuXHRcdFx0Ly8gRGVjb2RlIGFzIGJpZyBjaHVua3MgYXMgcG9zc2libGVcblx0XHRcdHJlcGxhY2VNYXBbbWF0Y2hbMF1dID0gZGVjb2RlVVJJQ29tcG9uZW50KG1hdGNoWzBdKTtcblx0XHR9IGNhdGNoIHtcblx0XHRcdGNvbnN0IHJlc3VsdCA9IGRlY29kZShtYXRjaFswXSk7XG5cblx0XHRcdGlmIChyZXN1bHQgIT09IG1hdGNoWzBdKSB7XG5cdFx0XHRcdHJlcGxhY2VNYXBbbWF0Y2hbMF1dID0gcmVzdWx0O1xuXHRcdFx0fVxuXHRcdH1cblxuXHRcdG1hdGNoID0gbXVsdGlNYXRjaGVyLmV4ZWMoaW5wdXQpO1xuXHR9XG5cblx0Ly8gQWRkIGAlQzJgIGF0IHRoZSBlbmQgb2YgdGhlIG1hcCB0byBtYWtlIHN1cmUgaXQgZG9lcyBub3QgcmVwbGFjZSB0aGUgY29tYmluYXRvciBiZWZvcmUgZXZlcnl0aGluZyBlbHNlXG5cdHJlcGxhY2VNYXBbJyVDMiddID0gJ1xcdUZGRkQnO1xuXG5cdGNvbnN0IGVudHJpZXMgPSBPYmplY3Qua2V5cyhyZXBsYWNlTWFwKTtcblxuXHRmb3IgKGNvbnN0IGtleSBvZiBlbnRyaWVzKSB7XG5cdFx0Ly8gUmVwbGFjZSBhbGwgZGVjb2RlZCBjb21wb25lbnRzXG5cdFx0aW5wdXQgPSBpbnB1dC5yZXBsYWNlKG5ldyBSZWdFeHAoa2V5LCAnZycpLCByZXBsYWNlTWFwW2tleV0pO1xuXHR9XG5cblx0cmV0dXJuIGlucHV0O1xufVxuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBkZWNvZGVVcmlDb21wb25lbnQoZW5jb2RlZFVSSSkge1xuXHRpZiAodHlwZW9mIGVuY29kZWRVUkkgIT09ICdzdHJpbmcnKSB7XG5cdFx0dGhyb3cgbmV3IFR5cGVFcnJvcignRXhwZWN0ZWQgYGVuY29kZWRVUklgIHRvIGJlIG9mIHR5cGUgYHN0cmluZ2AsIGdvdCBgJyArIHR5cGVvZiBlbmNvZGVkVVJJICsgJ2AnKTtcblx0fVxuXG5cdHRyeSB7XG5cdFx0Ly8gVHJ5IHRoZSBidWlsdCBpbiBkZWNvZGVyIGZpcnN0XG5cdFx0cmV0dXJuIGRlY29kZVVSSUNvbXBvbmVudChlbmNvZGVkVVJJKTtcblx0fSBjYXRjaCB7XG5cdFx0Ly8gRmFsbGJhY2sgdG8gYSBtb3JlIGFkdmFuY2VkIGRlY29kZXJcblx0XHRyZXR1cm4gY3VzdG9tRGVjb2RlVVJJQ29tcG9uZW50KGVuY29kZWRVUkkpO1xuXHR9XG59XG4iLCJleHBvcnQgZnVuY3Rpb24gaW5jbHVkZUtleXMob2JqZWN0LCBwcmVkaWNhdGUpIHtcblx0Y29uc3QgcmVzdWx0ID0ge307XG5cblx0aWYgKEFycmF5LmlzQXJyYXkocHJlZGljYXRlKSkge1xuXHRcdGZvciAoY29uc3Qga2V5IG9mIHByZWRpY2F0ZSkge1xuXHRcdFx0Y29uc3QgZGVzY3JpcHRvciA9IE9iamVjdC5nZXRPd25Qcm9wZXJ0eURlc2NyaXB0b3Iob2JqZWN0LCBrZXkpO1xuXHRcdFx0aWYgKGRlc2NyaXB0b3I/LmVudW1lcmFibGUpIHtcblx0XHRcdFx0T2JqZWN0LmRlZmluZVByb3BlcnR5KHJlc3VsdCwga2V5LCBkZXNjcmlwdG9yKTtcblx0XHRcdH1cblx0XHR9XG5cdH0gZWxzZSB7XG5cdFx0Ly8gYFJlZmxlY3Qub3duS2V5cygpYCBpcyByZXF1aXJlZCB0byByZXRyaWV2ZSBzeW1ib2wgcHJvcGVydGllc1xuXHRcdGZvciAoY29uc3Qga2V5IG9mIFJlZmxlY3Qub3duS2V5cyhvYmplY3QpKSB7XG5cdFx0XHRjb25zdCBkZXNjcmlwdG9yID0gT2JqZWN0LmdldE93blByb3BlcnR5RGVzY3JpcHRvcihvYmplY3QsIGtleSk7XG5cdFx0XHRpZiAoZGVzY3JpcHRvci5lbnVtZXJhYmxlKSB7XG5cdFx0XHRcdGNvbnN0IHZhbHVlID0gb2JqZWN0W2tleV07XG5cdFx0XHRcdGlmIChwcmVkaWNhdGUoa2V5LCB2YWx1ZSwgb2JqZWN0KSkge1xuXHRcdFx0XHRcdE9iamVjdC5kZWZpbmVQcm9wZXJ0eShyZXN1bHQsIGtleSwgZGVzY3JpcHRvcik7XG5cdFx0XHRcdH1cblx0XHRcdH1cblx0XHR9XG5cdH1cblxuXHRyZXR1cm4gcmVzdWx0O1xufVxuXG5leHBvcnQgZnVuY3Rpb24gZXhjbHVkZUtleXMob2JqZWN0LCBwcmVkaWNhdGUpIHtcblx0aWYgKEFycmF5LmlzQXJyYXkocHJlZGljYXRlKSkge1xuXHRcdGNvbnN0IHNldCA9IG5ldyBTZXQocHJlZGljYXRlKTtcblx0XHRyZXR1cm4gaW5jbHVkZUtleXMob2JqZWN0LCBrZXkgPT4gIXNldC5oYXMoa2V5KSk7XG5cdH1cblxuXHRyZXR1cm4gaW5jbHVkZUtleXMob2JqZWN0LCAoa2V5LCB2YWx1ZSwgb2JqZWN0KSA9PiAhcHJlZGljYXRlKGtleSwgdmFsdWUsIG9iamVjdCkpO1xufVxuIiwiZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gc3BsaXRPbkZpcnN0KHN0cmluZywgc2VwYXJhdG9yKSB7XG5cdGlmICghKHR5cGVvZiBzdHJpbmcgPT09ICdzdHJpbmcnICYmIHR5cGVvZiBzZXBhcmF0b3IgPT09ICdzdHJpbmcnKSkge1xuXHRcdHRocm93IG5ldyBUeXBlRXJyb3IoJ0V4cGVjdGVkIHRoZSBhcmd1bWVudHMgdG8gYmUgb2YgdHlwZSBgc3RyaW5nYCcpO1xuXHR9XG5cblx0aWYgKHN0cmluZyA9PT0gJycgfHwgc2VwYXJhdG9yID09PSAnJykge1xuXHRcdHJldHVybiBbXTtcblx0fVxuXG5cdGNvbnN0IHNlcGFyYXRvckluZGV4ID0gc3RyaW5nLmluZGV4T2Yoc2VwYXJhdG9yKTtcblxuXHRpZiAoc2VwYXJhdG9ySW5kZXggPT09IC0xKSB7XG5cdFx0cmV0dXJuIFtdO1xuXHR9XG5cblx0cmV0dXJuIFtcblx0XHRzdHJpbmcuc2xpY2UoMCwgc2VwYXJhdG9ySW5kZXgpLFxuXHRcdHN0cmluZy5zbGljZShzZXBhcmF0b3JJbmRleCArIHNlcGFyYXRvci5sZW5ndGgpXG5cdF07XG59XG4iLCJpbXBvcnQgZGVjb2RlQ29tcG9uZW50IGZyb20gJ2RlY29kZS11cmktY29tcG9uZW50JztcbmltcG9ydCB7aW5jbHVkZUtleXN9IGZyb20gJ2ZpbHRlci1vYmonO1xuaW1wb3J0IHNwbGl0T25GaXJzdCBmcm9tICdzcGxpdC1vbi1maXJzdCc7XG5cbmNvbnN0IGlzTnVsbE9yVW5kZWZpbmVkID0gdmFsdWUgPT4gdmFsdWUgPT09IG51bGwgfHwgdmFsdWUgPT09IHVuZGVmaW5lZDtcblxuLy8gZXNsaW50LWRpc2FibGUtbmV4dC1saW5lIHVuaWNvcm4vcHJlZmVyLWNvZGUtcG9pbnRcbmNvbnN0IHN0cmljdFVyaUVuY29kZSA9IHN0cmluZyA9PiBlbmNvZGVVUklDb21wb25lbnQoc3RyaW5nKS5yZXBsYWNlQWxsKC9bIScoKSpdL2csIHggPT4gYCUke3guY2hhckNvZGVBdCgwKS50b1N0cmluZygxNikudG9VcHBlckNhc2UoKX1gKTtcblxuY29uc3QgZW5jb2RlRnJhZ21lbnRJZGVudGlmaWVyID0gU3ltYm9sKCdlbmNvZGVGcmFnbWVudElkZW50aWZpZXInKTtcblxuZnVuY3Rpb24gZW5jb2RlckZvckFycmF5Rm9ybWF0KG9wdGlvbnMpIHtcblx0c3dpdGNoIChvcHRpb25zLmFycmF5Rm9ybWF0KSB7XG5cdFx0Y2FzZSAnaW5kZXgnOiB7XG5cdFx0XHRyZXR1cm4ga2V5ID0+IChyZXN1bHQsIHZhbHVlKSA9PiB7XG5cdFx0XHRcdGNvbnN0IGluZGV4ID0gcmVzdWx0Lmxlbmd0aDtcblxuXHRcdFx0XHRpZiAoXG5cdFx0XHRcdFx0dmFsdWUgPT09IHVuZGVmaW5lZFxuXHRcdFx0XHRcdHx8IChvcHRpb25zLnNraXBOdWxsICYmIHZhbHVlID09PSBudWxsKVxuXHRcdFx0XHRcdHx8IChvcHRpb25zLnNraXBFbXB0eVN0cmluZyAmJiB2YWx1ZSA9PT0gJycpXG5cdFx0XHRcdCkge1xuXHRcdFx0XHRcdHJldHVybiByZXN1bHQ7XG5cdFx0XHRcdH1cblxuXHRcdFx0XHRpZiAodmFsdWUgPT09IG51bGwpIHtcblx0XHRcdFx0XHRyZXR1cm4gW1xuXHRcdFx0XHRcdFx0Li4ucmVzdWx0LCBbZW5jb2RlKGtleSwgb3B0aW9ucyksICdbJywgaW5kZXgsICddJ10uam9pbignJyksXG5cdFx0XHRcdFx0XTtcblx0XHRcdFx0fVxuXG5cdFx0XHRcdHJldHVybiBbXG5cdFx0XHRcdFx0Li4ucmVzdWx0LFxuXHRcdFx0XHRcdFtlbmNvZGUoa2V5LCBvcHRpb25zKSwgJ1snLCBlbmNvZGUoaW5kZXgsIG9wdGlvbnMpLCAnXT0nLCBlbmNvZGUodmFsdWUsIG9wdGlvbnMpXS5qb2luKCcnKSxcblx0XHRcdFx0XTtcblx0XHRcdH07XG5cdFx0fVxuXG5cdFx0Y2FzZSAnYnJhY2tldCc6IHtcblx0XHRcdHJldHVybiBrZXkgPT4gKHJlc3VsdCwgdmFsdWUpID0+IHtcblx0XHRcdFx0aWYgKFxuXHRcdFx0XHRcdHZhbHVlID09PSB1bmRlZmluZWRcblx0XHRcdFx0XHR8fCAob3B0aW9ucy5za2lwTnVsbCAmJiB2YWx1ZSA9PT0gbnVsbClcblx0XHRcdFx0XHR8fCAob3B0aW9ucy5za2lwRW1wdHlTdHJpbmcgJiYgdmFsdWUgPT09ICcnKVxuXHRcdFx0XHQpIHtcblx0XHRcdFx0XHRyZXR1cm4gcmVzdWx0O1xuXHRcdFx0XHR9XG5cblx0XHRcdFx0aWYgKHZhbHVlID09PSBudWxsKSB7XG5cdFx0XHRcdFx0cmV0dXJuIFtcblx0XHRcdFx0XHRcdC4uLnJlc3VsdCxcblx0XHRcdFx0XHRcdFtlbmNvZGUoa2V5LCBvcHRpb25zKSwgJ1tdJ10uam9pbignJyksXG5cdFx0XHRcdFx0XTtcblx0XHRcdFx0fVxuXG5cdFx0XHRcdHJldHVybiBbXG5cdFx0XHRcdFx0Li4ucmVzdWx0LFxuXHRcdFx0XHRcdFtlbmNvZGUoa2V5LCBvcHRpb25zKSwgJ1tdPScsIGVuY29kZSh2YWx1ZSwgb3B0aW9ucyldLmpvaW4oJycpLFxuXHRcdFx0XHRdO1xuXHRcdFx0fTtcblx0XHR9XG5cblx0XHRjYXNlICdjb2xvbi1saXN0LXNlcGFyYXRvcic6IHtcblx0XHRcdHJldHVybiBrZXkgPT4gKHJlc3VsdCwgdmFsdWUpID0+IHtcblx0XHRcdFx0aWYgKFxuXHRcdFx0XHRcdHZhbHVlID09PSB1bmRlZmluZWRcblx0XHRcdFx0XHR8fCAob3B0aW9ucy5za2lwTnVsbCAmJiB2YWx1ZSA9PT0gbnVsbClcblx0XHRcdFx0XHR8fCAob3B0aW9ucy5za2lwRW1wdHlTdHJpbmcgJiYgdmFsdWUgPT09ICcnKVxuXHRcdFx0XHQpIHtcblx0XHRcdFx0XHRyZXR1cm4gcmVzdWx0O1xuXHRcdFx0XHR9XG5cblx0XHRcdFx0aWYgKHZhbHVlID09PSBudWxsKSB7XG5cdFx0XHRcdFx0cmV0dXJuIFtcblx0XHRcdFx0XHRcdC4uLnJlc3VsdCxcblx0XHRcdFx0XHRcdFtlbmNvZGUoa2V5LCBvcHRpb25zKSwgJzpsaXN0PSddLmpvaW4oJycpLFxuXHRcdFx0XHRcdF07XG5cdFx0XHRcdH1cblxuXHRcdFx0XHRyZXR1cm4gW1xuXHRcdFx0XHRcdC4uLnJlc3VsdCxcblx0XHRcdFx0XHRbZW5jb2RlKGtleSwgb3B0aW9ucyksICc6bGlzdD0nLCBlbmNvZGUodmFsdWUsIG9wdGlvbnMpXS5qb2luKCcnKSxcblx0XHRcdFx0XTtcblx0XHRcdH07XG5cdFx0fVxuXG5cdFx0Y2FzZSAnY29tbWEnOlxuXHRcdGNhc2UgJ3NlcGFyYXRvcic6XG5cdFx0Y2FzZSAnYnJhY2tldC1zZXBhcmF0b3InOiB7XG5cdFx0XHRjb25zdCBrZXlWYWx1ZVNlcGFyYXRvciA9IG9wdGlvbnMuYXJyYXlGb3JtYXQgPT09ICdicmFja2V0LXNlcGFyYXRvcidcblx0XHRcdFx0PyAnW109J1xuXHRcdFx0XHQ6ICc9JztcblxuXHRcdFx0cmV0dXJuIGtleSA9PiAocmVzdWx0LCB2YWx1ZSkgPT4ge1xuXHRcdFx0XHRpZiAoXG5cdFx0XHRcdFx0dmFsdWUgPT09IHVuZGVmaW5lZFxuXHRcdFx0XHRcdHx8IChvcHRpb25zLnNraXBOdWxsICYmIHZhbHVlID09PSBudWxsKVxuXHRcdFx0XHRcdHx8IChvcHRpb25zLnNraXBFbXB0eVN0cmluZyAmJiB2YWx1ZSA9PT0gJycpXG5cdFx0XHRcdCkge1xuXHRcdFx0XHRcdHJldHVybiByZXN1bHQ7XG5cdFx0XHRcdH1cblxuXHRcdFx0XHQvLyBUcmFuc2xhdGUgbnVsbCB0byBhbiBlbXB0eSBzdHJpbmcgc28gdGhhdCBpdCBkb2Vzbid0IHNlcmlhbGl6ZSBhcyAnbnVsbCdcblx0XHRcdFx0dmFsdWUgPSB2YWx1ZSA9PT0gbnVsbCA/ICcnIDogdmFsdWU7XG5cblx0XHRcdFx0aWYgKHJlc3VsdC5sZW5ndGggPT09IDApIHtcblx0XHRcdFx0XHRyZXR1cm4gW1tlbmNvZGUoa2V5LCBvcHRpb25zKSwga2V5VmFsdWVTZXBhcmF0b3IsIGVuY29kZSh2YWx1ZSwgb3B0aW9ucyldLmpvaW4oJycpXTtcblx0XHRcdFx0fVxuXG5cdFx0XHRcdHJldHVybiBbW3Jlc3VsdCwgZW5jb2RlKHZhbHVlLCBvcHRpb25zKV0uam9pbihvcHRpb25zLmFycmF5Rm9ybWF0U2VwYXJhdG9yKV07XG5cdFx0XHR9O1xuXHRcdH1cblxuXHRcdGRlZmF1bHQ6IHtcblx0XHRcdHJldHVybiBrZXkgPT4gKHJlc3VsdCwgdmFsdWUpID0+IHtcblx0XHRcdFx0aWYgKFxuXHRcdFx0XHRcdHZhbHVlID09PSB1bmRlZmluZWRcblx0XHRcdFx0XHR8fCAob3B0aW9ucy5za2lwTnVsbCAmJiB2YWx1ZSA9PT0gbnVsbClcblx0XHRcdFx0XHR8fCAob3B0aW9ucy5za2lwRW1wdHlTdHJpbmcgJiYgdmFsdWUgPT09ICcnKVxuXHRcdFx0XHQpIHtcblx0XHRcdFx0XHRyZXR1cm4gcmVzdWx0O1xuXHRcdFx0XHR9XG5cblx0XHRcdFx0aWYgKHZhbHVlID09PSBudWxsKSB7XG5cdFx0XHRcdFx0cmV0dXJuIFtcblx0XHRcdFx0XHRcdC4uLnJlc3VsdCxcblx0XHRcdFx0XHRcdGVuY29kZShrZXksIG9wdGlvbnMpLFxuXHRcdFx0XHRcdF07XG5cdFx0XHRcdH1cblxuXHRcdFx0XHRyZXR1cm4gW1xuXHRcdFx0XHRcdC4uLnJlc3VsdCxcblx0XHRcdFx0XHRbZW5jb2RlKGtleSwgb3B0aW9ucyksICc9JywgZW5jb2RlKHZhbHVlLCBvcHRpb25zKV0uam9pbignJyksXG5cdFx0XHRcdF07XG5cdFx0XHR9O1xuXHRcdH1cblx0fVxufVxuXG5mdW5jdGlvbiBwYXJzZXJGb3JBcnJheUZvcm1hdChvcHRpb25zKSB7XG5cdGxldCByZXN1bHQ7XG5cblx0c3dpdGNoIChvcHRpb25zLmFycmF5Rm9ybWF0KSB7XG5cdFx0Y2FzZSAnaW5kZXgnOiB7XG5cdFx0XHRyZXR1cm4gKGtleSwgdmFsdWUsIGFjY3VtdWxhdG9yKSA9PiB7XG5cdFx0XHRcdHJlc3VsdCA9IC9cXFsoXFxkKildJC8uZXhlYyhrZXkpO1xuXG5cdFx0XHRcdGtleSA9IGtleS5yZXBsYWNlKC9cXFtcXGQqXSQvLCAnJyk7XG5cblx0XHRcdFx0aWYgKCFyZXN1bHQpIHtcblx0XHRcdFx0XHRhY2N1bXVsYXRvcltrZXldID0gdmFsdWU7XG5cdFx0XHRcdFx0cmV0dXJuO1xuXHRcdFx0XHR9XG5cblx0XHRcdFx0aWYgKGFjY3VtdWxhdG9yW2tleV0gPT09IHVuZGVmaW5lZCkge1xuXHRcdFx0XHRcdGFjY3VtdWxhdG9yW2tleV0gPSB7fTtcblx0XHRcdFx0fVxuXG5cdFx0XHRcdGFjY3VtdWxhdG9yW2tleV1bcmVzdWx0WzFdXSA9IHZhbHVlO1xuXHRcdFx0fTtcblx0XHR9XG5cblx0XHRjYXNlICdicmFja2V0Jzoge1xuXHRcdFx0cmV0dXJuIChrZXksIHZhbHVlLCBhY2N1bXVsYXRvcikgPT4ge1xuXHRcdFx0XHRyZXN1bHQgPSAvKFxcW10pJC8uZXhlYyhrZXkpO1xuXHRcdFx0XHRrZXkgPSBrZXkucmVwbGFjZSgvXFxbXSQvLCAnJyk7XG5cblx0XHRcdFx0aWYgKCFyZXN1bHQpIHtcblx0XHRcdFx0XHRhY2N1bXVsYXRvcltrZXldID0gdmFsdWU7XG5cdFx0XHRcdFx0cmV0dXJuO1xuXHRcdFx0XHR9XG5cblx0XHRcdFx0aWYgKGFjY3VtdWxhdG9yW2tleV0gPT09IHVuZGVmaW5lZCkge1xuXHRcdFx0XHRcdGFjY3VtdWxhdG9yW2tleV0gPSBbdmFsdWVdO1xuXHRcdFx0XHRcdHJldHVybjtcblx0XHRcdFx0fVxuXG5cdFx0XHRcdGFjY3VtdWxhdG9yW2tleV0gPSBbLi4uYWNjdW11bGF0b3Jba2V5XSwgdmFsdWVdO1xuXHRcdFx0fTtcblx0XHR9XG5cblx0XHRjYXNlICdjb2xvbi1saXN0LXNlcGFyYXRvcic6IHtcblx0XHRcdHJldHVybiAoa2V5LCB2YWx1ZSwgYWNjdW11bGF0b3IpID0+IHtcblx0XHRcdFx0cmVzdWx0ID0gLyg6bGlzdCkkLy5leGVjKGtleSk7XG5cdFx0XHRcdGtleSA9IGtleS5yZXBsYWNlKC86bGlzdCQvLCAnJyk7XG5cblx0XHRcdFx0aWYgKCFyZXN1bHQpIHtcblx0XHRcdFx0XHRhY2N1bXVsYXRvcltrZXldID0gdmFsdWU7XG5cdFx0XHRcdFx0cmV0dXJuO1xuXHRcdFx0XHR9XG5cblx0XHRcdFx0aWYgKGFjY3VtdWxhdG9yW2tleV0gPT09IHVuZGVmaW5lZCkge1xuXHRcdFx0XHRcdGFjY3VtdWxhdG9yW2tleV0gPSBbdmFsdWVdO1xuXHRcdFx0XHRcdHJldHVybjtcblx0XHRcdFx0fVxuXG5cdFx0XHRcdGFjY3VtdWxhdG9yW2tleV0gPSBbLi4uYWNjdW11bGF0b3Jba2V5XSwgdmFsdWVdO1xuXHRcdFx0fTtcblx0XHR9XG5cblx0XHRjYXNlICdjb21tYSc6XG5cdFx0Y2FzZSAnc2VwYXJhdG9yJzoge1xuXHRcdFx0cmV0dXJuIChrZXksIHZhbHVlLCBhY2N1bXVsYXRvcikgPT4ge1xuXHRcdFx0XHRjb25zdCBpc0FycmF5ID0gdHlwZW9mIHZhbHVlID09PSAnc3RyaW5nJyAmJiB2YWx1ZS5pbmNsdWRlcyhvcHRpb25zLmFycmF5Rm9ybWF0U2VwYXJhdG9yKTtcblx0XHRcdFx0Y29uc3QgaXNFbmNvZGVkQXJyYXkgPSAodHlwZW9mIHZhbHVlID09PSAnc3RyaW5nJyAmJiAhaXNBcnJheSAmJiBkZWNvZGUodmFsdWUsIG9wdGlvbnMpLmluY2x1ZGVzKG9wdGlvbnMuYXJyYXlGb3JtYXRTZXBhcmF0b3IpKTtcblx0XHRcdFx0dmFsdWUgPSBpc0VuY29kZWRBcnJheSA/IGRlY29kZSh2YWx1ZSwgb3B0aW9ucykgOiB2YWx1ZTtcblx0XHRcdFx0Y29uc3QgbmV3VmFsdWUgPSBpc0FycmF5IHx8IGlzRW5jb2RlZEFycmF5ID8gdmFsdWUuc3BsaXQob3B0aW9ucy5hcnJheUZvcm1hdFNlcGFyYXRvcikubWFwKGl0ZW0gPT4gZGVjb2RlKGl0ZW0sIG9wdGlvbnMpKSA6ICh2YWx1ZSA9PT0gbnVsbCA/IHZhbHVlIDogZGVjb2RlKHZhbHVlLCBvcHRpb25zKSk7XG5cdFx0XHRcdGFjY3VtdWxhdG9yW2tleV0gPSBuZXdWYWx1ZTtcblx0XHRcdH07XG5cdFx0fVxuXG5cdFx0Y2FzZSAnYnJhY2tldC1zZXBhcmF0b3InOiB7XG5cdFx0XHRyZXR1cm4gKGtleSwgdmFsdWUsIGFjY3VtdWxhdG9yKSA9PiB7XG5cdFx0XHRcdGNvbnN0IGlzQXJyYXkgPSAvKFxcW10pJC8udGVzdChrZXkpO1xuXHRcdFx0XHRrZXkgPSBrZXkucmVwbGFjZSgvXFxbXSQvLCAnJyk7XG5cblx0XHRcdFx0aWYgKCFpc0FycmF5KSB7XG5cdFx0XHRcdFx0YWNjdW11bGF0b3Jba2V5XSA9IHZhbHVlID8gZGVjb2RlKHZhbHVlLCBvcHRpb25zKSA6IHZhbHVlO1xuXHRcdFx0XHRcdHJldHVybjtcblx0XHRcdFx0fVxuXG5cdFx0XHRcdGNvbnN0IGFycmF5VmFsdWUgPSB2YWx1ZSA9PT0gbnVsbFxuXHRcdFx0XHRcdD8gW11cblx0XHRcdFx0XHQ6IGRlY29kZSh2YWx1ZSwgb3B0aW9ucykuc3BsaXQob3B0aW9ucy5hcnJheUZvcm1hdFNlcGFyYXRvcik7XG5cblx0XHRcdFx0aWYgKGFjY3VtdWxhdG9yW2tleV0gPT09IHVuZGVmaW5lZCkge1xuXHRcdFx0XHRcdGFjY3VtdWxhdG9yW2tleV0gPSBhcnJheVZhbHVlO1xuXHRcdFx0XHRcdHJldHVybjtcblx0XHRcdFx0fVxuXG5cdFx0XHRcdGFjY3VtdWxhdG9yW2tleV0gPSBbLi4uYWNjdW11bGF0b3Jba2V5XSwgLi4uYXJyYXlWYWx1ZV07XG5cdFx0XHR9O1xuXHRcdH1cblxuXHRcdGRlZmF1bHQ6IHtcblx0XHRcdHJldHVybiAoa2V5LCB2YWx1ZSwgYWNjdW11bGF0b3IpID0+IHtcblx0XHRcdFx0aWYgKGFjY3VtdWxhdG9yW2tleV0gPT09IHVuZGVmaW5lZCkge1xuXHRcdFx0XHRcdGFjY3VtdWxhdG9yW2tleV0gPSB2YWx1ZTtcblx0XHRcdFx0XHRyZXR1cm47XG5cdFx0XHRcdH1cblxuXHRcdFx0XHRhY2N1bXVsYXRvcltrZXldID0gWy4uLlthY2N1bXVsYXRvcltrZXldXS5mbGF0KCksIHZhbHVlXTtcblx0XHRcdH07XG5cdFx0fVxuXHR9XG59XG5cbmZ1bmN0aW9uIHZhbGlkYXRlQXJyYXlGb3JtYXRTZXBhcmF0b3IodmFsdWUpIHtcblx0aWYgKHR5cGVvZiB2YWx1ZSAhPT0gJ3N0cmluZycgfHwgdmFsdWUubGVuZ3RoICE9PSAxKSB7XG5cdFx0dGhyb3cgbmV3IFR5cGVFcnJvcignYXJyYXlGb3JtYXRTZXBhcmF0b3IgbXVzdCBiZSBzaW5nbGUgY2hhcmFjdGVyIHN0cmluZycpO1xuXHR9XG59XG5cbmZ1bmN0aW9uIGVuY29kZSh2YWx1ZSwgb3B0aW9ucykge1xuXHRpZiAob3B0aW9ucy5lbmNvZGUpIHtcblx0XHRyZXR1cm4gb3B0aW9ucy5zdHJpY3QgPyBzdHJpY3RVcmlFbmNvZGUodmFsdWUpIDogZW5jb2RlVVJJQ29tcG9uZW50KHZhbHVlKTtcblx0fVxuXG5cdHJldHVybiB2YWx1ZTtcbn1cblxuZnVuY3Rpb24gZGVjb2RlKHZhbHVlLCBvcHRpb25zKSB7XG5cdGlmIChvcHRpb25zLmRlY29kZSkge1xuXHRcdHJldHVybiBkZWNvZGVDb21wb25lbnQodmFsdWUpO1xuXHR9XG5cblx0cmV0dXJuIHZhbHVlO1xufVxuXG5mdW5jdGlvbiBrZXlzU29ydGVyKGlucHV0KSB7XG5cdGlmIChBcnJheS5pc0FycmF5KGlucHV0KSkge1xuXHRcdHJldHVybiBpbnB1dC5zb3J0KCk7XG5cdH1cblxuXHRpZiAodHlwZW9mIGlucHV0ID09PSAnb2JqZWN0Jykge1xuXHRcdHJldHVybiBrZXlzU29ydGVyKE9iamVjdC5rZXlzKGlucHV0KSlcblx0XHRcdC5zb3J0KChhLCBiKSA9PiBOdW1iZXIoYSkgLSBOdW1iZXIoYikpXG5cdFx0XHQubWFwKGtleSA9PiBpbnB1dFtrZXldKTtcblx0fVxuXG5cdHJldHVybiBpbnB1dDtcbn1cblxuZnVuY3Rpb24gcmVtb3ZlSGFzaChpbnB1dCkge1xuXHRjb25zdCBoYXNoU3RhcnQgPSBpbnB1dC5pbmRleE9mKCcjJyk7XG5cdGlmIChoYXNoU3RhcnQgIT09IC0xKSB7XG5cdFx0aW5wdXQgPSBpbnB1dC5zbGljZSgwLCBoYXNoU3RhcnQpO1xuXHR9XG5cblx0cmV0dXJuIGlucHV0O1xufVxuXG5mdW5jdGlvbiBnZXRIYXNoKHVybCkge1xuXHRsZXQgaGFzaCA9ICcnO1xuXHRjb25zdCBoYXNoU3RhcnQgPSB1cmwuaW5kZXhPZignIycpO1xuXHRpZiAoaGFzaFN0YXJ0ICE9PSAtMSkge1xuXHRcdGhhc2ggPSB1cmwuc2xpY2UoaGFzaFN0YXJ0KTtcblx0fVxuXG5cdHJldHVybiBoYXNoO1xufVxuXG5mdW5jdGlvbiBwYXJzZVZhbHVlKHZhbHVlLCBvcHRpb25zLCB0eXBlKSB7XG5cdGlmICh0eXBlID09PSAnc3RyaW5nJyAmJiB0eXBlb2YgdmFsdWUgPT09ICdzdHJpbmcnKSB7XG5cdFx0cmV0dXJuIHZhbHVlO1xuXHR9XG5cblx0aWYgKHR5cGVvZiB0eXBlID09PSAnZnVuY3Rpb24nICYmIHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZycpIHtcblx0XHRyZXR1cm4gdHlwZSh2YWx1ZSk7XG5cdH1cblxuXHRpZiAodHlwZSA9PT0gJ3N0cmluZ1tdJyAmJiBvcHRpb25zLmFycmF5Rm9ybWF0ICE9PSAnbm9uZScgJiYgdHlwZW9mIHZhbHVlID09PSAnc3RyaW5nJykge1xuXHRcdHJldHVybiBbdmFsdWVdO1xuXHR9XG5cblx0aWYgKHR5cGUgPT09ICdudW1iZXJbXScgJiYgb3B0aW9ucy5hcnJheUZvcm1hdCAhPT0gJ25vbmUnICYmICFOdW1iZXIuaXNOYU4oTnVtYmVyKHZhbHVlKSkgJiYgKHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZycgJiYgdmFsdWUudHJpbSgpICE9PSAnJykpIHtcblx0XHRyZXR1cm4gW051bWJlcih2YWx1ZSldO1xuXHR9XG5cblx0aWYgKHR5cGUgPT09ICdudW1iZXInICYmICFOdW1iZXIuaXNOYU4oTnVtYmVyKHZhbHVlKSkgJiYgKHR5cGVvZiB2YWx1ZSA9PT0gJ3N0cmluZycgJiYgdmFsdWUudHJpbSgpICE9PSAnJykpIHtcblx0XHRyZXR1cm4gTnVtYmVyKHZhbHVlKTtcblx0fVxuXG5cdGlmIChvcHRpb25zLnBhcnNlQm9vbGVhbnMgJiYgdmFsdWUgIT09IG51bGwgJiYgKHZhbHVlLnRvTG93ZXJDYXNlKCkgPT09ICd0cnVlJyB8fCB2YWx1ZS50b0xvd2VyQ2FzZSgpID09PSAnZmFsc2UnKSkge1xuXHRcdHJldHVybiB2YWx1ZS50b0xvd2VyQ2FzZSgpID09PSAndHJ1ZSc7XG5cdH1cblxuXHRpZiAob3B0aW9ucy5wYXJzZU51bWJlcnMgJiYgIU51bWJlci5pc05hTihOdW1iZXIodmFsdWUpKSAmJiAodHlwZW9mIHZhbHVlID09PSAnc3RyaW5nJyAmJiB2YWx1ZS50cmltKCkgIT09ICcnKSkge1xuXHRcdHJldHVybiBOdW1iZXIodmFsdWUpO1xuXHR9XG5cblx0cmV0dXJuIHZhbHVlO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gZXh0cmFjdChpbnB1dCkge1xuXHRpbnB1dCA9IHJlbW92ZUhhc2goaW5wdXQpO1xuXHRjb25zdCBxdWVyeVN0YXJ0ID0gaW5wdXQuaW5kZXhPZignPycpO1xuXHRpZiAocXVlcnlTdGFydCA9PT0gLTEpIHtcblx0XHRyZXR1cm4gJyc7XG5cdH1cblxuXHRyZXR1cm4gaW5wdXQuc2xpY2UocXVlcnlTdGFydCArIDEpO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gcGFyc2UocXVlcnksIG9wdGlvbnMpIHtcblx0b3B0aW9ucyA9IHtcblx0XHRkZWNvZGU6IHRydWUsXG5cdFx0c29ydDogdHJ1ZSxcblx0XHRhcnJheUZvcm1hdDogJ25vbmUnLFxuXHRcdGFycmF5Rm9ybWF0U2VwYXJhdG9yOiAnLCcsXG5cdFx0cGFyc2VOdW1iZXJzOiBmYWxzZSxcblx0XHRwYXJzZUJvb2xlYW5zOiBmYWxzZSxcblx0XHR0eXBlczogT2JqZWN0LmNyZWF0ZShudWxsKSxcblx0XHQuLi5vcHRpb25zLFxuXHR9O1xuXG5cdHZhbGlkYXRlQXJyYXlGb3JtYXRTZXBhcmF0b3Iob3B0aW9ucy5hcnJheUZvcm1hdFNlcGFyYXRvcik7XG5cblx0Y29uc3QgZm9ybWF0dGVyID0gcGFyc2VyRm9yQXJyYXlGb3JtYXQob3B0aW9ucyk7XG5cblx0Ly8gQ3JlYXRlIGFuIG9iamVjdCB3aXRoIG5vIHByb3RvdHlwZVxuXHRjb25zdCByZXR1cm5WYWx1ZSA9IE9iamVjdC5jcmVhdGUobnVsbCk7XG5cblx0aWYgKHR5cGVvZiBxdWVyeSAhPT0gJ3N0cmluZycpIHtcblx0XHRyZXR1cm4gcmV0dXJuVmFsdWU7XG5cdH1cblxuXHRxdWVyeSA9IHF1ZXJ5LnRyaW0oKS5yZXBsYWNlKC9eWz8jJl0vLCAnJyk7XG5cblx0aWYgKCFxdWVyeSkge1xuXHRcdHJldHVybiByZXR1cm5WYWx1ZTtcblx0fVxuXG5cdGZvciAoY29uc3QgcGFyYW1ldGVyIG9mIHF1ZXJ5LnNwbGl0KCcmJykpIHtcblx0XHRpZiAocGFyYW1ldGVyID09PSAnJykge1xuXHRcdFx0Y29udGludWU7XG5cdFx0fVxuXG5cdFx0Y29uc3QgcGFyYW1ldGVyXyA9IG9wdGlvbnMuZGVjb2RlID8gcGFyYW1ldGVyLnJlcGxhY2VBbGwoJysnLCAnICcpIDogcGFyYW1ldGVyO1xuXG5cdFx0bGV0IFtrZXksIHZhbHVlXSA9IHNwbGl0T25GaXJzdChwYXJhbWV0ZXJfLCAnPScpO1xuXG5cdFx0aWYgKGtleSA9PT0gdW5kZWZpbmVkKSB7XG5cdFx0XHRrZXkgPSBwYXJhbWV0ZXJfO1xuXHRcdH1cblxuXHRcdC8vIE1pc3NpbmcgYD1gIHNob3VsZCBiZSBgbnVsbGA6XG5cdFx0Ly8gaHR0cDovL3czLm9yZy9UUi8yMDEyL1dELXVybC0yMDEyMDUyNC8jY29sbGVjdC11cmwtcGFyYW1ldGVyc1xuXHRcdHZhbHVlID0gdmFsdWUgPT09IHVuZGVmaW5lZCA/IG51bGwgOiAoWydjb21tYScsICdzZXBhcmF0b3InLCAnYnJhY2tldC1zZXBhcmF0b3InXS5pbmNsdWRlcyhvcHRpb25zLmFycmF5Rm9ybWF0KSA/IHZhbHVlIDogZGVjb2RlKHZhbHVlLCBvcHRpb25zKSk7XG5cdFx0Zm9ybWF0dGVyKGRlY29kZShrZXksIG9wdGlvbnMpLCB2YWx1ZSwgcmV0dXJuVmFsdWUpO1xuXHR9XG5cblx0Zm9yIChjb25zdCBba2V5LCB2YWx1ZV0gb2YgT2JqZWN0LmVudHJpZXMocmV0dXJuVmFsdWUpKSB7XG5cdFx0aWYgKHR5cGVvZiB2YWx1ZSA9PT0gJ29iamVjdCcgJiYgdmFsdWUgIT09IG51bGwgJiYgb3B0aW9ucy50eXBlc1trZXldICE9PSAnc3RyaW5nJykge1xuXHRcdFx0Zm9yIChjb25zdCBba2V5MiwgdmFsdWUyXSBvZiBPYmplY3QuZW50cmllcyh2YWx1ZSkpIHtcblx0XHRcdFx0Y29uc3QgdHlwZSA9IG9wdGlvbnMudHlwZXNba2V5XSA/IG9wdGlvbnMudHlwZXNba2V5XS5yZXBsYWNlKCdbXScsICcnKSA6IHVuZGVmaW5lZDtcblx0XHRcdFx0dmFsdWVba2V5Ml0gPSBwYXJzZVZhbHVlKHZhbHVlMiwgb3B0aW9ucywgdHlwZSk7XG5cdFx0XHR9XG5cdFx0fSBlbHNlIGlmICh0eXBlb2YgdmFsdWUgPT09ICdvYmplY3QnICYmIHZhbHVlICE9PSBudWxsICYmIG9wdGlvbnMudHlwZXNba2V5XSA9PT0gJ3N0cmluZycpIHtcblx0XHRcdHJldHVyblZhbHVlW2tleV0gPSBPYmplY3QudmFsdWVzKHZhbHVlKS5qb2luKG9wdGlvbnMuYXJyYXlGb3JtYXRTZXBhcmF0b3IpO1xuXHRcdH0gZWxzZSB7XG5cdFx0XHRyZXR1cm5WYWx1ZVtrZXldID0gcGFyc2VWYWx1ZSh2YWx1ZSwgb3B0aW9ucywgb3B0aW9ucy50eXBlc1trZXldKTtcblx0XHR9XG5cdH1cblxuXHRpZiAob3B0aW9ucy5zb3J0ID09PSBmYWxzZSkge1xuXHRcdHJldHVybiByZXR1cm5WYWx1ZTtcblx0fVxuXG5cdC8vIFRPRE86IFJlbW92ZSB0aGUgdXNlIG9mIGByZWR1Y2VgLlxuXHQvLyBlc2xpbnQtZGlzYWJsZS1uZXh0LWxpbmUgdW5pY29ybi9uby1hcnJheS1yZWR1Y2Vcblx0cmV0dXJuIChvcHRpb25zLnNvcnQgPT09IHRydWUgPyBPYmplY3Qua2V5cyhyZXR1cm5WYWx1ZSkuc29ydCgpIDogT2JqZWN0LmtleXMocmV0dXJuVmFsdWUpLnNvcnQob3B0aW9ucy5zb3J0KSkucmVkdWNlKChyZXN1bHQsIGtleSkgPT4ge1xuXHRcdGNvbnN0IHZhbHVlID0gcmV0dXJuVmFsdWVba2V5XTtcblx0XHRyZXN1bHRba2V5XSA9IEJvb2xlYW4odmFsdWUpICYmIHR5cGVvZiB2YWx1ZSA9PT0gJ29iamVjdCcgJiYgIUFycmF5LmlzQXJyYXkodmFsdWUpID8ga2V5c1NvcnRlcih2YWx1ZSkgOiB2YWx1ZTtcblx0XHRyZXR1cm4gcmVzdWx0O1xuXHR9LCBPYmplY3QuY3JlYXRlKG51bGwpKTtcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIHN0cmluZ2lmeShvYmplY3QsIG9wdGlvbnMpIHtcblx0aWYgKCFvYmplY3QpIHtcblx0XHRyZXR1cm4gJyc7XG5cdH1cblxuXHRvcHRpb25zID0ge1xuXHRcdGVuY29kZTogdHJ1ZSxcblx0XHRzdHJpY3Q6IHRydWUsXG5cdFx0YXJyYXlGb3JtYXQ6ICdub25lJyxcblx0XHRhcnJheUZvcm1hdFNlcGFyYXRvcjogJywnLFxuXHRcdC4uLm9wdGlvbnMsXG5cdH07XG5cblx0dmFsaWRhdGVBcnJheUZvcm1hdFNlcGFyYXRvcihvcHRpb25zLmFycmF5Rm9ybWF0U2VwYXJhdG9yKTtcblxuXHRjb25zdCBzaG91bGRGaWx0ZXIgPSBrZXkgPT4gKFxuXHRcdChvcHRpb25zLnNraXBOdWxsICYmIGlzTnVsbE9yVW5kZWZpbmVkKG9iamVjdFtrZXldKSlcblx0XHR8fCAob3B0aW9ucy5za2lwRW1wdHlTdHJpbmcgJiYgb2JqZWN0W2tleV0gPT09ICcnKVxuXHQpO1xuXG5cdGNvbnN0IGZvcm1hdHRlciA9IGVuY29kZXJGb3JBcnJheUZvcm1hdChvcHRpb25zKTtcblxuXHRjb25zdCBvYmplY3RDb3B5ID0ge307XG5cblx0Zm9yIChjb25zdCBba2V5LCB2YWx1ZV0gb2YgT2JqZWN0LmVudHJpZXMob2JqZWN0KSkge1xuXHRcdGlmICghc2hvdWxkRmlsdGVyKGtleSkpIHtcblx0XHRcdG9iamVjdENvcHlba2V5XSA9IHZhbHVlO1xuXHRcdH1cblx0fVxuXG5cdGNvbnN0IGtleXMgPSBPYmplY3Qua2V5cyhvYmplY3RDb3B5KTtcblxuXHRpZiAob3B0aW9ucy5zb3J0ICE9PSBmYWxzZSkge1xuXHRcdGtleXMuc29ydChvcHRpb25zLnNvcnQpO1xuXHR9XG5cblx0cmV0dXJuIGtleXMubWFwKGtleSA9PiB7XG5cdFx0Y29uc3QgdmFsdWUgPSBvYmplY3Rba2V5XTtcblxuXHRcdGlmICh2YWx1ZSA9PT0gdW5kZWZpbmVkKSB7XG5cdFx0XHRyZXR1cm4gJyc7XG5cdFx0fVxuXG5cdFx0aWYgKHZhbHVlID09PSBudWxsKSB7XG5cdFx0XHRyZXR1cm4gZW5jb2RlKGtleSwgb3B0aW9ucyk7XG5cdFx0fVxuXG5cdFx0aWYgKEFycmF5LmlzQXJyYXkodmFsdWUpKSB7XG5cdFx0XHRpZiAodmFsdWUubGVuZ3RoID09PSAwICYmIG9wdGlvbnMuYXJyYXlGb3JtYXQgPT09ICdicmFja2V0LXNlcGFyYXRvcicpIHtcblx0XHRcdFx0cmV0dXJuIGVuY29kZShrZXksIG9wdGlvbnMpICsgJ1tdJztcblx0XHRcdH1cblxuXHRcdFx0cmV0dXJuIHZhbHVlXG5cdFx0XHRcdC5yZWR1Y2UoZm9ybWF0dGVyKGtleSksIFtdKVxuXHRcdFx0XHQuam9pbignJicpO1xuXHRcdH1cblxuXHRcdHJldHVybiBlbmNvZGUoa2V5LCBvcHRpb25zKSArICc9JyArIGVuY29kZSh2YWx1ZSwgb3B0aW9ucyk7XG5cdH0pLmZpbHRlcih4ID0+IHgubGVuZ3RoID4gMCkuam9pbignJicpO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gcGFyc2VVcmwodXJsLCBvcHRpb25zKSB7XG5cdG9wdGlvbnMgPSB7XG5cdFx0ZGVjb2RlOiB0cnVlLFxuXHRcdC4uLm9wdGlvbnMsXG5cdH07XG5cblx0bGV0IFt1cmxfLCBoYXNoXSA9IHNwbGl0T25GaXJzdCh1cmwsICcjJyk7XG5cblx0aWYgKHVybF8gPT09IHVuZGVmaW5lZCkge1xuXHRcdHVybF8gPSB1cmw7XG5cdH1cblxuXHRyZXR1cm4ge1xuXHRcdHVybDogdXJsXz8uc3BsaXQoJz8nKT8uWzBdID8/ICcnLFxuXHRcdHF1ZXJ5OiBwYXJzZShleHRyYWN0KHVybCksIG9wdGlvbnMpLFxuXHRcdC4uLihvcHRpb25zICYmIG9wdGlvbnMucGFyc2VGcmFnbWVudElkZW50aWZpZXIgJiYgaGFzaCA/IHtmcmFnbWVudElkZW50aWZpZXI6IGRlY29kZShoYXNoLCBvcHRpb25zKX0gOiB7fSksXG5cdH07XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBzdHJpbmdpZnlVcmwob2JqZWN0LCBvcHRpb25zKSB7XG5cdG9wdGlvbnMgPSB7XG5cdFx0ZW5jb2RlOiB0cnVlLFxuXHRcdHN0cmljdDogdHJ1ZSxcblx0XHRbZW5jb2RlRnJhZ21lbnRJZGVudGlmaWVyXTogdHJ1ZSxcblx0XHQuLi5vcHRpb25zLFxuXHR9O1xuXG5cdGNvbnN0IHVybCA9IHJlbW92ZUhhc2gob2JqZWN0LnVybCkuc3BsaXQoJz8nKVswXSB8fCAnJztcblx0Y29uc3QgcXVlcnlGcm9tVXJsID0gZXh0cmFjdChvYmplY3QudXJsKTtcblxuXHRjb25zdCBxdWVyeSA9IHtcblx0XHQuLi5wYXJzZShxdWVyeUZyb21VcmwsIHtzb3J0OiBmYWxzZX0pLFxuXHRcdC4uLm9iamVjdC5xdWVyeSxcblx0fTtcblxuXHRsZXQgcXVlcnlTdHJpbmcgPSBzdHJpbmdpZnkocXVlcnksIG9wdGlvbnMpO1xuXHRxdWVyeVN0cmluZyAmJj0gYD8ke3F1ZXJ5U3RyaW5nfWA7XG5cblx0bGV0IGhhc2ggPSBnZXRIYXNoKG9iamVjdC51cmwpO1xuXHRpZiAodHlwZW9mIG9iamVjdC5mcmFnbWVudElkZW50aWZpZXIgPT09ICdzdHJpbmcnKSB7XG5cdFx0Y29uc3QgdXJsT2JqZWN0Rm9yRnJhZ21lbnRFbmNvZGUgPSBuZXcgVVJMKHVybCk7XG5cdFx0dXJsT2JqZWN0Rm9yRnJhZ21lbnRFbmNvZGUuaGFzaCA9IG9iamVjdC5mcmFnbWVudElkZW50aWZpZXI7XG5cdFx0aGFzaCA9IG9wdGlvbnNbZW5jb2RlRnJhZ21lbnRJZGVudGlmaWVyXSA/IHVybE9iamVjdEZvckZyYWdtZW50RW5jb2RlLmhhc2ggOiBgIyR7b2JqZWN0LmZyYWdtZW50SWRlbnRpZmllcn1gO1xuXHR9XG5cblx0cmV0dXJuIGAke3VybH0ke3F1ZXJ5U3RyaW5nfSR7aGFzaH1gO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gcGljayhpbnB1dCwgZmlsdGVyLCBvcHRpb25zKSB7XG5cdG9wdGlvbnMgPSB7XG5cdFx0cGFyc2VGcmFnbWVudElkZW50aWZpZXI6IHRydWUsXG5cdFx0W2VuY29kZUZyYWdtZW50SWRlbnRpZmllcl06IGZhbHNlLFxuXHRcdC4uLm9wdGlvbnMsXG5cdH07XG5cblx0Y29uc3Qge3VybCwgcXVlcnksIGZyYWdtZW50SWRlbnRpZmllcn0gPSBwYXJzZVVybChpbnB1dCwgb3B0aW9ucyk7XG5cblx0cmV0dXJuIHN0cmluZ2lmeVVybCh7XG5cdFx0dXJsLFxuXHRcdHF1ZXJ5OiBpbmNsdWRlS2V5cyhxdWVyeSwgZmlsdGVyKSxcblx0XHRmcmFnbWVudElkZW50aWZpZXIsXG5cdH0sIG9wdGlvbnMpO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gZXhjbHVkZShpbnB1dCwgZmlsdGVyLCBvcHRpb25zKSB7XG5cdGNvbnN0IGV4Y2x1c2lvbkZpbHRlciA9IEFycmF5LmlzQXJyYXkoZmlsdGVyKSA/IGtleSA9PiAhZmlsdGVyLmluY2x1ZGVzKGtleSkgOiAoa2V5LCB2YWx1ZSkgPT4gIWZpbHRlcihrZXksIHZhbHVlKTtcblxuXHRyZXR1cm4gcGljayhpbnB1dCwgZXhjbHVzaW9uRmlsdGVyLCBvcHRpb25zKTtcbn1cbiIsImltcG9ydCAqIGFzIHF1ZXJ5U3RyaW5nIGZyb20gJy4vYmFzZS5qcyc7XG5cbmV4cG9ydCBkZWZhdWx0IHF1ZXJ5U3RyaW5nO1xuIiwiaW1wb3J0IEl0ZXJhdG9yIGZyb20gJ3NyYy9oZWxwZXIvaXRlcmF0b3IuaGVscGVyJztcbmltcG9ydCBEb21BY2Nlc3MgZnJvbSAnc3JjL2hlbHBlci9kb20tYWNjZXNzLmhlbHBlcic7XG5cbi8qKlxuICogQHN3LXBhY2thZ2UgZnJhbWV3b3JrXG4gKi9cbmNsYXNzIEVsZW1lbnRSZXBsYWNlSGVscGVyU2luZ2xldG9uIHtcblxuICAgIGNvbnN0cnVjdG9yKCkge1xuICAgICAgICB0aGlzLl9kb21QYXJzZXIgPSBuZXcgRE9NUGFyc2VyKCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogcmVwbGFjZSBhbGwgZWxlbWVudHMgZnJvbSB0aGUgdGFyZ2V0XG4gICAgICpcbiAgICAgKiBAcGFyYW0ge3N0cmluZ3xIVE1MRWxlbWVudH0gbWFya3VwXG4gICAgICogQHBhcmFtIHthcnJheXxzdHJpbmd9IHNlbGVjdG9yc1xuICAgICAqIEBwYXJhbSB7Ym9vbGVhbn0gc3RyaWN0XG4gICAgICpcbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIHJlcGxhY2VGcm9tTWFya3VwKG1hcmt1cCwgc2VsZWN0b3JzLCBzdHJpY3QgPSB0cnVlKSB7XG4gICAgICAgIGxldCBzcmMgPSBtYXJrdXA7XG4gICAgICAgIGlmICh0eXBlb2Ygc3JjID09PSAnc3RyaW5nJykge1xuICAgICAgICAgICAgc3JjID0gdGhpcy5fY3JlYXRlTWFya3VwRnJvbVN0cmluZyhzcmMpO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKHR5cGVvZiBzZWxlY3RvcnMgPT09ICdzdHJpbmcnKSB7XG4gICAgICAgICAgICBzZWxlY3RvcnMgPSBbc2VsZWN0b3JzXTtcbiAgICAgICAgfVxuXG4gICAgICAgIHRoaXMuX3JlcGxhY2VTZWxlY3RvcnMoc3JjLCBzZWxlY3RvcnMsIHN0cmljdCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogcmVwbGFjZXMgdGhlIHRhcmdldCB3aXRoIHRoZSBzcmMgZWxlbWVudHNcbiAgICAgKlxuICAgICAqIEBwYXJhbSB7Tm9kZUxpc3R8SFRNTEVsZW1lbnR8c3RyaW5nfSBzcmNcbiAgICAgKiBAcGFyYW0ge05vZGVMaXN0fEhUTUxFbGVtZW50fHN0cmluZ30gdGFyZ2V0XG4gICAgICogQHBhcmFtIHtib29sZWFufSBzdHJpY3RcbiAgICAgKlxuICAgICAqIEByZXR1cm5zIHtib29sZWFufVxuICAgICAqL1xuICAgIHJlcGxhY2VFbGVtZW50KHNyYywgdGFyZ2V0LCBzdHJpY3QgPSB0cnVlKSB7XG4gICAgICAgIGlmICh0eXBlb2Ygc3JjID09PSAnc3RyaW5nJykge1xuICAgICAgICAgICAgc3JjID0gRG9tQWNjZXNzLnF1ZXJ5U2VsZWN0b3JBbGwoZG9jdW1lbnQsIHNyYywgc3RyaWN0KTtcbiAgICAgICAgfVxuXG4gICAgICAgIGlmICh0eXBlb2YgdGFyZ2V0ID09PSAnc3RyaW5nJykge1xuICAgICAgICAgICAgdGFyZ2V0ID0gRG9tQWNjZXNzLnF1ZXJ5U2VsZWN0b3JBbGwoZG9jdW1lbnQsIHRhcmdldCwgc3RyaWN0KTtcbiAgICAgICAgfVxuXG4gICAgICAgIGlmIChzcmMgaW5zdGFuY2VvZiBOb2RlTGlzdCAmJiB0YXJnZXQgaW5zdGFuY2VvZiBOb2RlTGlzdCAmJiB0YXJnZXQubGVuZ3RoID4gc3JjLmxlbmd0aCkge1xuICAgICAgICAgICAgSXRlcmF0b3IuaXRlcmF0ZSh0YXJnZXQsICh0YXJnZXRFbCkgPT4ge1xuICAgICAgICAgICAgICAgIEl0ZXJhdG9yLml0ZXJhdGUoc3JjLCAoc3JjRWwpID0+IHtcbiAgICAgICAgICAgICAgICAgICAgaWYgKHNyY0VsLmlubmVySFRNTCAmJiBzcmNFbC5jbGFzc05hbWUgPT09IHRhcmdldEVsLmNsYXNzTmFtZSkge1xuICAgICAgICAgICAgICAgICAgICAgICAgdGFyZ2V0RWwuaW5uZXJIVE1MID0gc3JjRWwuaW5uZXJIVE1MO1xuICAgICAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICAgICAgfSk7XG4gICAgICAgICAgICB9KTtcblxuICAgICAgICAgICAgcmV0dXJuIHRydWU7XG4gICAgICAgIH1cblxuICAgICAgICBpZiAoc3JjIGluc3RhbmNlb2YgTm9kZUxpc3QpIHtcbiAgICAgICAgICAgIEl0ZXJhdG9yLml0ZXJhdGUoc3JjLCAoc3JjRWwsIGluZGV4KSA9PiB7XG4gICAgICAgICAgICAgICAgaWYgKHNyY0VsLmlubmVySFRNTCkge1xuICAgICAgICAgICAgICAgICAgICB0YXJnZXRbaW5kZXhdLmlubmVySFRNTCA9IHNyY0VsLmlubmVySFRNTDtcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICB9KTtcbiAgICAgICAgICAgIHJldHVybiB0cnVlO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKHRhcmdldCBpbnN0YW5jZW9mIE5vZGVMaXN0KSB7XG4gICAgICAgICAgICBJdGVyYXRvci5pdGVyYXRlKHRhcmdldCwgKHRhcmdldEVsKSA9PiB7XG4gICAgICAgICAgICAgICAgaWYgKHNyYy5pbm5lckhUTUwpIHtcbiAgICAgICAgICAgICAgICAgICAgdGFyZ2V0RWwuaW5uZXJIVE1MID0gc3JjLmlubmVySFRNTDtcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICB9KTtcbiAgICAgICAgICAgIHJldHVybiB0cnVlO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKCF0YXJnZXQgfHwgIXNyYyB8fCAhc3JjLmlubmVySFRNTCkge1xuICAgICAgICAgICAgcmV0dXJuIGZhbHNlO1xuICAgICAgICB9XG5cbiAgICAgICAgdGFyZ2V0LmlubmVySFRNTCA9IHNyYy5pbm5lckhUTUw7XG4gICAgICAgIHJldHVybiB0cnVlO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIHJlcGxhY2VzIGFsbCBmb3VuZCBzZWxlY3RvcnMgaW4gdGhlIGRvY3VtZW50XG4gICAgICogd2l0aCB0aGUgb25lcyBpbiB0aGUgc291cmNlXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge0hUTUxFbGVtZW50fSBzcmNcbiAgICAgKiBAcGFyYW0ge0FycmF5fSBzZWxlY3RvcnNcbiAgICAgKiBAcGFyYW0ge2Jvb2xlYW59IHN0cmljdFxuICAgICAqXG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBfcmVwbGFjZVNlbGVjdG9ycyhzcmMsIHNlbGVjdG9ycywgc3RyaWN0KSB7XG4gICAgICAgIEl0ZXJhdG9yLml0ZXJhdGUoc2VsZWN0b3JzLCAoc2VsZWN0b3IpID0+IHtcbiAgICAgICAgICAgIGNvbnN0IHNyY0VsZW1lbnRzID0gRG9tQWNjZXNzLnF1ZXJ5U2VsZWN0b3JBbGwoc3JjLCBzZWxlY3Rvciwgc3RyaWN0KTtcbiAgICAgICAgICAgIGNvbnN0IHRhcmdldEVsZW1lbnRzID0gRG9tQWNjZXNzLnF1ZXJ5U2VsZWN0b3JBbGwoZG9jdW1lbnQsIHNlbGVjdG9yLCBzdHJpY3QpO1xuXG4gICAgICAgICAgICB0aGlzLnJlcGxhY2VFbGVtZW50KHNyY0VsZW1lbnRzLCB0YXJnZXRFbGVtZW50cywgc3RyaWN0KTtcbiAgICAgICAgfSk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogcmV0dXJucyBhIGRvbSBlbGVtZW50IHBhcnNlZCBmcm9tIHRoZSBwYXNzZWQgc3RyaW5nXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gc3RyaW5nXG4gICAgICpcbiAgICAgKiBAcmV0dXJucyB7SFRNTEVsZW1lbnR9XG4gICAgICpcbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIF9jcmVhdGVNYXJrdXBGcm9tU3RyaW5nKHN0cmluZykge1xuICAgICAgICByZXR1cm4gdGhpcy5fZG9tUGFyc2VyLnBhcnNlRnJvbVN0cmluZyhzdHJpbmcsICd0ZXh0L2h0bWwnKTtcbiAgICB9XG59XG5cbi8qKlxuICogQ3JlYXRlIHRoZSBFbGVtZW50UmVwbGFjZUhlbHBlciBpbnN0YW5jZS5cbiAqIEB0eXBlIHtSZWFkb25seTxFbGVtZW50UmVwbGFjZUhlbHBlclNpbmdsZXRvbj59XG4gKi9cbmV4cG9ydCBjb25zdCBFbGVtZW50UmVwbGFjZUhlbHBlckluc3RhbmNlID0gT2JqZWN0LmZyZWV6ZShuZXcgRWxlbWVudFJlcGxhY2VIZWxwZXJTaW5nbGV0b24oKSk7XG5cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIEVsZW1lbnRSZXBsYWNlSGVscGVyIHtcblxuICAgIC8qKlxuICAgICAqIHJlcGxhY2UgYWxsIGVsZW1lbnRzIGZyb20gdGhlIHRhcmdldFxuICAgICAqXG4gICAgICogQHBhcmFtIHtzdHJpbmd8SFRNTEVsZW1lbnR9IG1hcmt1cFxuICAgICAqIEBwYXJhbSB7YXJyYXl8c3RyaW5nfSBzZWxlY3RvcnNcbiAgICAgKiBAcGFyYW0ge2Jvb2xlYW59IHN0cmljdFxuICAgICAqXG4gICAgICovXG4gICAgc3RhdGljIHJlcGxhY2VGcm9tTWFya3VwKG1hcmt1cCwgc2VsZWN0b3JzLCBzdHJpY3QpIHtcbiAgICAgICAgRWxlbWVudFJlcGxhY2VIZWxwZXJJbnN0YW5jZS5yZXBsYWNlRnJvbU1hcmt1cChtYXJrdXAsIHNlbGVjdG9ycywgc3RyaWN0KTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiByZXBsYWNlcyB0aGUgdGFyZ2V0IHdpdGggdGhlIHNyYyBlbGVtZW50c1xuICAgICAqXG4gICAgICogQHBhcmFtIHtOb2RlTGlzdHxIVE1MRWxlbWVudHxzdHJpbmd9IHNyY1xuICAgICAqIEBwYXJhbSB7Tm9kZUxpc3R8SFRNTEVsZW1lbnR8c3RyaW5nfSB0YXJnZXRcbiAgICAgKiBAcGFyYW0ge2Jvb2xlYW59IHN0cmljdFxuICAgICAqXG4gICAgICogQHJldHVybnMge2Jvb2xlYW59XG4gICAgICovXG4gICAgc3RhdGljIHJlcGxhY2VFbGVtZW50KHNyYywgdGFyZ2V0LCBzdHJpY3QpIHtcbiAgICAgICAgcmV0dXJuIEVsZW1lbnRSZXBsYWNlSGVscGVySW5zdGFuY2UucmVwbGFjZUVsZW1lbnQoc3JjLCB0YXJnZXQsIHN0cmljdCk7XG4gICAgfVxufVxuIiwiLyoqXG4gKiBEZWJvdW5jZXJcbiAqIEBzdy1wYWNrYWdlIGZyYW1ld29ya1xuICovXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBEZWJvdW5jZXIge1xuXG4gICAgLyoqXG4gICAgICogRGVib3VuY2UgYW55IGdpdmVuIGZ1bmN0aW9uXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge0Z1bmN0aW9ufSBjYWxsYmFja1xuICAgICAqIEBwYXJhbSB7aW50fSBkZWxheVxuICAgICAqIEBwYXJhbSB7Ym9vbGVhbn0gaW1tZWRpYXRlXG4gICAgICpcbiAgICAgKiBAcmV0dXJucyB7RnVuY3Rpb259XG4gICAgICovXG4gICAgc3RhdGljIGRlYm91bmNlKGNhbGxiYWNrLCBkZWxheSwgaW1tZWRpYXRlID0gZmFsc2UpIHtcbiAgICAgICAgbGV0IHRpbWVvdXQ7XG5cbiAgICAgICAgcmV0dXJuICguLi5hcmdzKSA9PiB7XG4gICAgICAgICAgICBpZiAoaW1tZWRpYXRlICYmICAhdGltZW91dCkge1xuICAgICAgICAgICAgICAgIHNldFRpbWVvdXQoY2FsbGJhY2suYmluZChjYWxsYmFjaywgLi4uYXJncyksIDApO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICBjbGVhclRpbWVvdXQodGltZW91dCk7XG4gICAgICAgICAgICB0aW1lb3V0ID0gc2V0VGltZW91dChjYWxsYmFjay5iaW5kKGNhbGxiYWNrLCAuLi5hcmdzKSwgZGVsYXkpO1xuICAgICAgICB9O1xuICAgIH1cbn1cbiIsIi8qXG4gKiBAc3ctcGFja2FnZSBpbnZlbnRvcnlcbiAqL1xuXG5pbXBvcnQgUGx1Z2luIGZyb20gJ3NyYy9wbHVnaW4tc3lzdGVtL3BsdWdpbi5jbGFzcyc7XG5pbXBvcnQgSHR0cENsaWVudCBmcm9tICdzcmMvc2VydmljZS9odHRwLWNsaWVudC5zZXJ2aWNlJztcbmltcG9ydCBJdGVyYXRvciBmcm9tICdzcmMvaGVscGVyL2l0ZXJhdG9yLmhlbHBlcic7XG5pbXBvcnQgRG9tQWNjZXNzIGZyb20gJ3NyYy9oZWxwZXIvZG9tLWFjY2Vzcy5oZWxwZXInO1xuaW1wb3J0IHF1ZXJ5c3RyaW5nIGZyb20gJ3F1ZXJ5LXN0cmluZyc7XG5pbXBvcnQgRWxlbWVudFJlcGxhY2VIZWxwZXIgZnJvbSAnc3JjL2hlbHBlci9lbGVtZW50LXJlcGxhY2UuaGVscGVyJztcbmltcG9ydCBEZWJvdW5jZXIgZnJvbSAnc3JjL2hlbHBlci9kZWJvdW5jZXIuaGVscGVyJztcblxuZXhwb3J0IGRlZmF1bHQgY2xhc3MgTGlzdGluZ1BsdWdpbiBleHRlbmRzIFBsdWdpbiB7XG5cbiAgICBzdGF0aWMgb3B0aW9ucyA9IHtcbiAgICAgICAgZGF0YVVybDogJycsXG4gICAgICAgIGZpbHRlclVybDogJycsXG4gICAgICAgIHBhcmFtczoge30sXG4gICAgICAgIGZpbHRlclBhbmVsU2VsZWN0b3I6ICcuZmlsdGVyLXBhbmVsJyxcbiAgICAgICAgY21zUHJvZHVjdExpc3RpbmdTZWxlY3RvcjogJy5jbXMtZWxlbWVudC1wcm9kdWN0LWxpc3RpbmcnLFxuICAgICAgICBjbXNQcm9kdWN0TGlzdGluZ1dyYXBwZXJTZWxlY3RvcjogJy5jbXMtZWxlbWVudC1wcm9kdWN0LWxpc3Rpbmctd3JhcHBlcicsXG4gICAgICAgIGNtc1Byb2R1Y3RMaXN0aW5nUmVzdWx0c1NlbGVjdG9yOiAnLmpzLWxpc3Rpbmctd3JhcHBlcicsXG4gICAgICAgIGFjdGl2ZUZpbHRlckNvbnRhaW5lclNlbGVjdG9yOiAnLmZpbHRlci1wYW5lbC1hY3RpdmUtY29udGFpbmVyJyxcbiAgICAgICAgLyoqIEBkZXByZWNhdGVkIHRhZzp2Ni43LjAgLSBPcHRpb24gYGFjdGl2ZUZpbHRlckxhYmVsQ2xhc3NgIGlzIGRlcHJlY2F0ZWQuIFVzZSBgYWN0aXZlRmlsdGVyTGFiZWxDbGFzc2VzYCB0byByZW5kZXIgdGhlIGxhYmVsIGNsYXNzZXMgYW5kIGBhY3RpdmVGaWx0ZXJMYWJlbFNlbGVjdG9yYCBhcyB0aGUgc2VsZWN0b3IgZm9yIGV2ZW50cy4gKi9cbiAgICAgICAgYWN0aXZlRmlsdGVyTGFiZWxDbGFzczogJ2ZpbHRlci1hY3RpdmUnLFxuICAgICAgICBhY3RpdmVGaWx0ZXJMYWJlbENsYXNzZXM6ICdmaWx0ZXItYWN0aXZlIGJ0bicsXG4gICAgICAgIGFjdGl2ZUZpbHRlckxhYmVsU2VsZWN0b3I6ICcuZmlsdGVyLWFjdGl2ZScsXG4gICAgICAgIC8qKiBAZGVwcmVjYXRlZCB0YWc6djYuNy4wIC0gT3B0aW9uIGBhY3RpdmVGaWx0ZXJMYWJlbFJlbW92ZUNsYXNzYCBpcyBkZXByZWNhdGVkLiBTZWxlY3RvciBgYWN0aXZlRmlsdGVyTGFiZWxDbGFzc2Agd2lsbCBiZSB1c2VkIHRvIHF1ZXJ5IHRoZSByZW1vdmUgYnV0dG9uLiAqL1xuICAgICAgICBhY3RpdmVGaWx0ZXJMYWJlbFJlbW92ZUNsYXNzOiAnZmlsdGVyLWFjdGl2ZS1yZW1vdmUnLFxuICAgICAgICBhY3RpdmVGaWx0ZXJMYWJlbFByZXZpZXdDbGFzczogJ2ZpbHRlci1hY3RpdmUtcHJldmlldycsXG4gICAgICAgIHJlc2V0QWxsRmlsdGVyQnV0dG9uQ2xhc3NlczogJ2ZpbHRlci1yZXNldC1hbGwgYnRuIGJ0bi1vdXRsaW5lLWRhbmdlcicsXG4gICAgICAgIHJlc2V0QWxsRmlsdGVyQnV0dG9uU2VsZWN0b3I6ICcuZmlsdGVyLXJlc2V0LWFsbCcsXG4gICAgICAgIGxvYWRpbmdJbmRpY2F0b3JDbGFzczogJ2lzLWxvYWRpbmcnLFxuICAgICAgICBsb2FkaW5nRWxlbWVudExvYWRlckNsYXNzOiAnaGFzLWVsZW1lbnQtbG9hZGVyJyxcbiAgICAgICAgYXJpYUxpdmVTZWxlY3RvcjogJy5maWx0ZXItcGFuZWwtYXJpYS1saXZlJyxcbiAgICAgICAgYXJpYUxpdmVVcGRhdGVzOiB0cnVlLFxuICAgICAgICBkaXNhYmxlRW1wdHlGaWx0ZXI6IGZhbHNlLFxuICAgICAgICBzbmlwcGV0czoge1xuICAgICAgICAgICAgcmVzZXRBbGxCdXR0b25UZXh0OiAnUmVzZXQgYWxsJyxcbiAgICAgICAgICAgIHJlc2V0QWxsRmlsdGVyc0FyaWFMYWJlbDogJ1Jlc2V0IGFsbCBmaWx0ZXJzJyxcbiAgICAgICAgICAgIHJlbW92ZUZpbHRlckFyaWFMYWJlbDogJ1JlbW92ZSBmaWx0ZXInLFxuICAgICAgICB9LFxuICAgICAgICAvL2lmIHRoZSB3aW5kb3cgc2hvdWxkIGJlIHNjcm9sbGVkIHRvIHRvcCBvZiB0byB0aGUgbGlzdGluZ1dyYXBwZXIgZWxlbWVudFxuICAgICAgICBzY3JvbGxUb3BMaXN0aW5nV3JhcHBlcjogdHJ1ZSxcbiAgICAgICAgLy8gaG93IG11Y2ggcHggdGhlIHNjcm9sbGluZyBzaG91bGQgYmUgb2Zmc2V0XG4gICAgICAgIHNjcm9sbE9mZnNldDogMTUsXG4gICAgfTtcblxuICAgIGluaXQoKSB7XG4gICAgICAgIHRoaXMuX3JlZ2lzdHJ5ID0gW107XG5cbiAgICAgICAgdGhpcy5odHRwQ2xpZW50ID0gbmV3IEh0dHBDbGllbnQoKTtcblxuICAgICAgICB0aGlzLl91cmxGaWx0ZXJQYXJhbXMgPSBxdWVyeXN0cmluZy5wYXJzZSh3aW5kb3cubG9jYXRpb24uc2VhcmNoKTtcblxuICAgICAgICB0aGlzLl9maWx0ZXJQYW5lbCA9IERvbUFjY2Vzcy5xdWVyeVNlbGVjdG9yKGRvY3VtZW50LCB0aGlzLm9wdGlvbnMuZmlsdGVyUGFuZWxTZWxlY3RvciwgZmFsc2UpO1xuICAgICAgICB0aGlzLl9maWx0ZXJQYW5lbEFjdGl2ZSA9ICEhdGhpcy5fZmlsdGVyUGFuZWw7XG5cbiAgICAgICAgLy8gSW5pdCBmdW5jdGlvbmFsaXR5IGZvciB0aGUgZmlsdGVyIHBhbmVsXG4gICAgICAgIGlmICh0aGlzLl9maWx0ZXJQYW5lbEFjdGl2ZSkge1xuICAgICAgICAgICAgdGhpcy5fc2hvd1Jlc2V0QWxsID0gZmFsc2U7XG4gICAgICAgICAgICB0aGlzLmFjdGl2ZUZpbHRlckNvbnRhaW5lciA9IERvbUFjY2Vzcy5xdWVyeVNlbGVjdG9yKFxuICAgICAgICAgICAgICAgIGRvY3VtZW50LFxuICAgICAgICAgICAgICAgIHRoaXMub3B0aW9ucy5hY3RpdmVGaWx0ZXJDb250YWluZXJTZWxlY3RvclxuICAgICAgICAgICAgKTtcbiAgICAgICAgICAgIHRoaXMuYXJpYUxpdmVDb250YWluZXIgPSBEb21BY2Nlc3MucXVlcnlTZWxlY3Rvcihkb2N1bWVudCwgdGhpcy5vcHRpb25zLmFyaWFMaXZlU2VsZWN0b3IsIGZhbHNlKTtcbiAgICAgICAgfVxuXG4gICAgICAgIHRoaXMuX2Ntc1Byb2R1Y3RMaXN0aW5nV3JhcHBlciA9IERvbUFjY2Vzcy5xdWVyeVNlbGVjdG9yKGRvY3VtZW50LCB0aGlzLm9wdGlvbnMuY21zUHJvZHVjdExpc3RpbmdXcmFwcGVyU2VsZWN0b3IsIGZhbHNlKTtcbiAgICAgICAgdGhpcy5fY21zUHJvZHVjdExpc3RpbmdXcmFwcGVyQWN0aXZlID0gISF0aGlzLl9jbXNQcm9kdWN0TGlzdGluZ1dyYXBwZXI7XG5cbiAgICAgICAgdGhpcy5fYWxsRmlsdGVyc0luaXRpYWxpemVkRGVib3VuY2UgPSBEZWJvdW5jZXIuZGVib3VuY2UodGhpcy5zZW5kRGlzYWJsZWRGaWx0ZXJzUmVxdWVzdC5iaW5kKHRoaXMpLCAxMDApO1xuXG4gICAgICAgIHRoaXMuX3JlZ2lzdGVyRXZlbnRzKCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHB1YmxpY1xuICAgICAqL1xuICAgIHJlZnJlc2hSZWdpc3RyeSgpIHtcbiAgICAgICAgLy8gZ2V0IG9ubHkgdGhlIHJlZ2lzdHJhdGlvbnMgd2hpY2ggYXJlIHZpc2libGUgaW4gdGhlIGRvY3VtZW50XG4gICAgICAgIGNvbnN0IHZpc2libGVSZWdpc3RyYXRpb25zID0gdGhpcy5fcmVnaXN0cnkuZmlsdGVyKChlbnRyeSkgPT4gZG9jdW1lbnQuYm9keS5jb250YWlucyhlbnRyeS5lbCkpO1xuXG4gICAgICAgIC8vIHJlaW5pdGlhbGl6ZSB0aGUgbGlzdGluZyBwbHVnaW5cbiAgICAgICAgdGhpcy5pbml0KCk7XG5cbiAgICAgICAgLy8gcmVwbGFjZSBlbXB0eSByZWdpc3RyeSB3aXRoIGV4aXN0aW5nIHZpc2libGUgcmVnaXN0cmllc1xuICAgICAgICB0aGlzLl9yZWdpc3RyeSA9IHZpc2libGVSZWdpc3RyYXRpb25zO1xuXG4gICAgICAgIC8vIGluaXRpYWxpemUgcGx1Z2lucyB3aGljaCBhcmUgbm90IHJlZ2lzdGVyZWQgeWV0XG4gICAgICAgIHdpbmRvdy5QbHVnaW5NYW5hZ2VyLmluaXRpYWxpemVQbHVnaW5zKCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHB1c2hIaXN0b3J5XG4gICAgICogQHBhcmFtIG92ZXJyaWRlUGFyYW1zXG4gICAgICogQHB1YmxpY1xuICAgICAqL1xuICAgIGNoYW5nZUxpc3RpbmcocHVzaEhpc3RvcnkgPSB0cnVlLCBvdmVycmlkZVBhcmFtcyA9IHt9KSB7XG4gICAgICAgIHRoaXMuX2J1aWxkUmVxdWVzdChwdXNoSGlzdG9yeSwgb3ZlcnJpZGVQYXJhbXMpO1xuXG4gICAgICAgIGlmICh0aGlzLl9maWx0ZXJQYW5lbEFjdGl2ZSkge1xuICAgICAgICAgICAgdGhpcy5fYnVpbGRMYWJlbHMoKTtcbiAgICAgICAgfVxuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEBwYXJhbSBmaWx0ZXJJdGVtXG4gICAgICogQHB1YmxpY1xuICAgICAqL1xuICAgIHJlZ2lzdGVyRmlsdGVyKGZpbHRlckl0ZW0pIHtcbiAgICAgICAgdGhpcy5fcmVnaXN0cnkucHVzaChmaWx0ZXJJdGVtKTtcblxuICAgICAgICB0aGlzLl9zZXRGaWx0ZXJTdGF0ZShmaWx0ZXJJdGVtKTtcblxuICAgICAgICBpZiAodGhpcy5vcHRpb25zLmRpc2FibGVFbXB0eUZpbHRlcikge1xuICAgICAgICAgICAgdGhpcy5fYWxsRmlsdGVyc0luaXRpYWxpemVkRGVib3VuY2UoKTtcbiAgICAgICAgfVxuICAgIH1cblxuICAgIF9zZXRGaWx0ZXJTdGF0ZShmaWx0ZXJJdGVtKSB7XG4gICAgICAgIGlmIChPYmplY3Qua2V5cyh0aGlzLl91cmxGaWx0ZXJQYXJhbXMpLmxlbmd0aCA+IDAgJiYgdHlwZW9mIGZpbHRlckl0ZW0uc2V0VmFsdWVzRnJvbVVybCA9PT0gJ2Z1bmN0aW9uJyApIHtcbiAgICAgICAgICAgIGNvbnN0IHN0YXRlQ2hhbmdlZCA9IGZpbHRlckl0ZW0uc2V0VmFsdWVzRnJvbVVybCh0aGlzLl91cmxGaWx0ZXJQYXJhbXMpO1xuXG4gICAgICAgICAgICAvLyBSZXR1cm4gaWYgc3RhdGUgb2YgZmlsdGVyIGhhcyBub3QgY2hhbmdlZCBvciBmaWx0ZXIgcGFuZWwgaXMgbm90IGFjdGl2ZVxuICAgICAgICAgICAgaWYgKCFzdGF0ZUNoYW5nZWQgfHwgIXRoaXMuX2ZpbHRlclBhbmVsQWN0aXZlKSByZXR1cm47XG5cbiAgICAgICAgICAgIHRoaXMuX3Nob3dSZXNldEFsbCA9IHRydWU7XG4gICAgICAgICAgICB0aGlzLl9idWlsZExhYmVscygpO1xuICAgICAgICB9XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIGZpbHRlckl0ZW1cbiAgICAgKiBAcHVibGljXG4gICAgICovXG4gICAgZGVyZWdpc3RlckZpbHRlcihmaWx0ZXJJdGVtKSB7XG4gICAgICAgIHRoaXMuX3JlZ2lzdHJ5ID0gdGhpcy5fcmVnaXN0cnkuZmlsdGVyKChpdGVtKSA9PiB7XG4gICAgICAgICAgICByZXR1cm4gKGl0ZW0gIT09IGZpbHRlckl0ZW0pO1xuICAgICAgICB9KTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIF9mZXRjaFZhbHVlc09mUmVnaXN0ZXJlZEZpbHRlcnMoKSB7XG4gICAgICAgIGNvbnN0IGZpbHRlcnMgPSB7fTtcblxuICAgICAgICB0aGlzLl9yZWdpc3RyeS5mb3JFYWNoKChmaWx0ZXJQbHVnaW4pID0+IHtcbiAgICAgICAgICAgIGNvbnN0IHZhbHVlcyA9IGZpbHRlclBsdWdpbi5nZXRWYWx1ZXMoKTtcblxuICAgICAgICAgICAgT2JqZWN0LmtleXModmFsdWVzKS5mb3JFYWNoKChrZXkpID0+IHtcbiAgICAgICAgICAgICAgICBpZiAoT2JqZWN0LnByb3RvdHlwZS5oYXNPd25Qcm9wZXJ0eS5jYWxsKGZpbHRlcnMsIGtleSkpIHtcbiAgICAgICAgICAgICAgICAgICAgT2JqZWN0LnZhbHVlcyh2YWx1ZXNba2V5XSkuZm9yRWFjaCgodmFsdWUpID0+IHtcbiAgICAgICAgICAgICAgICAgICAgICAgIGZpbHRlcnNba2V5XS5wdXNoKHZhbHVlKTtcbiAgICAgICAgICAgICAgICAgICAgfSk7XG4gICAgICAgICAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAgICAgICAgICAgZmlsdGVyc1trZXldID0gdmFsdWVzW2tleV07XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgfSk7XG4gICAgICAgIH0pO1xuXG4gICAgICAgIHJldHVybiBmaWx0ZXJzO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEBwcml2YXRlXG4gICAgICovXG4gICAgX21hcEZpbHRlcnMoZmlsdGVycykge1xuICAgICAgICBjb25zdCBtYXBwZWQgPSB7fTtcbiAgICAgICAgT2JqZWN0LmtleXMoZmlsdGVycykuZm9yRWFjaCgoa2V5KSA9PiB7XG4gICAgICAgICAgICBsZXQgdmFsdWUgPSBmaWx0ZXJzW2tleV07XG5cbiAgICAgICAgICAgIGlmIChBcnJheS5pc0FycmF5KHZhbHVlKSkge1xuICAgICAgICAgICAgICAgIHZhbHVlID0gdmFsdWUuam9pbignfCcpO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICBjb25zdCBzdHJpbmcgPSBgJHt2YWx1ZX1gO1xuICAgICAgICAgICAgaWYgKHN0cmluZy5sZW5ndGgpIHtcbiAgICAgICAgICAgICAgICBtYXBwZWRba2V5XSA9IHZhbHVlO1xuICAgICAgICAgICAgfVxuICAgICAgICB9KTtcblxuICAgICAgICByZXR1cm4gbWFwcGVkO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEBwYXJhbSBwdXNoSGlzdG9yeVxuICAgICAqIEBwYXJhbSBvdmVycmlkZVBhcmFtc1xuICAgICAqIEBwcml2YXRlXG4gICAgICovXG4gICAgX2J1aWxkUmVxdWVzdChwdXNoSGlzdG9yeSA9IHRydWUsIG92ZXJyaWRlUGFyYW1zID0ge30pIHtcbiAgICAgICAgY29uc3QgZmlsdGVycyA9IHRoaXMuX2ZldGNoVmFsdWVzT2ZSZWdpc3RlcmVkRmlsdGVycygpO1xuICAgICAgICBjb25zdCBtYXBwZWQgPSB0aGlzLl9tYXBGaWx0ZXJzKGZpbHRlcnMpO1xuXG4gICAgICAgIGlmICh0aGlzLl9maWx0ZXJQYW5lbEFjdGl2ZSkge1xuICAgICAgICAgICAgdGhpcy5fc2hvd1Jlc2V0QWxsID0gISFPYmplY3Qua2V5cyhtYXBwZWQpLmxlbmd0aDtcbiAgICAgICAgfVxuXG4gICAgICAgIGlmICh0aGlzLm9wdGlvbnMucGFyYW1zKSB7XG4gICAgICAgICAgICBPYmplY3Qua2V5cyh0aGlzLm9wdGlvbnMucGFyYW1zKS5mb3JFYWNoKChrZXkpID0+IHtcbiAgICAgICAgICAgICAgICBtYXBwZWRba2V5XSA9IHRoaXMub3B0aW9ucy5wYXJhbXNba2V5XTtcbiAgICAgICAgICAgIH0pO1xuICAgICAgICB9XG5cbiAgICAgICAgT2JqZWN0LmVudHJpZXMob3ZlcnJpZGVQYXJhbXMpLmZvckVhY2goKFtwYXJhbUtleSwgcGFyYW1WYWx1ZV0pID0+IHtcbiAgICAgICAgICAgIG1hcHBlZFtwYXJhbUtleV0gPSBwYXJhbVZhbHVlO1xuICAgICAgICB9KTtcblxuICAgICAgICBsZXQgcXVlcnkgPSBxdWVyeXN0cmluZy5zdHJpbmdpZnkobWFwcGVkKTtcbiAgICAgICAgdGhpcy5zZW5kRGF0YVJlcXVlc3QocXVlcnkpO1xuXG4gICAgICAgIGRlbGV0ZSBtYXBwZWRbJ3Nsb3RzJ107XG4gICAgICAgIGRlbGV0ZSBtYXBwZWRbJ25vLWFnZ3JlZ2F0aW9ucyddO1xuICAgICAgICBkZWxldGUgbWFwcGVkWydyZWR1Y2UtYWdncmVnYXRpb25zJ107XG4gICAgICAgIGRlbGV0ZSBtYXBwZWRbJ29ubHktYWdncmVnYXRpb25zJ107XG4gICAgICAgIHF1ZXJ5ID0gcXVlcnlzdHJpbmcuc3RyaW5naWZ5KG1hcHBlZCk7XG5cbiAgICAgICAgaWYgKHB1c2hIaXN0b3J5KSB7XG4gICAgICAgICAgICB0aGlzLl91cGRhdGVIaXN0b3J5KHF1ZXJ5KTtcbiAgICAgICAgfVxuXG4gICAgICAgIGlmICh0aGlzLm9wdGlvbnMuc2Nyb2xsVG9wTGlzdGluZ1dyYXBwZXIpIHtcbiAgICAgICAgICAgIHRoaXMuX3Njcm9sbFRvcE9mTGlzdGluZygpO1xuICAgICAgICB9XG4gICAgfVxuXG4gICAgX3Njcm9sbFRvcE9mTGlzdGluZygpIHtcbiAgICAgICAgY29uc3QgZWxlbVJlY3QgPSB0aGlzLl9jbXNQcm9kdWN0TGlzdGluZ1dyYXBwZXIuZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCk7XG4gICAgICAgIGlmIChlbGVtUmVjdC50b3AgPj0gMCkge1xuICAgICAgICAgICAgcmV0dXJuO1xuICAgICAgICB9XG5cbiAgICAgICAgY29uc3QgdG9wID0gZWxlbVJlY3QudG9wICsgd2luZG93LnNjcm9sbFkgLSB0aGlzLm9wdGlvbnMuc2Nyb2xsT2Zmc2V0O1xuICAgICAgICB3aW5kb3cuc2Nyb2xsVG8oe1xuICAgICAgICAgICAgdG9wOiB0b3AsXG4gICAgICAgICAgICBiZWhhdmlvcjogJ3Ntb290aCcsXG4gICAgICAgIH0pO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEBwcml2YXRlXG4gICAgICovXG4gICAgX2dldERpc2FibGVkRmlsdGVyc1BhcmFtc0Zyb21QYXJhbXMocGFyYW1zKSB7XG4gICAgICAgIGNvbnN0IGZpbHRlclBhcmFtcyA9IE9iamVjdC5hc3NpZ24oe30sIHsnb25seS1hZ2dyZWdhdGlvbnMnOiAxLCAncmVkdWNlLWFnZ3JlZ2F0aW9ucyc6IDF9LCBwYXJhbXMpO1xuICAgICAgICBkZWxldGUgZmlsdGVyUGFyYW1zWydwJ107XG4gICAgICAgIGRlbGV0ZSBmaWx0ZXJQYXJhbXNbJ29yZGVyJ107XG4gICAgICAgIGRlbGV0ZSBmaWx0ZXJQYXJhbXNbJ25vLWFnZ3JlZ2F0aW9ucyddO1xuXG4gICAgICAgIHJldHVybiBmaWx0ZXJQYXJhbXM7XG4gICAgfVxuXG4gICAgX3VwZGF0ZUhpc3RvcnkocXVlcnkpIHtcbiAgICAgICAgd2luZG93Lmhpc3RvcnkucHVzaFN0YXRlKHt9LCAnJywgYCR7d2luZG93LmxvY2F0aW9uLnBhdGhuYW1lfT8ke3F1ZXJ5fWApO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEJ1aWxkIGFsbCBsYWJlbHMgZm9yIHRoZSBjdXJyZW50bHkgYWN0aXZlIGZpbHRlcnMuXG4gICAgICovXG4gICAgX2J1aWxkTGFiZWxzKCkge1xuICAgICAgICBsZXQgbGFiZWxIdG1sID0gJyc7XG5cbiAgICAgICAgdGhpcy5fcmVnaXN0cnkuZm9yRWFjaCgoZmlsdGVyUGx1Z2luKSA9PiB7XG4gICAgICAgICAgICBjb25zdCBsYWJlbHMgPSBmaWx0ZXJQbHVnaW4uZ2V0TGFiZWxzKCk7XG5cbiAgICAgICAgICAgIGlmIChsYWJlbHMubGVuZ3RoKSB7XG4gICAgICAgICAgICAgICAgbGFiZWxzLmZvckVhY2goKGxhYmVsKSA9PiB7XG4gICAgICAgICAgICAgICAgICAgIGxhYmVsSHRtbCArPSB0aGlzLmdldExhYmVsVGVtcGxhdGUobGFiZWwpO1xuICAgICAgICAgICAgICAgIH0pO1xuICAgICAgICAgICAgfVxuICAgICAgICB9KTtcblxuICAgICAgICB0aGlzLmFjdGl2ZUZpbHRlckNvbnRhaW5lci5pbm5lckhUTUwgPSBsYWJlbEh0bWw7XG5cbiAgICAgICAgLyoqIEBkZXByZWNhdGVkIHRhZzp2Ni43LjAgLSBUaGUgd2hvbGUgYnV0dG9uIHdpbGwgYmUgY2xpY2stYWJsZSB0byByZW1vdmUgYSBmaWx0ZXIgaW5zdGVhZCBvZiB0aGUgYWRkaXRpb25hbCByZW1vdmUgYnV0dG9uIGBmaWx0ZXItYWN0aXZlLXJlbW92ZWAuICovXG4gICAgICAgIGNvbnN0IHJlc2V0QnV0dG9ucyA9IHdpbmRvdy5GZWF0dXJlLmlzQWN0aXZlKCdBQ0NFU1NJQklMSVRZX1RXRUFLUycpXG4gICAgICAgICAgICA/IERvbUFjY2Vzcy5xdWVyeVNlbGVjdG9yQWxsKHRoaXMuYWN0aXZlRmlsdGVyQ29udGFpbmVyLCB0aGlzLm9wdGlvbnMuYWN0aXZlRmlsdGVyTGFiZWxTZWxlY3RvciwgZmFsc2UpXG4gICAgICAgICAgICA6IERvbUFjY2Vzcy5xdWVyeVNlbGVjdG9yQWxsKHRoaXMuYWN0aXZlRmlsdGVyQ29udGFpbmVyLCBgLiR7dGhpcy5vcHRpb25zLmFjdGl2ZUZpbHRlckxhYmVsUmVtb3ZlQ2xhc3N9YCwgZmFsc2UpO1xuXG4gICAgICAgIGlmIChsYWJlbEh0bWwubGVuZ3RoKSB7XG4gICAgICAgICAgICB0aGlzLl9yZWdpc3RlckxhYmVsRXZlbnRzKHJlc2V0QnV0dG9ucyk7XG4gICAgICAgICAgICB0aGlzLmNyZWF0ZVJlc2V0QWxsQnV0dG9uKCk7XG4gICAgICAgIH1cbiAgICB9XG5cbiAgICBfcmVnaXN0ZXJMYWJlbEV2ZW50cyhyZXNldEJ1dHRvbnMpIHtcbiAgICAgICAgSXRlcmF0b3IuaXRlcmF0ZShyZXNldEJ1dHRvbnMsIChsYWJlbCkgPT4ge1xuICAgICAgICAgICAgbGFiZWwuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCAoKSA9PiB0aGlzLnJlc2V0RmlsdGVyKGxhYmVsKSk7XG4gICAgICAgIH0pO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIENyZWF0ZSB0aGUgYnV0dG9uIHRvIHJlc2V0IGFsbCBhY3RpdmUgZmlsdGVycy5cbiAgICAgKiBSZWdpc3RlciBldmVudCBsaXN0ZW5lciB0byByZW1vdmUgYSBzaW5nbGUgZmlsdGVyLlxuICAgICAqL1xuICAgIGNyZWF0ZVJlc2V0QWxsQnV0dG9uKCkge1xuICAgICAgICB0aGlzLmFjdGl2ZUZpbHRlckNvbnRhaW5lci5pbnNlcnRBZGphY2VudEhUTUwoJ2JlZm9yZWVuZCcsIHRoaXMuZ2V0UmVzZXRBbGxCdXR0b25UZW1wbGF0ZSgpKTtcblxuICAgICAgICBjb25zdCByZXNldEFsbEJ1dHRvbkVsID0gRG9tQWNjZXNzLnF1ZXJ5U2VsZWN0b3IoXG4gICAgICAgICAgICB0aGlzLmFjdGl2ZUZpbHRlckNvbnRhaW5lcixcbiAgICAgICAgICAgIHRoaXMub3B0aW9ucy5yZXNldEFsbEZpbHRlckJ1dHRvblNlbGVjdG9yXG4gICAgICAgICk7XG5cbiAgICAgICAgcmVzZXRBbGxCdXR0b25FbC5yZW1vdmVFdmVudExpc3RlbmVyKCdjbGljaycsIHRoaXMucmVzZXRBbGxGaWx0ZXIuYmluZCh0aGlzKSk7XG4gICAgICAgIHJlc2V0QWxsQnV0dG9uRWwuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCB0aGlzLnJlc2V0QWxsRmlsdGVyLmJpbmQodGhpcykpO1xuXG4gICAgICAgIGlmICghdGhpcy5fc2hvd1Jlc2V0QWxsKSB7XG4gICAgICAgICAgICByZXNldEFsbEJ1dHRvbkVsLnJlbW92ZSgpO1xuICAgICAgICB9XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogUmVtb3ZlIHRoZSBnaXZlbiBmaWx0ZXIgZnJvbSB0aGUgZmlsdGVyIG1hcC5cbiAgICAgKlxuICAgICAqIEBwYXJhbSB7T2JqZWN0fSBsYWJlbFxuICAgICAqL1xuICAgIHJlc2V0RmlsdGVyKGxhYmVsKSB7XG4gICAgICAgIHRoaXMuX3JlZ2lzdHJ5LmZvckVhY2goKGZpbHRlclBsdWdpbikgPT4ge1xuICAgICAgICAgICAgZmlsdGVyUGx1Z2luLnJlc2V0KGxhYmVsLmRhdGFzZXQuaWQpO1xuICAgICAgICB9KTtcblxuICAgICAgICB0aGlzLl9idWlsZFJlcXVlc3QoKTtcbiAgICAgICAgdGhpcy5fYnVpbGRMYWJlbHMoKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBSZXNldCBhbGwgYWN0aXZlIGZpbHRlcnMuXG4gICAgICovXG4gICAgcmVzZXRBbGxGaWx0ZXIoKSB7XG4gICAgICAgIHRoaXMuX3JlZ2lzdHJ5LmZvckVhY2goKGZpbHRlclBsdWdpbikgPT4ge1xuICAgICAgICAgICAgZmlsdGVyUGx1Z2luLnJlc2V0QWxsKCk7XG4gICAgICAgIH0pO1xuXG4gICAgICAgIHRoaXMuX2J1aWxkUmVxdWVzdCgpO1xuICAgICAgICB0aGlzLl9idWlsZExhYmVscygpO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIFRlbXBsYXRlIGZvciBhbiBhY3RpdmUgZmlsdGVyIGxhYmVsLlxuICAgICAqXG4gICAgICogQHBhcmFtIHtPYmplY3R9IGxhYmVsXG4gICAgICogQHJldHVybnMge3N0cmluZ31cbiAgICAgKi9cbiAgICBnZXRMYWJlbFRlbXBsYXRlKGxhYmVsKSB7XG4gICAgICAgIC8qKiBAZGVwcmVjYXRlZCB0YWc6djYuNy4wIC0gVGhlIGBmaWx0ZXItYWN0aXZlYCBsYWJlbCB3aWxsIGJlIGEgQm9vdHN0cmFwIGJ1dHRvbiBpbnN0ZWFkIG9mIGEgc3BhbiBlbGVtZW50ICovXG4gICAgICAgIGlmICh3aW5kb3cuRmVhdHVyZS5pc0FjdGl2ZSgnQUNDRVNTSUJJTElUWV9UV0VBS1MnKSkge1xuICAgICAgICAgICAgcmV0dXJuIGBcbiAgICAgICAgICAgIDxidXR0b25cbiAgICAgICAgICAgICAgICBjbGFzcz1cIiR7dGhpcy5vcHRpb25zLmFjdGl2ZUZpbHRlckxhYmVsQ2xhc3Nlc31cIlxuICAgICAgICAgICAgICAgIGRhdGEtaWQ9XCIke2xhYmVsLmlkfVwiXG4gICAgICAgICAgICAgICAgdGl0bGU9XCIke3RoaXMub3B0aW9ucy5zbmlwcGV0cy5yZW1vdmVGaWx0ZXJBcmlhTGFiZWx9OiAke2xhYmVsLmxhYmVsfVwiXG4gICAgICAgICAgICAgICAgYXJpYS1sYWJlbD1cIiR7dGhpcy5vcHRpb25zLnNuaXBwZXRzLnJlbW92ZUZpbHRlckFyaWFMYWJlbH06ICR7bGFiZWwubGFiZWx9XCI+XG4gICAgICAgICAgICAgICAgJHt0aGlzLmdldExhYmVsUHJldmlld1RlbXBsYXRlKGxhYmVsKX1cbiAgICAgICAgICAgICAgICAke2xhYmVsLmxhYmVsfVxuICAgICAgICAgICAgICAgIDxzcGFuIGFyaWEtaGlkZGVuPVwidHJ1ZVwiIGNsYXNzPVwibXMtMSBmcy00XCI+JnRpbWVzOzwvc3Bhbj5cbiAgICAgICAgICAgIDwvYnV0dG9uPlxuICAgICAgICAgICAgYDtcbiAgICAgICAgfVxuXG4gICAgICAgIHJldHVybiBgXG4gICAgICAgIDxzcGFuIGNsYXNzPVwiJHt0aGlzLm9wdGlvbnMuYWN0aXZlRmlsdGVyTGFiZWxDbGFzc31cIj5cbiAgICAgICAgICAgICR7dGhpcy5nZXRMYWJlbFByZXZpZXdUZW1wbGF0ZShsYWJlbCl9XG4gICAgICAgICAgICA8c3BhbiBhcmlhLWhpZGRlbj1cInRydWVcIj4ke2xhYmVsLmxhYmVsfTwvc3Bhbj5cbiAgICAgICAgICAgIDxidXR0b24gY2xhc3M9XCIke3RoaXMub3B0aW9ucy5hY3RpdmVGaWx0ZXJMYWJlbFJlbW92ZUNsYXNzfVwiXG4gICAgICAgICAgICAgICAgICAgIGRhdGEtaWQ9XCIke2xhYmVsLmlkfVwiXG4gICAgICAgICAgICAgICAgICAgIHRpdGxlPVwiJHt0aGlzLm9wdGlvbnMuc25pcHBldHMucmVtb3ZlRmlsdGVyQXJpYUxhYmVsfTogJHtsYWJlbC5sYWJlbH1cIlxuICAgICAgICAgICAgICAgICAgICBhcmlhLWxhYmVsPVwiJHt0aGlzLm9wdGlvbnMuc25pcHBldHMucmVtb3ZlRmlsdGVyQXJpYUxhYmVsfTogJHtsYWJlbC5sYWJlbH1cIj5cbiAgICAgICAgICAgICAgICAmdGltZXM7XG4gICAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgPC9zcGFuPlxuICAgICAgICBgO1xuICAgIH1cblxuICAgIGdldExhYmVsUHJldmlld1RlbXBsYXRlKGxhYmVsKSB7XG4gICAgICAgIGNvbnN0IHByZXZpZXdDbGFzcyA9IHRoaXMub3B0aW9ucy5hY3RpdmVGaWx0ZXJMYWJlbFByZXZpZXdDbGFzcztcblxuICAgICAgICBpZiAobGFiZWwucHJldmlld0hleCkge1xuICAgICAgICAgICAgcmV0dXJuIGBcbiAgICAgICAgICAgICAgICA8c3BhbiBjbGFzcz1cIiR7cHJldmlld0NsYXNzfVwiIHN0eWxlPVwiYmFja2dyb3VuZC1jb2xvcjogJHtsYWJlbC5wcmV2aWV3SGV4fTtcIj48L3NwYW4+XG4gICAgICAgICAgICBgO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKGxhYmVsLnByZXZpZXdJbWFnZVVybCkge1xuICAgICAgICAgICAgcmV0dXJuIGBcbiAgICAgICAgICAgICAgICA8c3BhbiBjbGFzcz1cIiR7cHJldmlld0NsYXNzfVwiIHN0eWxlPVwiYmFja2dyb3VuZC1pbWFnZTogdXJsKCcke2xhYmVsLnByZXZpZXdJbWFnZVVybH0nKTtcIj48L3NwYW4+XG4gICAgICAgICAgICBgO1xuICAgICAgICB9XG5cbiAgICAgICAgcmV0dXJuICcnO1xuICAgIH1cblxuICAgIGdldFJlc2V0QWxsQnV0dG9uVGVtcGxhdGUoKSB7XG4gICAgICAgIHJldHVybiBgXG4gICAgICAgIDxidXR0b24gY2xhc3M9XCIke3RoaXMub3B0aW9ucy5yZXNldEFsbEZpbHRlckJ1dHRvbkNsYXNzZXN9XCIgYXJpYS1sYWJlbD1cIiR7dGhpcy5vcHRpb25zLnNuaXBwZXRzLnJlc2V0QWxsRmlsdGVyc0FyaWFMYWJlbH1cIj5cbiAgICAgICAgICAgICR7dGhpcy5vcHRpb25zLnNuaXBwZXRzLnJlc2V0QWxsQnV0dG9uVGV4dH1cbiAgICAgICAgPC9idXR0b24+XG4gICAgICAgIGA7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQWRkIGNsYXNzZXMgdG8gYWRkIGxvYWRpbmcgc3R5bGluZy5cbiAgICAgKiBQcmV2ZW50cyB0aGUgdXNlciBmcm9tIGNsaWNraW5nIGZpbHRlciBsYWJlbHMgZHVyaW5nIGZpbHRlciByZXF1ZXN0LlxuICAgICAqL1xuICAgIGFkZExvYWRpbmdJbmRpY2F0b3JDbGFzcygpIHtcbiAgICAgICAgdGhpcy5fZmlsdGVyUGFuZWwuY2xhc3NMaXN0LmFkZCh0aGlzLm9wdGlvbnMubG9hZGluZ0luZGljYXRvckNsYXNzKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBSZW1vdmUgbG9hZGluZyBzdHlsaW5nIGNsYXNzZXMuXG4gICAgICovXG4gICAgcmVtb3ZlTG9hZGluZ0luZGljYXRvckNsYXNzKCkge1xuICAgICAgICB0aGlzLl9maWx0ZXJQYW5lbC5jbGFzc0xpc3QucmVtb3ZlKHRoaXMub3B0aW9ucy5sb2FkaW5nSW5kaWNhdG9yQ2xhc3MpO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEFkZCBjbGFzc2VzIHRvIGFkZCBsb2FkaW5nIHN0eWxpbmcgZm9yIHByb2R1Y3QgbGlzdGluZ1xuICAgICAqL1xuICAgIGFkZExvYWRpbmdFbGVtZW50TG9hZGVyQ2xhc3MoKSB7XG4gICAgICAgIHRoaXMuX2Ntc1Byb2R1Y3RMaXN0aW5nV3JhcHBlci5jbGFzc0xpc3QuYWRkKHRoaXMub3B0aW9ucy5sb2FkaW5nRWxlbWVudExvYWRlckNsYXNzKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBSZW1vdmUgbG9hZGluZyBzdHlsaW5nIGNsYXNzZXMgZm9yIHByb2R1Y3QgbGlzdGluZ1xuICAgICAqL1xuICAgIHJlbW92ZUxvYWRpbmdFbGVtZW50TG9hZGVyQ2xhc3MoKSB7XG4gICAgICAgIHRoaXMuX2Ntc1Byb2R1Y3RMaXN0aW5nV3JhcHBlci5jbGFzc0xpc3QucmVtb3ZlKHRoaXMub3B0aW9ucy5sb2FkaW5nRWxlbWVudExvYWRlckNsYXNzKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBTZW5kIHJlcXVlc3QgdG8gZ2V0IGZpbHRlcmVkIHByb2R1Y3QgZGF0YS5cbiAgICAgKlxuICAgICAqIEBwYXJhbSB7U3RyaW5nfSBmaWx0ZXJQYXJhbXMgLSBhY3RpdmUgZmlsdGVycyBhcyBxdWVyeXN0cmluZ1xuICAgICAqL1xuICAgIHNlbmREYXRhUmVxdWVzdChmaWx0ZXJQYXJhbXMpIHtcbiAgICAgICAgaWYgKHRoaXMuX2ZpbHRlclBhbmVsQWN0aXZlKSB7XG4gICAgICAgICAgICB0aGlzLmFkZExvYWRpbmdJbmRpY2F0b3JDbGFzcygpO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKHRoaXMuX2Ntc1Byb2R1Y3RMaXN0aW5nV3JhcHBlckFjdGl2ZSkge1xuICAgICAgICAgICAgdGhpcy5hZGRMb2FkaW5nRWxlbWVudExvYWRlckNsYXNzKCk7XG4gICAgICAgIH1cblxuICAgICAgICBpZiAodGhpcy5vcHRpb25zLmRpc2FibGVFbXB0eUZpbHRlcikge1xuICAgICAgICAgICAgdGhpcy5zZW5kRGlzYWJsZWRGaWx0ZXJzUmVxdWVzdCgpO1xuICAgICAgICB9XG5cbiAgICAgICAgdGhpcy5odHRwQ2xpZW50LmdldChgJHt0aGlzLm9wdGlvbnMuZGF0YVVybH0/JHtmaWx0ZXJQYXJhbXN9YCwgKHJlc3BvbnNlKSA9PiB7XG4gICAgICAgICAgICB0aGlzLnJlbmRlclJlc3BvbnNlKHJlc3BvbnNlKTtcblxuICAgICAgICAgICAgaWYgKHRoaXMuX2ZpbHRlclBhbmVsQWN0aXZlKSB7XG4gICAgICAgICAgICAgICAgdGhpcy5yZW1vdmVMb2FkaW5nSW5kaWNhdG9yQ2xhc3MoKTtcbiAgICAgICAgICAgICAgICB0aGlzLl91cGRhdGVBcmlhTGl2ZSgpO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICBpZiAodGhpcy5fY21zUHJvZHVjdExpc3RpbmdXcmFwcGVyQWN0aXZlKSB7XG4gICAgICAgICAgICAgICAgdGhpcy5yZW1vdmVMb2FkaW5nRWxlbWVudExvYWRlckNsYXNzKCk7XG4gICAgICAgICAgICB9XG4gICAgICAgIH0pO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIFNlbmQgcmVxdWVzdCB0byBnZXQgZGlzYWJsZWQgZmlsdGVycyBkYXRhXG4gICAgICovXG4gICAgc2VuZERpc2FibGVkRmlsdGVyc1JlcXVlc3QoKSB7XG4gICAgICAgIGNvbnN0IGZpbHRlcnMgPSB0aGlzLl9mZXRjaFZhbHVlc09mUmVnaXN0ZXJlZEZpbHRlcnMoKTtcbiAgICAgICAgY29uc3QgbWFwcGVkID0gdGhpcy5fbWFwRmlsdGVycyhmaWx0ZXJzKTtcbiAgICAgICAgaWYgKHRoaXMub3B0aW9ucy5wYXJhbXMpIHtcbiAgICAgICAgICAgIE9iamVjdC5rZXlzKHRoaXMub3B0aW9ucy5wYXJhbXMpLmZvckVhY2goKGtleSkgPT4ge1xuICAgICAgICAgICAgICAgIG1hcHBlZFtrZXldID0gdGhpcy5vcHRpb25zLnBhcmFtc1trZXldO1xuICAgICAgICAgICAgfSk7XG4gICAgICAgIH1cblxuICAgICAgICAvLyB1bnNldCB0aGUgZGVib3VuY2UgZnVuY3Rpb24gYWZ0ZXIgZmlyc3QgZXhlY3V0aW9uXG4gICAgICAgIHRoaXMuX2FsbEZpbHRlcnNJbml0aWFsaXplZERlYm91bmNlID0gKCkgPT4ge307XG5cbiAgICAgICAgY29uc3QgZmlsdGVyUGFyYW1zID0gdGhpcy5fZ2V0RGlzYWJsZWRGaWx0ZXJzUGFyYW1zRnJvbVBhcmFtcyhtYXBwZWQpO1xuXG4gICAgICAgIHRoaXMuaHR0cENsaWVudC5nZXQoYCR7dGhpcy5vcHRpb25zLmZpbHRlclVybH0/JHtxdWVyeXN0cmluZy5zdHJpbmdpZnkoZmlsdGVyUGFyYW1zKX1gLCAocmVzcG9uc2UpID0+IHtcbiAgICAgICAgICAgIGNvbnN0IGZpbHRlciA9ICBKU09OLnBhcnNlKHJlc3BvbnNlKTtcblxuICAgICAgICAgICAgdGhpcy5fcmVnaXN0cnkuZm9yRWFjaCgoaXRlbSkgPT4ge1xuICAgICAgICAgICAgICAgIGlmICh0eXBlb2YgaXRlbS5yZWZyZXNoRGlzYWJsZWRTdGF0ZSA9PT0gJ2Z1bmN0aW9uJykge1xuICAgICAgICAgICAgICAgICAgICBpdGVtLnJlZnJlc2hEaXNhYmxlZFN0YXRlKGZpbHRlciwgZmlsdGVyUGFyYW1zKTtcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICB9KTtcbiAgICAgICAgfSk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogSW5qZWN0IHRoZSBIVE1MIG9mIHRoZSBmaWx0ZXJlZCBwcm9kdWN0cyB0byB0aGUgcGFnZS5cbiAgICAgKlxuICAgICAqIEBwYXJhbSB7U3RyaW5nfSByZXNwb25zZSAtIEhUTUwgb2YgZmlsdGVyZWQgcHJvZHVjdCBkYXRhLlxuICAgICAqL1xuICAgIHJlbmRlclJlc3BvbnNlKHJlc3BvbnNlKSB7XG4gICAgICAgIEVsZW1lbnRSZXBsYWNlSGVscGVyLnJlcGxhY2VGcm9tTWFya3VwKHJlc3BvbnNlLCB0aGlzLm9wdGlvbnMuY21zUHJvZHVjdExpc3RpbmdTZWxlY3RvciwgZmFsc2UpO1xuXG4gICAgICAgIHRoaXMuX3JlZ2lzdHJ5LmZvckVhY2goKGl0ZW0pID0+IHtcbiAgICAgICAgICAgIGlmICh0eXBlb2YgaXRlbS5hZnRlckNvbnRlbnRDaGFuZ2UgPT09ICdmdW5jdGlvbicpIHtcbiAgICAgICAgICAgICAgICBpdGVtLmFmdGVyQ29udGVudENoYW5nZSgpO1xuICAgICAgICAgICAgfVxuICAgICAgICB9KTtcblxuICAgICAgICB3aW5kb3cuUGx1Z2luTWFuYWdlci5pbml0aWFsaXplUGx1Z2lucygpO1xuXG4gICAgICAgIHRoaXMuJGVtaXR0ZXIucHVibGlzaCgnTGlzdGluZy9hZnRlclJlbmRlclJlc3BvbnNlJywgeyByZXNwb25zZSB9KTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBVcGRhdGUgdGhlIGFyaWEtbGl2ZSByZWdpb24gd2l0aCB0aGUgY3VycmVudCBsaXN0aW5nIHJlc3VsdHMuXG4gICAgICpcbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIF91cGRhdGVBcmlhTGl2ZSgpIHtcbiAgICAgICAgaWYgKCF0aGlzLm9wdGlvbnMuYXJpYUxpdmVVcGRhdGVzKSB7XG4gICAgICAgICAgICByZXR1cm47XG4gICAgICAgIH1cblxuICAgICAgICBpZiAoIXRoaXMuYXJpYUxpdmVDb250YWluZXIpIHtcbiAgICAgICAgICAgIHJldHVybjtcbiAgICAgICAgfVxuXG4gICAgICAgIGNvbnN0IGxpc3RpbmdSZXN1bHRzRWwgPSB0aGlzLmVsLnF1ZXJ5U2VsZWN0b3IodGhpcy5vcHRpb25zLmNtc1Byb2R1Y3RMaXN0aW5nUmVzdWx0c1NlbGVjdG9yKTtcbiAgICAgICAgdGhpcy5hcmlhTGl2ZUNvbnRhaW5lci5pbm5lckhUTUwgPSBsaXN0aW5nUmVzdWx0c0VsLmRhdGFzZXQuYXJpYUxpdmVUZXh0O1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEBwcml2YXRlXG4gICAgICovXG4gICAgX3JlZ2lzdGVyRXZlbnRzKCkge1xuICAgICAgICB3aW5kb3cub25wb3BzdGF0ZSA9IHRoaXMuX29uV2luZG93UG9wc3RhdGUuYmluZCh0aGlzKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIF9vbldpbmRvd1BvcHN0YXRlKCkge1xuICAgICAgICB0aGlzLnJlZnJlc2hSZWdpc3RyeSgpO1xuXG4gICAgICAgIHRoaXMuX3JlZ2lzdHJ5LmZvckVhY2goZmlsdGVySXRlbSA9PiB7XG4gICAgICAgICAgICBpZiAoT2JqZWN0LmtleXModGhpcy5fdXJsRmlsdGVyUGFyYW1zKS5sZW5ndGggPT09IDApIHtcbiAgICAgICAgICAgICAgICB0aGlzLl91cmxGaWx0ZXJQYXJhbXMucCA9IDE7XG4gICAgICAgICAgICB9XG4gICAgICAgICAgICB0aGlzLl9zZXRGaWx0ZXJTdGF0ZShmaWx0ZXJJdGVtKTtcbiAgICAgICAgfSk7XG5cbiAgICAgICAgaWYgKHRoaXMub3B0aW9ucy5kaXNhYmxlRW1wdHlGaWx0ZXIpIHtcbiAgICAgICAgICAgIHRoaXMuX2FsbEZpbHRlcnNJbml0aWFsaXplZERlYm91bmNlKCk7XG4gICAgICAgIH1cblxuICAgICAgICB0aGlzLmNoYW5nZUxpc3RpbmcoZmFsc2UpO1xuICAgIH1cbn1cbiIsImltcG9ydCBMaXN0aW5nUGx1Z2luIGZyb20gXCJzcmMvcGx1Z2luL2xpc3RpbmcvbGlzdGluZy5wbHVnaW5cIjtcblxuZXhwb3J0IGRlZmF1bHQgY2xhc3MgTWFrYWlyYUxpc3RpbmcgZXh0ZW5kcyBMaXN0aW5nUGx1Z2luIHtcbiAgaW5pdCgpIHtcbiAgICBzdXBlci5pbml0KCk7XG4gIH1cblxuICBfYnVpbGRSZXF1ZXN0KHB1c2hIaXN0b3J5ID0gdHJ1ZSwgb3ZlcnJpZGVQYXJhbXMgPSB7fSkge1xuICAgIGNvbnN0IGZpbHRlcnMgPSB0aGlzLl9mZXRjaFZhbHVlc09mUmVnaXN0ZXJlZEZpbHRlcnMoKTtcbiAgICBjb25zdCBtYXBwZWQgPSB0aGlzLl9tYXBGaWx0ZXJzKGZpbHRlcnMpO1xuXG4gICAgY29uc3Qgc29ydGluZ0VsZW1lbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFxuICAgICAgJ1tkYXRhLWxpc3Rpbmctc29ydGluZz1cInRydWVcIl0nXG4gICAgKTtcbiAgICBpZiAoc29ydGluZ0VsZW1lbnQpIHtcbiAgICAgIGNvbnN0IHNlbGVjdEVsZW1lbnQgPSBzb3J0aW5nRWxlbWVudC5xdWVyeVNlbGVjdG9yKFwic2VsZWN0XCIpO1xuICAgICAgaWYgKHNlbGVjdEVsZW1lbnQgJiYgc2VsZWN0RWxlbWVudC52YWx1ZSkge1xuICAgICAgICAvLyBEZXRlcm1pbmUgdGhlIHBhcmFtZXRlciBuYW1lIGZyb20gdGhlIHNlbGVjdCBlbGVtZW50XG4gICAgICAgIGNvbnN0IHBhcmFtTmFtZSA9IHNlbGVjdEVsZW1lbnQubmFtZSB8fCBcIm9yZGVyXCI7XG4gICAgICAgIG1hcHBlZFtwYXJhbU5hbWVdID0gc2VsZWN0RWxlbWVudC52YWx1ZTtcbiAgICAgIH1cbiAgICB9XG5cbiAgICBpZiAodGhpcy5fZmlsdGVyUGFuZWxBY3RpdmUpIHtcbiAgICAgIHRoaXMuX3Nob3dSZXNldEFsbCA9ICEhT2JqZWN0LmtleXMobWFwcGVkKS5sZW5ndGg7XG4gICAgfVxuXG4gICAgaWYgKHRoaXMub3B0aW9ucy5wYXJhbXMpIHtcbiAgICAgIE9iamVjdC5rZXlzKHRoaXMub3B0aW9ucy5wYXJhbXMpLmZvckVhY2goKGtleSkgPT4ge1xuICAgICAgICBtYXBwZWRba2V5XSA9IHRoaXMub3B0aW9ucy5wYXJhbXNba2V5XTtcbiAgICAgIH0pO1xuICAgIH1cblxuICAgIE9iamVjdC5lbnRyaWVzKG92ZXJyaWRlUGFyYW1zKS5mb3JFYWNoKChbcGFyYW1LZXksIHBhcmFtVmFsdWVdKSA9PiB7XG4gICAgICBtYXBwZWRbcGFyYW1LZXldID0gcGFyYW1WYWx1ZTtcbiAgICB9KTtcblxuICAgIC8vdGhpcy5fcmVnaXN0cnkgPSBbXTtcblxuICAgIGxldCBxdWVyeSA9IG5ldyBVUkxTZWFyY2hQYXJhbXMobWFwcGVkKS50b1N0cmluZygpO1xuICAgIHRoaXMuc2VuZERhdGFSZXF1ZXN0KHF1ZXJ5KTtcblxuICAgIGRlbGV0ZSBtYXBwZWRbXCJzbG90c1wiXTtcbiAgICBkZWxldGUgbWFwcGVkW1wibm8tYWdncmVnYXRpb25zXCJdO1xuICAgIGRlbGV0ZSBtYXBwZWRbXCJyZWR1Y2UtYWdncmVnYXRpb25zXCJdO1xuICAgIGRlbGV0ZSBtYXBwZWRbXCJvbmx5LWFnZ3JlZ2F0aW9uc1wiXTtcbiAgICBxdWVyeSA9IG5ldyBVUkxTZWFyY2hQYXJhbXMobWFwcGVkKS50b1N0cmluZygpO1xuXG4gICAgaWYgKHB1c2hIaXN0b3J5KSB7XG4gICAgICB0aGlzLl91cGRhdGVIaXN0b3J5KHF1ZXJ5KTtcbiAgICB9XG5cbiAgICBpZiAodGhpcy5vcHRpb25zLnNjcm9sbFRvcExpc3RpbmdXcmFwcGVyKSB7XG4gICAgICB0aGlzLl9zY3JvbGxUb3BPZkxpc3RpbmcoKTtcbiAgICB9XG4gIH1cblxuICBfYnVpbGRMYWJlbHMoKSB7XG4gICAgLy9leHRyYWN0IHRoZSBsYWJlbHMgZnJvbSB0aGlzLl9jbXNQcm9kdWN0TGlzdGluZ1dyYXBwZXIuYmFzZVVSSSB0aGF0IGxvb2tzIGxpa2UgXCJodHRwOi8vbG9jYWxob3N0L0Nsb3RoaW5nLz9maWx0ZXJfc2l6ZT1NJnA9MVwiXG4gICAgY29uc3QgYmFzZVVSSSA9IHRoaXMuX2Ntc1Byb2R1Y3RMaXN0aW5nV3JhcHBlci5iYXNlVVJJO1xuICAgIGNvbnN0IHVybCA9IG5ldyBVUkwoYmFzZVVSSSk7XG4gICAgY29uc3QgcGFyYW1zID0gdXJsLnNlYXJjaFBhcmFtcztcbiAgICBjb25zdCBsYWJlbHMgPSBbXTtcbiAgICAvL3VzZSBvbmx5IGtleXMgdGhhdCBzdGFydCB3aXRoIGZpbHRlcl9cbiAgICBwYXJhbXMuZm9yRWFjaCgodmFsdWUsIGtleSkgPT4ge1xuICAgICAgLy9tdXRsaXBsZSB2YWx1ZXMgYXJlIHNlcGFyYXRlZCBieSAmXG4gICAgICBjb25zdCB2YWx1ZXMgPSB2YWx1ZS5zcGxpdChcInxcIik7XG4gICAgICB2YWx1ZXMuZm9yRWFjaCgodmFsdWUpID0+IHtcbiAgICAgICAgaWYgKGtleS5zdGFydHNXaXRoKFwiZmlsdGVyX1wiKSkge1xuICAgICAgICAgIGxhYmVscy5wdXNoKHtcbiAgICAgICAgICAgIGlkOiB2YWx1ZSxcbiAgICAgICAgICAgIGxhYmVsOiB2YWx1ZSxcbiAgICAgICAgICB9KTtcbiAgICAgICAgfVxuICAgICAgfSk7XG4gICAgfSk7XG5cbiAgICAvL2FkZCB0aGUgbGFiZWxzIGZvciB0aG9zZSB1cmwgcGFyYW1zIG1pbi1wcmljZT00MCZtYXgtcHJpY2U9MTAwXG4gICAgY29uc3QgbWluUHJpY2UgPSBwYXJhbXMuZ2V0KFwibWluLXByaWNlXCIpO1xuICAgIGNvbnN0IG1heFByaWNlID0gcGFyYW1zLmdldChcIm1heC1wcmljZVwiKTtcblxuICAgIGlmIChtaW5QcmljZSkge1xuICAgICAgbGFiZWxzLnB1c2goe1xuICAgICAgICBpZDogXCJtaW4tcHJpY2VcIixcbiAgICAgICAgbGFiZWw6IFwiUHJlaXMgYWIgXCIgKyBtaW5QcmljZSxcbiAgICAgIH0pO1xuICAgIH1cbiAgICBpZiAobWF4UHJpY2UpIHtcbiAgICAgIGxhYmVscy5wdXNoKHtcbiAgICAgICAgaWQ6IFwibWF4LXByaWNlXCIsXG4gICAgICAgIGxhYmVsOiBcIlByZWlzIGJpcyBcIiArIG1heFByaWNlLFxuICAgICAgfSk7XG4gICAgfVxuXG4gICAgbGV0IGxhYmVsSHRtbCA9IFwiXCI7XG4gICAgbGFiZWxzLmZvckVhY2goKGxhYmVsKSA9PiB7XG4gICAgICBpZiAoIWxhYmVsSHRtbC5pbmNsdWRlcyhsYWJlbCkpIHtcbiAgICAgICAgbGFiZWxIdG1sICs9IHRoaXMuZ2V0TGFiZWxUZW1wbGF0ZShsYWJlbCk7XG4gICAgICB9XG4gICAgfSk7XG5cbiAgICAvKmxldCBsYWJlbEh0bWwgPSAnJztcblxuXG5cbiAgICAgICAgdGhpcy5fcmVnaXN0cnkuZm9yRWFjaCgoZmlsdGVyUGx1Z2luKSA9PiB7XG4gICAgICAgICAgICBjb25zdCBsYWJlbHMgPSBmaWx0ZXJQbHVnaW4uZ2V0TGFiZWxzKCk7XG5cbiAgICAgICAgICAgIGlmIChsYWJlbHMubGVuZ3RoKSB7XG4gICAgICAgICAgICAgICAgbGFiZWxzLmZvckVhY2goKGxhYmVsKSA9PiB7XG4gICAgICAgICAgICAgICAgICAgIGxhYmVsSHRtbCArPSB0aGlzLmdldExhYmVsVGVtcGxhdGUobGFiZWwpO1xuICAgICAgICAgICAgICAgIH0pO1xuICAgICAgICAgICAgfVxuICAgICAgICB9KTsqL1xuXG4gICAgdGhpcy5hY3RpdmVGaWx0ZXJDb250YWluZXIuaW5uZXJIVE1MID0gbGFiZWxIdG1sO1xuXG4gICAgbGV0IGZpbHRlckFjdGl2ZVNlbGVjdG9yID0gd2luZG93LkZlYXR1cmUuaXNBY3RpdmUoXCJBQ0NFU1NJQklMSVRZX1RXRUFLU1wiKVxuICAgICAgPyBcIi5maWx0ZXItYWN0aXZlXCJcbiAgICAgIDogXCIuZmlsdGVyLWFjdGl2ZS1yZW1vdmVcIjtcbiAgICBjb25zdCByZXNldEJ1dHRvbnMgPVxuICAgICAgdGhpcy5hY3RpdmVGaWx0ZXJDb250YWluZXIucXVlcnlTZWxlY3RvckFsbChmaWx0ZXJBY3RpdmVTZWxlY3Rvcik7XG5cbiAgICBpZiAobGFiZWxIdG1sLmxlbmd0aCkge1xuICAgICAgdGhpcy5fcmVnaXN0ZXJMYWJlbEV2ZW50cyhyZXNldEJ1dHRvbnMpO1xuICAgICAgdGhpcy5jcmVhdGVSZXNldEFsbEJ1dHRvbigpO1xuICAgIH1cbiAgfVxuXG4gIHJlZ2lzdGVyRmlsdGVyKGZpbHRlckl0ZW0pIHtcbiAgICAvLyBjaGVjayBpZiB0aGUgaXRlbSBpcyBhbHJlYWR5IGluIHRoZSBfcmVnaXN0cnkgYW5kIHNraXAgaWYgc29cbiAgICBpZiAoXG4gICAgICB0aGlzLl9yZWdpc3RyeS5zb21lKFxuICAgICAgICAoaXRlbSkgPT4gaXRlbS5vcHRpb25zLm5hbWUgPT09IGZpbHRlckl0ZW0ub3B0aW9ucy5uYW1lXG4gICAgICApXG4gICAgKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuXG4gICAgdGhpcy5fcmVnaXN0cnkucHVzaChmaWx0ZXJJdGVtKTtcbiAgICB0aGlzLl9zZXRGaWx0ZXJTdGF0ZShmaWx0ZXJJdGVtKTtcblxuICAgIGlmICh0aGlzLm9wdGlvbnMuZGlzYWJsZUVtcHR5RmlsdGVyKSB7XG4gICAgICB0aGlzLl9hbGxGaWx0ZXJzSW5pdGlhbGl6ZWREZWJvdW5jZSgpO1xuICAgIH1cbiAgfVxufVxuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///773\n"
-      );
+    773: (e, t, r) => {
+      r.r(t), r.d(t, { default: () => I });
+      var s = {};
+      r.r(s),
+        r.d(s, {
+          exclude: () => j,
+          extract: () => E,
+          parse: () => w,
+          parseUrl: () => R,
+          pick: () => P,
+          stringify: () => S,
+          stringifyUrl: () => C,
+        });
+      var i = r(194);
+      class n {
+        constructor() {
+          (this._request = null), (this._errorHandlingInternal = !1);
+        }
+        get(e, t, r = "application/json") {
+          const s = this._createPreparedRequest("GET", e, r);
+          return this._sendRequest(s, null, t);
+        }
+        post(e, t, r, s = "application/json") {
+          s = this._getContentType(t, s);
+          const i = this._createPreparedRequest("POST", e, s);
+          return this._sendRequest(i, t, r);
+        }
+        delete(e, t, r, s = "application/json") {
+          s = this._getContentType(t, s);
+          const i = this._createPreparedRequest("DELETE", e, s);
+          return this._sendRequest(i, t, r);
+        }
+        patch(e, t, r, s = "application/json") {
+          s = this._getContentType(t, s);
+          const i = this._createPreparedRequest("PATCH", e, s);
+          return this._sendRequest(i, t, r);
+        }
+        abort() {
+          if (this._request) return this._request.abort();
+        }
+        setErrorHandlingInternal(e) {
+          this._errorHandlingInternal = e;
+        }
+        _registerOnLoaded(e, t) {
+          t &&
+            (!0 === this._errorHandlingInternal
+              ? (e.addEventListener("load", () => {
+                  t(e.responseText, e);
+                }),
+                e.addEventListener("abort", () => {
+                  console.warn(`the request to ${e.responseURL} was aborted`);
+                }),
+                e.addEventListener("error", () => {
+                  console.warn(
+                    `the request to ${e.responseURL} failed with status ${e.status}`
+                  );
+                }),
+                e.addEventListener("timeout", () => {
+                  console.warn(`the request to ${e.responseURL} timed out`);
+                }))
+              : e.addEventListener("loadend", () => {
+                  t(e.responseText, e);
+                }));
+        }
+        _sendRequest(e, t, r) {
+          return this._registerOnLoaded(e, r), e.send(t), e;
+        }
+        _getContentType(e, t) {
+          return e instanceof FormData && (t = !1), t;
+        }
+        _createPreparedRequest(e, t, r) {
+          return (
+            (this._request = new XMLHttpRequest()),
+            this._request.open(e, t),
+            this._request.setRequestHeader(
+              "X-Requested-With",
+              "XMLHttpRequest"
+            ),
+            r && this._request.setRequestHeader("Content-type", r),
+            this._request
+          );
+        }
+      }
+      class a {
+        static iterate(e, t) {
+          if (e instanceof Map) return e.forEach(t);
+          if (Array.isArray(e)) return e.forEach(t);
+          if (!(e instanceof FormData)) {
+            if (e instanceof NodeList) return e.forEach(t);
+            if (e instanceof HTMLCollection) return Array.from(e).forEach(t);
+            if (e instanceof Object)
+              return Object.keys(e).forEach((r) => {
+                t(e[r], r);
+              });
+            throw new Error(`The element type ${typeof e} is not iterable!`);
+          }
+          for (var r of e.entries()) t(r[1], r[0]);
+        }
+      }
+      var o = r(139);
+      const l = "%[a-f0-9]{2}",
+        c = new RegExp("(" + l + ")|([^%]+?)", "gi"),
+        p = new RegExp("(" + l + ")+", "gi");
+      function u(e, t) {
+        try {
+          return [decodeURIComponent(e.join(""))];
+        } catch {}
+        if (1 === e.length) return e;
+        t = t || 1;
+        const r = e.slice(0, t),
+          s = e.slice(t);
+        return Array.prototype.concat.call([], u(r), u(s));
+      }
+      function d(e) {
+        try {
+          return decodeURIComponent(e);
+        } catch {
+          let t = e.match(c) || [];
+          for (let r = 1; r < t.length; r++)
+            t = (e = u(t, r).join("")).match(c) || [];
+          return e;
+        }
+      }
+      function h(e, t) {
+        const r = {};
+        if (Array.isArray(t))
+          for (const s of t) {
+            const t = Object.getOwnPropertyDescriptor(e, s);
+            t?.enumerable && Object.defineProperty(r, s, t);
+          }
+        else
+          for (const s of Reflect.ownKeys(e)) {
+            const i = Object.getOwnPropertyDescriptor(e, s);
+            i.enumerable && t(s, e[s], e) && Object.defineProperty(r, s, i);
+          }
+        return r;
+      }
+      function f(e, t) {
+        if ("string" != typeof e || "string" != typeof t)
+          throw new TypeError("Expected the arguments to be of type `string`");
+        if ("" === e || "" === t) return [];
+        const r = e.indexOf(t);
+        return -1 === r ? [] : [e.slice(0, r), e.slice(r + t.length)];
+      }
+      const g = (e) => null == e,
+        m = (e) =>
+          encodeURIComponent(e).replaceAll(
+            /[!'()*]/g,
+            (e) => `%${e.charCodeAt(0).toString(16).toUpperCase()}`
+          ),
+        b = Symbol("encodeFragmentIdentifier");
+      function y(e) {
+        if ("string" != typeof e || 1 !== e.length)
+          throw new TypeError(
+            "arrayFormatSeparator must be single character string"
+          );
+      }
+      function L(e, t) {
+        return t.encode ? (t.strict ? m(e) : encodeURIComponent(e)) : e;
+      }
+      function _(e, t) {
+        return t.decode
+          ? (function (e) {
+              if ("string" != typeof e)
+                throw new TypeError(
+                  "Expected `encodedURI` to be of type `string`, got `" +
+                    typeof e +
+                    "`"
+                );
+              try {
+                return decodeURIComponent(e);
+              } catch {
+                return (function (e) {
+                  const t = { "%FE%FF": "��", "%FF%FE": "��" };
+                  let r = p.exec(e);
+                  for (; r; ) {
+                    try {
+                      t[r[0]] = decodeURIComponent(r[0]);
+                    } catch {
+                      const e = d(r[0]);
+                      e !== r[0] && (t[r[0]] = e);
+                    }
+                    r = p.exec(e);
+                  }
+                  t["%C2"] = "�";
+                  const s = Object.keys(t);
+                  for (const r of s) e = e.replace(new RegExp(r, "g"), t[r]);
+                  return e;
+                })(e);
+              }
+            })(e)
+          : e;
+      }
+      function v(e) {
+        return Array.isArray(e)
+          ? e.sort()
+          : "object" == typeof e
+            ? v(Object.keys(e))
+                .sort((e, t) => Number(e) - Number(t))
+                .map((t) => e[t])
+            : e;
+      }
+      function F(e) {
+        const t = e.indexOf("#");
+        return -1 !== t && (e = e.slice(0, t)), e;
+      }
+      function A(e, t, r) {
+        return "string" === r && "string" == typeof e
+          ? e
+          : "function" == typeof r && "string" == typeof e
+            ? r(e)
+            : "string[]" === r &&
+                "none" !== t.arrayFormat &&
+                "string" == typeof e
+              ? [e]
+              : "number[]" !== r ||
+                  "none" === t.arrayFormat ||
+                  Number.isNaN(Number(e)) ||
+                  "string" != typeof e ||
+                  "" === e.trim()
+                ? "number" !== r ||
+                  Number.isNaN(Number(e)) ||
+                  "string" != typeof e ||
+                  "" === e.trim()
+                  ? !t.parseBooleans ||
+                    null === e ||
+                    ("true" !== e.toLowerCase() && "false" !== e.toLowerCase())
+                    ? t.parseNumbers &&
+                      !Number.isNaN(Number(e)) &&
+                      "string" == typeof e &&
+                      "" !== e.trim()
+                      ? Number(e)
+                      : e
+                    : "true" === e.toLowerCase()
+                  : Number(e)
+                : [Number(e)];
+      }
+      function E(e) {
+        const t = (e = F(e)).indexOf("?");
+        return -1 === t ? "" : e.slice(t + 1);
+      }
+      function w(e, t) {
+        y(
+          (t = {
+            decode: !0,
+            sort: !0,
+            arrayFormat: "none",
+            arrayFormatSeparator: ",",
+            parseNumbers: !1,
+            parseBooleans: !1,
+            types: Object.create(null),
+            ...t,
+          }).arrayFormatSeparator
+        );
+        const r = (function (e) {
+            let t;
+            switch (e.arrayFormat) {
+              case "index":
+                return (e, r, s) => {
+                  (t = /\[(\d*)]$/.exec(e)),
+                    (e = e.replace(/\[\d*]$/, "")),
+                    t
+                      ? (void 0 === s[e] && (s[e] = {}), (s[e][t[1]] = r))
+                      : (s[e] = r);
+                };
+              case "bracket":
+                return (e, r, s) => {
+                  (t = /(\[])$/.exec(e)),
+                    (e = e.replace(/\[]$/, "")),
+                    t
+                      ? void 0 !== s[e]
+                        ? (s[e] = [...s[e], r])
+                        : (s[e] = [r])
+                      : (s[e] = r);
+                };
+              case "colon-list-separator":
+                return (e, r, s) => {
+                  (t = /(:list)$/.exec(e)),
+                    (e = e.replace(/:list$/, "")),
+                    t
+                      ? void 0 !== s[e]
+                        ? (s[e] = [...s[e], r])
+                        : (s[e] = [r])
+                      : (s[e] = r);
+                };
+              case "comma":
+              case "separator":
+                return (t, r, s) => {
+                  const i =
+                      "string" == typeof r &&
+                      r.includes(e.arrayFormatSeparator),
+                    n =
+                      "string" == typeof r &&
+                      !i &&
+                      _(r, e).includes(e.arrayFormatSeparator);
+                  r = n ? _(r, e) : r;
+                  const a =
+                    i || n
+                      ? r.split(e.arrayFormatSeparator).map((t) => _(t, e))
+                      : null === r
+                        ? r
+                        : _(r, e);
+                  s[t] = a;
+                };
+              case "bracket-separator":
+                return (t, r, s) => {
+                  const i = /(\[])$/.test(t);
+                  if (((t = t.replace(/\[]$/, "")), !i))
+                    return void (s[t] = r ? _(r, e) : r);
+                  const n =
+                    null === r ? [] : _(r, e).split(e.arrayFormatSeparator);
+                  void 0 !== s[t] ? (s[t] = [...s[t], ...n]) : (s[t] = n);
+                };
+              default:
+                return (e, t, r) => {
+                  void 0 !== r[e] ? (r[e] = [...[r[e]].flat(), t]) : (r[e] = t);
+                };
+            }
+          })(t),
+          s = Object.create(null);
+        if ("string" != typeof e) return s;
+        if (!(e = e.trim().replace(/^[?#&]/, ""))) return s;
+        for (const i of e.split("&")) {
+          if ("" === i) continue;
+          const e = t.decode ? i.replaceAll("+", " ") : i;
+          let [n, a] = f(e, "=");
+          void 0 === n && (n = e),
+            (a =
+              void 0 === a
+                ? null
+                : ["comma", "separator", "bracket-separator"].includes(
+                      t.arrayFormat
+                    )
+                  ? a
+                  : _(a, t)),
+            r(_(n, t), a, s);
+        }
+        for (const [e, r] of Object.entries(s))
+          if ("object" == typeof r && null !== r && "string" !== t.types[e])
+            for (const [s, i] of Object.entries(r)) {
+              const n = t.types[e] ? t.types[e].replace("[]", "") : void 0;
+              r[s] = A(i, t, n);
+            }
+          else
+            "object" == typeof r && null !== r && "string" === t.types[e]
+              ? (s[e] = Object.values(r).join(t.arrayFormatSeparator))
+              : (s[e] = A(r, t, t.types[e]));
+        return !1 === t.sort
+          ? s
+          : (!0 === t.sort
+              ? Object.keys(s).sort()
+              : Object.keys(s).sort(t.sort)
+            ).reduce((e, t) => {
+              const r = s[t];
+              return (
+                (e[t] =
+                  Boolean(r) && "object" == typeof r && !Array.isArray(r)
+                    ? v(r)
+                    : r),
+                e
+              );
+            }, Object.create(null));
+      }
+      function S(e, t) {
+        if (!e) return "";
+        y(
+          (t = {
+            encode: !0,
+            strict: !0,
+            arrayFormat: "none",
+            arrayFormatSeparator: ",",
+            ...t,
+          }).arrayFormatSeparator
+        );
+        const r = (r) =>
+            (t.skipNull && g(e[r])) || (t.skipEmptyString && "" === e[r]),
+          s = (function (e) {
+            switch (e.arrayFormat) {
+              case "index":
+                return (t) => (r, s) => {
+                  const i = r.length;
+                  return void 0 === s ||
+                    (e.skipNull && null === s) ||
+                    (e.skipEmptyString && "" === s)
+                    ? r
+                    : null === s
+                      ? [...r, [L(t, e), "[", i, "]"].join("")]
+                      : [...r, [L(t, e), "[", L(i, e), "]=", L(s, e)].join("")];
+                };
+              case "bracket":
+                return (t) => (r, s) =>
+                  void 0 === s ||
+                  (e.skipNull && null === s) ||
+                  (e.skipEmptyString && "" === s)
+                    ? r
+                    : null === s
+                      ? [...r, [L(t, e), "[]"].join("")]
+                      : [...r, [L(t, e), "[]=", L(s, e)].join("")];
+              case "colon-list-separator":
+                return (t) => (r, s) =>
+                  void 0 === s ||
+                  (e.skipNull && null === s) ||
+                  (e.skipEmptyString && "" === s)
+                    ? r
+                    : null === s
+                      ? [...r, [L(t, e), ":list="].join("")]
+                      : [...r, [L(t, e), ":list=", L(s, e)].join("")];
+              case "comma":
+              case "separator":
+              case "bracket-separator": {
+                const t = "bracket-separator" === e.arrayFormat ? "[]=" : "=";
+                return (r) => (s, i) =>
+                  void 0 === i ||
+                  (e.skipNull && null === i) ||
+                  (e.skipEmptyString && "" === i)
+                    ? s
+                    : ((i = null === i ? "" : i),
+                      0 === s.length
+                        ? [[L(r, e), t, L(i, e)].join("")]
+                        : [[s, L(i, e)].join(e.arrayFormatSeparator)]);
+              }
+              default:
+                return (t) => (r, s) =>
+                  void 0 === s ||
+                  (e.skipNull && null === s) ||
+                  (e.skipEmptyString && "" === s)
+                    ? r
+                    : null === s
+                      ? [...r, L(t, e)]
+                      : [...r, [L(t, e), "=", L(s, e)].join("")];
+            }
+          })(t),
+          i = {};
+        for (const [t, s] of Object.entries(e)) r(t) || (i[t] = s);
+        const n = Object.keys(i);
+        return (
+          !1 !== t.sort && n.sort(t.sort),
+          n
+            .map((r) => {
+              const i = e[r];
+              return void 0 === i
+                ? ""
+                : null === i
+                  ? L(r, t)
+                  : Array.isArray(i)
+                    ? 0 === i.length && "bracket-separator" === t.arrayFormat
+                      ? L(r, t) + "[]"
+                      : i.reduce(s(r), []).join("&")
+                    : L(r, t) + "=" + L(i, t);
+            })
+            .filter((e) => e.length > 0)
+            .join("&")
+        );
+      }
+      function R(e, t) {
+        t = { decode: !0, ...t };
+        let [r, s] = f(e, "#");
+        return (
+          void 0 === r && (r = e),
+          {
+            url: r?.split("?")?.[0] ?? "",
+            query: w(E(e), t),
+            ...(t && t.parseFragmentIdentifier && s
+              ? { fragmentIdentifier: _(s, t) }
+              : {}),
+          }
+        );
+      }
+      function C(e, t) {
+        t = { encode: !0, strict: !0, [b]: !0, ...t };
+        const r = F(e.url).split("?")[0] || "";
+        let s = S({ ...w(E(e.url), { sort: !1 }), ...e.query }, t);
+        s &&= `?${s}`;
+        let i = (function (e) {
+          let t = "";
+          const r = e.indexOf("#");
+          return -1 !== r && (t = e.slice(r)), t;
+        })(e.url);
+        if ("string" == typeof e.fragmentIdentifier) {
+          const s = new URL(r);
+          (s.hash = e.fragmentIdentifier),
+            (i = t[b] ? s.hash : `#${e.fragmentIdentifier}`);
+        }
+        return `${r}${s}${i}`;
+      }
+      function P(e, t, r) {
+        r = { parseFragmentIdentifier: !0, [b]: !1, ...r };
+        const { url: s, query: i, fragmentIdentifier: n } = R(e, r);
+        return C({ url: s, query: h(i, t), fragmentIdentifier: n }, r);
+      }
+      function j(e, t, r) {
+        return P(
+          e,
+          Array.isArray(t) ? (e) => !t.includes(e) : (e, r) => !t(e, r),
+          r
+        );
+      }
+      const T = s,
+        q = Object.freeze(
+          new (class {
+            constructor() {
+              this._domParser = new DOMParser();
+            }
+            replaceFromMarkup(e, t, r = !0) {
+              let s = e;
+              "string" == typeof s && (s = this._createMarkupFromString(s)),
+                "string" == typeof t && (t = [t]),
+                this._replaceSelectors(s, t, r);
+            }
+            replaceElement(e, t, r = !0) {
+              return (
+                "string" == typeof e &&
+                  (e = o.A.querySelectorAll(document, e, r)),
+                "string" == typeof t &&
+                  (t = o.A.querySelectorAll(document, t, r)),
+                e instanceof NodeList &&
+                t instanceof NodeList &&
+                t.length > e.length
+                  ? (a.iterate(t, (t) => {
+                      a.iterate(e, (e) => {
+                        e.innerHTML &&
+                          e.className === t.className &&
+                          (t.innerHTML = e.innerHTML);
+                      });
+                    }),
+                    !0)
+                  : e instanceof NodeList
+                    ? (a.iterate(e, (e, r) => {
+                        e.innerHTML && (t[r].innerHTML = e.innerHTML);
+                      }),
+                      !0)
+                    : t instanceof NodeList
+                      ? (a.iterate(t, (t) => {
+                          e.innerHTML && (t.innerHTML = e.innerHTML);
+                        }),
+                        !0)
+                      : !!(t && e && e.innerHTML) &&
+                        ((t.innerHTML = e.innerHTML), !0)
+              );
+            }
+            _replaceSelectors(e, t, r) {
+              a.iterate(t, (t) => {
+                const s = o.A.querySelectorAll(e, t, r),
+                  i = o.A.querySelectorAll(document, t, r);
+                this.replaceElement(s, i, r);
+              });
+            }
+            _createMarkupFromString(e) {
+              return this._domParser.parseFromString(e, "text/html");
+            }
+          })()
+        );
+      class O {
+        static replaceFromMarkup(e, t, r) {
+          q.replaceFromMarkup(e, t, r);
+        }
+        static replaceElement(e, t, r) {
+          return q.replaceElement(e, t, r);
+        }
+      }
+      class k {
+        static debounce(e, t, r = !1) {
+          let s;
+          return (...i) => {
+            r && !s && setTimeout(e.bind(e, ...i), 0),
+              clearTimeout(s),
+              (s = setTimeout(e.bind(e, ...i), t));
+          };
+        }
+      }
+      class $ extends i.A {
+        static options = {
+          dataUrl: "",
+          filterUrl: "",
+          params: {},
+          filterPanelSelector: ".filter-panel",
+          cmsProductListingSelector: ".cms-element-product-listing",
+          cmsProductListingWrapperSelector:
+            ".cms-element-product-listing-wrapper",
+          cmsProductListingResultsSelector: ".js-listing-wrapper",
+          activeFilterContainerSelector: ".filter-panel-active-container",
+          activeFilterLabelClass: "filter-active",
+          activeFilterLabelClasses: "filter-active btn",
+          activeFilterLabelSelector: ".filter-active",
+          activeFilterLabelRemoveClass: "filter-active-remove",
+          activeFilterLabelPreviewClass: "filter-active-preview",
+          resetAllFilterButtonClasses:
+            "filter-reset-all btn btn-outline-danger",
+          resetAllFilterButtonSelector: ".filter-reset-all",
+          loadingIndicatorClass: "is-loading",
+          loadingElementLoaderClass: "has-element-loader",
+          ariaLiveSelector: ".filter-panel-aria-live",
+          ariaLiveUpdates: !0,
+          disableEmptyFilter: !1,
+          snippets: {
+            resetAllButtonText: "Reset all",
+            resetAllFiltersAriaLabel: "Reset all filters",
+            removeFilterAriaLabel: "Remove filter",
+          },
+          scrollTopListingWrapper: !0,
+          scrollOffset: 15,
+        };
+        init() {
+          (this._registry = []),
+            (this.httpClient = new n()),
+            (this._urlFilterParams = T.parse(window.location.search)),
+            (this._filterPanel = o.A.querySelector(
+              document,
+              this.options.filterPanelSelector,
+              !1
+            )),
+            (this._filterPanelActive = !!this._filterPanel),
+            this._filterPanelActive &&
+              ((this._showResetAll = !1),
+              (this.activeFilterContainer = o.A.querySelector(
+                document,
+                this.options.activeFilterContainerSelector
+              )),
+              (this.ariaLiveContainer = o.A.querySelector(
+                document,
+                this.options.ariaLiveSelector,
+                !1
+              ))),
+            (this._cmsProductListingWrapper = o.A.querySelector(
+              document,
+              this.options.cmsProductListingWrapperSelector,
+              !1
+            )),
+            (this._cmsProductListingWrapperActive =
+              !!this._cmsProductListingWrapper),
+            (this._allFiltersInitializedDebounce = k.debounce(
+              this.sendDisabledFiltersRequest.bind(this),
+              100
+            )),
+            this._registerEvents();
+        }
+        refreshRegistry() {
+          const e = this._registry.filter((e) => document.body.contains(e.el));
+          this.init(),
+            (this._registry = e),
+            window.PluginManager.initializePlugins();
+        }
+        changeListing(e = !0, t = {}) {
+          this._buildRequest(e, t),
+            this._filterPanelActive && this._buildLabels();
+        }
+        registerFilter(e) {
+          this._registry.push(e),
+            this._setFilterState(e),
+            this.options.disableEmptyFilter &&
+              this._allFiltersInitializedDebounce();
+        }
+        _setFilterState(e) {
+          if (
+            Object.keys(this._urlFilterParams).length > 0 &&
+            "function" == typeof e.setValuesFromUrl
+          ) {
+            if (
+              !e.setValuesFromUrl(this._urlFilterParams) ||
+              !this._filterPanelActive
+            )
+              return;
+            (this._showResetAll = !0), this._buildLabels();
+          }
+        }
+        deregisterFilter(e) {
+          this._registry = this._registry.filter((t) => t !== e);
+        }
+        _fetchValuesOfRegisteredFilters() {
+          const e = {};
+          return (
+            this._registry.forEach((t) => {
+              const r = t.getValues();
+              Object.keys(r).forEach((t) => {
+                Object.prototype.hasOwnProperty.call(e, t)
+                  ? Object.values(r[t]).forEach((r) => {
+                      e[t].push(r);
+                    })
+                  : (e[t] = r[t]);
+              });
+            }),
+            e
+          );
+        }
+        _mapFilters(e) {
+          const t = {};
+          return (
+            Object.keys(e).forEach((r) => {
+              let s = e[r];
+              Array.isArray(s) && (s = s.join("|")),
+                `${s}`.length && (t[r] = s);
+            }),
+            t
+          );
+        }
+        _buildRequest(e = !0, t = {}) {
+          const r = this._fetchValuesOfRegisteredFilters(),
+            s = this._mapFilters(r);
+          this._filterPanelActive &&
+            (this._showResetAll = !!Object.keys(s).length),
+            this.options.params &&
+              Object.keys(this.options.params).forEach((e) => {
+                s[e] = this.options.params[e];
+              }),
+            Object.entries(t).forEach(([e, t]) => {
+              s[e] = t;
+            });
+          let i = T.stringify(s);
+          this.sendDataRequest(i),
+            delete s.slots,
+            delete s["no-aggregations"],
+            delete s["reduce-aggregations"],
+            delete s["only-aggregations"],
+            (i = T.stringify(s)),
+            e && this._updateHistory(i),
+            this.options.scrollTopListingWrapper && this._scrollTopOfListing();
+        }
+        _scrollTopOfListing() {
+          const e = this._cmsProductListingWrapper.getBoundingClientRect();
+          if (e.top >= 0) return;
+          const t = e.top + window.scrollY - this.options.scrollOffset;
+          window.scrollTo({ top: t, behavior: "smooth" });
+        }
+        _getDisabledFiltersParamsFromParams(e) {
+          const t = Object.assign(
+            {},
+            { "only-aggregations": 1, "reduce-aggregations": 1 },
+            e
+          );
+          return delete t.p, delete t.order, delete t["no-aggregations"], t;
+        }
+        _updateHistory(e) {
+          window.history.pushState({}, "", `${window.location.pathname}?${e}`);
+        }
+        _buildLabels() {
+          let e = "";
+          this._registry.forEach((t) => {
+            const r = t.getLabels();
+            r.length &&
+              r.forEach((t) => {
+                e += this.getLabelTemplate(t);
+              });
+          }),
+            (this.activeFilterContainer.innerHTML = e);
+          const t = window.Feature.isActive("ACCESSIBILITY_TWEAKS")
+            ? o.A.querySelectorAll(
+                this.activeFilterContainer,
+                this.options.activeFilterLabelSelector,
+                !1
+              )
+            : o.A.querySelectorAll(
+                this.activeFilterContainer,
+                `.${this.options.activeFilterLabelRemoveClass}`,
+                !1
+              );
+          e.length &&
+            (this._registerLabelEvents(t), this.createResetAllButton());
+        }
+        _registerLabelEvents(e) {
+          a.iterate(e, (e) => {
+            e.addEventListener("click", () => this.resetFilter(e));
+          });
+        }
+        createResetAllButton() {
+          this.activeFilterContainer.insertAdjacentHTML(
+            "beforeend",
+            this.getResetAllButtonTemplate()
+          );
+          const e = o.A.querySelector(
+            this.activeFilterContainer,
+            this.options.resetAllFilterButtonSelector
+          );
+          e.removeEventListener("click", this.resetAllFilter.bind(this)),
+            e.addEventListener("click", this.resetAllFilter.bind(this)),
+            this._showResetAll || e.remove();
+        }
+        resetFilter(e) {
+          this._registry.forEach((t) => {
+            t.reset(e.dataset.id);
+          }),
+            this._buildRequest(),
+            this._buildLabels();
+        }
+        resetAllFilter() {
+          this._registry.forEach((e) => {
+            e.resetAll();
+          }),
+            this._buildRequest(),
+            this._buildLabels();
+        }
+        getLabelTemplate(e) {
+          return window.Feature.isActive("ACCESSIBILITY_TWEAKS")
+            ? `\n            <button\n                class="${this.options.activeFilterLabelClasses}"\n                data-id="${e.id}"\n                title="${this.options.snippets.removeFilterAriaLabel}: ${e.label}"\n                aria-label="${this.options.snippets.removeFilterAriaLabel}: ${e.label}">\n                ${this.getLabelPreviewTemplate(e)}\n                ${e.label}\n                <span aria-hidden="true" class="ms-1 fs-4">&times;</span>\n            </button>\n            `
+            : `\n        <span class="${this.options.activeFilterLabelClass}">\n            ${this.getLabelPreviewTemplate(e)}\n            <span aria-hidden="true">${e.label}</span>\n            <button class="${this.options.activeFilterLabelRemoveClass}"\n                    data-id="${e.id}"\n                    title="${this.options.snippets.removeFilterAriaLabel}: ${e.label}"\n                    aria-label="${this.options.snippets.removeFilterAriaLabel}: ${e.label}">\n                &times;\n            </button>\n        </span>\n        `;
+        }
+        getLabelPreviewTemplate(e) {
+          const t = this.options.activeFilterLabelPreviewClass;
+          return e.previewHex
+            ? `\n                <span class="${t}" style="background-color: ${e.previewHex};"></span>\n            `
+            : e.previewImageUrl
+              ? `\n                <span class="${t}" style="background-image: url('${e.previewImageUrl}');"></span>\n            `
+              : "";
+        }
+        getResetAllButtonTemplate() {
+          return `\n        <button class="${this.options.resetAllFilterButtonClasses}" aria-label="${this.options.snippets.resetAllFiltersAriaLabel}">\n            ${this.options.snippets.resetAllButtonText}\n        </button>\n        `;
+        }
+        addLoadingIndicatorClass() {
+          this._filterPanel.classList.add(this.options.loadingIndicatorClass);
+        }
+        removeLoadingIndicatorClass() {
+          this._filterPanel.classList.remove(
+            this.options.loadingIndicatorClass
+          );
+        }
+        addLoadingElementLoaderClass() {
+          this._cmsProductListingWrapper.classList.add(
+            this.options.loadingElementLoaderClass
+          );
+        }
+        removeLoadingElementLoaderClass() {
+          this._cmsProductListingWrapper.classList.remove(
+            this.options.loadingElementLoaderClass
+          );
+        }
+        sendDataRequest(e) {
+          this._filterPanelActive && this.addLoadingIndicatorClass(),
+            this._cmsProductListingWrapperActive &&
+              this.addLoadingElementLoaderClass(),
+            this.options.disableEmptyFilter &&
+              this.sendDisabledFiltersRequest(),
+            this.httpClient.get(`${this.options.dataUrl}?${e}`, (e) => {
+              this.renderResponse(e),
+                this._filterPanelActive &&
+                  (this.removeLoadingIndicatorClass(), this._updateAriaLive()),
+                this._cmsProductListingWrapperActive &&
+                  this.removeLoadingElementLoaderClass();
+            });
+        }
+        sendDisabledFiltersRequest() {
+          const e = this._fetchValuesOfRegisteredFilters(),
+            t = this._mapFilters(e);
+          this.options.params &&
+            Object.keys(this.options.params).forEach((e) => {
+              t[e] = this.options.params[e];
+            }),
+            (this._allFiltersInitializedDebounce = () => {});
+          const r = this._getDisabledFiltersParamsFromParams(t);
+          this.httpClient.get(
+            `${this.options.filterUrl}?${T.stringify(r)}`,
+            (e) => {
+              const t = JSON.parse(e);
+              this._registry.forEach((e) => {
+                "function" == typeof e.refreshDisabledState &&
+                  e.refreshDisabledState(t, r);
+              });
+            }
+          );
+        }
+        renderResponse(e) {
+          O.replaceFromMarkup(e, this.options.cmsProductListingSelector, !1),
+            this._registry.forEach((e) => {
+              "function" == typeof e.afterContentChange &&
+                e.afterContentChange();
+            }),
+            window.PluginManager.initializePlugins(),
+            this.$emitter.publish("Listing/afterRenderResponse", {
+              response: e,
+            });
+        }
+        _updateAriaLive() {
+          if (!this.options.ariaLiveUpdates) return;
+          if (!this.ariaLiveContainer) return;
+          const e = this.el.querySelector(
+            this.options.cmsProductListingResultsSelector
+          );
+          this.ariaLiveContainer.innerHTML = e.dataset.ariaLiveText;
+        }
+        _registerEvents() {
+          window.onpopstate = this._onWindowPopstate.bind(this);
+        }
+        _onWindowPopstate() {
+          this.refreshRegistry(),
+            this._registry.forEach((e) => {
+              0 === Object.keys(this._urlFilterParams).length &&
+                (this._urlFilterParams.p = 1),
+                this._setFilterState(e);
+            }),
+            this.options.disableEmptyFilter &&
+              this._allFiltersInitializedDebounce(),
+            this.changeListing(!1);
+        }
+      }
+      class I extends $ {
+        init() {
+          super.init();
+        }
+        _buildRequest(e = !0, t = {}) {
+          const r = this._fetchValuesOfRegisteredFilters(),
+            s = this._mapFilters(r),
+            i = document.querySelector('[data-listing-sorting="true"]');
+          if (i) {
+            const e = i.querySelector("select");
+            if (e && e.value) {
+              const t = e.name || "order";
+              s[t] = e.value;
+            }
+          }
+          this._filterPanelActive &&
+            (this._showResetAll = !!Object.keys(s).length),
+            this.options.params &&
+              Object.keys(this.options.params).forEach((e) => {
+                s[e] = this.options.params[e];
+              }),
+            Object.entries(t).forEach(([e, t]) => {
+              s[e] = t;
+            });
+          let n = new URLSearchParams(s).toString();
+          this.sendDataRequest(n),
+            delete s.slots,
+            delete s["no-aggregations"],
+            delete s["reduce-aggregations"],
+            delete s["only-aggregations"],
+            (n = new URLSearchParams(s).toString()),
+            e && this._updateHistory(n),
+            this.options.scrollTopListingWrapper && this._scrollTopOfListing();
+        }
+        _buildLabels() {
+          const e = this._cmsProductListingWrapper.baseURI,
+            t = new URL(e).searchParams,
+            r = [];
+          t.forEach((e, t) => {
+            e.split("|").forEach((e) => {
+              t.startsWith("filter_") && r.push({ id: e, label: e });
+            });
+          });
+          const s = t.get("min-price"),
+            i = t.get("max-price");
+          s && r.push({ id: "min-price", label: "Preis ab " + s }),
+            i && r.push({ id: "max-price", label: "Preis bis " + i });
+          let n = "";
+          r.forEach((e) => {
+            n.includes(e) || (n += this.getLabelTemplate(e));
+          }),
+            (this.activeFilterContainer.innerHTML = n);
+          let a = window.Feature.isActive("ACCESSIBILITY_TWEAKS")
+            ? ".filter-active"
+            : ".filter-active-remove";
+          const o = this.activeFilterContainer.querySelectorAll(a);
+          n.length &&
+            (this._registerLabelEvents(o), this.createResetAllButton());
+        }
+        registerFilter(e) {
+          this._registry.some((t) => t.options.name === e.options.name) ||
+            (this._registry.push(e),
+            this._setFilterState(e),
+            this.options.disableEmptyFilter &&
+              this._allFiltersInitializedDebounce());
+        }
+      }
     },
   },
 ]);
+//# sourceMappingURL=773.makaira-shopware6-storefront.js.map

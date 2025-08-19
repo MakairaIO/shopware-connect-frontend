@@ -1,223 +1,2011 @@
 (() => {
   "use strict";
-  var __webpack_modules__ = {
-      139: (
-        __unused_webpack_module,
-        __webpack_exports__,
-        __webpack_require__
-      ) => {
-        eval(
-          "/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   A: () => (/* binding */ DomAccess)\n/* harmony export */ });\n/* harmony import */ var src_helper_string_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(747);\n\n\n/**\n * @sw-package framework\n */\nclass DomAccess {\n\n    /**\n     * Returns if the element is an HTML node\n     *\n     * @param {HTMLElement} element\n     * @returns {boolean}\n     */\n    static isNode(element) {\n        if (typeof element !== 'object' || element === null) {\n            return false;\n        }\n\n        if (element === document || element === window) {\n            return true;\n        }\n\n        return element instanceof Node;\n    }\n\n    /**\n     * Returns if the given element has the requested attribute/property\n     * @param {HTMLElement} element\n     * @param {string} attribute\n     */\n    static hasAttribute(element, attribute) {\n        if (!DomAccess.isNode(element)) {\n            throw new Error('The element must be a valid HTML Node!');\n        }\n\n        if (typeof element.hasAttribute !== 'function') return false;\n\n        return element.hasAttribute(attribute);\n    }\n\n    /**\n     * Returns the value of a given element's attribute/property\n     * @param {HTMLElement|EventTarget} element\n     * @param {string} attribute\n     * @param {boolean} strict\n     * @returns {*|this|string}\n     */\n    static getAttribute(element, attribute, strict = true) {\n        if (strict && DomAccess.hasAttribute(element, attribute) === false) {\n            throw new Error(`The required property \"${attribute}\" does not exist!`);\n        }\n\n        if (typeof element.getAttribute !== 'function') {\n            if (strict) {\n                throw new Error('This node doesn\\'t support the getAttribute function!');\n            }\n\n            return undefined;\n        }\n\n        return element.getAttribute(attribute);\n    }\n\n    /**\n     * Returns the value of a given elements dataset entry\n     *\n     * @param {HTMLElement|EventTarget} element\n     * @param {string} key\n     * @param {boolean} strict\n     * @returns {*|this|string}\n     */\n    static getDataAttribute(element, key, strict = true) {\n        const keyWithoutData = key.replace(/^data(|-)/, '');\n        const parsedKey = src_helper_string_helper__WEBPACK_IMPORTED_MODULE_0__/* [\"default\"] */ .A.toLowerCamelCase(keyWithoutData, '-');\n        if (!DomAccess.isNode(element)) {\n            if (strict) {\n                throw new Error('The passed node is not a valid HTML Node!');\n            }\n\n            return undefined;\n        }\n\n        if (typeof element.dataset === 'undefined') {\n            if (strict) {\n                throw new Error('This node doesn\\'t support the dataset attribute!');\n            }\n\n            return undefined;\n        }\n\n        const attribute = element.dataset[parsedKey];\n\n        if (typeof attribute === 'undefined') {\n            if (strict) {\n                throw new Error(`The required data attribute \"${key}\" does not exist on ${element}!`);\n            }\n\n            return attribute;\n        }\n\n        return src_helper_string_helper__WEBPACK_IMPORTED_MODULE_0__/* [\"default\"] */ .A.parsePrimitive(attribute);\n    }\n\n    /**\n     * Returns the selected element of a defined parent node\n     * @param {HTMLElement|EventTarget} parentNode\n     * @param {string} selector\n     * @param {boolean} strict\n     * @returns {HTMLElement}\n     */\n    static querySelector(parentNode, selector, strict = true) {\n        if (strict && !DomAccess.isNode(parentNode)) {\n            throw new Error('The parent node is not a valid HTML Node!');\n        }\n\n        const element = parentNode.querySelector(selector) || false;\n\n        if (strict && element === false) {\n            throw new Error(`The required element \"${selector}\" does not exist in parent node!`);\n        }\n\n        return element;\n    }\n\n    /**\n     * Returns the selected elements of a defined parent node\n     *\n     * @param {HTMLElement|EventTarget} parentNode\n     * @param {string} selector\n     * @param {boolean} strict\n     * @returns {NodeList|false}\n     */\n    static querySelectorAll(parentNode, selector, strict = true) {\n        if (strict && !DomAccess.isNode(parentNode)) {\n            throw new Error('The parent node is not a valid HTML Node!');\n        }\n\n        let elements = parentNode.querySelectorAll(selector);\n        if (elements.length === 0) {\n            elements = false;\n        }\n\n        if (strict && elements === false) {\n            throw new Error(`At least one item of \"${selector}\" must exist in parent node!`);\n        }\n\n        return elements;\n    }\n\n    /**\n     * Returns all focusable elements in the given parent node.\n     *\n     * @param {HTMLElement|document} parentNode\n     * @returns {NodeListOf<Element>}\n     */\n    static getFocusableElements(parentNode = document.body) {\n        const focusAbleElements = `\n            input:not([tabindex^=\"-\"]):not([disabled]):not([type=\"hidden\"]),\n            select:not([tabindex^=\"-\"]):not([disabled]),\n            textarea:not([tabindex^=\"-\"]):not([disabled]),\n            button:not([tabindex^=\"-\"]):not([disabled]),\n            a[href]:not([tabindex^=\"-\"]):not([disabled]),\n            [tabindex]:not([tabindex^=\"-\"]):not([disabled])\n        `;\n\n        return parentNode.querySelectorAll(focusAbleElements);\n    }\n\n    /**\n     * Returns the first focusable element in the given parent node.\n     *\n     * @param parentNode\n     * @returns {HTMLElement}\n     */\n    static getFirstFocusableElement(parentNode = document.body) {\n        return this.getFocusableElements(parentNode)[0];\n    }\n\n    /**\n     * Returns the last focusable element in the given parent node.\n     *\n     * @param parentNode\n     * @returns {HTMLElement}\n     */\n    static getLastFocusableElement(parentNode = document) {\n        const result = this.getFocusableElements(parentNode);\n\n        return result[result.length - 1];\n    }\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMTM5LmpzIiwibWFwcGluZ3MiOiI7Ozs7QUFBb0Q7O0FBRXBEO0FBQ0E7QUFDQTtBQUNlOztBQUVmO0FBQ0E7QUFDQTtBQUNBLGVBQWUsYUFBYTtBQUM1QixpQkFBaUI7QUFDakI7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsZUFBZSxhQUFhO0FBQzVCLGVBQWUsUUFBUTtBQUN2QjtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBLGVBQWUseUJBQXlCO0FBQ3hDLGVBQWUsUUFBUTtBQUN2QixlQUFlLFNBQVM7QUFDeEIsaUJBQWlCO0FBQ2pCO0FBQ0E7QUFDQTtBQUNBLHNEQUFzRCxVQUFVO0FBQ2hFOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQSxlQUFlLHlCQUF5QjtBQUN4QyxlQUFlLFFBQVE7QUFDdkIsZUFBZSxTQUFTO0FBQ3hCLGlCQUFpQjtBQUNqQjtBQUNBO0FBQ0E7QUFDQSwwQkFBMEIseUVBQVk7QUFDdEM7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBOztBQUVBO0FBQ0E7QUFDQSxnRUFBZ0UsSUFBSSxzQkFBc0IsUUFBUTtBQUNsRzs7QUFFQTtBQUNBOztBQUVBLGVBQWUseUVBQVk7QUFDM0I7O0FBRUE7QUFDQTtBQUNBLGVBQWUseUJBQXlCO0FBQ3hDLGVBQWUsUUFBUTtBQUN2QixlQUFlLFNBQVM7QUFDeEIsaUJBQWlCO0FBQ2pCO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7O0FBRUE7QUFDQSxxREFBcUQsU0FBUztBQUM5RDs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLGVBQWUseUJBQXlCO0FBQ3hDLGVBQWUsUUFBUTtBQUN2QixlQUFlLFNBQVM7QUFDeEIsaUJBQWlCO0FBQ2pCO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQSxxREFBcUQsU0FBUztBQUM5RDs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLGVBQWUsc0JBQXNCO0FBQ3JDLGlCQUFpQjtBQUNqQjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsaUJBQWlCO0FBQ2pCO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsaUJBQWlCO0FBQ2pCO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9tYWthaXJhLXNob3B3YXJlNi1zdG9yZWZyb250Ly4vdmVuZG9yL3Nob3B3YXJlL3N0b3JlZnJvbnQvUmVzb3VyY2VzL2FwcC9zdG9yZWZyb250L3NyYy9oZWxwZXIvZG9tLWFjY2Vzcy5oZWxwZXIuanM/YzkzZCJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgU3RyaW5nSGVscGVyIGZyb20gJ3NyYy9oZWxwZXIvc3RyaW5nLmhlbHBlcic7XG5cbi8qKlxuICogQHN3LXBhY2thZ2UgZnJhbWV3b3JrXG4gKi9cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIERvbUFjY2VzcyB7XG5cbiAgICAvKipcbiAgICAgKiBSZXR1cm5zIGlmIHRoZSBlbGVtZW50IGlzIGFuIEhUTUwgbm9kZVxuICAgICAqXG4gICAgICogQHBhcmFtIHtIVE1MRWxlbWVudH0gZWxlbWVudFxuICAgICAqIEByZXR1cm5zIHtib29sZWFufVxuICAgICAqL1xuICAgIHN0YXRpYyBpc05vZGUoZWxlbWVudCkge1xuICAgICAgICBpZiAodHlwZW9mIGVsZW1lbnQgIT09ICdvYmplY3QnIHx8IGVsZW1lbnQgPT09IG51bGwpIHtcbiAgICAgICAgICAgIHJldHVybiBmYWxzZTtcbiAgICAgICAgfVxuXG4gICAgICAgIGlmIChlbGVtZW50ID09PSBkb2N1bWVudCB8fCBlbGVtZW50ID09PSB3aW5kb3cpIHtcbiAgICAgICAgICAgIHJldHVybiB0cnVlO1xuICAgICAgICB9XG5cbiAgICAgICAgcmV0dXJuIGVsZW1lbnQgaW5zdGFuY2VvZiBOb2RlO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIFJldHVybnMgaWYgdGhlIGdpdmVuIGVsZW1lbnQgaGFzIHRoZSByZXF1ZXN0ZWQgYXR0cmlidXRlL3Byb3BlcnR5XG4gICAgICogQHBhcmFtIHtIVE1MRWxlbWVudH0gZWxlbWVudFxuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBhdHRyaWJ1dGVcbiAgICAgKi9cbiAgICBzdGF0aWMgaGFzQXR0cmlidXRlKGVsZW1lbnQsIGF0dHJpYnV0ZSkge1xuICAgICAgICBpZiAoIURvbUFjY2Vzcy5pc05vZGUoZWxlbWVudCkpIHtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcignVGhlIGVsZW1lbnQgbXVzdCBiZSBhIHZhbGlkIEhUTUwgTm9kZSEnKTtcbiAgICAgICAgfVxuXG4gICAgICAgIGlmICh0eXBlb2YgZWxlbWVudC5oYXNBdHRyaWJ1dGUgIT09ICdmdW5jdGlvbicpIHJldHVybiBmYWxzZTtcblxuICAgICAgICByZXR1cm4gZWxlbWVudC5oYXNBdHRyaWJ1dGUoYXR0cmlidXRlKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBSZXR1cm5zIHRoZSB2YWx1ZSBvZiBhIGdpdmVuIGVsZW1lbnQncyBhdHRyaWJ1dGUvcHJvcGVydHlcbiAgICAgKiBAcGFyYW0ge0hUTUxFbGVtZW50fEV2ZW50VGFyZ2V0fSBlbGVtZW50XG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGF0dHJpYnV0ZVxuICAgICAqIEBwYXJhbSB7Ym9vbGVhbn0gc3RyaWN0XG4gICAgICogQHJldHVybnMgeyp8dGhpc3xzdHJpbmd9XG4gICAgICovXG4gICAgc3RhdGljIGdldEF0dHJpYnV0ZShlbGVtZW50LCBhdHRyaWJ1dGUsIHN0cmljdCA9IHRydWUpIHtcbiAgICAgICAgaWYgKHN0cmljdCAmJiBEb21BY2Nlc3MuaGFzQXR0cmlidXRlKGVsZW1lbnQsIGF0dHJpYnV0ZSkgPT09IGZhbHNlKSB7XG4gICAgICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYFRoZSByZXF1aXJlZCBwcm9wZXJ0eSBcIiR7YXR0cmlidXRlfVwiIGRvZXMgbm90IGV4aXN0IWApO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKHR5cGVvZiBlbGVtZW50LmdldEF0dHJpYnV0ZSAhPT0gJ2Z1bmN0aW9uJykge1xuICAgICAgICAgICAgaWYgKHN0cmljdCkge1xuICAgICAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcignVGhpcyBub2RlIGRvZXNuXFwndCBzdXBwb3J0IHRoZSBnZXRBdHRyaWJ1dGUgZnVuY3Rpb24hJyk7XG4gICAgICAgICAgICB9XG5cbiAgICAgICAgICAgIHJldHVybiB1bmRlZmluZWQ7XG4gICAgICAgIH1cblxuICAgICAgICByZXR1cm4gZWxlbWVudC5nZXRBdHRyaWJ1dGUoYXR0cmlidXRlKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBSZXR1cm5zIHRoZSB2YWx1ZSBvZiBhIGdpdmVuIGVsZW1lbnRzIGRhdGFzZXQgZW50cnlcbiAgICAgKlxuICAgICAqIEBwYXJhbSB7SFRNTEVsZW1lbnR8RXZlbnRUYXJnZXR9IGVsZW1lbnRcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30ga2V5XG4gICAgICogQHBhcmFtIHtib29sZWFufSBzdHJpY3RcbiAgICAgKiBAcmV0dXJucyB7Knx0aGlzfHN0cmluZ31cbiAgICAgKi9cbiAgICBzdGF0aWMgZ2V0RGF0YUF0dHJpYnV0ZShlbGVtZW50LCBrZXksIHN0cmljdCA9IHRydWUpIHtcbiAgICAgICAgY29uc3Qga2V5V2l0aG91dERhdGEgPSBrZXkucmVwbGFjZSgvXmRhdGEofC0pLywgJycpO1xuICAgICAgICBjb25zdCBwYXJzZWRLZXkgPSBTdHJpbmdIZWxwZXIudG9Mb3dlckNhbWVsQ2FzZShrZXlXaXRob3V0RGF0YSwgJy0nKTtcbiAgICAgICAgaWYgKCFEb21BY2Nlc3MuaXNOb2RlKGVsZW1lbnQpKSB7XG4gICAgICAgICAgICBpZiAoc3RyaWN0KSB7XG4gICAgICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKCdUaGUgcGFzc2VkIG5vZGUgaXMgbm90IGEgdmFsaWQgSFRNTCBOb2RlIScpO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICByZXR1cm4gdW5kZWZpbmVkO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKHR5cGVvZiBlbGVtZW50LmRhdGFzZXQgPT09ICd1bmRlZmluZWQnKSB7XG4gICAgICAgICAgICBpZiAoc3RyaWN0KSB7XG4gICAgICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKCdUaGlzIG5vZGUgZG9lc25cXCd0IHN1cHBvcnQgdGhlIGRhdGFzZXQgYXR0cmlidXRlIScpO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICByZXR1cm4gdW5kZWZpbmVkO1xuICAgICAgICB9XG5cbiAgICAgICAgY29uc3QgYXR0cmlidXRlID0gZWxlbWVudC5kYXRhc2V0W3BhcnNlZEtleV07XG5cbiAgICAgICAgaWYgKHR5cGVvZiBhdHRyaWJ1dGUgPT09ICd1bmRlZmluZWQnKSB7XG4gICAgICAgICAgICBpZiAoc3RyaWN0KSB7XG4gICAgICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBUaGUgcmVxdWlyZWQgZGF0YSBhdHRyaWJ1dGUgXCIke2tleX1cIiBkb2VzIG5vdCBleGlzdCBvbiAke2VsZW1lbnR9IWApO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICByZXR1cm4gYXR0cmlidXRlO1xuICAgICAgICB9XG5cbiAgICAgICAgcmV0dXJuIFN0cmluZ0hlbHBlci5wYXJzZVByaW1pdGl2ZShhdHRyaWJ1dGUpO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIFJldHVybnMgdGhlIHNlbGVjdGVkIGVsZW1lbnQgb2YgYSBkZWZpbmVkIHBhcmVudCBub2RlXG4gICAgICogQHBhcmFtIHtIVE1MRWxlbWVudHxFdmVudFRhcmdldH0gcGFyZW50Tm9kZVxuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBzZWxlY3RvclxuICAgICAqIEBwYXJhbSB7Ym9vbGVhbn0gc3RyaWN0XG4gICAgICogQHJldHVybnMge0hUTUxFbGVtZW50fVxuICAgICAqL1xuICAgIHN0YXRpYyBxdWVyeVNlbGVjdG9yKHBhcmVudE5vZGUsIHNlbGVjdG9yLCBzdHJpY3QgPSB0cnVlKSB7XG4gICAgICAgIGlmIChzdHJpY3QgJiYgIURvbUFjY2Vzcy5pc05vZGUocGFyZW50Tm9kZSkpIHtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcignVGhlIHBhcmVudCBub2RlIGlzIG5vdCBhIHZhbGlkIEhUTUwgTm9kZSEnKTtcbiAgICAgICAgfVxuXG4gICAgICAgIGNvbnN0IGVsZW1lbnQgPSBwYXJlbnROb2RlLnF1ZXJ5U2VsZWN0b3Ioc2VsZWN0b3IpIHx8IGZhbHNlO1xuXG4gICAgICAgIGlmIChzdHJpY3QgJiYgZWxlbWVudCA9PT0gZmFsc2UpIHtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcihgVGhlIHJlcXVpcmVkIGVsZW1lbnQgXCIke3NlbGVjdG9yfVwiIGRvZXMgbm90IGV4aXN0IGluIHBhcmVudCBub2RlIWApO1xuICAgICAgICB9XG5cbiAgICAgICAgcmV0dXJuIGVsZW1lbnQ7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogUmV0dXJucyB0aGUgc2VsZWN0ZWQgZWxlbWVudHMgb2YgYSBkZWZpbmVkIHBhcmVudCBub2RlXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge0hUTUxFbGVtZW50fEV2ZW50VGFyZ2V0fSBwYXJlbnROb2RlXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IHNlbGVjdG9yXG4gICAgICogQHBhcmFtIHtib29sZWFufSBzdHJpY3RcbiAgICAgKiBAcmV0dXJucyB7Tm9kZUxpc3R8ZmFsc2V9XG4gICAgICovXG4gICAgc3RhdGljIHF1ZXJ5U2VsZWN0b3JBbGwocGFyZW50Tm9kZSwgc2VsZWN0b3IsIHN0cmljdCA9IHRydWUpIHtcbiAgICAgICAgaWYgKHN0cmljdCAmJiAhRG9tQWNjZXNzLmlzTm9kZShwYXJlbnROb2RlKSkge1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKCdUaGUgcGFyZW50IG5vZGUgaXMgbm90IGEgdmFsaWQgSFRNTCBOb2RlIScpO1xuICAgICAgICB9XG5cbiAgICAgICAgbGV0IGVsZW1lbnRzID0gcGFyZW50Tm9kZS5xdWVyeVNlbGVjdG9yQWxsKHNlbGVjdG9yKTtcbiAgICAgICAgaWYgKGVsZW1lbnRzLmxlbmd0aCA9PT0gMCkge1xuICAgICAgICAgICAgZWxlbWVudHMgPSBmYWxzZTtcbiAgICAgICAgfVxuXG4gICAgICAgIGlmIChzdHJpY3QgJiYgZWxlbWVudHMgPT09IGZhbHNlKSB7XG4gICAgICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYEF0IGxlYXN0IG9uZSBpdGVtIG9mIFwiJHtzZWxlY3Rvcn1cIiBtdXN0IGV4aXN0IGluIHBhcmVudCBub2RlIWApO1xuICAgICAgICB9XG5cbiAgICAgICAgcmV0dXJuIGVsZW1lbnRzO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIFJldHVybnMgYWxsIGZvY3VzYWJsZSBlbGVtZW50cyBpbiB0aGUgZ2l2ZW4gcGFyZW50IG5vZGUuXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge0hUTUxFbGVtZW50fGRvY3VtZW50fSBwYXJlbnROb2RlXG4gICAgICogQHJldHVybnMge05vZGVMaXN0T2Y8RWxlbWVudD59XG4gICAgICovXG4gICAgc3RhdGljIGdldEZvY3VzYWJsZUVsZW1lbnRzKHBhcmVudE5vZGUgPSBkb2N1bWVudC5ib2R5KSB7XG4gICAgICAgIGNvbnN0IGZvY3VzQWJsZUVsZW1lbnRzID0gYFxuICAgICAgICAgICAgaW5wdXQ6bm90KFt0YWJpbmRleF49XCItXCJdKTpub3QoW2Rpc2FibGVkXSk6bm90KFt0eXBlPVwiaGlkZGVuXCJdKSxcbiAgICAgICAgICAgIHNlbGVjdDpub3QoW3RhYmluZGV4Xj1cIi1cIl0pOm5vdChbZGlzYWJsZWRdKSxcbiAgICAgICAgICAgIHRleHRhcmVhOm5vdChbdGFiaW5kZXhePVwiLVwiXSk6bm90KFtkaXNhYmxlZF0pLFxuICAgICAgICAgICAgYnV0dG9uOm5vdChbdGFiaW5kZXhePVwiLVwiXSk6bm90KFtkaXNhYmxlZF0pLFxuICAgICAgICAgICAgYVtocmVmXTpub3QoW3RhYmluZGV4Xj1cIi1cIl0pOm5vdChbZGlzYWJsZWRdKSxcbiAgICAgICAgICAgIFt0YWJpbmRleF06bm90KFt0YWJpbmRleF49XCItXCJdKTpub3QoW2Rpc2FibGVkXSlcbiAgICAgICAgYDtcblxuICAgICAgICByZXR1cm4gcGFyZW50Tm9kZS5xdWVyeVNlbGVjdG9yQWxsKGZvY3VzQWJsZUVsZW1lbnRzKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBSZXR1cm5zIHRoZSBmaXJzdCBmb2N1c2FibGUgZWxlbWVudCBpbiB0aGUgZ2l2ZW4gcGFyZW50IG5vZGUuXG4gICAgICpcbiAgICAgKiBAcGFyYW0gcGFyZW50Tm9kZVxuICAgICAqIEByZXR1cm5zIHtIVE1MRWxlbWVudH1cbiAgICAgKi9cbiAgICBzdGF0aWMgZ2V0Rmlyc3RGb2N1c2FibGVFbGVtZW50KHBhcmVudE5vZGUgPSBkb2N1bWVudC5ib2R5KSB7XG4gICAgICAgIHJldHVybiB0aGlzLmdldEZvY3VzYWJsZUVsZW1lbnRzKHBhcmVudE5vZGUpWzBdO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIFJldHVybnMgdGhlIGxhc3QgZm9jdXNhYmxlIGVsZW1lbnQgaW4gdGhlIGdpdmVuIHBhcmVudCBub2RlLlxuICAgICAqXG4gICAgICogQHBhcmFtIHBhcmVudE5vZGVcbiAgICAgKiBAcmV0dXJucyB7SFRNTEVsZW1lbnR9XG4gICAgICovXG4gICAgc3RhdGljIGdldExhc3RGb2N1c2FibGVFbGVtZW50KHBhcmVudE5vZGUgPSBkb2N1bWVudCkge1xuICAgICAgICBjb25zdCByZXN1bHQgPSB0aGlzLmdldEZvY3VzYWJsZUVsZW1lbnRzKHBhcmVudE5vZGUpO1xuXG4gICAgICAgIHJldHVybiByZXN1bHRbcmVzdWx0Lmxlbmd0aCAtIDFdO1xuICAgIH1cbn1cbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///139\n"
-        );
+  var t,
+    e,
+    r = {
+      139: (t, e, r) => {
+        r.d(e, { A: () => n });
+        var i = r(747);
+        class n {
+          static isNode(t) {
+            return (
+              "object" == typeof t &&
+              null !== t &&
+              (t === document || t === window || t instanceof Node)
+            );
+          }
+          static hasAttribute(t, e) {
+            if (!n.isNode(t))
+              throw new Error("The element must be a valid HTML Node!");
+            return "function" == typeof t.hasAttribute && t.hasAttribute(e);
+          }
+          static getAttribute(t, e, r = !0) {
+            if (r && !1 === n.hasAttribute(t, e))
+              throw new Error(`The required property "${e}" does not exist!`);
+            if ("function" == typeof t.getAttribute) return t.getAttribute(e);
+            if (r)
+              throw new Error(
+                "This node doesn't support the getAttribute function!"
+              );
+          }
+          static getDataAttribute(t, e, r = !0) {
+            const s = e.replace(/^data(|-)/, ""),
+              o = i.A.toLowerCamelCase(s, "-");
+            if (!n.isNode(t)) {
+              if (r)
+                throw new Error("The passed node is not a valid HTML Node!");
+              return;
+            }
+            if (void 0 === t.dataset) {
+              if (r)
+                throw new Error(
+                  "This node doesn't support the dataset attribute!"
+                );
+              return;
+            }
+            const l = t.dataset[o];
+            if (void 0 === l) {
+              if (r)
+                throw new Error(
+                  `The required data attribute "${e}" does not exist on ${t}!`
+                );
+              return l;
+            }
+            return i.A.parsePrimitive(l);
+          }
+          static querySelector(t, e, r = !0) {
+            if (r && !n.isNode(t))
+              throw new Error("The parent node is not a valid HTML Node!");
+            const i = t.querySelector(e) || !1;
+            if (r && !1 === i)
+              throw new Error(
+                `The required element "${e}" does not exist in parent node!`
+              );
+            return i;
+          }
+          static querySelectorAll(t, e, r = !0) {
+            if (r && !n.isNode(t))
+              throw new Error("The parent node is not a valid HTML Node!");
+            let i = t.querySelectorAll(e);
+            if ((0 === i.length && (i = !1), r && !1 === i))
+              throw new Error(
+                `At least one item of "${e}" must exist in parent node!`
+              );
+            return i;
+          }
+          static getFocusableElements(t = document.body) {
+            return t.querySelectorAll(
+              '\n            input:not([tabindex^="-"]):not([disabled]):not([type="hidden"]),\n            select:not([tabindex^="-"]):not([disabled]),\n            textarea:not([tabindex^="-"]):not([disabled]),\n            button:not([tabindex^="-"]):not([disabled]),\n            a[href]:not([tabindex^="-"]):not([disabled]),\n            [tabindex]:not([tabindex^="-"]):not([disabled])\n        '
+            );
+          }
+          static getFirstFocusableElement(t = document.body) {
+            return this.getFocusableElements(t)[0];
+          }
+          static getLastFocusableElement(t = document) {
+            const e = this.getFocusableElements(t);
+            return e[e.length - 1];
+          }
+        }
       },
-      194: (
-        __unused_webpack_module,
-        __webpack_exports__,
-        __webpack_require__
-      ) => {
-        eval(
-          "\n// EXPORTS\n__webpack_require__.d(__webpack_exports__, {\n  A: () => (/* binding */ Plugin)\n});\n\n// EXTERNAL MODULE: ./node_modules/deepmerge/dist/cjs.js\nvar cjs = __webpack_require__(744);\nvar cjs_default = /*#__PURE__*/__webpack_require__.n(cjs);\n// EXTERNAL MODULE: ./vendor/shopware/storefront/Resources/app/storefront/src/helper/dom-access.helper.js\nvar dom_access_helper = __webpack_require__(139);\n// EXTERNAL MODULE: ./vendor/shopware/storefront/Resources/app/storefront/src/helper/string.helper.js\nvar string_helper = __webpack_require__(747);\n;// ./vendor/shopware/storefront/Resources/app/storefront/src/helper/emitter.helper.js\n/**\n * @sw-package framework\n */\nclass NativeEventEmitter {\n    /**\n     * Event Emitter which works with the provided DOM element. The class isn't meant to be\n     * extended. It should rather being used as a mixin component to provide the ability to\n     * publish events.\n     *\n     * @example\n     * const emitter = new NativeEventEmitter();\n     * emitter.publish('my-event-name');\n     *\n     * @example using custom data\n     * const emitter = new NativeEventEmitter();\n     * emitter.subscribe('my-event-name', (event) => {\n     *     console.log(event.detail);\n     * });\n     * emitter.publish('my-event-name', { custom: 'data' });\n     *\n     * @example using a custom scope\n     * const emitter = new NativeEventEmitter();\n     * emitter.subscribe('my-event-name', (event) => {\n     *     console.log(event.detail);\n     * }, { scope: myScope });\n     * emitter.publish('my-event-name', { custom: 'data' });\n     *\n     * @example once listeners\n     * const emitter = new NativeEventEmitter();\n     * emitter.subscribe('my-event-name', (event) => {\n     *     console.log(event.detail);\n     * }, { once: true });\n     * emitter.publish('my-event-name', { custom: 'data' });\n     *\n     * @constructor\n     * @param {Document|HTMLElement} [el = document]\n     */\n    constructor(el = document) {\n        this._el = el;\n        el.$emitter = this;\n        this._listeners = [];\n    }\n\n    /**\n     * Publishes an event on the element. Additional information can be added using the `data` parameter.\n     * The data are accessible in the event handler in `event.detail` which represents the standard\n     * implementation.\n     *\n     * @param {Boolean} cancelable\n     * @return {CustomEvent}\n     */\n    publish(eventName, detail = {}, cancelable = false) {\n        const event = new CustomEvent(eventName, {\n            detail,\n            cancelable,\n        });\n\n        this.el.dispatchEvent(event);\n\n        return event;\n    }\n\n    /**\n     * Subscribes to an event and adds a listener.\n     *\n     * @param {String} eventName\n     * @param {Function} callback\n     * @param {Object} [opts = {}]\n     */\n    subscribe(eventName, callback, opts = {}) {\n        const emitter = this;\n        const splitEventName = eventName.split('.');\n        let cb = opts.scope ? callback.bind(opts.scope) : callback;\n\n        // Support for listeners which are fired once\n        if (opts.once && opts.once === true) {\n            const onceCallback = cb;\n            cb = function onceListener(event) {\n                emitter.unsubscribe(eventName);\n                onceCallback(event);\n            };\n        }\n\n        this.el.addEventListener(splitEventName[0], cb);\n\n        this.listeners.push({\n            splitEventName,\n            opts,\n            cb,\n        });\n\n        return true;\n    }\n\n    /**\n     * Removes an event listener.\n     *\n     * @param {String} eventName\n     */\n    unsubscribe(eventName) {\n        const splitEventName = eventName.split('.');\n        this.listeners = this.listeners.reduce((accumulator, listener) => {\n            const foundEvent = [...listener.splitEventName].sort().toString() === splitEventName.sort().toString();\n\n            if (foundEvent) {\n                this.el.removeEventListener(listener.splitEventName[0], listener.cb);\n                return accumulator;\n            }\n\n            accumulator.push(listener);\n            return accumulator;\n        }, []);\n\n        return true;\n    }\n\n    /**\n     * Resets the listeners\n     *\n     * @return {boolean}\n     */\n    reset() {\n        // Loop through the event listener and remove them from the element\n        this.listeners.forEach((listener) => {\n            this.el.removeEventListener(listener.splitEventName[0], listener.cb);\n        });\n\n        // Reset registry\n        this.listeners = [];\n        return true;\n    }\n\n    get el() {\n        return this._el;\n    }\n\n    set el(value) {\n        this._el = value;\n    }\n\n    get listeners() {\n        return this._listeners;\n    }\n\n    set listeners(value) {\n        this._listeners = value;\n    }\n}\n\n;// ./vendor/shopware/storefront/Resources/app/storefront/src/plugin-system/plugin.class.js\n\n\n\n\n\n/**\n * Plugin Base class\n * @sw-package framework\n */\nclass Plugin {\n    /**\n     * plugin constructor\n     *\n     * @param {HTMLElement} el\n     * @param {Object} options\n     * @param {string} pluginName\n     */\n    constructor(el, options = {}, pluginName = false) {\n        if (!dom_access_helper/* default */.A.isNode(el)) {\n            throw new Error('There is no valid element given.');\n        }\n\n        this.el = el;\n        this.$emitter = new NativeEventEmitter(this.el);\n        this._pluginName = this._getPluginName(pluginName);\n        this.options = this._mergeOptions(options);\n        this._initialized = false;\n\n        this._registerInstance();\n        this._init();\n    }\n\n    /**\n     * this function gets executed when the plugin is initialized\n     */\n    init() {\n        throw new Error(`The \"init\" method for the plugin \"${this._pluginName}\" is not defined.`);\n    }\n\n    /**\n     * this function gets executed when the plugin is being updated\n     */\n    update() {\n\n    }\n\n    /**\n     * internal init method which checks\n     * if the plugin is already initialized\n     * before executing the public init\n     *\n     * @private\n     */\n    _init() {\n        if (this._initialized) return;\n\n        this.init();\n        this._initialized = true;\n    }\n\n    /**\n     * internal update method which checks\n     * if the plugin is already initialized\n     * before executing the public update\n     *\n     * @private\n     */\n    _update() {\n        if (!this._initialized) return;\n\n        this.update();\n    }\n\n    /**\n     * deep merge the passed options and the static defaults\n     *\n     * @param {Object} options\n     *\n     * @private\n     */\n    _mergeOptions(options) {\n        const dashedPluginName = string_helper/* default */.A.toDashCase(this._pluginName);\n        const dataAttributeConfig = dom_access_helper/* default */.A.getDataAttribute(this.el, `data-${dashedPluginName}-config`, false);\n        const dataAttributeOptions = dom_access_helper/* default */.A.getAttribute(this.el, `data-${dashedPluginName}-options`, false);\n\n\n        // static plugin options\n        // previously merged options\n        // explicit options when creating a plugin instance with 'new'\n        const merge = [\n            this.constructor.options,\n            this.options,\n            options,\n        ];\n\n        // options which are set via data-plugin-name-config=\"config name\"\n        if (dataAttributeConfig) merge.push(window.PluginConfigManager.get(this._pluginName, dataAttributeConfig));\n        // options which are set via data-plugin-name-options=\"{json..}\"\n        try {\n            if (dataAttributeOptions) merge.push(JSON.parse(dataAttributeOptions));\n        } catch (e) {\n            console.error(this.el);\n            throw new Error(\n                `The data attribute \"data-${dashedPluginName}-options\" could not be parsed to json: ${e.message}`\n            );\n        }\n\n        return cjs_default().all(\n            merge.filter(config => {\n                return config instanceof Object && !(config instanceof Array);\n            })\n                .map(config => config || {})\n        );\n    }\n\n    /**\n     * registers the plugin Instance to the element\n     *\n     * @private\n     */\n    _registerInstance() {\n        const elementPluginInstances = window.PluginManager.getPluginInstancesFromElement(this.el);\n        elementPluginInstances.set(this._pluginName, this);\n\n        const plugin = window.PluginManager.getPlugin(this._pluginName, false);\n        plugin.get('instances').push(this);\n    }\n\n    /**\n     * returns the plugin name\n     *\n     * @param {string} pluginName\n     *\n     * @returns {string}\n     * @private\n     */\n    _getPluginName(pluginName) {\n        if (!pluginName) pluginName = this.constructor.name;\n\n        return pluginName;\n    }\n\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMTk0LmpzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7O0FBQUE7QUFDQTtBQUNBO0FBQ2U7QUFDZjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFFBQVE7QUFDUiwwQ0FBMEMsZ0JBQWdCO0FBQzFEO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxRQUFRLElBQUksZ0JBQWdCO0FBQzVCLDBDQUEwQyxnQkFBZ0I7QUFDMUQ7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFFBQVEsSUFBSSxZQUFZO0FBQ3hCLDBDQUEwQyxnQkFBZ0I7QUFDMUQ7QUFDQTtBQUNBLGVBQWUsc0JBQXNCO0FBQ3JDO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsZUFBZSxTQUFTO0FBQ3hCLGdCQUFnQjtBQUNoQjtBQUNBLGtDQUFrQztBQUNsQztBQUNBO0FBQ0E7QUFDQSxTQUFTOztBQUVUOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0EsZUFBZSxRQUFRO0FBQ3ZCLGVBQWUsVUFBVTtBQUN6QixlQUFlLFFBQVEsVUFBVTtBQUNqQztBQUNBLDRDQUE0QztBQUM1QztBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFNBQVM7O0FBRVQ7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQSxlQUFlLFFBQVE7QUFDdkI7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsU0FBUzs7QUFFVDtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLGdCQUFnQjtBQUNoQjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsU0FBUzs7QUFFVDtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7O0FDbkprQztBQUNtQjtBQUNEO0FBQ087O0FBRTNEO0FBQ0E7QUFDQTtBQUNBO0FBQ2U7QUFDZjtBQUNBO0FBQ0E7QUFDQSxlQUFlLGFBQWE7QUFDNUIsZUFBZSxRQUFRO0FBQ3ZCLGVBQWUsUUFBUTtBQUN2QjtBQUNBLGdDQUFnQztBQUNoQyxhQUFhLGdDQUFTO0FBQ3RCO0FBQ0E7O0FBRUE7QUFDQSw0QkFBNEIsa0JBQWtCO0FBQzlDO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQSw2REFBNkQsaUJBQWlCO0FBQzlFOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0EsZUFBZSxRQUFRO0FBQ3ZCO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsaUNBQWlDLDRCQUFZO0FBQzdDLG9DQUFvQyxnQ0FBUyxtQ0FBbUMsaUJBQWlCO0FBQ2pHLHFDQUFxQyxnQ0FBUywrQkFBK0IsaUJBQWlCOzs7QUFHOUY7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsZ0VBQWdFLE9BQU87QUFDdkU7QUFDQTtBQUNBLFVBQVU7QUFDVjtBQUNBO0FBQ0EsNENBQTRDLGlCQUFpQix5Q0FBeUMsVUFBVTtBQUNoSDtBQUNBOztBQUVBLGVBQWUsaUJBQWE7QUFDNUI7QUFDQTtBQUNBLGFBQWE7QUFDYiwyQ0FBMkM7QUFDM0M7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQSxlQUFlLFFBQVE7QUFDdkI7QUFDQSxpQkFBaUI7QUFDakI7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQSIsInNvdXJjZXMiOlsid2VicGFjazovL21ha2FpcmEtc2hvcHdhcmU2LXN0b3JlZnJvbnQvLi92ZW5kb3Ivc2hvcHdhcmUvc3RvcmVmcm9udC9SZXNvdXJjZXMvYXBwL3N0b3JlZnJvbnQvc3JjL2hlbHBlci9lbWl0dGVyLmhlbHBlci5qcz9kY2E0Iiwid2VicGFjazovL21ha2FpcmEtc2hvcHdhcmU2LXN0b3JlZnJvbnQvLi92ZW5kb3Ivc2hvcHdhcmUvc3RvcmVmcm9udC9SZXNvdXJjZXMvYXBwL3N0b3JlZnJvbnQvc3JjL3BsdWdpbi1zeXN0ZW0vcGx1Z2luLmNsYXNzLmpzPzBiMWMiXSwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAc3ctcGFja2FnZSBmcmFtZXdvcmtcbiAqL1xuZXhwb3J0IGRlZmF1bHQgY2xhc3MgTmF0aXZlRXZlbnRFbWl0dGVyIHtcbiAgICAvKipcbiAgICAgKiBFdmVudCBFbWl0dGVyIHdoaWNoIHdvcmtzIHdpdGggdGhlIHByb3ZpZGVkIERPTSBlbGVtZW50LiBUaGUgY2xhc3MgaXNuJ3QgbWVhbnQgdG8gYmVcbiAgICAgKiBleHRlbmRlZC4gSXQgc2hvdWxkIHJhdGhlciBiZWluZyB1c2VkIGFzIGEgbWl4aW4gY29tcG9uZW50IHRvIHByb3ZpZGUgdGhlIGFiaWxpdHkgdG9cbiAgICAgKiBwdWJsaXNoIGV2ZW50cy5cbiAgICAgKlxuICAgICAqIEBleGFtcGxlXG4gICAgICogY29uc3QgZW1pdHRlciA9IG5ldyBOYXRpdmVFdmVudEVtaXR0ZXIoKTtcbiAgICAgKiBlbWl0dGVyLnB1Ymxpc2goJ215LWV2ZW50LW5hbWUnKTtcbiAgICAgKlxuICAgICAqIEBleGFtcGxlIHVzaW5nIGN1c3RvbSBkYXRhXG4gICAgICogY29uc3QgZW1pdHRlciA9IG5ldyBOYXRpdmVFdmVudEVtaXR0ZXIoKTtcbiAgICAgKiBlbWl0dGVyLnN1YnNjcmliZSgnbXktZXZlbnQtbmFtZScsIChldmVudCkgPT4ge1xuICAgICAqICAgICBjb25zb2xlLmxvZyhldmVudC5kZXRhaWwpO1xuICAgICAqIH0pO1xuICAgICAqIGVtaXR0ZXIucHVibGlzaCgnbXktZXZlbnQtbmFtZScsIHsgY3VzdG9tOiAnZGF0YScgfSk7XG4gICAgICpcbiAgICAgKiBAZXhhbXBsZSB1c2luZyBhIGN1c3RvbSBzY29wZVxuICAgICAqIGNvbnN0IGVtaXR0ZXIgPSBuZXcgTmF0aXZlRXZlbnRFbWl0dGVyKCk7XG4gICAgICogZW1pdHRlci5zdWJzY3JpYmUoJ215LWV2ZW50LW5hbWUnLCAoZXZlbnQpID0+IHtcbiAgICAgKiAgICAgY29uc29sZS5sb2coZXZlbnQuZGV0YWlsKTtcbiAgICAgKiB9LCB7IHNjb3BlOiBteVNjb3BlIH0pO1xuICAgICAqIGVtaXR0ZXIucHVibGlzaCgnbXktZXZlbnQtbmFtZScsIHsgY3VzdG9tOiAnZGF0YScgfSk7XG4gICAgICpcbiAgICAgKiBAZXhhbXBsZSBvbmNlIGxpc3RlbmVyc1xuICAgICAqIGNvbnN0IGVtaXR0ZXIgPSBuZXcgTmF0aXZlRXZlbnRFbWl0dGVyKCk7XG4gICAgICogZW1pdHRlci5zdWJzY3JpYmUoJ215LWV2ZW50LW5hbWUnLCAoZXZlbnQpID0+IHtcbiAgICAgKiAgICAgY29uc29sZS5sb2coZXZlbnQuZGV0YWlsKTtcbiAgICAgKiB9LCB7IG9uY2U6IHRydWUgfSk7XG4gICAgICogZW1pdHRlci5wdWJsaXNoKCdteS1ldmVudC1uYW1lJywgeyBjdXN0b206ICdkYXRhJyB9KTtcbiAgICAgKlxuICAgICAqIEBjb25zdHJ1Y3RvclxuICAgICAqIEBwYXJhbSB7RG9jdW1lbnR8SFRNTEVsZW1lbnR9IFtlbCA9IGRvY3VtZW50XVxuICAgICAqL1xuICAgIGNvbnN0cnVjdG9yKGVsID0gZG9jdW1lbnQpIHtcbiAgICAgICAgdGhpcy5fZWwgPSBlbDtcbiAgICAgICAgZWwuJGVtaXR0ZXIgPSB0aGlzO1xuICAgICAgICB0aGlzLl9saXN0ZW5lcnMgPSBbXTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBQdWJsaXNoZXMgYW4gZXZlbnQgb24gdGhlIGVsZW1lbnQuIEFkZGl0aW9uYWwgaW5mb3JtYXRpb24gY2FuIGJlIGFkZGVkIHVzaW5nIHRoZSBgZGF0YWAgcGFyYW1ldGVyLlxuICAgICAqIFRoZSBkYXRhIGFyZSBhY2Nlc3NpYmxlIGluIHRoZSBldmVudCBoYW5kbGVyIGluIGBldmVudC5kZXRhaWxgIHdoaWNoIHJlcHJlc2VudHMgdGhlIHN0YW5kYXJkXG4gICAgICogaW1wbGVtZW50YXRpb24uXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge0Jvb2xlYW59IGNhbmNlbGFibGVcbiAgICAgKiBAcmV0dXJuIHtDdXN0b21FdmVudH1cbiAgICAgKi9cbiAgICBwdWJsaXNoKGV2ZW50TmFtZSwgZGV0YWlsID0ge30sIGNhbmNlbGFibGUgPSBmYWxzZSkge1xuICAgICAgICBjb25zdCBldmVudCA9IG5ldyBDdXN0b21FdmVudChldmVudE5hbWUsIHtcbiAgICAgICAgICAgIGRldGFpbCxcbiAgICAgICAgICAgIGNhbmNlbGFibGUsXG4gICAgICAgIH0pO1xuXG4gICAgICAgIHRoaXMuZWwuZGlzcGF0Y2hFdmVudChldmVudCk7XG5cbiAgICAgICAgcmV0dXJuIGV2ZW50O1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIFN1YnNjcmliZXMgdG8gYW4gZXZlbnQgYW5kIGFkZHMgYSBsaXN0ZW5lci5cbiAgICAgKlxuICAgICAqIEBwYXJhbSB7U3RyaW5nfSBldmVudE5hbWVcbiAgICAgKiBAcGFyYW0ge0Z1bmN0aW9ufSBjYWxsYmFja1xuICAgICAqIEBwYXJhbSB7T2JqZWN0fSBbb3B0cyA9IHt9XVxuICAgICAqL1xuICAgIHN1YnNjcmliZShldmVudE5hbWUsIGNhbGxiYWNrLCBvcHRzID0ge30pIHtcbiAgICAgICAgY29uc3QgZW1pdHRlciA9IHRoaXM7XG4gICAgICAgIGNvbnN0IHNwbGl0RXZlbnROYW1lID0gZXZlbnROYW1lLnNwbGl0KCcuJyk7XG4gICAgICAgIGxldCBjYiA9IG9wdHMuc2NvcGUgPyBjYWxsYmFjay5iaW5kKG9wdHMuc2NvcGUpIDogY2FsbGJhY2s7XG5cbiAgICAgICAgLy8gU3VwcG9ydCBmb3IgbGlzdGVuZXJzIHdoaWNoIGFyZSBmaXJlZCBvbmNlXG4gICAgICAgIGlmIChvcHRzLm9uY2UgJiYgb3B0cy5vbmNlID09PSB0cnVlKSB7XG4gICAgICAgICAgICBjb25zdCBvbmNlQ2FsbGJhY2sgPSBjYjtcbiAgICAgICAgICAgIGNiID0gZnVuY3Rpb24gb25jZUxpc3RlbmVyKGV2ZW50KSB7XG4gICAgICAgICAgICAgICAgZW1pdHRlci51bnN1YnNjcmliZShldmVudE5hbWUpO1xuICAgICAgICAgICAgICAgIG9uY2VDYWxsYmFjayhldmVudCk7XG4gICAgICAgICAgICB9O1xuICAgICAgICB9XG5cbiAgICAgICAgdGhpcy5lbC5hZGRFdmVudExpc3RlbmVyKHNwbGl0RXZlbnROYW1lWzBdLCBjYik7XG5cbiAgICAgICAgdGhpcy5saXN0ZW5lcnMucHVzaCh7XG4gICAgICAgICAgICBzcGxpdEV2ZW50TmFtZSxcbiAgICAgICAgICAgIG9wdHMsXG4gICAgICAgICAgICBjYixcbiAgICAgICAgfSk7XG5cbiAgICAgICAgcmV0dXJuIHRydWU7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogUmVtb3ZlcyBhbiBldmVudCBsaXN0ZW5lci5cbiAgICAgKlxuICAgICAqIEBwYXJhbSB7U3RyaW5nfSBldmVudE5hbWVcbiAgICAgKi9cbiAgICB1bnN1YnNjcmliZShldmVudE5hbWUpIHtcbiAgICAgICAgY29uc3Qgc3BsaXRFdmVudE5hbWUgPSBldmVudE5hbWUuc3BsaXQoJy4nKTtcbiAgICAgICAgdGhpcy5saXN0ZW5lcnMgPSB0aGlzLmxpc3RlbmVycy5yZWR1Y2UoKGFjY3VtdWxhdG9yLCBsaXN0ZW5lcikgPT4ge1xuICAgICAgICAgICAgY29uc3QgZm91bmRFdmVudCA9IFsuLi5saXN0ZW5lci5zcGxpdEV2ZW50TmFtZV0uc29ydCgpLnRvU3RyaW5nKCkgPT09IHNwbGl0RXZlbnROYW1lLnNvcnQoKS50b1N0cmluZygpO1xuXG4gICAgICAgICAgICBpZiAoZm91bmRFdmVudCkge1xuICAgICAgICAgICAgICAgIHRoaXMuZWwucmVtb3ZlRXZlbnRMaXN0ZW5lcihsaXN0ZW5lci5zcGxpdEV2ZW50TmFtZVswXSwgbGlzdGVuZXIuY2IpO1xuICAgICAgICAgICAgICAgIHJldHVybiBhY2N1bXVsYXRvcjtcbiAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgYWNjdW11bGF0b3IucHVzaChsaXN0ZW5lcik7XG4gICAgICAgICAgICByZXR1cm4gYWNjdW11bGF0b3I7XG4gICAgICAgIH0sIFtdKTtcblxuICAgICAgICByZXR1cm4gdHJ1ZTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBSZXNldHMgdGhlIGxpc3RlbmVyc1xuICAgICAqXG4gICAgICogQHJldHVybiB7Ym9vbGVhbn1cbiAgICAgKi9cbiAgICByZXNldCgpIHtcbiAgICAgICAgLy8gTG9vcCB0aHJvdWdoIHRoZSBldmVudCBsaXN0ZW5lciBhbmQgcmVtb3ZlIHRoZW0gZnJvbSB0aGUgZWxlbWVudFxuICAgICAgICB0aGlzLmxpc3RlbmVycy5mb3JFYWNoKChsaXN0ZW5lcikgPT4ge1xuICAgICAgICAgICAgdGhpcy5lbC5yZW1vdmVFdmVudExpc3RlbmVyKGxpc3RlbmVyLnNwbGl0RXZlbnROYW1lWzBdLCBsaXN0ZW5lci5jYik7XG4gICAgICAgIH0pO1xuXG4gICAgICAgIC8vIFJlc2V0IHJlZ2lzdHJ5XG4gICAgICAgIHRoaXMubGlzdGVuZXJzID0gW107XG4gICAgICAgIHJldHVybiB0cnVlO1xuICAgIH1cblxuICAgIGdldCBlbCgpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMuX2VsO1xuICAgIH1cblxuICAgIHNldCBlbCh2YWx1ZSkge1xuICAgICAgICB0aGlzLl9lbCA9IHZhbHVlO1xuICAgIH1cblxuICAgIGdldCBsaXN0ZW5lcnMoKSB7XG4gICAgICAgIHJldHVybiB0aGlzLl9saXN0ZW5lcnM7XG4gICAgfVxuXG4gICAgc2V0IGxpc3RlbmVycyh2YWx1ZSkge1xuICAgICAgICB0aGlzLl9saXN0ZW5lcnMgPSB2YWx1ZTtcbiAgICB9XG59XG4iLCJpbXBvcnQgZGVlcG1lcmdlIGZyb20gJ2RlZXBtZXJnZSc7XG5pbXBvcnQgRG9tQWNjZXNzIGZyb20gJ3NyYy9oZWxwZXIvZG9tLWFjY2Vzcy5oZWxwZXInO1xuaW1wb3J0IFN0cmluZ0hlbHBlciBmcm9tICdzcmMvaGVscGVyL3N0cmluZy5oZWxwZXInO1xuaW1wb3J0IE5hdGl2ZUV2ZW50RW1pdHRlciBmcm9tICdzcmMvaGVscGVyL2VtaXR0ZXIuaGVscGVyJztcblxuLyoqXG4gKiBQbHVnaW4gQmFzZSBjbGFzc1xuICogQHN3LXBhY2thZ2UgZnJhbWV3b3JrXG4gKi9cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIFBsdWdpbiB7XG4gICAgLyoqXG4gICAgICogcGx1Z2luIGNvbnN0cnVjdG9yXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge0hUTUxFbGVtZW50fSBlbFxuICAgICAqIEBwYXJhbSB7T2JqZWN0fSBvcHRpb25zXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IHBsdWdpbk5hbWVcbiAgICAgKi9cbiAgICBjb25zdHJ1Y3RvcihlbCwgb3B0aW9ucyA9IHt9LCBwbHVnaW5OYW1lID0gZmFsc2UpIHtcbiAgICAgICAgaWYgKCFEb21BY2Nlc3MuaXNOb2RlKGVsKSkge1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKCdUaGVyZSBpcyBubyB2YWxpZCBlbGVtZW50IGdpdmVuLicpO1xuICAgICAgICB9XG5cbiAgICAgICAgdGhpcy5lbCA9IGVsO1xuICAgICAgICB0aGlzLiRlbWl0dGVyID0gbmV3IE5hdGl2ZUV2ZW50RW1pdHRlcih0aGlzLmVsKTtcbiAgICAgICAgdGhpcy5fcGx1Z2luTmFtZSA9IHRoaXMuX2dldFBsdWdpbk5hbWUocGx1Z2luTmFtZSk7XG4gICAgICAgIHRoaXMub3B0aW9ucyA9IHRoaXMuX21lcmdlT3B0aW9ucyhvcHRpb25zKTtcbiAgICAgICAgdGhpcy5faW5pdGlhbGl6ZWQgPSBmYWxzZTtcblxuICAgICAgICB0aGlzLl9yZWdpc3Rlckluc3RhbmNlKCk7XG4gICAgICAgIHRoaXMuX2luaXQoKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiB0aGlzIGZ1bmN0aW9uIGdldHMgZXhlY3V0ZWQgd2hlbiB0aGUgcGx1Z2luIGlzIGluaXRpYWxpemVkXG4gICAgICovXG4gICAgaW5pdCgpIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBUaGUgXCJpbml0XCIgbWV0aG9kIGZvciB0aGUgcGx1Z2luIFwiJHt0aGlzLl9wbHVnaW5OYW1lfVwiIGlzIG5vdCBkZWZpbmVkLmApO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIHRoaXMgZnVuY3Rpb24gZ2V0cyBleGVjdXRlZCB3aGVuIHRoZSBwbHVnaW4gaXMgYmVpbmcgdXBkYXRlZFxuICAgICAqL1xuICAgIHVwZGF0ZSgpIHtcblxuICAgIH1cblxuICAgIC8qKlxuICAgICAqIGludGVybmFsIGluaXQgbWV0aG9kIHdoaWNoIGNoZWNrc1xuICAgICAqIGlmIHRoZSBwbHVnaW4gaXMgYWxyZWFkeSBpbml0aWFsaXplZFxuICAgICAqIGJlZm9yZSBleGVjdXRpbmcgdGhlIHB1YmxpYyBpbml0XG4gICAgICpcbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIF9pbml0KCkge1xuICAgICAgICBpZiAodGhpcy5faW5pdGlhbGl6ZWQpIHJldHVybjtcblxuICAgICAgICB0aGlzLmluaXQoKTtcbiAgICAgICAgdGhpcy5faW5pdGlhbGl6ZWQgPSB0cnVlO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIGludGVybmFsIHVwZGF0ZSBtZXRob2Qgd2hpY2ggY2hlY2tzXG4gICAgICogaWYgdGhlIHBsdWdpbiBpcyBhbHJlYWR5IGluaXRpYWxpemVkXG4gICAgICogYmVmb3JlIGV4ZWN1dGluZyB0aGUgcHVibGljIHVwZGF0ZVxuICAgICAqXG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBfdXBkYXRlKCkge1xuICAgICAgICBpZiAoIXRoaXMuX2luaXRpYWxpemVkKSByZXR1cm47XG5cbiAgICAgICAgdGhpcy51cGRhdGUoKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBkZWVwIG1lcmdlIHRoZSBwYXNzZWQgb3B0aW9ucyBhbmQgdGhlIHN0YXRpYyBkZWZhdWx0c1xuICAgICAqXG4gICAgICogQHBhcmFtIHtPYmplY3R9IG9wdGlvbnNcbiAgICAgKlxuICAgICAqIEBwcml2YXRlXG4gICAgICovXG4gICAgX21lcmdlT3B0aW9ucyhvcHRpb25zKSB7XG4gICAgICAgIGNvbnN0IGRhc2hlZFBsdWdpbk5hbWUgPSBTdHJpbmdIZWxwZXIudG9EYXNoQ2FzZSh0aGlzLl9wbHVnaW5OYW1lKTtcbiAgICAgICAgY29uc3QgZGF0YUF0dHJpYnV0ZUNvbmZpZyA9IERvbUFjY2Vzcy5nZXREYXRhQXR0cmlidXRlKHRoaXMuZWwsIGBkYXRhLSR7ZGFzaGVkUGx1Z2luTmFtZX0tY29uZmlnYCwgZmFsc2UpO1xuICAgICAgICBjb25zdCBkYXRhQXR0cmlidXRlT3B0aW9ucyA9IERvbUFjY2Vzcy5nZXRBdHRyaWJ1dGUodGhpcy5lbCwgYGRhdGEtJHtkYXNoZWRQbHVnaW5OYW1lfS1vcHRpb25zYCwgZmFsc2UpO1xuXG5cbiAgICAgICAgLy8gc3RhdGljIHBsdWdpbiBvcHRpb25zXG4gICAgICAgIC8vIHByZXZpb3VzbHkgbWVyZ2VkIG9wdGlvbnNcbiAgICAgICAgLy8gZXhwbGljaXQgb3B0aW9ucyB3aGVuIGNyZWF0aW5nIGEgcGx1Z2luIGluc3RhbmNlIHdpdGggJ25ldydcbiAgICAgICAgY29uc3QgbWVyZ2UgPSBbXG4gICAgICAgICAgICB0aGlzLmNvbnN0cnVjdG9yLm9wdGlvbnMsXG4gICAgICAgICAgICB0aGlzLm9wdGlvbnMsXG4gICAgICAgICAgICBvcHRpb25zLFxuICAgICAgICBdO1xuXG4gICAgICAgIC8vIG9wdGlvbnMgd2hpY2ggYXJlIHNldCB2aWEgZGF0YS1wbHVnaW4tbmFtZS1jb25maWc9XCJjb25maWcgbmFtZVwiXG4gICAgICAgIGlmIChkYXRhQXR0cmlidXRlQ29uZmlnKSBtZXJnZS5wdXNoKHdpbmRvdy5QbHVnaW5Db25maWdNYW5hZ2VyLmdldCh0aGlzLl9wbHVnaW5OYW1lLCBkYXRhQXR0cmlidXRlQ29uZmlnKSk7XG4gICAgICAgIC8vIG9wdGlvbnMgd2hpY2ggYXJlIHNldCB2aWEgZGF0YS1wbHVnaW4tbmFtZS1vcHRpb25zPVwie2pzb24uLn1cIlxuICAgICAgICB0cnkge1xuICAgICAgICAgICAgaWYgKGRhdGFBdHRyaWJ1dGVPcHRpb25zKSBtZXJnZS5wdXNoKEpTT04ucGFyc2UoZGF0YUF0dHJpYnV0ZU9wdGlvbnMpKTtcbiAgICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAgICAgY29uc29sZS5lcnJvcih0aGlzLmVsKTtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcihcbiAgICAgICAgICAgICAgICBgVGhlIGRhdGEgYXR0cmlidXRlIFwiZGF0YS0ke2Rhc2hlZFBsdWdpbk5hbWV9LW9wdGlvbnNcIiBjb3VsZCBub3QgYmUgcGFyc2VkIHRvIGpzb246ICR7ZS5tZXNzYWdlfWBcbiAgICAgICAgICAgICk7XG4gICAgICAgIH1cblxuICAgICAgICByZXR1cm4gZGVlcG1lcmdlLmFsbChcbiAgICAgICAgICAgIG1lcmdlLmZpbHRlcihjb25maWcgPT4ge1xuICAgICAgICAgICAgICAgIHJldHVybiBjb25maWcgaW5zdGFuY2VvZiBPYmplY3QgJiYgIShjb25maWcgaW5zdGFuY2VvZiBBcnJheSk7XG4gICAgICAgICAgICB9KVxuICAgICAgICAgICAgICAgIC5tYXAoY29uZmlnID0+IGNvbmZpZyB8fCB7fSlcbiAgICAgICAgKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiByZWdpc3RlcnMgdGhlIHBsdWdpbiBJbnN0YW5jZSB0byB0aGUgZWxlbWVudFxuICAgICAqXG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBfcmVnaXN0ZXJJbnN0YW5jZSgpIHtcbiAgICAgICAgY29uc3QgZWxlbWVudFBsdWdpbkluc3RhbmNlcyA9IHdpbmRvdy5QbHVnaW5NYW5hZ2VyLmdldFBsdWdpbkluc3RhbmNlc0Zyb21FbGVtZW50KHRoaXMuZWwpO1xuICAgICAgICBlbGVtZW50UGx1Z2luSW5zdGFuY2VzLnNldCh0aGlzLl9wbHVnaW5OYW1lLCB0aGlzKTtcblxuICAgICAgICBjb25zdCBwbHVnaW4gPSB3aW5kb3cuUGx1Z2luTWFuYWdlci5nZXRQbHVnaW4odGhpcy5fcGx1Z2luTmFtZSwgZmFsc2UpO1xuICAgICAgICBwbHVnaW4uZ2V0KCdpbnN0YW5jZXMnKS5wdXNoKHRoaXMpO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIHJldHVybnMgdGhlIHBsdWdpbiBuYW1lXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gcGx1Z2luTmFtZVxuICAgICAqXG4gICAgICogQHJldHVybnMge3N0cmluZ31cbiAgICAgKiBAcHJpdmF0ZVxuICAgICAqL1xuICAgIF9nZXRQbHVnaW5OYW1lKHBsdWdpbk5hbWUpIHtcbiAgICAgICAgaWYgKCFwbHVnaW5OYW1lKSBwbHVnaW5OYW1lID0gdGhpcy5jb25zdHJ1Y3Rvci5uYW1lO1xuXG4gICAgICAgIHJldHVybiBwbHVnaW5OYW1lO1xuICAgIH1cblxufVxuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///194\n"
-        );
+      194: (t, e, r) => {
+        r.d(e, { A: () => a });
+        var i = r(744),
+          n = r.n(i),
+          s = r(139),
+          o = r(747);
+        class l {
+          constructor(t = document) {
+            (this._el = t), (t.$emitter = this), (this._listeners = []);
+          }
+          publish(t, e = {}, r = !1) {
+            const i = new CustomEvent(t, { detail: e, cancelable: r });
+            return this.el.dispatchEvent(i), i;
+          }
+          subscribe(t, e, r = {}) {
+            const i = this,
+              n = t.split(".");
+            let s = r.scope ? e.bind(r.scope) : e;
+            if (r.once && !0 === r.once) {
+              const e = s;
+              s = function (r) {
+                i.unsubscribe(t), e(r);
+              };
+            }
+            return (
+              this.el.addEventListener(n[0], s),
+              this.listeners.push({ splitEventName: n, opts: r, cb: s }),
+              !0
+            );
+          }
+          unsubscribe(t) {
+            const e = t.split(".");
+            return (
+              (this.listeners = this.listeners.reduce(
+                (t, r) =>
+                  [...r.splitEventName].sort().toString() ===
+                  e.sort().toString()
+                    ? (this.el.removeEventListener(r.splitEventName[0], r.cb),
+                      t)
+                    : (t.push(r), t),
+                []
+              )),
+              !0
+            );
+          }
+          reset() {
+            return (
+              this.listeners.forEach((t) => {
+                this.el.removeEventListener(t.splitEventName[0], t.cb);
+              }),
+              (this.listeners = []),
+              !0
+            );
+          }
+          get el() {
+            return this._el;
+          }
+          set el(t) {
+            this._el = t;
+          }
+          get listeners() {
+            return this._listeners;
+          }
+          set listeners(t) {
+            this._listeners = t;
+          }
+        }
+        class a {
+          constructor(t, e = {}, r = !1) {
+            if (!s.A.isNode(t))
+              throw new Error("There is no valid element given.");
+            (this.el = t),
+              (this.$emitter = new l(this.el)),
+              (this._pluginName = this._getPluginName(r)),
+              (this.options = this._mergeOptions(e)),
+              (this._initialized = !1),
+              this._registerInstance(),
+              this._init();
+          }
+          init() {
+            throw new Error(
+              `The "init" method for the plugin "${this._pluginName}" is not defined.`
+            );
+          }
+          update() {}
+          _init() {
+            this._initialized || (this.init(), (this._initialized = !0));
+          }
+          _update() {
+            this._initialized && this.update();
+          }
+          _mergeOptions(t) {
+            const e = o.A.toDashCase(this._pluginName),
+              r = s.A.getDataAttribute(this.el, `data-${e}-config`, !1),
+              i = s.A.getAttribute(this.el, `data-${e}-options`, !1),
+              l = [this.constructor.options, this.options, t];
+            r && l.push(window.PluginConfigManager.get(this._pluginName, r));
+            try {
+              i && l.push(JSON.parse(i));
+            } catch (t) {
+              throw (
+                (console.error(this.el),
+                new Error(
+                  `The data attribute "data-${e}-options" could not be parsed to json: ${t.message}`
+                ))
+              );
+            }
+            return n().all(
+              l
+                .filter((t) => t instanceof Object && !(t instanceof Array))
+                .map((t) => t || {})
+            );
+          }
+          _registerInstance() {
+            window.PluginManager.getPluginInstancesFromElement(this.el).set(
+              this._pluginName,
+              this
+            ),
+              window.PluginManager.getPlugin(this._pluginName, !1)
+                .get("instances")
+                .push(this);
+          }
+          _getPluginName(t) {
+            return t || (t = this.constructor.name), t;
+          }
+        }
       },
-      744: (module) => {
-        eval(
-          "\n\nvar isMergeableObject = function isMergeableObject(value) {\n\treturn isNonNullObject(value)\n\t\t&& !isSpecial(value)\n};\n\nfunction isNonNullObject(value) {\n\treturn !!value && typeof value === 'object'\n}\n\nfunction isSpecial(value) {\n\tvar stringValue = Object.prototype.toString.call(value);\n\n\treturn stringValue === '[object RegExp]'\n\t\t|| stringValue === '[object Date]'\n\t\t|| isReactElement(value)\n}\n\n// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25\nvar canUseSymbol = typeof Symbol === 'function' && Symbol.for;\nvar REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;\n\nfunction isReactElement(value) {\n\treturn value.$$typeof === REACT_ELEMENT_TYPE\n}\n\nfunction emptyTarget(val) {\n\treturn Array.isArray(val) ? [] : {}\n}\n\nfunction cloneUnlessOtherwiseSpecified(value, options) {\n\treturn (options.clone !== false && options.isMergeableObject(value))\n\t\t? deepmerge(emptyTarget(value), value, options)\n\t\t: value\n}\n\nfunction defaultArrayMerge(target, source, options) {\n\treturn target.concat(source).map(function(element) {\n\t\treturn cloneUnlessOtherwiseSpecified(element, options)\n\t})\n}\n\nfunction getMergeFunction(key, options) {\n\tif (!options.customMerge) {\n\t\treturn deepmerge\n\t}\n\tvar customMerge = options.customMerge(key);\n\treturn typeof customMerge === 'function' ? customMerge : deepmerge\n}\n\nfunction getEnumerableOwnPropertySymbols(target) {\n\treturn Object.getOwnPropertySymbols\n\t\t? Object.getOwnPropertySymbols(target).filter(function(symbol) {\n\t\t\treturn Object.propertyIsEnumerable.call(target, symbol)\n\t\t})\n\t\t: []\n}\n\nfunction getKeys(target) {\n\treturn Object.keys(target).concat(getEnumerableOwnPropertySymbols(target))\n}\n\nfunction propertyIsOnObject(object, property) {\n\ttry {\n\t\treturn property in object\n\t} catch(_) {\n\t\treturn false\n\t}\n}\n\n// Protects from prototype poisoning and unexpected merging up the prototype chain.\nfunction propertyIsUnsafe(target, key) {\n\treturn propertyIsOnObject(target, key) // Properties are safe to merge if they don't exist in the target yet,\n\t\t&& !(Object.hasOwnProperty.call(target, key) // unsafe if they exist up the prototype chain,\n\t\t\t&& Object.propertyIsEnumerable.call(target, key)) // and also unsafe if they're nonenumerable.\n}\n\nfunction mergeObject(target, source, options) {\n\tvar destination = {};\n\tif (options.isMergeableObject(target)) {\n\t\tgetKeys(target).forEach(function(key) {\n\t\t\tdestination[key] = cloneUnlessOtherwiseSpecified(target[key], options);\n\t\t});\n\t}\n\tgetKeys(source).forEach(function(key) {\n\t\tif (propertyIsUnsafe(target, key)) {\n\t\t\treturn\n\t\t}\n\n\t\tif (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {\n\t\t\tdestination[key] = getMergeFunction(key, options)(target[key], source[key], options);\n\t\t} else {\n\t\t\tdestination[key] = cloneUnlessOtherwiseSpecified(source[key], options);\n\t\t}\n\t});\n\treturn destination\n}\n\nfunction deepmerge(target, source, options) {\n\toptions = options || {};\n\toptions.arrayMerge = options.arrayMerge || defaultArrayMerge;\n\toptions.isMergeableObject = options.isMergeableObject || isMergeableObject;\n\t// cloneUnlessOtherwiseSpecified is added to `options` so that custom arrayMerge()\n\t// implementations can use it. The caller may not replace it.\n\toptions.cloneUnlessOtherwiseSpecified = cloneUnlessOtherwiseSpecified;\n\n\tvar sourceIsArray = Array.isArray(source);\n\tvar targetIsArray = Array.isArray(target);\n\tvar sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;\n\n\tif (!sourceAndTargetTypesMatch) {\n\t\treturn cloneUnlessOtherwiseSpecified(source, options)\n\t} else if (sourceIsArray) {\n\t\treturn options.arrayMerge(target, source, options)\n\t} else {\n\t\treturn mergeObject(target, source, options)\n\t}\n}\n\ndeepmerge.all = function deepmergeAll(array, options) {\n\tif (!Array.isArray(array)) {\n\t\tthrow new Error('first argument should be an array')\n\t}\n\n\treturn array.reduce(function(prev, next) {\n\t\treturn deepmerge(prev, next, options)\n\t}, {})\n};\n\nvar deepmerge_1 = deepmerge;\n\nmodule.exports = deepmerge_1;\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNzQ0LmpzIiwibWFwcGluZ3MiOiJBQUFhOztBQUViO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0EsRUFBRTtBQUNGOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsR0FBRztBQUNIO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLEdBQUc7QUFDSDtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxHQUFHO0FBQ0g7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsSUFBSTtBQUNKO0FBQ0E7QUFDQSxFQUFFO0FBQ0Y7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBLEdBQUc7QUFDSDtBQUNBLEdBQUc7QUFDSDtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBLEVBQUUsSUFBSTtBQUNOOztBQUVBOztBQUVBIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vbWFrYWlyYS1zaG9wd2FyZTYtc3RvcmVmcm9udC8uL25vZGVfbW9kdWxlcy9kZWVwbWVyZ2UvZGlzdC9janMuanM/M2M0ZSJdLCJzb3VyY2VzQ29udGVudCI6WyIndXNlIHN0cmljdCc7XG5cbnZhciBpc01lcmdlYWJsZU9iamVjdCA9IGZ1bmN0aW9uIGlzTWVyZ2VhYmxlT2JqZWN0KHZhbHVlKSB7XG5cdHJldHVybiBpc05vbk51bGxPYmplY3QodmFsdWUpXG5cdFx0JiYgIWlzU3BlY2lhbCh2YWx1ZSlcbn07XG5cbmZ1bmN0aW9uIGlzTm9uTnVsbE9iamVjdCh2YWx1ZSkge1xuXHRyZXR1cm4gISF2YWx1ZSAmJiB0eXBlb2YgdmFsdWUgPT09ICdvYmplY3QnXG59XG5cbmZ1bmN0aW9uIGlzU3BlY2lhbCh2YWx1ZSkge1xuXHR2YXIgc3RyaW5nVmFsdWUgPSBPYmplY3QucHJvdG90eXBlLnRvU3RyaW5nLmNhbGwodmFsdWUpO1xuXG5cdHJldHVybiBzdHJpbmdWYWx1ZSA9PT0gJ1tvYmplY3QgUmVnRXhwXSdcblx0XHR8fCBzdHJpbmdWYWx1ZSA9PT0gJ1tvYmplY3QgRGF0ZV0nXG5cdFx0fHwgaXNSZWFjdEVsZW1lbnQodmFsdWUpXG59XG5cbi8vIHNlZSBodHRwczovL2dpdGh1Yi5jb20vZmFjZWJvb2svcmVhY3QvYmxvYi9iNWFjOTYzZmI3OTFkMTI5OGU3ZjM5NjIzNjM4M2JjOTU1ZjkxNmMxL3NyYy9pc29tb3JwaGljL2NsYXNzaWMvZWxlbWVudC9SZWFjdEVsZW1lbnQuanMjTDIxLUwyNVxudmFyIGNhblVzZVN5bWJvbCA9IHR5cGVvZiBTeW1ib2wgPT09ICdmdW5jdGlvbicgJiYgU3ltYm9sLmZvcjtcbnZhciBSRUFDVF9FTEVNRU5UX1RZUEUgPSBjYW5Vc2VTeW1ib2wgPyBTeW1ib2wuZm9yKCdyZWFjdC5lbGVtZW50JykgOiAweGVhYzc7XG5cbmZ1bmN0aW9uIGlzUmVhY3RFbGVtZW50KHZhbHVlKSB7XG5cdHJldHVybiB2YWx1ZS4kJHR5cGVvZiA9PT0gUkVBQ1RfRUxFTUVOVF9UWVBFXG59XG5cbmZ1bmN0aW9uIGVtcHR5VGFyZ2V0KHZhbCkge1xuXHRyZXR1cm4gQXJyYXkuaXNBcnJheSh2YWwpID8gW10gOiB7fVxufVxuXG5mdW5jdGlvbiBjbG9uZVVubGVzc090aGVyd2lzZVNwZWNpZmllZCh2YWx1ZSwgb3B0aW9ucykge1xuXHRyZXR1cm4gKG9wdGlvbnMuY2xvbmUgIT09IGZhbHNlICYmIG9wdGlvbnMuaXNNZXJnZWFibGVPYmplY3QodmFsdWUpKVxuXHRcdD8gZGVlcG1lcmdlKGVtcHR5VGFyZ2V0KHZhbHVlKSwgdmFsdWUsIG9wdGlvbnMpXG5cdFx0OiB2YWx1ZVxufVxuXG5mdW5jdGlvbiBkZWZhdWx0QXJyYXlNZXJnZSh0YXJnZXQsIHNvdXJjZSwgb3B0aW9ucykge1xuXHRyZXR1cm4gdGFyZ2V0LmNvbmNhdChzb3VyY2UpLm1hcChmdW5jdGlvbihlbGVtZW50KSB7XG5cdFx0cmV0dXJuIGNsb25lVW5sZXNzT3RoZXJ3aXNlU3BlY2lmaWVkKGVsZW1lbnQsIG9wdGlvbnMpXG5cdH0pXG59XG5cbmZ1bmN0aW9uIGdldE1lcmdlRnVuY3Rpb24oa2V5LCBvcHRpb25zKSB7XG5cdGlmICghb3B0aW9ucy5jdXN0b21NZXJnZSkge1xuXHRcdHJldHVybiBkZWVwbWVyZ2Vcblx0fVxuXHR2YXIgY3VzdG9tTWVyZ2UgPSBvcHRpb25zLmN1c3RvbU1lcmdlKGtleSk7XG5cdHJldHVybiB0eXBlb2YgY3VzdG9tTWVyZ2UgPT09ICdmdW5jdGlvbicgPyBjdXN0b21NZXJnZSA6IGRlZXBtZXJnZVxufVxuXG5mdW5jdGlvbiBnZXRFbnVtZXJhYmxlT3duUHJvcGVydHlTeW1ib2xzKHRhcmdldCkge1xuXHRyZXR1cm4gT2JqZWN0LmdldE93blByb3BlcnR5U3ltYm9sc1xuXHRcdD8gT2JqZWN0LmdldE93blByb3BlcnR5U3ltYm9scyh0YXJnZXQpLmZpbHRlcihmdW5jdGlvbihzeW1ib2wpIHtcblx0XHRcdHJldHVybiBPYmplY3QucHJvcGVydHlJc0VudW1lcmFibGUuY2FsbCh0YXJnZXQsIHN5bWJvbClcblx0XHR9KVxuXHRcdDogW11cbn1cblxuZnVuY3Rpb24gZ2V0S2V5cyh0YXJnZXQpIHtcblx0cmV0dXJuIE9iamVjdC5rZXlzKHRhcmdldCkuY29uY2F0KGdldEVudW1lcmFibGVPd25Qcm9wZXJ0eVN5bWJvbHModGFyZ2V0KSlcbn1cblxuZnVuY3Rpb24gcHJvcGVydHlJc09uT2JqZWN0KG9iamVjdCwgcHJvcGVydHkpIHtcblx0dHJ5IHtcblx0XHRyZXR1cm4gcHJvcGVydHkgaW4gb2JqZWN0XG5cdH0gY2F0Y2goXykge1xuXHRcdHJldHVybiBmYWxzZVxuXHR9XG59XG5cbi8vIFByb3RlY3RzIGZyb20gcHJvdG90eXBlIHBvaXNvbmluZyBhbmQgdW5leHBlY3RlZCBtZXJnaW5nIHVwIHRoZSBwcm90b3R5cGUgY2hhaW4uXG5mdW5jdGlvbiBwcm9wZXJ0eUlzVW5zYWZlKHRhcmdldCwga2V5KSB7XG5cdHJldHVybiBwcm9wZXJ0eUlzT25PYmplY3QodGFyZ2V0LCBrZXkpIC8vIFByb3BlcnRpZXMgYXJlIHNhZmUgdG8gbWVyZ2UgaWYgdGhleSBkb24ndCBleGlzdCBpbiB0aGUgdGFyZ2V0IHlldCxcblx0XHQmJiAhKE9iamVjdC5oYXNPd25Qcm9wZXJ0eS5jYWxsKHRhcmdldCwga2V5KSAvLyB1bnNhZmUgaWYgdGhleSBleGlzdCB1cCB0aGUgcHJvdG90eXBlIGNoYWluLFxuXHRcdFx0JiYgT2JqZWN0LnByb3BlcnR5SXNFbnVtZXJhYmxlLmNhbGwodGFyZ2V0LCBrZXkpKSAvLyBhbmQgYWxzbyB1bnNhZmUgaWYgdGhleSdyZSBub25lbnVtZXJhYmxlLlxufVxuXG5mdW5jdGlvbiBtZXJnZU9iamVjdCh0YXJnZXQsIHNvdXJjZSwgb3B0aW9ucykge1xuXHR2YXIgZGVzdGluYXRpb24gPSB7fTtcblx0aWYgKG9wdGlvbnMuaXNNZXJnZWFibGVPYmplY3QodGFyZ2V0KSkge1xuXHRcdGdldEtleXModGFyZ2V0KS5mb3JFYWNoKGZ1bmN0aW9uKGtleSkge1xuXHRcdFx0ZGVzdGluYXRpb25ba2V5XSA9IGNsb25lVW5sZXNzT3RoZXJ3aXNlU3BlY2lmaWVkKHRhcmdldFtrZXldLCBvcHRpb25zKTtcblx0XHR9KTtcblx0fVxuXHRnZXRLZXlzKHNvdXJjZSkuZm9yRWFjaChmdW5jdGlvbihrZXkpIHtcblx0XHRpZiAocHJvcGVydHlJc1Vuc2FmZSh0YXJnZXQsIGtleSkpIHtcblx0XHRcdHJldHVyblxuXHRcdH1cblxuXHRcdGlmIChwcm9wZXJ0eUlzT25PYmplY3QodGFyZ2V0LCBrZXkpICYmIG9wdGlvbnMuaXNNZXJnZWFibGVPYmplY3Qoc291cmNlW2tleV0pKSB7XG5cdFx0XHRkZXN0aW5hdGlvbltrZXldID0gZ2V0TWVyZ2VGdW5jdGlvbihrZXksIG9wdGlvbnMpKHRhcmdldFtrZXldLCBzb3VyY2Vba2V5XSwgb3B0aW9ucyk7XG5cdFx0fSBlbHNlIHtcblx0XHRcdGRlc3RpbmF0aW9uW2tleV0gPSBjbG9uZVVubGVzc090aGVyd2lzZVNwZWNpZmllZChzb3VyY2Vba2V5XSwgb3B0aW9ucyk7XG5cdFx0fVxuXHR9KTtcblx0cmV0dXJuIGRlc3RpbmF0aW9uXG59XG5cbmZ1bmN0aW9uIGRlZXBtZXJnZSh0YXJnZXQsIHNvdXJjZSwgb3B0aW9ucykge1xuXHRvcHRpb25zID0gb3B0aW9ucyB8fCB7fTtcblx0b3B0aW9ucy5hcnJheU1lcmdlID0gb3B0aW9ucy5hcnJheU1lcmdlIHx8IGRlZmF1bHRBcnJheU1lcmdlO1xuXHRvcHRpb25zLmlzTWVyZ2VhYmxlT2JqZWN0ID0gb3B0aW9ucy5pc01lcmdlYWJsZU9iamVjdCB8fCBpc01lcmdlYWJsZU9iamVjdDtcblx0Ly8gY2xvbmVVbmxlc3NPdGhlcndpc2VTcGVjaWZpZWQgaXMgYWRkZWQgdG8gYG9wdGlvbnNgIHNvIHRoYXQgY3VzdG9tIGFycmF5TWVyZ2UoKVxuXHQvLyBpbXBsZW1lbnRhdGlvbnMgY2FuIHVzZSBpdC4gVGhlIGNhbGxlciBtYXkgbm90IHJlcGxhY2UgaXQuXG5cdG9wdGlvbnMuY2xvbmVVbmxlc3NPdGhlcndpc2VTcGVjaWZpZWQgPSBjbG9uZVVubGVzc090aGVyd2lzZVNwZWNpZmllZDtcblxuXHR2YXIgc291cmNlSXNBcnJheSA9IEFycmF5LmlzQXJyYXkoc291cmNlKTtcblx0dmFyIHRhcmdldElzQXJyYXkgPSBBcnJheS5pc0FycmF5KHRhcmdldCk7XG5cdHZhciBzb3VyY2VBbmRUYXJnZXRUeXBlc01hdGNoID0gc291cmNlSXNBcnJheSA9PT0gdGFyZ2V0SXNBcnJheTtcblxuXHRpZiAoIXNvdXJjZUFuZFRhcmdldFR5cGVzTWF0Y2gpIHtcblx0XHRyZXR1cm4gY2xvbmVVbmxlc3NPdGhlcndpc2VTcGVjaWZpZWQoc291cmNlLCBvcHRpb25zKVxuXHR9IGVsc2UgaWYgKHNvdXJjZUlzQXJyYXkpIHtcblx0XHRyZXR1cm4gb3B0aW9ucy5hcnJheU1lcmdlKHRhcmdldCwgc291cmNlLCBvcHRpb25zKVxuXHR9IGVsc2Uge1xuXHRcdHJldHVybiBtZXJnZU9iamVjdCh0YXJnZXQsIHNvdXJjZSwgb3B0aW9ucylcblx0fVxufVxuXG5kZWVwbWVyZ2UuYWxsID0gZnVuY3Rpb24gZGVlcG1lcmdlQWxsKGFycmF5LCBvcHRpb25zKSB7XG5cdGlmICghQXJyYXkuaXNBcnJheShhcnJheSkpIHtcblx0XHR0aHJvdyBuZXcgRXJyb3IoJ2ZpcnN0IGFyZ3VtZW50IHNob3VsZCBiZSBhbiBhcnJheScpXG5cdH1cblxuXHRyZXR1cm4gYXJyYXkucmVkdWNlKGZ1bmN0aW9uKHByZXYsIG5leHQpIHtcblx0XHRyZXR1cm4gZGVlcG1lcmdlKHByZXYsIG5leHQsIG9wdGlvbnMpXG5cdH0sIHt9KVxufTtcblxudmFyIGRlZXBtZXJnZV8xID0gZGVlcG1lcmdlO1xuXG5tb2R1bGUuZXhwb3J0cyA9IGRlZXBtZXJnZV8xO1xuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///744\n"
-        );
+      744: (t) => {
+        var e = function (t) {
+            return (
+              (function (t) {
+                return !!t && "object" == typeof t;
+              })(t) &&
+              !(function (t) {
+                var e = Object.prototype.toString.call(t);
+                return (
+                  "[object RegExp]" === e ||
+                  "[object Date]" === e ||
+                  (function (t) {
+                    return t.$$typeof === r;
+                  })(t)
+                );
+              })(t)
+            );
+          },
+          r =
+            "function" == typeof Symbol && Symbol.for
+              ? Symbol.for("react.element")
+              : 60103;
+        function i(t, e) {
+          return !1 !== e.clone && e.isMergeableObject(t)
+            ? l(((r = t), Array.isArray(r) ? [] : {}), t, e)
+            : t;
+          var r;
+        }
+        function n(t, e, r) {
+          return t.concat(e).map(function (t) {
+            return i(t, r);
+          });
+        }
+        function s(t) {
+          return Object.keys(t).concat(
+            (function (t) {
+              return Object.getOwnPropertySymbols
+                ? Object.getOwnPropertySymbols(t).filter(function (e) {
+                    return Object.propertyIsEnumerable.call(t, e);
+                  })
+                : [];
+            })(t)
+          );
+        }
+        function o(t, e) {
+          try {
+            return e in t;
+          } catch (t) {
+            return !1;
+          }
+        }
+        function l(t, r, a) {
+          ((a = a || {}).arrayMerge = a.arrayMerge || n),
+            (a.isMergeableObject = a.isMergeableObject || e),
+            (a.cloneUnlessOtherwiseSpecified = i);
+          var c = Array.isArray(r);
+          return c === Array.isArray(t)
+            ? c
+              ? a.arrayMerge(t, r, a)
+              : (function (t, e, r) {
+                  var n = {};
+                  return (
+                    r.isMergeableObject(t) &&
+                      s(t).forEach(function (e) {
+                        n[e] = i(t[e], r);
+                      }),
+                    s(e).forEach(function (s) {
+                      (function (t, e) {
+                        return (
+                          o(t, e) &&
+                          !(
+                            Object.hasOwnProperty.call(t, e) &&
+                            Object.propertyIsEnumerable.call(t, e)
+                          )
+                        );
+                      })(t, s) ||
+                        (o(t, s) && r.isMergeableObject(e[s])
+                          ? (n[s] = (function (t, e) {
+                              if (!e.customMerge) return l;
+                              var r = e.customMerge(t);
+                              return "function" == typeof r ? r : l;
+                            })(s, r)(t[s], e[s], r))
+                          : (n[s] = i(e[s], r)));
+                    }),
+                    n
+                  );
+                })(t, r, a)
+            : i(r, a);
+        }
+        l.all = function (t, e) {
+          if (!Array.isArray(t))
+            throw new Error("first argument should be an array");
+          return t.reduce(function (t, r) {
+            return l(t, r, e);
+          }, {});
+        };
+        var a = l;
+        t.exports = a;
       },
-      747: (
-        __unused_webpack_module,
-        __webpack_exports__,
-        __webpack_require__
-      ) => {
-        eval(
-          "/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   A: () => (/* binding */ StringHelper)\n/* harmony export */ });\n/**\n * @sw-package framework\n */\nclass StringHelper {\n\n    /**\n     * turns first character of word to uppercase\n     *\n     * @param {string} string\n     * @returns {string}\n     * @private\n     */\n    static ucFirst(string) {\n        return string.charAt(0).toUpperCase() + string.slice(1);\n    }\n\n\n    /**\n     * turns first character of string to uppercase\n     *\n     * @param {string} string\n     * @returns {string}\n     * @private\n     */\n    static lcFirst(string) {\n        return string.charAt(0).toLowerCase() + string.slice(1);\n    }\n\n    /**\n     * converts a camel case string\n     * into a dash case string\n     *\n     * @param string\n     * @returns {string}\n     */\n    static toDashCase(string) {\n        return string.replace(/([A-Z])/g, '-$1').replace(/^-/, '').toLowerCase();\n    }\n\n    /**\n     *\n     * @param {string} string\n     * @param {string} separator\n     *\n     * @returns {string}\n     */\n    static toLowerCamelCase(string, separator) {\n        const upperCamelCase = StringHelper.toUpperCamelCase(string, separator);\n        return StringHelper.lcFirst(upperCamelCase);\n    }\n\n    /**\n     *\n     * @param {string} string\n     * @param {string} separator\n     *\n     * @returns {string}\n     */\n    static toUpperCamelCase(string, separator) {\n        if (!separator) {\n            return StringHelper.ucFirst(string.toLowerCase());\n        }\n\n        const stringParts = string.split(separator);\n        return stringParts.map(string => StringHelper.ucFirst(string.toLowerCase())).join('');\n    }\n\n    /**\n     * returns primitive value of a string\n     *\n     * @param value\n     * @returns {*}\n     * @private\n     */\n    static parsePrimitive(value) {\n        try {\n            // replace comma with dot\n            // if value only contains numbers and commas\n            if (/^\\d+(.|,)\\d+$/.test(value)) {\n                value = value.replace(',', '.');\n            }\n\n            return JSON.parse(value);\n        }\n        catch (e) {\n            return value.toString();\n        }\n    }\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNzQ3LmpzIiwibWFwcGluZ3MiOiI7OztBQUFBO0FBQ0E7QUFDQTtBQUNlOztBQUVmO0FBQ0E7QUFDQTtBQUNBLGVBQWUsUUFBUTtBQUN2QixpQkFBaUI7QUFDakI7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7O0FBR0E7QUFDQTtBQUNBO0FBQ0EsZUFBZSxRQUFRO0FBQ3ZCLGlCQUFpQjtBQUNqQjtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxpQkFBaUI7QUFDakI7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBLGVBQWUsUUFBUTtBQUN2QixlQUFlLFFBQVE7QUFDdkI7QUFDQSxpQkFBaUI7QUFDakI7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsZUFBZSxRQUFRO0FBQ3ZCLGVBQWUsUUFBUTtBQUN2QjtBQUNBLGlCQUFpQjtBQUNqQjtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLGlCQUFpQjtBQUNqQjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9tYWthaXJhLXNob3B3YXJlNi1zdG9yZWZyb250Ly4vdmVuZG9yL3Nob3B3YXJlL3N0b3JlZnJvbnQvUmVzb3VyY2VzL2FwcC9zdG9yZWZyb250L3NyYy9oZWxwZXIvc3RyaW5nLmhlbHBlci5qcz81YzQ1Il0sInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQHN3LXBhY2thZ2UgZnJhbWV3b3JrXG4gKi9cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIFN0cmluZ0hlbHBlciB7XG5cbiAgICAvKipcbiAgICAgKiB0dXJucyBmaXJzdCBjaGFyYWN0ZXIgb2Ygd29yZCB0byB1cHBlcmNhc2VcbiAgICAgKlxuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBzdHJpbmdcbiAgICAgKiBAcmV0dXJucyB7c3RyaW5nfVxuICAgICAqIEBwcml2YXRlXG4gICAgICovXG4gICAgc3RhdGljIHVjRmlyc3Qoc3RyaW5nKSB7XG4gICAgICAgIHJldHVybiBzdHJpbmcuY2hhckF0KDApLnRvVXBwZXJDYXNlKCkgKyBzdHJpbmcuc2xpY2UoMSk7XG4gICAgfVxuXG5cbiAgICAvKipcbiAgICAgKiB0dXJucyBmaXJzdCBjaGFyYWN0ZXIgb2Ygc3RyaW5nIHRvIHVwcGVyY2FzZVxuICAgICAqXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IHN0cmluZ1xuICAgICAqIEByZXR1cm5zIHtzdHJpbmd9XG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBzdGF0aWMgbGNGaXJzdChzdHJpbmcpIHtcbiAgICAgICAgcmV0dXJuIHN0cmluZy5jaGFyQXQoMCkudG9Mb3dlckNhc2UoKSArIHN0cmluZy5zbGljZSgxKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBjb252ZXJ0cyBhIGNhbWVsIGNhc2Ugc3RyaW5nXG4gICAgICogaW50byBhIGRhc2ggY2FzZSBzdHJpbmdcbiAgICAgKlxuICAgICAqIEBwYXJhbSBzdHJpbmdcbiAgICAgKiBAcmV0dXJucyB7c3RyaW5nfVxuICAgICAqL1xuICAgIHN0YXRpYyB0b0Rhc2hDYXNlKHN0cmluZykge1xuICAgICAgICByZXR1cm4gc3RyaW5nLnJlcGxhY2UoLyhbQS1aXSkvZywgJy0kMScpLnJlcGxhY2UoL14tLywgJycpLnRvTG93ZXJDYXNlKCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICpcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gc3RyaW5nXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IHNlcGFyYXRvclxuICAgICAqXG4gICAgICogQHJldHVybnMge3N0cmluZ31cbiAgICAgKi9cbiAgICBzdGF0aWMgdG9Mb3dlckNhbWVsQ2FzZShzdHJpbmcsIHNlcGFyYXRvcikge1xuICAgICAgICBjb25zdCB1cHBlckNhbWVsQ2FzZSA9IFN0cmluZ0hlbHBlci50b1VwcGVyQ2FtZWxDYXNlKHN0cmluZywgc2VwYXJhdG9yKTtcbiAgICAgICAgcmV0dXJuIFN0cmluZ0hlbHBlci5sY0ZpcnN0KHVwcGVyQ2FtZWxDYXNlKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKlxuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBzdHJpbmdcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gc2VwYXJhdG9yXG4gICAgICpcbiAgICAgKiBAcmV0dXJucyB7c3RyaW5nfVxuICAgICAqL1xuICAgIHN0YXRpYyB0b1VwcGVyQ2FtZWxDYXNlKHN0cmluZywgc2VwYXJhdG9yKSB7XG4gICAgICAgIGlmICghc2VwYXJhdG9yKSB7XG4gICAgICAgICAgICByZXR1cm4gU3RyaW5nSGVscGVyLnVjRmlyc3Qoc3RyaW5nLnRvTG93ZXJDYXNlKCkpO1xuICAgICAgICB9XG5cbiAgICAgICAgY29uc3Qgc3RyaW5nUGFydHMgPSBzdHJpbmcuc3BsaXQoc2VwYXJhdG9yKTtcbiAgICAgICAgcmV0dXJuIHN0cmluZ1BhcnRzLm1hcChzdHJpbmcgPT4gU3RyaW5nSGVscGVyLnVjRmlyc3Qoc3RyaW5nLnRvTG93ZXJDYXNlKCkpKS5qb2luKCcnKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiByZXR1cm5zIHByaW1pdGl2ZSB2YWx1ZSBvZiBhIHN0cmluZ1xuICAgICAqXG4gICAgICogQHBhcmFtIHZhbHVlXG4gICAgICogQHJldHVybnMgeyp9XG4gICAgICogQHByaXZhdGVcbiAgICAgKi9cbiAgICBzdGF0aWMgcGFyc2VQcmltaXRpdmUodmFsdWUpIHtcbiAgICAgICAgdHJ5IHtcbiAgICAgICAgICAgIC8vIHJlcGxhY2UgY29tbWEgd2l0aCBkb3RcbiAgICAgICAgICAgIC8vIGlmIHZhbHVlIG9ubHkgY29udGFpbnMgbnVtYmVycyBhbmQgY29tbWFzXG4gICAgICAgICAgICBpZiAoL15cXGQrKC58LClcXGQrJC8udGVzdCh2YWx1ZSkpIHtcbiAgICAgICAgICAgICAgICB2YWx1ZSA9IHZhbHVlLnJlcGxhY2UoJywnLCAnLicpO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICByZXR1cm4gSlNPTi5wYXJzZSh2YWx1ZSk7XG4gICAgICAgIH1cbiAgICAgICAgY2F0Y2ggKGUpIHtcbiAgICAgICAgICAgIHJldHVybiB2YWx1ZS50b1N0cmluZygpO1xuICAgICAgICB9XG4gICAgfVxufVxuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///747\n"
-        );
-      },
-      792: (
-        __unused_webpack_module,
-        __unused_webpack___webpack_exports__,
-        __webpack_require__
-      ) => {
-        eval(
-          '\n// EXTERNAL MODULE: ./vendor/shopware/storefront/Resources/app/storefront/src/plugin-system/plugin.class.js + 1 modules\nvar plugin_class = __webpack_require__(194);\n;// ./src/makaira-filter/filter/listing.plugin.js\n// Import PluginOverride from Shopware\'s storefront-sdk\n//import Plugin from \'../plugin\';\n\n\n/**\n * ListingListener Plugin\n *\n * Handles filter panel content synchronization for both sidebar and offcanvas modes.\n * Updates all matching containers except those specified in excludeSelectors.\n *\n * Configuration options:\n * - hideItemsWhenOffcanvasHidden: Hide all filter items when offcanvas is not visible\n * - enabled: Whether the plugin is enabled\n *\n * Usage:\n * new ListingListener(element, {\n *   hideItemsWhenOffcanvasHidden: true\n * });\n */\nclass ListingListener extends plugin_class/* default */.A {\n  static sidebarFilterSelector = ".cms-element-sidebar-filter";\n\n  static options = {\n    hideItemsWhenOffcanvasHidden: false,\n    enabled: false,\n  };\n\n  constructor(el, options, pluginName) {\n    super(el, options, pluginName);\n    this._isUpdating = false;\n\n    // Merge PHP configuration with default options\n    this._mergeConfigFromElement(el);\n  }\n\n  /**\n   * Merge configuration from PHP (data attribute) with default options\n   */\n  _mergeConfigFromElement(el) {\n    const configAttribute = el.getAttribute("data-listing-listener-options");\n    if (configAttribute) {\n      try {\n        const pluginConfig = JSON.parse(configAttribute);\n\n        // Merge PHP config with options, PHP config takes precedence\n        if (pluginConfig.enabled !== undefined) {\n          this.options.enabled = pluginConfig.enabled;\n        }\n\n        if (pluginConfig.hideItemsWhenOffcanvasHidden !== undefined) {\n          this.options.hideItemsWhenOffcanvasHidden =\n            pluginConfig.hideItemsWhenOffcanvasHidden;\n        }\n      } catch (e) {\n        console.warn(\n          "ListingListener: Failed to parse configuration from data attribute",\n          e\n        );\n      }\n    }\n  }\n\n  init() {\n    // Only register events if the filter listener is enabled\n    this._registerEvents();\n    if (this.options.hideItemsWhenOffcanvasHidden) {\n      this._setupOffcanvasMonitoring();\n    }\n\n    // Establish connection to the main listing plugin\n    this._connectToListingPlugin();\n  }\n\n  /**\n   * Connect to the main listing plugin instance\n   */\n  _connectToListingPlugin() {\n    // Try to find the listing plugin instance\n    const listingElement = document.querySelector("[data-listing]");\n    if (listingElement) {\n      const listingPlugin = window.PluginManager.getPluginInstanceFromElement(\n        listingElement,\n        "Listing"\n      );\n\n      if (listingPlugin) {\n        // Store reference to the listing plugin\n        this.listing = listingPlugin;\n      }\n    }\n  }\n\n  /**\n   * Check if the filter listener is enabled\n   */\n  _isEnabled() {\n    // Check if explicitly disabled in options\n    if (this.options.enabled === false) {\n      return false;\n    }\n\n    // If no explicit setting, default to enabled\n    return this.options.enabled !== false;\n  }\n\n  _registerEvents() {\n    this.$emitter.subscribe("Listing/afterRenderResponse", (event) => {\n      this._swapContent(event.detail.response);\n    });\n  }\n\n  /**\n   * Find all filter panel containers\n   */\n  _findFilterPanelContainers(doc = document) {\n    return Array.from(doc.querySelectorAll(".filter-panel-items-container"));\n  }\n\n  /**\n   * Extract filters from new panel and merge with existing filters in localStorage\n   */\n  _extractAndMergeFilters(doc) {\n    try {\n      // Extract filters from the new document\n      const newFilters = this._getAvailableFiltersFromDocument(doc);\n\n      if (newFilters.length === 0) {\n        return; // No new filters to merge\n      }\n\n      // Store current response filters to "macurrfi"\n      this._storeCurrentFiltersToLocalStorage(newFilters);\n\n      // Get existing filters from localStorage\n      const existingFilters = this._getStoredFilters();\n\n      // Merge filters (create union with no duplicates)\n      const mergedFilters = [...new Set([...existingFilters, ...newFilters])];\n\n      // Store merged filters back to localStorage\n      this._storeFiltersToLocalStorage(mergedFilters);\n    } catch (e) {\n      console.error("ListingListener: Failed to extract and merge filters:", e);\n    }\n  }\n\n  /**\n   * Get available filters from a document\n   */\n  _getAvailableFiltersFromDocument(doc) {\n    const filterItems = doc.querySelectorAll(\n      ".filter-panel-item[data-filter-multi-select-options]"\n    );\n    const availableFilters = [];\n\n    filterItems.forEach((filterItem) => {\n      try {\n        const optionsData = filterItem.getAttribute(\n          "data-filter-multi-select-options"\n        );\n        if (optionsData) {\n          const options = JSON.parse(optionsData);\n          if (options.name) {\n            availableFilters.push(options.name);\n          }\n        }\n      } catch (e) {\n        // Ignore parsing errors and continue with next item\n        console.warn(\n          "ListingListener: Failed to parse filter options for item:",\n          filterItem,\n          e\n        );\n      }\n    });\n\n    return availableFilters;\n  }\n\n  /**\n   * Get stored filters from localStorage\n   */\n  _getStoredFilters() {\n    try {\n      const data = localStorage.getItem("macatfiall");\n      return data ? JSON.parse(data) : [];\n    } catch (e) {\n      console.error(\n        "ListingListener: Failed to retrieve filters from localStorage:",\n        e\n      );\n      return [];\n    }\n  }\n\n  /**\n   * Store filters array to localStorage\n   */\n  _storeFiltersToLocalStorage(filtersArray) {\n    try {\n      const storageValue = JSON.stringify(filtersArray);\n      localStorage.setItem("macatfiall", storageValue);\n    } catch (e) {\n      console.error(\n        "ListingListener: Failed to store filters to localStorage:",\n        e\n      );\n    }\n  }\n\n  /**\n   * Store current response filters to localStorage\n   */\n  _storeCurrentFiltersToLocalStorage(filtersArray) {\n    try {\n      const storageValue = JSON.stringify(filtersArray);\n      localStorage.setItem("macurrfi", storageValue);\n    } catch (e) {\n      console.error(\n        "ListingListener: Failed to store current filters to localStorage:",\n        e\n      );\n    }\n  }\n\n  /**\n   * Set up monitoring for offcanvas visibility changes\n   */\n  _setupOffcanvasMonitoring() {\n    // Monitor for offcanvas show/hide events\n    document.addEventListener("shown.bs.offcanvas", () => {\n      this._onOffcanvasVisibilityChange(true);\n    });\n\n    document.addEventListener("hidden.bs.offcanvas", () => {\n      this._onOffcanvasVisibilityChange(false);\n    });\n\n    // Bind to custom onCloseOffcanvas event if $emitter is available\n    if (document.$emitter) {\n      document.$emitter.subscribe("onCloseOffcanvas", () => {\n        this._onOffcanvasVisibilityChange(false);\n      });\n    }\n\n    // Also monitor for modal backdrop clicks and ESC key\n    document.addEventListener("keydown", (e) => {\n      if (e.key === "Escape" && this._isOffcanvasVisible()) {\n        setTimeout(() => this._onOffcanvasVisibilityChange(false), 100);\n      }\n    });\n  }\n\n  /**\n   * Handle offcanvas visibility changes\n   */\n  _onOffcanvasVisibilityChange(isVisible) {\n    if (!isVisible && this.options.hideItemsWhenOffcanvasHidden) {\n      this._hideAllFilterItems();\n    } else {\n      this._showAllActiveFilters();\n    }\n  }\n\n  /**\n   * Check if any offcanvas is currently visible\n   */\n  _isOffcanvasVisible() {\n    const offcanvasElements = document.querySelectorAll(".offcanvas");\n    return Array.from(offcanvasElements).some((offcanvas) => {\n      return (\n        offcanvas.classList.contains("show") ||\n        getComputedStyle(offcanvas).display !== "none"\n      );\n    });\n  }\n\n  /**\n   * Hide all filter panel items containers\n   */\n  _hideAllFilterItems() {\n    // Get the available filters from localStorage\n    const availableFilters = this._getAvailableFiltersFromLocalStorage();\n\n    if (!availableFilters || availableFilters.length === 0) {\n      return;\n    }\n\n    const containers = document.querySelectorAll(\n      ".filter-panel-items-container"\n    );\n\n    containers.forEach((container) => {\n      const items = container.querySelectorAll(".filter-panel-item");\n\n      items.forEach((item) => {\n        // Check if this item\'s filter name is in the available filters list\n        const filterName = this._getFilterNameFromItem(item);\n        if (filterName && availableFilters.includes(filterName)) {\n          this._hideFilterItem(item);\n        }\n      });\n    });\n  }\n\n  /**\n   * Show only active filters based on localStorage macurrfi\n   */\n  _showAllActiveFilters() {\n    // Get the current filters from localStorage\n    const currentFilters = this._getCurrentFiltersFromLocalStorage();\n\n    if (!currentFilters || currentFilters.length === 0) {\n      // If no current filters are set, show all available filters\n      this._showAllAvailableFilters();\n      return;\n    }\n\n    const containers = document.querySelectorAll(\n      ".filter-panel-items-container"\n    );\n\n    containers.forEach((container) => {\n      const items = container.querySelectorAll(\n        ".filter-panel-item, .filter-multi-select-list-item"\n      );\n\n      items.forEach((item) => {\n        const filterName = this._getFilterNameFromItem(item);\n        if (filterName) {\n          if (currentFilters.includes(filterName)) {\n            // Show items that are in the current filters list\n            this._showFilterItem(item);\n          } else {\n            // Hide items that are not in the current filters list\n            this._hideFilterItem(item);\n          }\n        }\n      });\n    });\n  }\n\n  /**\n   * Show all available filters (fallback when no current filters are set)\n   */\n  _showAllAvailableFilters() {\n    const availableFilters = this._getAvailableFiltersFromLocalStorage();\n\n    if (!availableFilters || availableFilters.length === 0) {\n      return;\n    }\n\n    const containers = document.querySelectorAll(\n      ".filter-panel-items-container"\n    );\n\n    containers.forEach((container) => {\n      const items = container.querySelectorAll(\n        ".filter-panel-item, .filter-multi-select-list-item"\n      );\n\n      items.forEach((item) => {\n        const filterName = this._getFilterNameFromItem(item);\n        if (filterName && availableFilters.includes(filterName)) {\n          this._showFilterItem(item);\n        }\n      });\n    });\n  }\n\n  /**\n   * Get available filters from localStorage using macatfiall key\n   */\n  _getAvailableFiltersFromLocalStorage() {\n    try {\n      const data = localStorage.getItem("macatfiall");\n      return data ? JSON.parse(data) : [];\n    } catch (e) {\n      console.error(\n        "ListingListener: Failed to retrieve filters from localStorage:",\n        e\n      );\n      return [];\n    }\n  }\n\n  /**\n   * Get current filters from localStorage using macurrfi key\n   */\n  _getCurrentFiltersFromLocalStorage() {\n    try {\n      const data = localStorage.getItem("macurrfi");\n      return data ? JSON.parse(data) : [];\n    } catch (e) {\n      console.error(\n        "ListingListener: Failed to retrieve current filters from localStorage:",\n        e\n      );\n      return [];\n    }\n  }\n\n  /**\n   * Extract filter name from a filter item element\n   */\n  _getFilterNameFromItem(item) {\n    try {\n      // Try to get the filter name from data attribute\n      const optionsData = item.getAttribute("data-filter-multi-select-options");\n      if (optionsData) {\n        const options = JSON.parse(optionsData);\n        return options.name;\n      }\n\n      // Fallback: try to get from parent container\n      const parentContainer = item.closest(\n        "[data-filter-multi-select-options]"\n      );\n      if (parentContainer) {\n        const parentOptionsData = parentContainer.getAttribute(\n          "data-filter-multi-select-options"\n        );\n        if (parentOptionsData) {\n          const parentOptions = JSON.parse(parentOptionsData);\n          return parentOptions.name;\n        }\n      }\n\n      return null;\n    } catch (e) {\n      console.warn(\n        "ListingListener: Failed to extract filter name from item:",\n        item,\n        e\n      );\n      return null;\n    }\n  }\n\n  /**\n   * Find the filter panel container using configurable selectors (legacy method)\n   * @deprecated Use _findFilterPanelContainers instead\n   */\n  _findFilterPanelContainer(doc = document) {\n    const containers = this._findFilterPanelContainers(doc);\n    return containers.length > 0 ? containers[0] : null;\n  }\n\n  /**\n   * Get a unique identifier for a container to match old and new panels\n   */\n  _getContainerIdentifier(container) {\n    // Try different attributes to create a unique identifier\n    if (container.id) {\n      return `id-${container.id}`;\n    }\n\n    if (container.dataset.filterType) {\n      return `filter-type-${container.dataset.filterType}`;\n    }\n\n    if (container.className) {\n      // Use a combination of classes as identifier\n      const classes = container.className\n        .split(" ")\n        .filter(\n          (cls) =>\n            cls.includes("filter") ||\n            cls.includes("sidebar") ||\n            cls.includes("offcanvas")\n        )\n        .sort()\n        .join("-");\n      if (classes) {\n        return `classes-${classes}`;\n      }\n    }\n\n    // Try to use the parent element\'s identifier if available\n    const parent = container.closest("[id], [data-filter-type]");\n    if (parent) {\n      const parentId = parent.id || parent.dataset.filterType;\n      if (parentId) {\n        return `parent-${parentId}`;\n      }\n    }\n\n    return null;\n  }\n\n  _swapContent(data) {\n    if (this._isUpdating) {\n      return;\n    }\n\n    this._isUpdating = true;\n\n    try {\n      // Check if we should hide items based on offcanvas visibility\n      if (\n        this.options.hideItemsWhenOffcanvasHidden &&\n        !this._isOffcanvasVisible()\n      ) {\n        this._hideAllFilterItems();\n        return;\n      }\n\n      const doc = new DOMParser().parseFromString(data, "text/html");\n      const oldFilterPanels = this._findFilterPanelContainers();\n      const newFilterPanels = this._findFilterPanelContainers(doc);\n\n      // Extract and merge filters from new panels\n      this._extractAndMergeFilters(doc);\n\n      // Create a map of new panels by their selector or position for matching\n      const newPanelsMap = new Map();\n      newFilterPanels.forEach((panel, index) => {\n        // Try to create a unique identifier for each panel\n        const identifier =\n          this._getContainerIdentifier(panel) || `panel-${index}`;\n        newPanelsMap.set(identifier, panel);\n      });\n\n      // Update each old panel with its corresponding new panel\n      oldFilterPanels.forEach((oldPanel, index) => {\n        const identifier =\n          this._getContainerIdentifier(oldPanel) || `panel-${index}`;\n        const newPanel = newPanelsMap.get(identifier);\n\n        if (newPanel) {\n          this._updateFilterPanelSelectively(oldPanel, newPanel);\n        } else {\n          // If no matching new panel found, try to match by index as fallback\n          const fallbackNewPanel = newFilterPanels[index];\n          if (fallbackNewPanel) {\n            this._updateFilterPanelSelectively(oldPanel, fallbackNewPanel);\n          }\n        }\n      });\n    } finally {\n      setTimeout(() => {\n        this._isUpdating = false;\n      }, 50);\n    }\n  }\n\n  /**\n   * Original innerHTML replacement method (fallback)\n   */\n  _updateFilterPanelWithInnerHTML(oldPanel, newPanel) {\n    const inputStates = this._getInputStates(oldPanel);\n\n    // Replace the entire HTML content\n    oldPanel.innerHTML = newPanel.innerHTML;\n\n    // Restore states\n    this._restoreInputStates(oldPanel, inputStates);\n\n    // Reinitialize plugins\n    //window.PluginManager.initializePlugins();\n\n    // Update filter labels\n    this._buildLabels();\n  }\n\n  /**\n   * Selectively update filter panel by hiding/showing elements\n   */\n\n  _updateFilterPanelSelectively(oldPanel, newPanel) {\n    const inputStates = this._getInputStates(oldPanel);\n\n    if (this.options.enabled) {\n      // First, preserve existing section-item relationships\n      const existingSectionMap = this._createExistingSectionMap(oldPanel);\n\n      // Create a complete structural replacement approach\n      this._replaceFilterStructureCompletely(\n        oldPanel,\n        newPanel,\n        existingSectionMap\n      );\n    }\n\n    this._reregisterExistingFilters(oldPanel);\n    this._restoreInputStates(oldPanel, inputStates, false);\n  }\n\n  /**\n   * Synchronize the structural elements between old and new filter panels\n   * This handles elements that appear between filter containers and their lists\n   */\n  _synchronizeFilterStructure(oldPanel, newPanel) {\n    // Get all filter elements from both panels\n    const oldFilters = oldPanel.querySelectorAll(\n      "[data-filter-multi-select-options]"\n    );\n    const newFilters = newPanel.querySelectorAll(\n      "[data-filter-multi-select-options]"\n    );\n\n    // Create maps for comparison using filter names\n    const oldFiltersMap = this._createFilterElementsMap(oldFilters);\n    const newFiltersMap = this._createFilterElementsMap(newFilters);\n\n    // Synchronize structure for each filter\n    Object.keys(newFiltersMap).forEach((filterName) => {\n      const oldFilter = oldFiltersMap[filterName];\n      const newFilter = newFiltersMap[filterName];\n\n      if (oldFilter && newFilter) {\n        this._synchronizeFilterDropdownStructure(oldFilter, newFilter);\n      }\n    });\n  }\n\n  /**\n   * Synchronize the dropdown structure for a specific filter\n   */\n  _synchronizeFilterDropdownStructure(oldFilter, newFilter) {\n    const oldDropdown = oldFilter.querySelector(".filter-panel-item-dropdown");\n    const newDropdown = newFilter.querySelector(".filter-panel-item-dropdown");\n\n    if (!oldDropdown || !newDropdown) return;\n\n    // Get the structure map for both dropdowns\n    const oldStructure = this._getDropdownStructureMap(oldDropdown);\n    const newStructure = this._getDropdownStructureMap(newDropdown);\n\n    // Add missing structural elements\n    this._addMissingStructuralElements(oldDropdown, newStructure, oldStructure);\n  }\n\n  /**\n   * Create a map of filter elements keyed by their filter name\n   */\n  _createFilterElementsMap(elements) {\n    const map = {};\n    elements.forEach((element) => {\n      const options = element.getAttribute("data-filter-multi-select-options");\n      if (options) {\n        try {\n          const parsedOptions = JSON.parse(options);\n          if (parsedOptions.name) {\n            map[parsedOptions.name] = element;\n          }\n        } catch (e) {\n          console.warn("ListingListener: Failed to parse filter options", e);\n        }\n      }\n    });\n    return map;\n  }\n\n  /**\n   * Get the structural map of a dropdown container\n   * Returns an array of structural elements in order\n   */\n  _getDropdownStructureMap(dropdown) {\n    const structure = [];\n    const children = Array.from(dropdown.children);\n\n    children.forEach((child, index) => {\n      const elementInfo = {\n        index,\n        element: child,\n        tagName: child.tagName.toLowerCase(),\n        classes: Array.from(child.classList),\n        textContent: this._getElementTextSignature(child),\n        isList:\n          child.tagName.toLowerCase() === "ul" &&\n          child.classList.contains("filter-multi-select-list"),\n        isStructural: !child.classList.contains(\n          "filter-multi-select-list-item"\n        ),\n      };\n\n      structure.push(elementInfo);\n    });\n\n    return structure;\n  }\n\n  /**\n   * Get a text signature for an element (useful for matching)\n   */\n  _getElementTextSignature(element) {\n    if (element.tagName.toLowerCase() === "ul") {\n      return ""; // Lists don\'t have meaningful text content for matching\n    }\n\n    // Get direct text content, not from children\n    let textContent = "";\n    element.childNodes.forEach((node) => {\n      if (node.nodeType === Node.TEXT_NODE) {\n        textContent += node.textContent.trim();\n      }\n    });\n\n    return textContent.trim();\n  }\n\n  /**\n   * Add missing structural elements to the old dropdown\n   */\n  _addMissingStructuralElements(oldDropdown, newStructure, oldStructure) {\n    // Create a map of existing elements by their signature\n    const existingElements = new Map();\n    oldStructure.forEach((info) => {\n      const signature = this._createElementSignature(info);\n      existingElements.set(signature, info);\n    });\n\n    // Track where to insert new elements\n    let insertPosition = 0;\n\n    newStructure.forEach((newElementInfo, newIndex) => {\n      const signature = this._createElementSignature(newElementInfo);\n\n      if (!existingElements.has(signature) && newElementInfo.isStructural) {\n        // This is a new structural element, clone and insert it\n        const clonedElement = newElementInfo.element.cloneNode(true);\n\n        // Find the correct insertion point\n        const insertBeforeElement = this._findInsertionPoint(\n          oldDropdown,\n          newStructure,\n          newIndex,\n          existingElements\n        );\n\n        if (insertBeforeElement) {\n          oldDropdown.insertBefore(clonedElement, insertBeforeElement);\n        } else {\n          oldDropdown.appendChild(clonedElement);\n        }\n      }\n    });\n  }\n\n  /**\n   * Create a signature for an element to match between old and new structures\n   */\n  _createElementSignature(elementInfo) {\n    if (elementInfo.isList) {\n      // For lists, create signature based on position and context\n      return `list-${elementInfo.classes.join("-")}`;\n    }\n\n    // For other elements, use tag + classes + text content\n    const classSignature = elementInfo.classes.join("-");\n    const textSignature = elementInfo.textContent.replace(/\\s+/g, " ").trim();\n\n    return `${elementInfo.tagName}-${classSignature}-${textSignature}`;\n  }\n\n  /**\n   * Find the correct insertion point for a new structural element\n   */\n  _findInsertionPoint(\n    oldDropdown,\n    newStructure,\n    newElementIndex,\n    existingElements\n  ) {\n    // Look for the next existing element after the new element position\n    for (let i = newElementIndex + 1; i < newStructure.length; i++) {\n      const nextElementInfo = newStructure[i];\n      const nextSignature = this._createElementSignature(nextElementInfo);\n\n      if (existingElements.has(nextSignature)) {\n        // Find this element in the old dropdown\n        const existingInfo = existingElements.get(nextSignature);\n        return existingInfo.element;\n      }\n    }\n\n    return null; // Insert at the end\n  }\n\n  /**\n   * Update filter-multi-select elements based on data-filter-multi-select-options\n   */\n  _updateFilterMultiSelectElements(oldPanel, newPanel) {\n    // Get all filter-multi-select elements from both panels\n    const oldElements = oldPanel.querySelectorAll("[data-filter-multi-select]");\n    const newElements = newPanel.querySelectorAll("[data-filter-multi-select]");\n\n    // Create maps for comparison using data-filter-multi-select-options name and value\n    const oldElementsMap = this._createFilterMultiSelectMap(oldElements);\n    const newElementsMap = this._createFilterMultiSelectMap(newElements);\n\n    // Hide elements that are no longer in the new panel\n    Object.keys(oldElementsMap).forEach((key) => {\n      if (!newElementsMap[key]) {\n        this._hideFilterItem(oldElementsMap[key]);\n      }\n    });\n\n    // Show elements that are in the new panel\n    Object.keys(newElementsMap).forEach((key) => {\n      if (oldElementsMap[key]) {\n        this._showFilterItem(oldElementsMap[key]);\n      } else {\n        // New element, add it to the panel\n        const newElement = newElementsMap[key].cloneNode(true);\n        oldPanel.appendChild(newElement);\n        newElement.setAttribute("data-needs-init", "true");\n      }\n    });\n  }\n\n  /**\n   * Update filter-multi-select-list-item elements based on data-label\n   */\n  _updateFilterListItemElements(oldPanel, newPanel) {\n    // Get all filter-multi-select-list-item elements from both panels\n    const oldItems = oldPanel.querySelectorAll(\n      ".filter-multi-select-list-item"\n    );\n    const newItems = newPanel.querySelectorAll(\n      ".filter-multi-select-list-item"\n    );\n\n    // Create maps for comparison using data-label attribute from input elements\n    const oldItemsMap = this._createFilterListItemMap(oldItems);\n    const newItemsMap = this._createFilterListItemMap(newItems);\n\n    // Hide items that are no longer in the new panel\n    Object.keys(oldItemsMap).forEach((key) => {\n      if (!newItemsMap[key]) {\n        this._hideFilterItem(oldItemsMap[key]);\n      }\n    });\n\n    // Show items that are in the new panel\n    Object.keys(newItemsMap).forEach((key) => {\n      if (oldItemsMap[key]) {\n        this._showFilterItem(oldItemsMap[key]);\n        this._updateFilterListItemContent(oldItemsMap[key], newItemsMap[key]);\n      } else {\n        this._addNewFilterListItem(oldPanel, newItemsMap[key]);\n      }\n    });\n  }\n\n  /**\n   * Create a map of filter-multi-select elements keyed by their filter name\n   */\n  _createFilterMultiSelectMap(elements) {\n    const map = {};\n    elements.forEach((element) => {\n      const options = element.getAttribute("data-filter-multi-select-options");\n      if (options) {\n        try {\n          // Parse the options to get the filter name for a reliable key\n          const parsedOptions = JSON.parse(options);\n          if (parsedOptions.name) {\n            const key = `filter-multi-select-${parsedOptions.name}`;\n            map[key] = element;\n          }\n        } catch (e) {\n          // Skip elements with invalid JSON\n          console.warn("ListingListener: Failed to parse filter options", e);\n        }\n      }\n    });\n    return map;\n  }\n\n  /**\n   * Create a map of filter-multi-select-list-item elements keyed by their data-label\n   */\n  _createFilterListItemMap(items) {\n    const map = {};\n    items.forEach((item) => {\n      // Look for data-label attribute on the input element inside the list item\n      const input = item.querySelector("input[data-label]");\n      const label = input ? input.getAttribute("data-label") : null;\n      if (label) {\n        // Include parent filter info to make key more unique\n        const parentFilter = item.closest("[data-filter-multi-select]");\n        let parentFilterName = "unknown";\n\n        if (parentFilter) {\n          const parentOptions = parentFilter.getAttribute(\n            "data-filter-multi-select-options"\n          );\n          if (parentOptions) {\n            try {\n              const parsedOptions = JSON.parse(parentOptions);\n              parentFilterName = parsedOptions.name || "unknown";\n            } catch (e) {\n              // Use fallback if parsing fails\n              console.warn(\n                "ListingListener: Failed to parse parent filter options",\n                e\n              );\n            }\n          }\n        }\n\n        const key = `${parentFilterName}-${label}`;\n        map[key] = item;\n      }\n    });\n    return map;\n  }\n\n  /**\n   * Update the content of a filter dropdown\n   */\n  _updateFilterDropdownContent(oldElement, newElement) {\n    const oldDropdown = oldElement.querySelector(".filter-panel-item-dropdown");\n    const newDropdown = newElement.querySelector(".filter-panel-item-dropdown");\n\n    if (oldDropdown && newDropdown) {\n      // Store current input states before updating content\n      const inputStates = this._getInputStates(oldDropdown);\n\n      // Use our existing merge method to preserve event handlers\n      this._mergeDropdownContent(oldDropdown, newDropdown);\n\n      // Restore states without triggering events\n      this._restoreInputStates(oldDropdown, inputStates, false);\n    }\n  }\n\n  /**\n   * Update the content of a filter list item\n   */\n  _updateFilterListItemContent(oldItem, newItem) {\n    // Update label text if changed\n    const oldLabel = oldItem.querySelector("label");\n    const newLabel = newItem.querySelector("label");\n\n    if (oldLabel && newLabel && oldLabel.textContent !== newLabel.textContent) {\n      oldLabel.textContent = newLabel.textContent;\n    }\n\n    // Update input attributes if they\'ve changed\n    const oldInput = oldItem.querySelector("input");\n    const newInput = newItem.querySelector("input");\n\n    if (oldInput && newInput) {\n      ["value", "name", "data-count"].forEach((attr) => {\n        if (oldInput.getAttribute(attr) !== newInput.getAttribute(attr)) {\n          oldInput.setAttribute(attr, newInput.getAttribute(attr) || "");\n        }\n      });\n    }\n  }\n\n  /**\n   * Find a filter element by its name (extracted from data-filter-multi-select-options)\n   */\n  _findFilterElementByName(panel, filterName) {\n    const filterElements = panel.querySelectorAll(\n      "[data-filter-multi-select-options]"\n    );\n\n    for (const element of filterElements) {\n      try {\n        const optionsJson = element.getAttribute(\n          "data-filter-multi-select-options"\n        );\n        if (optionsJson) {\n          const options = JSON.parse(optionsJson);\n          if (options.name === filterName) {\n            return element;\n          }\n        }\n      } catch (e) {\n        // Skip elements with invalid JSON\n        continue;\n      }\n    }\n\n    return null;\n  }\n\n  /**\n   * Find the target list (ul element) where a new filter item should be added\n   */\n  _findTargetListForNewItem(dropdownInOldPanel, newItem, clonedItem) {\n    // Find the proper container to search in\n    const newDropdown = newItem.closest(".filter-panel-item-dropdown");\n    const targetContainer = newDropdown\n      ? this._findTargetContainer(newDropdown, dropdownInOldPanel)\n      : dropdownInOldPanel;\n\n    // First, try to find the section where this item belongs in the new panel structure\n    const newItemParentList = newItem.closest("ul.filter-multi-select-list");\n\n    if (newItemParentList) {\n      // Look for a preceding structural element to identify the section\n      let sectionElement = null;\n      let sectionText = null;\n      let currentElement = newItemParentList.previousElementSibling;\n\n      // Walk backwards to find the section identifier\n      while (currentElement && !sectionElement) {\n        // Check if this is a structural element (not a list item)\n        if (\n          currentElement.tagName &&\n          !currentElement.classList.contains("filter-multi-select-list-item") &&\n          currentElement.textContent.trim()\n        ) {\n          sectionElement = currentElement;\n          sectionText = currentElement.textContent.trim();\n          break;\n        }\n        currentElement = currentElement.previousElementSibling;\n      }\n\n      // If we found a section element, try to find the matching section in the target container\n      if (sectionElement && sectionText) {\n        const matchingSection = this._findSectionByText(\n          targetContainer,\n          sectionText,\n          sectionElement.tagName\n        );\n        if (matchingSection) {\n          return matchingSection;\n        }\n      }\n    }\n\n    // Fallback: try to find the best matching list based on item position or content\n    const allLists = targetContainer.querySelectorAll(\n      "ul.filter-multi-select-list"\n    );\n\n    if (allLists.length === 1) {\n      // If there\'s only one list, use it\n      return allLists[0];\n    }\n\n    if (allLists.length > 1) {\n      // Try to find a list that already contains similar items\n      const newItemLabel = clonedItem\n        .querySelector("input[data-label]")\n        ?.getAttribute("data-label");\n\n      if (newItemLabel) {\n        for (const list of allLists) {\n          const existingItems = list.querySelectorAll("input[data-label]");\n          for (const existing of existingItems) {\n            const existingLabel = existing.getAttribute("data-label");\n\n            // Simple heuristic: if labels have similar patterns, they might belong together\n            if (this._labelsSeemRelated(newItemLabel, existingLabel)) {\n              return list;\n            }\n          }\n        }\n      }\n\n      // If no good match found, use the first list\n      return allLists[0];\n    }\n\n    // No lists found, return null\n    return null;\n  }\n\n  /**\n   * Find a section\'s ul element by matching text content and tag name\n   */\n  _findSectionByText(container, sectionText, tagName) {\n    // Find all elements with the same tag name\n    const elements = container.querySelectorAll(tagName.toLowerCase());\n\n    for (const element of elements) {\n      if (element.textContent.trim() === sectionText) {\n        // Find the next ul element after this section element\n        let nextElement = element.nextElementSibling;\n        while (nextElement) {\n          if (\n            nextElement.tagName.toLowerCase() === "ul" &&\n            nextElement.classList.contains("filter-multi-select-list")\n          ) {\n            return nextElement;\n          }\n          nextElement = nextElement.nextElementSibling;\n        }\n      }\n    }\n\n    return null;\n  }\n\n  /**\n   * Simple heuristic to check if two filter labels seem related\n   */\n  _labelsSeemRelated(label1, label2) {\n    if (!label1 || !label2) return false;\n\n    // Check if both are numeric ranges (e.g., "41-42", "43-44")\n    const rangePattern = /^\\d+(-\\d+)?$/;\n    if (rangePattern.test(label1) && rangePattern.test(label2)) {\n      return true;\n    }\n\n    // Check if both are size indicators (e.g., "XL", "XXL", "3XL")\n    const sizePattern = /^\\d*XL[K]?$/;\n    if (sizePattern.test(label1) && sizePattern.test(label2)) {\n      return true;\n    }\n\n    // Check if both are waist/length combinations (e.g., "40/30", "42/32")\n    const waistLengthPattern = /^\\d+\\/\\d+$/;\n    if (waistLengthPattern.test(label1) && waistLengthPattern.test(label2)) {\n      return true;\n    }\n\n    // Check if both start with "W" (waist sizes like "W40", "W42")\n    if (label1.startsWith("W") && label2.startsWith("W")) {\n      return true;\n    }\n\n    return false;\n  }\n\n  /**\n   * Add a new filter list item to the appropriate parent\n   */\n  _addNewFilterListItem(oldPanel, newItem) {\n    // Find the parent filter in the old panel\n    const parentOptions = newItem\n      .closest("[data-filter-multi-select]")\n      ?.getAttribute("data-filter-multi-select-options");\n    if (!parentOptions) return;\n\n    // Parse the options to get the filter name\n    let filterName;\n    try {\n      const parsedOptions = JSON.parse(parentOptions);\n      filterName = parsedOptions.name;\n    } catch (e) {\n      console.warn("ListingListener: Failed to parse parent options", e);\n      return;\n    }\n\n    if (!filterName) return;\n\n    // Find the matching parent in old panel by filter name\n    const parentInOldPanel = this._findFilterElementByName(\n      oldPanel,\n      filterName\n    );\n    if (!parentInOldPanel) return;\n\n    const dropdownInOldPanel = parentInOldPanel.querySelector(\n      ".filter-panel-item-dropdown"\n    );\n    if (!dropdownInOldPanel) return;\n\n    // Clone the new item\n    const clonedItem = newItem.cloneNode(true);\n\n    // First, ensure the section structure exists\n    const sectionStructure = this._ensureSectionStructureExists(\n      newItem,\n      dropdownInOldPanel\n    );\n\n    // Then find the appropriate target list within the existing/created section\n    const targetList = this._findTargetListForNewItem(\n      dropdownInOldPanel,\n      newItem,\n      clonedItem\n    );\n\n    if (targetList) {\n      targetList.appendChild(clonedItem);\n    } else if (sectionStructure && sectionStructure.list) {\n      // Use the list from the newly created section structure\n      sectionStructure.list.appendChild(clonedItem);\n    } else {\n      // Ultimate fallback: append to the main dropdown\n      dropdownInOldPanel.appendChild(clonedItem);\n    }\n\n    // Ensure event handlers are attached\n    this._attachEventHandlersToNewItem(clonedItem, dropdownInOldPanel);\n  }\n\n  /**\n   * Hide a filter item with smooth animation\n   */\n  _hideFilterItem(item) {\n    item.style.display = "none";\n    item.classList.add("filter-item-hidden");\n  }\n\n  /**\n   * Show a filter item with smooth animation\n   * Respects different display modes (sidebar vs offcanvas)\n   */\n  _showFilterItem(item) {\n    if (item.classList.contains("filter-item-hidden")) {\n      item.classList.remove("filter-item-hidden");\n\n      // Determine the appropriate display style based on filter context\n      const displayStyle = this._getAppropriateDisplayStyle(item);\n      item.style.display = displayStyle;\n    }\n  }\n\n  /**\n   * Get the appropriate display style for a filter item based on its context\n   */\n  _getAppropriateDisplayStyle(item) {\n    // Check if we\'re in sidebar mode (uses collapse/d-grid)\n    if (item.closest(".filter-panel-item.d-grid")) {\n      return "block";\n    }\n\n    // Check if we\'re in offcanvas/dropdown mode\n    if (item.closest(".filter-panel-item.dropdown")) {\n      return "block";\n    }\n\n    // Check for list items which should use inline-block\n    if (item.classList.contains("filter-multi-select-list-item")) {\n      return "inline-block";\n    }\n\n    // Default to block display\n    return "block";\n  }\n\n  /**\n   * Create a map of filter items keyed by their identifier\n   */\n  _getFilterItemsMap(panel) {\n    const items = {};\n    const filterItems = panel.querySelectorAll(".filter-panel-item");\n\n    filterItems.forEach((item) => {\n      // Use data attributes or other identifiers to create unique keys\n      const key = this._getFilterItemKey(item);\n      if (key) {\n        items[key] = item;\n      }\n    });\n\n    return items;\n  }\n\n  /**\n   * Generate a unique key for a filter item\n   */\n  _getFilterItemKey(item) {\n    // Try to find a unique identifier for the filter item\n    const input = item.querySelector("input[name]");\n    const toggle = item.querySelector(".filter-panel-item-toggle");\n\n    if (input) {\n      return `input-${input.name}`;\n    } else if (toggle) {\n      return `toggle-${toggle.textContent.trim()}`;\n    }\n\n    // Fallback to index if no unique identifier found\n    return null;\n  }\n\n  /**\n   * Get current states of all inputs in the panel\n   */\n  _getInputStates(panel) {\n    const states = new Map();\n    const inputs = panel.querySelectorAll("input");\n\n    inputs.forEach((input) => {\n      const key =\n        input.type === "checkbox" || input.type === "radio"\n          ? input.name + "_" + input.value\n          : input.name;\n      states.set(key, {\n        checked: input.checked,\n        value: input.value,\n      });\n    });\n\n    return states;\n  }\n\n  /**\n   * Restore input states after content update\n   */\n  _restoreInputStates(panel, inputStates, triggerEvents = true) {\n    const inputs = panel.querySelectorAll("input");\n\n    inputs.forEach((input) => {\n      const key =\n        input.type === "checkbox" || input.type === "radio"\n          ? input.name + "_" + input.value\n          : input.name;\n\n      if (inputStates.has(key)) {\n        const state = inputStates.get(key);\n        if (input.type === "checkbox" || input.type === "radio") {\n          input.checked = state.checked;\n        } else {\n          input.value = state.value;\n        }\n\n        // Trigger appropriate event only if requested\n        if (triggerEvents) {\n          input.dispatchEvent(\n            new Event(\n              input.type === "checkbox" || input.type === "radio"\n                ? "change"\n                : "input",\n              { bubbles: true }\n            )\n          );\n        }\n      }\n    });\n  }\n\n  /**\n   * Update the content of an existing filter item if needed\n   */\n  _updateFilterItemContent(oldItem, newItem) {\n    // Compare the options/content within the filter item\n    const oldOptions = oldItem.querySelectorAll(\n      ".filter-multi-select-list-item"\n    );\n    const newOptions = newItem.querySelectorAll(\n      ".filter-multi-select-list-item"\n    );\n\n    // If the number of options has changed, update the content\n    if (oldOptions.length !== newOptions.length) {\n      const dropdown = oldItem.querySelector(".filter-panel-item-dropdown");\n      const newDropdown = newItem.querySelector(".filter-panel-item-dropdown");\n\n      if (dropdown && newDropdown) {\n        // Store current input states before updating content\n        const inputStates = this._getInputStates(dropdown);\n\n        // Instead of replacing innerHTML, merge the content while preserving handlers\n        this._mergeDropdownContent(dropdown, newDropdown);\n\n        // Restore states without triggering events\n        this._restoreInputStates(dropdown, inputStates, false);\n      }\n    }\n  }\n\n  /**\n   * Merge dropdown content while preserving existing event handlers\n   */\n  _mergeDropdownContent(oldDropdown, newDropdown) {\n    const oldItems = this._getDropdownItemsMap(oldDropdown);\n    const newItems = this._getDropdownItemsMap(newDropdown);\n\n    // Create a temporary container to hold the correctly ordered items\n    const tempContainer = document.createElement("div");\n\n    // Process items in the correct order from the server response\n    const newItemElements = newDropdown.querySelectorAll(\n      ".filter-multi-select-list-item"\n    );\n    newItemElements.forEach((newItemElement, index) => {\n      const key = this._getDropdownItemKey(newItemElement);\n\n      if (oldItems[key]) {\n        // Item exists, reuse the old DOM element but update its content\n        const oldItemElement = oldItems[key];\n\n        // Update content if needed\n        const oldLabel = oldItemElement.querySelector("label");\n        const newLabel = newItemElement.querySelector("label");\n\n        if (\n          oldLabel &&\n          newLabel &&\n          oldLabel.textContent !== newLabel.textContent\n        ) {\n          oldLabel.textContent = newLabel.textContent;\n        }\n\n        // Update input attributes if they\'ve changed\n        const oldInput = oldItemElement.querySelector("input");\n        const newInput = newItemElement.querySelector("input");\n\n        if (oldInput && newInput) {\n          ["value", "name", "data-count"].forEach((attr) => {\n            if (oldInput.getAttribute(attr) !== newInput.getAttribute(attr)) {\n              oldInput.setAttribute(attr, newInput.getAttribute(attr) || "");\n            }\n          });\n        }\n\n        // Move the existing item to the correct position in temp container\n        tempContainer.appendChild(oldItemElement);\n      } else {\n        // New item, clone and add it\n        const clonedItem = newItemElement.cloneNode(true);\n        tempContainer.appendChild(clonedItem);\n\n        // Ensure event handlers are attached to the new item\n        this._attachEventHandlersToNewItem(clonedItem, oldDropdown);\n      }\n    });\n\n    // Clear the old dropdown and move all items from temp container\n    oldDropdown.innerHTML = "";\n    while (tempContainer.firstChild) {\n      oldDropdown.appendChild(tempContainer.firstChild);\n    }\n  }\n\n  /**\n   * Create a map of dropdown items keyed by their identifier\n   */\n  _getDropdownItemsMap(dropdown) {\n    const items = {};\n    const listItems = dropdown.querySelectorAll(\n      ".filter-multi-select-list-item"\n    );\n\n    listItems.forEach((item) => {\n      const key = this._getDropdownItemKey(item);\n      if (key) {\n        items[key] = item;\n      }\n    });\n\n    return items;\n  }\n\n  /**\n   * Generate a unique key for a dropdown item\n   */\n  _getDropdownItemKey(item) {\n    const input = item.querySelector("input");\n    if (input) {\n      // Prefer data-label if available, otherwise use value\n      const identifier = input.getAttribute("data-label") || input.value;\n      if (identifier && input.name) {\n        return `${input.name}-${identifier}`;\n      }\n    }\n\n    const label = item.querySelector("label");\n    if (label) {\n      return `label-${label.textContent.trim()}`;\n    }\n\n    return null;\n  }\n\n  /**\n   * Attach event handlers to newly added filter items\n   */\n  _attachEventHandlersToNewItem(newItem, dropdown) {\n    // Find all inputs in the new item that need event handlers\n    const inputs = newItem.querySelectorAll(\n      \'input[type="checkbox"], input[type="radio"]\'\n    );\n\n    inputs.forEach((input, index) => {\n      // Add change event listener that calls the filter change handler\n      input.addEventListener("change", (event) => {\n        this._onChangeFilter(event);\n      });\n    });\n  }\n\n  /**\n   * Handle filter change events for dynamically added items\n   */\n  _onChangeFilter(event) {\n    // Check if we have access to the main listing plugin\n    if (this.listing && typeof this.listing.changeListing === "function") {\n      this.listing.changeListing(true, { p: 1 });\n    } else {\n      // Try to find the listing plugin instance\n      const listingElement = document.querySelector("[data-listing]");\n      if (listingElement) {\n        const listingPlugin = window.PluginManager.getPluginInstanceFromElement(\n          listingElement,\n          "Listing"\n        );\n        if (\n          listingPlugin &&\n          typeof listingPlugin.changeListing === "function"\n        ) {\n          listingPlugin.changeListing(true, { p: 1 });\n        } else {\n          console.warn(\n            "ListingListener: Could not find listing plugin or changeListing method"\n          );\n        }\n      } else {\n        console.warn("ListingListener: Could not find listing element");\n      }\n    }\n  }\n\n  /**\n   * Reinitialize plugins only for new or modified elements\n   */\n  _reinitializePluginsSelectively(panel) {\n    // Only reinitialize plugins for elements that were newly added\n    const newElements = panel.querySelectorAll(\'[data-needs-init="true"]\');\n\n    newElements.forEach((element) => {\n      try {\n        // Initialize plugins for the new element and its children\n        if (\n          element.dataset.pluginName &&\n          typeof element.dataset.pluginName === "string"\n        ) {\n          window.PluginManager.initializePlugin(\n            element,\n            element.dataset.pluginName\n          );\n        }\n\n        // Also initialize plugins for child elements that might need it\n        const childElements = element.querySelectorAll("[data-plugin-name]");\n        childElements.forEach((child) => {\n          if (\n            child.dataset.pluginName &&\n            typeof child.dataset.pluginName === "string"\n          ) {\n            window.PluginManager.initializePlugin(\n              child,\n              child.dataset.pluginName\n            );\n          }\n        });\n      } catch (e) {\n        console.warn(\n          "ListingListener: Failed to reinitialize plugin for element:",\n          element,\n          e\n        );\n      }\n\n      // Remove the initialization flag\n      element.removeAttribute("data-needs-init");\n    });\n  }\n\n  /**\n   * Build filter labels after content update\n   */\n  _buildLabels() {\n    // const filterPanelItems = document.querySelectorAll(".filter-panel-item");\n    // filterPanelItems.forEach((item) => {\n    //   const checkedInputs = item.querySelectorAll("input:checked");\n    //   const countElement = item.querySelector(".filter-multi-select-count");\n    //   const toggleElement = item.querySelector(".filter-panel-item-toggle");\n    //   if (countElement && checkedInputs.length > 0) {\n    //     // Update count display\n    //     countElement.textContent = checkedInputs.length;\n    //     countElement.style.display = "inline";\n    //     // Update toggle text or add active class\n    //     if (toggleElement) {\n    //       toggleElement.classList.add("is-active");\n    //     }\n    //   } else if (countElement) {\n    //     // Hide count when no filters selected\n    //     countElement.style.display = "none";\n    //     if (toggleElement) {\n    //       toggleElement.classList.remove("is-active");\n    //     }\n    //   }\n    // });\n  }\n\n  /**\n   * Re-register existing filter plugins with the main listing plugin\n   * This is needed because the registry gets cleared during updates\n   */\n  _reregisterExistingFilters(panel) {\n    // Find the main listing plugin instance\n    const listingElement = document.querySelector("[data-listing]");\n    if (!listingElement) return;\n\n    const listingPlugin = window.PluginManager.getPluginInstanceFromElement(\n      listingElement,\n      "Listing"\n    );\n    if (!listingPlugin || !listingPlugin.registerFilter) return;\n\n    // Find all filter elements and their associated plugins\n    const filterElements = panel.querySelectorAll(\n      "[data-filter-multi-select], [data-filter-range-slider], [data-filter-boolean]"\n    );\n\n    filterElements.forEach((element) => {\n      // Check if this element needs reinitialization due to new content\n      const needsReinit = element.hasAttribute("data-needs-reinit");\n\n      // Try to get the plugin instance for each filter element\n      const pluginNames = [\n        "FilterMultiSelect",\n        "FilterRangeSlider",\n        "FilterBoolean",\n      ];\n\n      for (const pluginName of pluginNames) {\n        try {\n          const filterPlugin =\n            window.PluginManager.getPluginInstanceFromElement(\n              element,\n              pluginName\n            );\n          if (filterPlugin) {\n            // Re-register this filter plugin with the main listing\n            if (typeof listingPlugin.registerFilter === "function") {\n              listingPlugin.registerFilter(filterPlugin);\n            }\n\n            // Skip automatic reinitialization to avoid conflicts\n            // Our manual event handlers should be sufficient\n            if (needsReinit) {\n              element.removeAttribute("data-needs-reinit");\n            }\n            break;\n          }\n        } catch (e) {\n          console.warn(\n            `ListingListener: Error processing ${pluginName} plugin:`,\n            e\n          );\n        }\n      }\n    });\n  }\n\n  /**\n   * Create missing section structure for a new filter item\n   */\n  _createMissingSectionStructure(newItem, dropdownInOldPanel) {\n    // Find the section structure that this item belongs to in the new panel\n    const newItemParentList = newItem.closest("ul.filter-multi-select-list");\n    if (!newItemParentList) {\n      return { list: null };\n    }\n\n    // Find the new panel dropdown that contains this structure\n    const newDropdown = newItem.closest(".filter-panel-item-dropdown");\n    if (!newDropdown) {\n      return { list: null };\n    }\n\n    // First, ensure we have the complete wrapper structure\n    const targetContainer = this._ensureWrapperStructureExists(\n      newDropdown,\n      dropdownInOldPanel\n    );\n\n    // Find all elements that come before this list in the new structure\n    const elementsToClone = [];\n    let currentElement = newItemParentList.previousElementSibling;\n\n    // Walk backwards to collect all structural elements that belong to this section\n    while (currentElement) {\n      // Check if this is a structural element (not a list item)\n      if (\n        currentElement.tagName &&\n        !currentElement.classList.contains("filter-multi-select-list-item")\n      ) {\n        // Check if this element is already in the target container\n        const signature =\n          this._createElementSignatureFromElement(currentElement);\n        if (!this._elementExistsInContainer(targetContainer, signature)) {\n          elementsToClone.unshift(currentElement); // Add to beginning to maintain order\n        } else {\n          // If we found an existing element, we\'ve reached the boundary of this section\n          break;\n        }\n      }\n      currentElement = currentElement.previousElementSibling;\n    }\n\n    // Find the insertion point in the target container\n    const insertionPoint = this._findSectionInsertionPoint(\n      targetContainer,\n      newDropdown,\n      newItemParentList\n    );\n\n    // Clone and insert the structural elements\n    let lastInsertedElement = null;\n    elementsToClone.forEach((elementToClone) => {\n      const clonedElement = elementToClone.cloneNode(true);\n\n      if (insertionPoint) {\n        targetContainer.insertBefore(clonedElement, insertionPoint);\n      } else {\n        targetContainer.appendChild(clonedElement);\n      }\n\n      lastInsertedElement = clonedElement;\n    });\n\n    // Create and insert the new list\n    const newList = newItemParentList.cloneNode(false); // Clone without children\n    newList.innerHTML = ""; // Ensure it\'s empty\n\n    if (lastInsertedElement) {\n      // Insert the list right after the last structural element\n      lastInsertedElement.parentNode.insertBefore(\n        newList,\n        lastInsertedElement.nextSibling\n      );\n    } else if (insertionPoint) {\n      targetContainer.insertBefore(newList, insertionPoint);\n    } else {\n      targetContainer.appendChild(newList);\n    }\n\n    return { list: newList };\n  }\n\n  /**\n   * Create element signature from an actual element\n   */\n  _createElementSignatureFromElement(element) {\n    const elementInfo = {\n      tagName: element.tagName.toLowerCase(),\n      classes: Array.from(element.classList),\n      textContent: this._getElementTextSignature(element),\n      isList:\n        element.tagName.toLowerCase() === "ul" &&\n        element.classList.contains("filter-multi-select-list"),\n      isStructural: !element.classList.contains(\n        "filter-multi-select-list-item"\n      ),\n    };\n\n    return this._createElementSignature(elementInfo);\n  }\n\n  /**\n   * Find the insertion point for a new section in the target container\n   */\n  _findSectionInsertionPoint(targetContainer, newDropdown, newItemParentList) {\n    // Find elements that come after this list in the new structure\n    let nextElement = newItemParentList.nextElementSibling;\n\n    while (nextElement) {\n      if (\n        nextElement.tagName &&\n        !nextElement.classList.contains("filter-multi-select-list-item")\n      ) {\n        // Check if this element exists in the target container\n        const signature = this._createElementSignatureFromElement(nextElement);\n\n        // Find this element in the target container\n        const children = Array.from(targetContainer.children);\n        for (const child of children) {\n          const childSignature = this._createElementSignatureFromElement(child);\n          if (childSignature === signature) {\n            return child; // Insert before this element\n          }\n        }\n      }\n      nextElement = nextElement.nextElementSibling;\n    }\n\n    return null; // Insert at the end\n  }\n\n  /**\n   * Ensure that the section structure exists for a new filter item\n   * Returns the created structure if it was created, null if it already existed\n   */\n  _ensureSectionStructureExists(newItem, dropdownInOldPanel) {\n    // First check if the section already exists\n    if (this._sectionExistsForItem(newItem, dropdownInOldPanel)) {\n      return null; // Section already exists, no need to create\n    }\n\n    // Section doesn\'t exist, create it\n    return this._createMissingSectionStructure(newItem, dropdownInOldPanel);\n  }\n\n  /**\n   * Check if the section structure already exists for a given item\n   */\n  _sectionExistsForItem(newItem, dropdownInOldPanel) {\n    // Find the section structure that this item belongs to in the new panel\n    const newItemParentList = newItem.closest("ul.filter-multi-select-list");\n    if (!newItemParentList) {\n      return true; // If no parent list, assume structure exists\n    }\n\n    // First, ensure we know where to look (find the proper container)\n    const newDropdown = newItem.closest(".filter-panel-item-dropdown");\n    if (!newDropdown) {\n      return true;\n    }\n\n    // Get the target container where we should check for the section\n    const targetContainer = this._findTargetContainer(\n      newDropdown,\n      dropdownInOldPanel\n    );\n\n    // Look for the preceding structural element to identify the section\n    let sectionElement = null;\n    let sectionText = null;\n    let currentElement = newItemParentList.previousElementSibling;\n\n    // Walk backwards to find the section identifier\n    while (currentElement && !sectionElement) {\n      // Check if this is a structural element (not a list item)\n      if (\n        currentElement.tagName &&\n        !currentElement.classList.contains("filter-multi-select-list-item") &&\n        currentElement.textContent.trim()\n      ) {\n        sectionElement = currentElement;\n        sectionText = currentElement.textContent.trim();\n        break;\n      }\n      currentElement = currentElement.previousElementSibling;\n    }\n\n    // If no section element found, assume structure exists\n    if (!sectionElement || !sectionText) {\n      return true;\n    }\n\n    // Check if this section element exists in the target container\n    const signature = this._createElementSignatureFromElement(sectionElement);\n    const exists = this._elementExistsInContainer(targetContainer, signature);\n\n    return exists;\n  }\n\n  /**\n   * Find the target container where content should be checked/added\n   * (handles wrapper structure)\n   */\n  _findTargetContainer(newDropdown, oldDropdown) {\n    // Get the structural path from the new dropdown\n    const structuralPath = this._getStructuralPath(newDropdown);\n\n    // Navigate through existing structure in old dropdown\n    let currentContainer = oldDropdown;\n\n    structuralPath.forEach((wrapperInfo) => {\n      const existingWrapper = this._findWrapperInContainer(\n        currentContainer,\n        wrapperInfo\n      );\n      if (existingWrapper) {\n        currentContainer = existingWrapper;\n      }\n      // If wrapper doesn\'t exist, we\'ll stay at the current level\n      // The section creation will handle creating missing wrappers\n    });\n\n    return currentContainer;\n  }\n\n  /**\n   * Ensure the complete wrapper structure exists from dropdown to content level\n   * Returns the target container where content should be added\n   */\n  _ensureWrapperStructureExists(newDropdown, oldDropdown) {\n    // Get the structural path from the new dropdown to the content\n    const structuralPath = this._getStructuralPath(newDropdown);\n\n    // Build the same structure in the old dropdown if it doesn\'t exist\n    let currentContainer = oldDropdown;\n\n    structuralPath.forEach((wrapperInfo) => {\n      const existingWrapper = this._findWrapperInContainer(\n        currentContainer,\n        wrapperInfo\n      );\n\n      if (existingWrapper) {\n        // Wrapper already exists, use it\n        currentContainer = existingWrapper;\n      } else {\n        // Create the missing wrapper\n        const newWrapper = this._createWrapperElement(wrapperInfo);\n        currentContainer.appendChild(newWrapper);\n        currentContainer = newWrapper;\n      }\n    });\n\n    return currentContainer;\n  }\n\n  /**\n   * Get the structural path from dropdown to content level\n   */\n  _getStructuralPath(dropdown) {\n    const path = [];\n    const directChildren = Array.from(dropdown.children);\n\n    // Look for wrapper elements that contain the content\n    directChildren.forEach((child) => {\n      if (this._isWrapperElement(child)) {\n        const wrapperInfo = {\n          tagName: child.tagName.toLowerCase(),\n          classes: Array.from(child.classList),\n          signature: this._createElementSignatureFromElement(child),\n        };\n        path.push(wrapperInfo);\n      }\n    });\n\n    return path;\n  }\n\n  /**\n   * Check if an element is a wrapper element (contains content but isn\'t content itself)\n   */\n  _isWrapperElement(element) {\n    // Skip list items and individual lists\n    if (\n      element.classList.contains("filter-multi-select-list-item") ||\n      (element.tagName.toLowerCase() === "ul" &&\n        element.classList.contains("filter-multi-select-list"))\n    ) {\n      return false;\n    }\n\n    // Check if it contains multiple structural elements or lists\n    const childLists = element.querySelectorAll("ul.filter-multi-select-list");\n    const childStructural = element.querySelectorAll(\n      ":scope > *:not(.filter-multi-select-list-item)"\n    );\n\n    return childLists.length > 0 || childStructural.length > 1;\n  }\n\n  /**\n   * Find a wrapper element in a container by its info\n   */\n  _findWrapperInContainer(container, wrapperInfo) {\n    const children = Array.from(container.children);\n\n    return children.find((child) => {\n      const childSignature = this._createElementSignatureFromElement(child);\n      return childSignature === wrapperInfo.signature;\n    });\n  }\n\n  /**\n   * Create a wrapper element from wrapper info\n   */\n  _createWrapperElement(wrapperInfo) {\n    const element = document.createElement(wrapperInfo.tagName);\n    wrapperInfo.classes.forEach((className) => {\n      element.classList.add(className);\n    });\n    return element;\n  }\n\n  /**\n   * Check if an element with the given signature exists in the container\n   */\n  _elementExistsInContainer(container, signature) {\n    const children = Array.from(container.children);\n\n    return children.some((child) => {\n      const childSignature = this._createElementSignatureFromElement(child);\n      return childSignature === signature;\n    });\n  }\n\n  /**\n   * Create a map of existing section-item relationships before structural changes\n   */\n  _createExistingSectionMap(oldPanel) {\n    const sectionMap = new Map();\n\n    // Find all filter elements in the old panel\n    const filterElements = oldPanel.querySelectorAll(\n      "[data-filter-multi-select-options]"\n    );\n\n    filterElements.forEach((filterElement) => {\n      const dropdown = filterElement.querySelector(\n        ".filter-panel-item-dropdown"\n      );\n      if (!dropdown) return;\n\n      // Find the target container\n      const targetContainer = this._findTargetContainerInExisting(dropdown);\n\n      // Find all structural elements that could be section headers\n      const structuralElements = targetContainer.querySelectorAll("*");\n\n      structuralElements.forEach((element) => {\n        // Check if this looks like a section header (has text content and is followed by a list)\n        if (\n          element.textContent.trim() &&\n          !element.classList.contains("filter-multi-select-list-item") &&\n          element.tagName.toLowerCase() !== "ul"\n        ) {\n          const sectionText = element.textContent.trim();\n          let nextElement = element.nextElementSibling;\n\n          // Look for the associated list\n          while (nextElement) {\n            if (\n              nextElement.tagName.toLowerCase() === "ul" &&\n              nextElement.classList.contains("filter-multi-select-list")\n            ) {\n              // Collect all items from this list\n              const items = Array.from(\n                nextElement.querySelectorAll(".filter-multi-select-list-item")\n              );\n              const itemsCloned = items.map((item) => item.cloneNode(true));\n\n              if (itemsCloned.length > 0) {\n                if (!sectionMap.has(sectionText)) {\n                  sectionMap.set(sectionText, []);\n                }\n                sectionMap.get(sectionText).push(...itemsCloned);\n              }\n              break;\n            }\n\n            // Stop if we hit another section header\n            if (\n              nextElement.textContent.trim() &&\n              !nextElement.classList.contains(\n                "filter-multi-select-list-item"\n              ) &&\n              nextElement.tagName.toLowerCase() !== "ul"\n            ) {\n              break;\n            }\n\n            nextElement = nextElement.nextElementSibling;\n          }\n        }\n      });\n    });\n\n    return sectionMap;\n  }\n\n  /**\n   * Find the target container in existing structure (before changes)\n   */\n  _findTargetContainerInExisting(dropdown) {\n    // Look for wrapper elements in the existing structure\n    const children = Array.from(dropdown.children);\n\n    for (const child of children) {\n      if (this._isWrapperElement(child)) {\n        return child;\n      }\n    }\n\n    // If no wrapper found, use the dropdown itself\n    return dropdown;\n  }\n\n  /**\n   * Restore existing items to their correct sections after structural changes\n   */\n  _restoreExistingSectionAssociations(oldPanel, sectionMap) {\n    if (sectionMap.size === 0) return;\n\n    // Find all filter elements in the updated panel\n    const filterElements = oldPanel.querySelectorAll(\n      "[data-filter-multi-select-options]"\n    );\n\n    filterElements.forEach((filterElement) => {\n      const dropdown = filterElement.querySelector(\n        ".filter-panel-item-dropdown"\n      );\n      if (!dropdown) return;\n\n      const targetContainer =\n        this._findTargetContainer(null, dropdown) || dropdown;\n\n      // For each preserved section, try to restore its items\n      sectionMap.forEach((preservedItems, sectionText) => {\n        const sectionList = this._findSectionByTextInContainer(\n          targetContainer,\n          sectionText\n        );\n\n        if (sectionList) {\n          // Clear any incorrectly placed items first\n          this._removeItemsFromIncorrectSections(\n            targetContainer,\n            preservedItems,\n            sectionText\n          );\n\n          // Add the preserved items to the correct section\n          preservedItems.forEach((item) => {\n            // Check if this item is already in the correct section\n            if (!this._itemExistsInList(sectionList, item)) {\n              sectionList.appendChild(item.cloneNode(true));\n            }\n          });\n        }\n      });\n    });\n  }\n\n  /**\n   * Find a section list by section text in a container\n   */\n  _findSectionByTextInContainer(container, sectionText) {\n    const elements = container.querySelectorAll("*");\n\n    for (const element of elements) {\n      if (\n        element.textContent.trim() === sectionText &&\n        !element.classList.contains("filter-multi-select-list-item") &&\n        element.tagName.toLowerCase() !== "ul"\n      ) {\n        // Find the next list after this section header\n        let nextElement = element.nextElementSibling;\n        while (nextElement) {\n          if (\n            nextElement.tagName.toLowerCase() === "ul" &&\n            nextElement.classList.contains("filter-multi-select-list")\n          ) {\n            return nextElement;\n          }\n          nextElement = nextElement.nextElementSibling;\n        }\n      }\n    }\n\n    return null;\n  }\n\n  /**\n   * Remove items from incorrect sections (cleanup before restoration)\n   */\n  _removeItemsFromIncorrectSections(\n    container,\n    preservedItems,\n    correctSectionText\n  ) {\n    const allLists = container.querySelectorAll("ul.filter-multi-select-list");\n\n    allLists.forEach((list) => {\n      // Skip if this is the correct section\n      const sectionText = this._getSectionTextForList(list);\n      if (sectionText === correctSectionText) return;\n\n      // Remove any items that belong to the correct section\n      const listItems = Array.from(\n        list.querySelectorAll(".filter-multi-select-list-item")\n      );\n\n      listItems.forEach((listItem) => {\n        const itemLabel = this._getItemLabel(listItem);\n\n        // Check if this item should be in the preserved section\n        const shouldBeInPreservedSection = preservedItems.some(\n          (preservedItem) => {\n            const preservedLabel = this._getItemLabel(preservedItem);\n            return preservedLabel === itemLabel;\n          }\n        );\n\n        if (shouldBeInPreservedSection) {\n          listItem.remove();\n        }\n      });\n    });\n  }\n\n  /**\n   * Get the section text for a given list\n   */\n  _getSectionTextForList(list) {\n    let prevElement = list.previousElementSibling;\n\n    while (prevElement) {\n      if (\n        prevElement.textContent.trim() &&\n        !prevElement.classList.contains("filter-multi-select-list-item") &&\n        prevElement.tagName.toLowerCase() !== "ul"\n      ) {\n        return prevElement.textContent.trim();\n      }\n      prevElement = prevElement.previousElementSibling;\n    }\n\n    return null;\n  }\n\n  /**\n   * Check if an item already exists in a list\n   */\n  _itemExistsInList(list, item) {\n    const itemLabel = this._getItemLabel(item);\n    const existingItems = list.querySelectorAll(\n      ".filter-multi-select-list-item"\n    );\n\n    return Array.from(existingItems).some((existingItem) => {\n      const existingLabel = this._getItemLabel(existingItem);\n      return existingLabel === itemLabel;\n    });\n  }\n\n  /**\n   * Get the label from a filter item\n   */\n  _getItemLabel(item) {\n    const input = item.querySelector("input[data-label]");\n    return input ? input.getAttribute("data-label") : null;\n  }\n\n  /**\n   * Replace the filter structure completely while preserving existing items\n   */\n  _replaceFilterStructureCompletely(oldPanel, newPanel, existingSectionMap) {\n    // Find all filter elements in both panels\n    const oldFilters = oldPanel.querySelectorAll(\n      "[data-filter-multi-select-options]"\n    );\n    const newFilters = newPanel.querySelectorAll(\n      "[data-filter-multi-select-options]"\n    );\n\n    // Create maps for comparison using filter names\n    const oldFiltersMap = this._createFilterElementsMap(oldFilters);\n    const newFiltersMap = this._createFilterElementsMap(newFilters);\n\n    // Process each filter\n    Object.keys(newFiltersMap).forEach((filterName) => {\n      const oldFilter = oldFiltersMap[filterName];\n      const newFilter = newFiltersMap[filterName];\n\n      if (oldFilter && newFilter) {\n        this._replaceFilterDropdownStructure(\n          oldFilter,\n          newFilter,\n          existingSectionMap\n        );\n      } else if (newFilter && !oldFilter) {\n        // Add new filters that don\'t exist in the old panel\n        oldPanel.appendChild(newFilter);\n        //this._attachEventHandlersToNewFilter(newFilter);\n      }\n    });\n\n    // Remove filters that no longer exist in the new panel\n    Object.keys(oldFiltersMap).forEach((filterName) => {\n      if (!newFiltersMap[filterName]) {\n        const obsoleteFilter = oldFiltersMap[filterName];\n        obsoleteFilter.classList.add("filter-panel-item-hidden");\n      } else {\n        const obsoleteFilter = oldFiltersMap[filterName];\n        if (obsoleteFilter.classList.contains("filter-panel-item-hidden")) {\n          obsoleteFilter.classList.remove("filter-panel-item-hidden");\n        }\n      }\n    });\n  }\n\n  /**\n   * Replace the dropdown structure for a specific filter\n   */\n  _replaceFilterDropdownStructure(oldFilter, newFilter, existingSectionMap) {\n    const oldDropdown = oldFilter.querySelector(".filter-panel-item-dropdown");\n    const newDropdown = newFilter.querySelector(".filter-panel-item-dropdown");\n\n    if (!oldDropdown || !newDropdown) return;\n\n    // Build the complete new structure from the new panel\n    const newStructure = this._buildCompleteStructureFromNew(\n      newDropdown,\n      existingSectionMap\n    );\n\n    // Replace the old dropdown content with the new structure\n    oldDropdown.innerHTML = "";\n\n    // Add the new structure to the old dropdown\n    newStructure.forEach((element) => {\n      oldDropdown.appendChild(element);\n    });\n\n    // Attach event handlers to all new items\n    this._attachEventHandlersToNewDropdown(oldDropdown);\n  }\n\n  /**\n   * Attach event handlers to all items in a dropdown\n   */\n  _attachEventHandlersToNewDropdown(dropdown) {\n    const allItems = dropdown.querySelectorAll(\n      ".filter-multi-select-list-item"\n    );\n\n    allItems.forEach((item) => {\n      this._attachEventHandlersToNewItem(item, dropdown);\n    });\n  }\n\n  /**\n   * Build the complete structure from the new panel, placing existing items correctly\n   */\n  _buildCompleteStructureFromNew(newDropdown, existingSectionMap) {\n    const structure = [];\n    const newChildren = Array.from(newDropdown.children);\n\n    newChildren.forEach((child) => {\n      if (this._isWrapperElement(child)) {\n        // This is a wrapper, process its contents\n        const wrapper = child.cloneNode(false); // Clone without children\n        const wrapperContent = this._buildWrapperContent(\n          child,\n          existingSectionMap\n        );\n\n        wrapperContent.forEach((contentElement) => {\n          wrapper.appendChild(contentElement);\n        });\n\n        structure.push(wrapper);\n      } else {\n        // Direct child element\n        const clonedChild = this._processStructuralElement(\n          child,\n          existingSectionMap\n        );\n        if (clonedChild) {\n          structure.push(clonedChild);\n        }\n      }\n    });\n\n    return structure;\n  }\n\n  /**\n   * Build the content for a wrapper element\n   */\n  _buildWrapperContent(wrapperElement, existingSectionMap) {\n    const content = [];\n    const children = Array.from(wrapperElement.children);\n    let currentSection = null;\n    let currentSectionList = null;\n\n    children.forEach((child) => {\n      if (\n        child.tagName.toLowerCase() === "ul" &&\n        child.classList.contains("filter-multi-select-list")\n      ) {\n        // This is a list - populate it with the correct items\n        if (currentSection) {\n          currentSectionList = this._createListForSection(\n            child,\n            currentSection,\n            existingSectionMap\n          );\n          content.push(currentSectionList);\n        } else {\n          // List without a section - clone as is but check for existing items\n          currentSectionList = this._createListWithExistingItems(\n            child,\n            existingSectionMap\n          );\n          content.push(currentSectionList);\n        }\n      } else if (\n        child.textContent.trim() &&\n        !child.classList.contains("filter-multi-select-list-item")\n      ) {\n        // This is a section header\n        currentSection = child.textContent.trim();\n        const clonedHeader = child.cloneNode(true);\n        content.push(clonedHeader);\n      } else {\n        // Other structural element\n        const clonedElement = child.cloneNode(true);\n        content.push(clonedElement);\n      }\n    });\n\n    return content;\n  }\n\n  /**\n   * Create a list for a specific section, using existing items if available\n   */\n  _createListForSection(templateList, sectionText, existingSectionMap) {\n    const list = templateList.cloneNode(false); // Clone without children\n\n    // Create a map of existing items by their labels to preserve checked states\n    const existingItemsMap = new Map();\n    if (existingSectionMap.has(sectionText)) {\n      const existingItems = existingSectionMap.get(sectionText);\n      existingItems.forEach((item) => {\n        const label = this._getItemLabel(item);\n        if (label) {\n          const input = item.querySelector("input");\n          existingItemsMap.set(label, {\n            element: item,\n            checked: input ? input.checked : false,\n          });\n        }\n      });\n    }\n\n    // Use items from the new template (server response) as the source of truth\n    const templateItems = Array.from(templateList.children);\n    templateItems.forEach((templateItem) => {\n      const templateLabel = this._getItemLabel(templateItem);\n      const newItem = templateItem.cloneNode(true);\n\n      // If we have an existing item with the same label, preserve its checked state\n      if (templateLabel && existingItemsMap.has(templateLabel)) {\n        const existingInfo = existingItemsMap.get(templateLabel);\n        const newInput = newItem.querySelector("input");\n        if (newInput && existingInfo.checked) {\n          newInput.checked = true;\n        }\n      }\n\n      list.appendChild(newItem);\n    });\n\n    return list;\n  }\n\n  /**\n   * Create a list with existing items (for lists without clear section headers)\n   */\n  _createListWithExistingItems(templateList, existingSectionMap) {\n    const list = templateList.cloneNode(false);\n\n    // Try to determine which section this list belongs to by looking at its items\n    const templateItems = Array.from(templateList.children);\n    let matchedSection = null;\n\n    // Look for the section that contains most of these items\n    existingSectionMap.forEach((existingItems, sectionText) => {\n      const matchCount = templateItems.reduce((count, templateItem) => {\n        const templateLabel = this._getItemLabel(templateItem);\n        const hasMatch = existingItems.some((existingItem) => {\n          const existingLabel = this._getItemLabel(existingItem);\n          return existingLabel === templateLabel;\n        });\n        return hasMatch ? count + 1 : count;\n      }, 0);\n\n      if (\n        matchCount > 0 &&\n        (!matchedSection || matchCount > matchedSection.count)\n      ) {\n        matchedSection = { section: sectionText, count: matchCount };\n      }\n    });\n\n    if (matchedSection) {\n      // Use the matched section\'s items\n      return this._createListForSection(\n        templateList,\n        matchedSection.section,\n        existingSectionMap\n      );\n    }\n\n    // No section match found - create a map of all existing items to preserve checked states\n    const existingItemsMap = new Map();\n    existingSectionMap.forEach((existingItems, sectionText) => {\n      existingItems.forEach((item) => {\n        const label = this._getItemLabel(item);\n        if (label) {\n          const input = item.querySelector("input");\n          existingItemsMap.set(label, {\n            element: item,\n            checked: input ? input.checked : false,\n          });\n        }\n      });\n    });\n\n    // Use items from the template (server response) as the source of truth\n    templateItems.forEach((templateItem) => {\n      const templateLabel = this._getItemLabel(templateItem);\n      const newItem = templateItem.cloneNode(true);\n\n      // If we have an existing item with the same label, preserve its checked state\n      if (templateLabel && existingItemsMap.has(templateLabel)) {\n        const existingInfo = existingItemsMap.get(templateLabel);\n        const newInput = newItem.querySelector("input");\n        if (newInput && existingInfo.checked) {\n          newInput.checked = true;\n        }\n      }\n\n      list.appendChild(newItem);\n    });\n\n    return list;\n  }\n\n  /**\n   * Process a structural element (non-wrapper)\n   */\n  _processStructuralElement(element, existingSectionMap) {\n    if (\n      element.tagName.toLowerCase() === "ul" &&\n      element.classList.contains("filter-multi-select-list")\n    ) {\n      return this._createListWithExistingItems(element, existingSectionMap);\n    }\n\n    return element.cloneNode(true);\n  }\n}\n\n;// ./src/makaira-filter/category-local-storage.plugin.js\n\n\n/**\n * CategoryLocalStorage Plugin\n *\n * Detects available filters on Shopware category pages and stores them as an array to localStorage.\n * Tracks which filters are available for each category page visit.\n *\n * Configuration options:\n * - enabled: Whether the plugin is enabled\n * - storageKey: The key to use in localStorage (default: \'macatfiall\')\n *\n * Usage:\n * <div data-category-local-storage="true"\n *      data-category-local-storage-options=\'{"enabled": true, "storageKey": "macatfiall"}\'>\n * </div>\n */\nclass CategoryLocalStorage extends plugin_class/* default */.A {\n  static options = {\n    enabled: true,\n    storageKey: "macatfiall",\n    includeTimestamp: false,\n  };\n\n  constructor(el, options, pluginName) {\n    super(el, options, pluginName);\n\n    this._currentCategoryId = null;\n    this._isInitialized = false;\n\n    // Merge configuration from data attributes\n    this._mergeConfigFromElement(el);\n  }\n\n  /**\n   * Merge configuration from PHP (data attribute) with default options\n   */\n  _mergeConfigFromElement(el) {\n    const configAttribute = el.getAttribute(\n      "data-category-local-storage-options"\n    );\n    if (configAttribute) {\n      try {\n        const pluginConfig = JSON.parse(configAttribute);\n        Object.assign(this.options, pluginConfig);\n      } catch (e) {\n        console.warn(\n          "CategoryLocalStorage: Failed to parse configuration from data attribute",\n          e\n        );\n      }\n    }\n  }\n\n  init() {\n    if (!this.options.enabled) {\n      return;\n    }\n\n    this._detectAndStoreCategoryData();\n    this._setupUrlChangeListener();\n    this._isInitialized = true;\n  }\n\n  /**\n   * Detect available filters and store to localStorage\n   */\n  _detectAndStoreCategoryData() {\n    const availableFilters = this._getCategoryData();\n\n    if (availableFilters && availableFilters.length > 0) {\n      this._storeToLocalStorage(availableFilters);\n\n      // Also store to macurrfi if filter parameters are present in URL\n      if (this._hasFilterParameters()) {\n        this._storeCurrentFiltersToLocalStorage(availableFilters);\n      } else {\n        // Clean macurrfi if no filter parameters are present\n        this._clearCurrentFiltersFromLocalStorage();\n      }\n\n      this._currentCategoryId = this._extractCategoryId();\n    }\n  }\n\n  /**\n   * Set up listener for URL changes (for SPA navigation)\n   */\n  _setupUrlChangeListener() {\n    // Listen for popstate events (browser navigation)\n    window.addEventListener("popstate", () => {\n      setTimeout(() => this._detectAndStoreCategoryData(), 100);\n    });\n\n    // Listen for Shopware\'s listing updates\n    // if (this.$emitter) {\n    //   this.$emitter.subscribe(\'Listing/afterRenderResponse\', () => {\n    //     setTimeout(() => this._detectAndStoreCategoryData(), 100);\n    //   });\n    // }\n\n    // Also listen for pushState/replaceState changes\n    // const originalPushState = history.pushState;\n    // const originalReplaceState = history.replaceState;\n\n    // history.pushState = (...args) => {\n    //   originalPushState.apply(history, args);\n    //   setTimeout(() => this._detectAndStoreCategoryData(), 100);\n    // };\n\n    // history.replaceState = (...args) => {\n    //   originalReplaceState.apply(history, args);\n    //   setTimeout(() => this._detectAndStoreCategoryData(), 100);\n    // };\n  }\n\n  /**\n   * Extract available filters from the current page\n   */\n  _getCategoryData() {\n    // Check if we\'re on a category page\n    if (!this._isOnCategoryPage()) {\n      return null;\n    }\n\n    // Simply return the available filters array\n    return this._getAvailableFilters();\n  }\n\n  /**\n   * Check if current page is a category page\n   */\n  _isOnCategoryPage() {\n    // Check for category-specific elements\n    const categoryIndicators = [\n      ".category-listing",\n      ".cms-element-product-listing",\n      "[data-listing]",\n      ".product-listing",\n      "body.is-ctl-navigation",\n    ];\n\n    return categoryIndicators.some(\n      (selector) => document.querySelector(selector) !== null\n    );\n  }\n\n  /**\n   * Extract category ID from various sources (simplified)\n   */\n  _extractCategoryId() {\n    // Method 1: From data attributes\n    const listingElement = document.querySelector("[data-listing]");\n    if (listingElement && listingElement.dataset.listingOptions) {\n      try {\n        const listingOptions = JSON.parse(\n          listingElement.dataset.listingOptions\n        );\n        if (listingOptions.categoryId) {\n          return listingOptions.categoryId;\n        }\n      } catch (e) {\n        // Ignore parsing errors\n      }\n    }\n\n    // Method 2: From URL patterns\n    const path = window.location.pathname;\n    const match = path.match(/\\/navigation\\/([a-f0-9-]+)/);\n    if (match) {\n      return match[1];\n    }\n\n    // Method 3: Generate simple identifier from URL\n    return window.location.pathname.replace(/\\//g, "_") || "unknown_category";\n  }\n\n  /**\n   * Check if URL contains parameters that start with "filter_"\n   */\n  _hasFilterParameters() {\n    const urlParams = new URLSearchParams(window.location.search);\n\n    for (const [key] of urlParams) {\n      if (key.startsWith("filter_")) {\n        return true;\n      }\n    }\n\n    return false;\n  }\n\n  /**\n   * Get available filters from the page\n   */\n  _getAvailableFilters() {\n    const filterItems = document.querySelectorAll(\n      ".filter-panel-item[data-filter-multi-select-options]"\n    );\n    const availableFilters = [];\n\n    filterItems.forEach((filterItem) => {\n      try {\n        const optionsData = filterItem.getAttribute(\n          "data-filter-multi-select-options"\n        );\n        if (optionsData) {\n          const options = JSON.parse(optionsData);\n          if (options.name) {\n            availableFilters.push(options.name);\n          }\n        }\n      } catch (e) {\n        // Ignore parsing errors and continue with next item\n        console.warn(\n          "CategoryLocalStorage: Failed to parse filter options for item:",\n          filterItem,\n          e\n        );\n      }\n    });\n\n    return availableFilters;\n  }\n\n  /**\n   * Store filters array to localStorage\n   */\n  _storeToLocalStorage(filtersArray) {\n    try {\n      const storageValue = JSON.stringify(filtersArray);\n      localStorage.setItem(this.options.storageKey, storageValue);\n    } catch (e) {\n      console.error(\n        "CategoryLocalStorage: Failed to store filters to localStorage:",\n        e\n      );\n    }\n  }\n\n  /**\n   * Store current filters to localStorage with key "macurrfi"\n   */\n  _storeCurrentFiltersToLocalStorage(filtersArray) {\n    try {\n      const storageValue = JSON.stringify(filtersArray);\n      localStorage.setItem("macurrfi", storageValue);\n    } catch (e) {\n      console.error(\n        "CategoryLocalStorage: Failed to store current filters to localStorage:",\n        e\n      );\n    }\n  }\n\n  /**\n   * Clear current filters from localStorage by setting macurrfi to values from macatfiall\n   */\n  _clearCurrentFiltersFromLocalStorage() {\n    try {\n      // Get values from macatfiall and set them to macurrfi\n      const macatfiallData = localStorage.getItem(this.options.storageKey);\n      if (macatfiallData) {\n        localStorage.setItem("macurrfi", macatfiallData);\n        const filtersArray = JSON.parse(macatfiallData);\n        console.log(\n          "CategoryLocalStorage: Set macurrfi to values from macatfiall (no filter parameters):",\n          filtersArray\n        );\n      } else {\n        // If macatfiall doesn\'t exist, remove macurrfi\n        localStorage.removeItem("macurrfi");\n        console.log(\n          "CategoryLocalStorage: Removed macurrfi from localStorage (no filter parameters, no macatfiall data)"\n        );\n      }\n    } catch (e) {\n      console.error(\n        "CategoryLocalStorage: Failed to clear current filters from localStorage:",\n        e\n      );\n    }\n  }\n\n  /**\n   * Get stored filters from localStorage\n   */\n  getStoredFilters() {\n    try {\n      const data = localStorage.getItem(this.options.storageKey);\n      return data ? JSON.parse(data) : [];\n    } catch (e) {\n      console.error(\n        "CategoryLocalStorage: Failed to retrieve filters from localStorage:",\n        e\n      );\n      return [];\n    }\n  }\n\n  /**\n   * Clear stored filters from localStorage\n   */\n  clearStoredFilters() {\n    try {\n      localStorage.removeItem(this.options.storageKey);\n    } catch (e) {\n      console.error(\n        "CategoryLocalStorage: Failed to clear filters from localStorage:",\n        e\n      );\n    }\n  }\n\n  /**\n   * Check if currently on a category page\n   */\n  isOnCategoryPage() {\n    return this._currentCategoryId !== null;\n  }\n\n  /**\n   * Get current category ID\n   */\n  getCurrentCategoryId() {\n    return this._currentCategoryId;\n  }\n}\n\n;// ./src/main.js\n\n\n\ndocument.addEventListener("DOMContentLoaded", () => {\n  if (window.PluginManager) {\n    // Only register if not already registered\n    window.PluginManager.register(\n      "ListingListener",\n      ListingListener,\n      "[data-listing-listener]"\n    );\n\n    // Register CategoryLocalStorage plugin\n    window.PluginManager.register(\n      "CategoryLocalStorage",\n      CategoryLocalStorage,\n      "[data-category-local-storage]"\n    );\n\n    if (window.PluginManager.getPlugin("Listing")) {\n      window.PluginManager.override(\n        "Listing",\n        () => __webpack_require__.e(/* import() */ 773).then(__webpack_require__.bind(__webpack_require__, 773)),\n        "[data-listing]"\n      );\n    }\n\n    window.PluginManager.initializePlugins();\n  }\n});\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNzkyLmpzIiwibWFwcGluZ3MiOiI7Ozs7QUFBQTtBQUNBO0FBQ29EOztBQUVwRDtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLElBQUk7QUFDSjtBQUNlLDhCQUE4QiwyQkFBTTtBQUNuRDs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQSxRQUFRO0FBQ1I7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQSxLQUFLO0FBQ0w7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0EsZ0JBQWdCO0FBQ2hCOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFFBQVE7QUFDUjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7O0FBRUw7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSzs7QUFFTDtBQUNBO0FBQ0EsS0FBSzs7QUFFTDtBQUNBO0FBQ0E7QUFDQTtBQUNBLE9BQU87QUFDUDs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSztBQUNMOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxLQUFLO0FBQ0w7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxPQUFPO0FBQ1AsS0FBSztBQUNMOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxZQUFZO0FBQ1o7QUFDQTtBQUNBO0FBQ0E7QUFDQSxPQUFPO0FBQ1AsS0FBSztBQUNMOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsT0FBTztBQUNQLEtBQUs7QUFDTDs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0EsTUFBTTtBQUNOO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxtQkFBbUIsYUFBYTtBQUNoQzs7QUFFQTtBQUNBLDRCQUE0Qiw2QkFBNkI7QUFDekQ7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSwwQkFBMEIsUUFBUTtBQUNsQztBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSx5QkFBeUIsU0FBUztBQUNsQztBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSwwREFBMEQsTUFBTTtBQUNoRTtBQUNBLE9BQU87O0FBRVA7QUFDQTtBQUNBO0FBQ0EsNkRBQTZELE1BQU07QUFDbkU7O0FBRUE7QUFDQTtBQUNBLFVBQVU7QUFDVjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxPQUFPO0FBQ1AsTUFBTTtBQUNOO0FBQ0E7QUFDQSxPQUFPO0FBQ1A7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0EsS0FBSztBQUNMOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsVUFBVTtBQUNWO0FBQ0E7QUFDQTtBQUNBLEtBQUs7QUFDTDtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQSxLQUFLOztBQUVMO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLGlCQUFpQjtBQUNqQjs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxLQUFLOztBQUVMO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSzs7QUFFTDtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQSxVQUFVO0FBQ1Y7QUFDQTtBQUNBO0FBQ0EsS0FBSztBQUNMOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLHFCQUFxQiw4QkFBOEI7QUFDbkQ7O0FBRUE7QUFDQTtBQUNBOztBQUVBLGNBQWMsb0JBQW9CLEdBQUcsZUFBZSxHQUFHLGNBQWM7QUFDckU7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxzQ0FBc0MseUJBQXlCO0FBQy9EO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBLGlCQUFpQjtBQUNqQjs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7O0FBRUw7QUFDQTtBQUNBO0FBQ0E7QUFDQSxRQUFRO0FBQ1I7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7QUFDTDs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSzs7QUFFTDtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsUUFBUTtBQUNSO0FBQ0E7QUFDQSxLQUFLO0FBQ0w7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsK0NBQStDLG1CQUFtQjtBQUNsRTtBQUNBO0FBQ0EsVUFBVTtBQUNWO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSztBQUNMO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLGNBQWM7QUFDZDtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBLHVCQUF1QixpQkFBaUIsR0FBRyxNQUFNO0FBQ2pEO0FBQ0E7QUFDQSxLQUFLO0FBQ0w7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsT0FBTztBQUNQO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFFBQVE7QUFDUjtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0E7O0FBRUE7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0EsTUFBTTtBQUNOO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSzs7QUFFTDtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0Esc0JBQXNCLFdBQVc7QUFDakMsTUFBTTtBQUNOLHVCQUF1QiwwQkFBMEI7QUFDakQ7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsT0FBTztBQUNQLEtBQUs7O0FBRUw7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQSxVQUFVO0FBQ1Y7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLGdCQUFnQjtBQUNoQjtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7QUFDTDs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxXQUFXO0FBQ1g7O0FBRUE7QUFDQTtBQUNBLFFBQVE7QUFDUjtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0EsS0FBSzs7QUFFTDtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSzs7QUFFTDtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLGtCQUFrQixXQUFXLEdBQUcsV0FBVztBQUMzQztBQUNBOztBQUVBO0FBQ0E7QUFDQSxzQkFBc0IseUJBQXlCO0FBQy9DOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE9BQU87QUFDUCxLQUFLO0FBQ0w7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EseUNBQXlDLE1BQU07QUFDL0MsTUFBTTtBQUNOO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSw4Q0FBOEMsTUFBTTtBQUNwRCxVQUFVO0FBQ1Y7QUFDQTtBQUNBO0FBQ0E7QUFDQSxRQUFRO0FBQ1I7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxTQUFTO0FBQ1QsUUFBUTtBQUNSO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsS0FBSztBQUNMOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxXQUFXO0FBQ1g7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsUUFBUTtBQUNSOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFVBQVU7QUFDVjtBQUNBLGlEQUFpRCxZQUFZO0FBQzdEO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSztBQUNMOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsZUFBZTtBQUNmOztBQUVBO0FBQ0E7QUFDQTtBQUNBLGVBQWU7QUFDZjs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsbURBQW1EO0FBQ25ELFVBQVU7QUFDVjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQSxRQUFRO0FBQ1I7QUFDQTs7QUFFQTtBQUNBLEtBQUs7O0FBRUw7QUFDQSx3REFBd0Q7QUFDeEQsNEJBQTRCOztBQUU1QjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQSxNQUFNO0FBQ047QUFDQTs7QUFFQSxhQUFhO0FBQ2I7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSwwQkFBMEI7QUFDMUI7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQSxpQkFBaUI7QUFDakI7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxtQkFBbUI7QUFDbkI7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsbUJBQW1CO0FBQ25COztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxLQUFLOztBQUVMO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLFFBQVE7QUFDUjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSzs7QUFFTDtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7O0FBRUw7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0EsS0FBSztBQUNMOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSztBQUNMO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQSxLQUFLO0FBQ0w7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLE9BQU87QUFDUCxLQUFLOztBQUVMO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxXQUFXO0FBQ1g7QUFDQSxPQUFPO0FBQ1AsS0FBSztBQUNMOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQSxPQUFPO0FBQ1AsS0FBSztBQUNMOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7QUFDTDs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxRQUFRO0FBQ1I7QUFDQTtBQUNBO0FBQ0E7QUFDQSxLQUFLOztBQUVMO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxRQUFRO0FBQ1I7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7QUFDTDs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7O0FBRUw7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQSxLQUFLO0FBQ0w7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLGdEQUFnRDtBQUNoRDtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsU0FBUzs7QUFFVDtBQUNBLFFBQVE7QUFDUjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxLQUFLOztBQUVMO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFVBQVU7QUFDVjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFFBQVE7QUFDUjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFFBQVE7QUFDUjtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7O0FBRUw7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLGdEQUFnRDs7QUFFaEQ7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFdBQVc7QUFDWDtBQUNBLE9BQU87QUFDUDs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQSxLQUFLOztBQUVMO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxTQUFTO0FBQ1Q7QUFDQSxPQUFPOztBQUVQO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsMkJBQTJCO0FBQzNCO0FBQ0EsS0FBSzs7QUFFTDtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsV0FBVztBQUNYO0FBQ0EsT0FBTztBQUNQLEtBQUs7O0FBRUw7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBLEtBQUs7O0FBRUw7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7OztBQ2orRW9EOztBQUVwRDtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSw4Q0FBOEMsNENBQTRDO0FBQzFGO0FBQ0E7QUFDZSxtQ0FBbUMsMkJBQU07QUFDeEQ7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxRQUFRO0FBQ1I7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLFFBQVE7QUFDUjtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSzs7QUFFTDtBQUNBO0FBQ0E7QUFDQTtBQUNBLFVBQVU7QUFDVjs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFFBQVE7QUFDUjtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxRQUFRO0FBQ1I7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxLQUFLOztBQUVMO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsTUFBTTtBQUNOO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsUUFBUTtBQUNSO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsTUFBTTtBQUNOO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7OztBQ3ZVcUU7QUFDYTs7QUFFbEY7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE1BQU0sZUFBZTtBQUNyQjtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLE1BQU0sb0JBQW9CO0FBQzFCO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0EsY0FBYyxrR0FBaUQ7QUFDL0Q7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQSxDQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vbWFrYWlyYS1zaG9wd2FyZTYtc3RvcmVmcm9udC8uL3NyYy9tYWthaXJhLWZpbHRlci9maWx0ZXIvbGlzdGluZy5wbHVnaW4uanM/ODc5NyIsIndlYnBhY2s6Ly9tYWthaXJhLXNob3B3YXJlNi1zdG9yZWZyb250Ly4vc3JjL21ha2FpcmEtZmlsdGVyL2NhdGVnb3J5LWxvY2FsLXN0b3JhZ2UucGx1Z2luLmpzP2E5MWIiLCJ3ZWJwYWNrOi8vbWFrYWlyYS1zaG9wd2FyZTYtc3RvcmVmcm9udC8uL3NyYy9tYWluLmpzPzU2ZDciXSwic291cmNlc0NvbnRlbnQiOlsiLy8gSW1wb3J0IFBsdWdpbk92ZXJyaWRlIGZyb20gU2hvcHdhcmUncyBzdG9yZWZyb250LXNka1xuLy9pbXBvcnQgUGx1Z2luIGZyb20gJy4uL3BsdWdpbic7XG5pbXBvcnQgUGx1Z2luIGZyb20gXCJzcmMvcGx1Z2luLXN5c3RlbS9wbHVnaW4uY2xhc3NcIjtcblxuLyoqXG4gKiBMaXN0aW5nTGlzdGVuZXIgUGx1Z2luXG4gKlxuICogSGFuZGxlcyBmaWx0ZXIgcGFuZWwgY29udGVudCBzeW5jaHJvbml6YXRpb24gZm9yIGJvdGggc2lkZWJhciBhbmQgb2ZmY2FudmFzIG1vZGVzLlxuICogVXBkYXRlcyBhbGwgbWF0Y2hpbmcgY29udGFpbmVycyBleGNlcHQgdGhvc2Ugc3BlY2lmaWVkIGluIGV4Y2x1ZGVTZWxlY3RvcnMuXG4gKlxuICogQ29uZmlndXJhdGlvbiBvcHRpb25zOlxuICogLSBoaWRlSXRlbXNXaGVuT2ZmY2FudmFzSGlkZGVuOiBIaWRlIGFsbCBmaWx0ZXIgaXRlbXMgd2hlbiBvZmZjYW52YXMgaXMgbm90IHZpc2libGVcbiAqIC0gZW5hYmxlZDogV2hldGhlciB0aGUgcGx1Z2luIGlzIGVuYWJsZWRcbiAqXG4gKiBVc2FnZTpcbiAqIG5ldyBMaXN0aW5nTGlzdGVuZXIoZWxlbWVudCwge1xuICogICBoaWRlSXRlbXNXaGVuT2ZmY2FudmFzSGlkZGVuOiB0cnVlXG4gKiB9KTtcbiAqL1xuZXhwb3J0IGRlZmF1bHQgY2xhc3MgTGlzdGluZ0xpc3RlbmVyIGV4dGVuZHMgUGx1Z2luIHtcbiAgc3RhdGljIHNpZGViYXJGaWx0ZXJTZWxlY3RvciA9IFwiLmNtcy1lbGVtZW50LXNpZGViYXItZmlsdGVyXCI7XG5cbiAgc3RhdGljIG9wdGlvbnMgPSB7XG4gICAgaGlkZUl0ZW1zV2hlbk9mZmNhbnZhc0hpZGRlbjogZmFsc2UsXG4gICAgZW5hYmxlZDogZmFsc2UsXG4gIH07XG5cbiAgY29uc3RydWN0b3IoZWwsIG9wdGlvbnMsIHBsdWdpbk5hbWUpIHtcbiAgICBzdXBlcihlbCwgb3B0aW9ucywgcGx1Z2luTmFtZSk7XG4gICAgdGhpcy5faXNVcGRhdGluZyA9IGZhbHNlO1xuXG4gICAgLy8gTWVyZ2UgUEhQIGNvbmZpZ3VyYXRpb24gd2l0aCBkZWZhdWx0IG9wdGlvbnNcbiAgICB0aGlzLl9tZXJnZUNvbmZpZ0Zyb21FbGVtZW50KGVsKTtcbiAgfVxuXG4gIC8qKlxuICAgKiBNZXJnZSBjb25maWd1cmF0aW9uIGZyb20gUEhQIChkYXRhIGF0dHJpYnV0ZSkgd2l0aCBkZWZhdWx0IG9wdGlvbnNcbiAgICovXG4gIF9tZXJnZUNvbmZpZ0Zyb21FbGVtZW50KGVsKSB7XG4gICAgY29uc3QgY29uZmlnQXR0cmlidXRlID0gZWwuZ2V0QXR0cmlidXRlKFwiZGF0YS1saXN0aW5nLWxpc3RlbmVyLW9wdGlvbnNcIik7XG4gICAgaWYgKGNvbmZpZ0F0dHJpYnV0ZSkge1xuICAgICAgdHJ5IHtcbiAgICAgICAgY29uc3QgcGx1Z2luQ29uZmlnID0gSlNPTi5wYXJzZShjb25maWdBdHRyaWJ1dGUpO1xuXG4gICAgICAgIC8vIE1lcmdlIFBIUCBjb25maWcgd2l0aCBvcHRpb25zLCBQSFAgY29uZmlnIHRha2VzIHByZWNlZGVuY2VcbiAgICAgICAgaWYgKHBsdWdpbkNvbmZpZy5lbmFibGVkICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgICB0aGlzLm9wdGlvbnMuZW5hYmxlZCA9IHBsdWdpbkNvbmZpZy5lbmFibGVkO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKHBsdWdpbkNvbmZpZy5oaWRlSXRlbXNXaGVuT2ZmY2FudmFzSGlkZGVuICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgICB0aGlzLm9wdGlvbnMuaGlkZUl0ZW1zV2hlbk9mZmNhbnZhc0hpZGRlbiA9XG4gICAgICAgICAgICBwbHVnaW5Db25maWcuaGlkZUl0ZW1zV2hlbk9mZmNhbnZhc0hpZGRlbjtcbiAgICAgICAgfVxuICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICBjb25zb2xlLndhcm4oXG4gICAgICAgICAgXCJMaXN0aW5nTGlzdGVuZXI6IEZhaWxlZCB0byBwYXJzZSBjb25maWd1cmF0aW9uIGZyb20gZGF0YSBhdHRyaWJ1dGVcIixcbiAgICAgICAgICBlXG4gICAgICAgICk7XG4gICAgICB9XG4gICAgfVxuICB9XG5cbiAgaW5pdCgpIHtcbiAgICAvLyBPbmx5IHJlZ2lzdGVyIGV2ZW50cyBpZiB0aGUgZmlsdGVyIGxpc3RlbmVyIGlzIGVuYWJsZWRcbiAgICB0aGlzLl9yZWdpc3RlckV2ZW50cygpO1xuICAgIGlmICh0aGlzLm9wdGlvbnMuaGlkZUl0ZW1zV2hlbk9mZmNhbnZhc0hpZGRlbikge1xuICAgICAgdGhpcy5fc2V0dXBPZmZjYW52YXNNb25pdG9yaW5nKCk7XG4gICAgfVxuXG4gICAgLy8gRXN0YWJsaXNoIGNvbm5lY3Rpb24gdG8gdGhlIG1haW4gbGlzdGluZyBwbHVnaW5cbiAgICB0aGlzLl9jb25uZWN0VG9MaXN0aW5nUGx1Z2luKCk7XG4gIH1cblxuICAvKipcbiAgICogQ29ubmVjdCB0byB0aGUgbWFpbiBsaXN0aW5nIHBsdWdpbiBpbnN0YW5jZVxuICAgKi9cbiAgX2Nvbm5lY3RUb0xpc3RpbmdQbHVnaW4oKSB7XG4gICAgLy8gVHJ5IHRvIGZpbmQgdGhlIGxpc3RpbmcgcGx1Z2luIGluc3RhbmNlXG4gICAgY29uc3QgbGlzdGluZ0VsZW1lbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiW2RhdGEtbGlzdGluZ11cIik7XG4gICAgaWYgKGxpc3RpbmdFbGVtZW50KSB7XG4gICAgICBjb25zdCBsaXN0aW5nUGx1Z2luID0gd2luZG93LlBsdWdpbk1hbmFnZXIuZ2V0UGx1Z2luSW5zdGFuY2VGcm9tRWxlbWVudChcbiAgICAgICAgbGlzdGluZ0VsZW1lbnQsXG4gICAgICAgIFwiTGlzdGluZ1wiXG4gICAgICApO1xuXG4gICAgICBpZiAobGlzdGluZ1BsdWdpbikge1xuICAgICAgICAvLyBTdG9yZSByZWZlcmVuY2UgdG8gdGhlIGxpc3RpbmcgcGx1Z2luXG4gICAgICAgIHRoaXMubGlzdGluZyA9IGxpc3RpbmdQbHVnaW47XG4gICAgICB9XG4gICAgfVxuICB9XG5cbiAgLyoqXG4gICAqIENoZWNrIGlmIHRoZSBmaWx0ZXIgbGlzdGVuZXIgaXMgZW5hYmxlZFxuICAgKi9cbiAgX2lzRW5hYmxlZCgpIHtcbiAgICAvLyBDaGVjayBpZiBleHBsaWNpdGx5IGRpc2FibGVkIGluIG9wdGlvbnNcbiAgICBpZiAodGhpcy5vcHRpb25zLmVuYWJsZWQgPT09IGZhbHNlKSB7XG4gICAgICByZXR1cm4gZmFsc2U7XG4gICAgfVxuXG4gICAgLy8gSWYgbm8gZXhwbGljaXQgc2V0dGluZywgZGVmYXVsdCB0byBlbmFibGVkXG4gICAgcmV0dXJuIHRoaXMub3B0aW9ucy5lbmFibGVkICE9PSBmYWxzZTtcbiAgfVxuXG4gIF9yZWdpc3RlckV2ZW50cygpIHtcbiAgICB0aGlzLiRlbWl0dGVyLnN1YnNjcmliZShcIkxpc3RpbmcvYWZ0ZXJSZW5kZXJSZXNwb25zZVwiLCAoZXZlbnQpID0+IHtcbiAgICAgIHRoaXMuX3N3YXBDb250ZW50KGV2ZW50LmRldGFpbC5yZXNwb25zZSk7XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogRmluZCBhbGwgZmlsdGVyIHBhbmVsIGNvbnRhaW5lcnNcbiAgICovXG4gIF9maW5kRmlsdGVyUGFuZWxDb250YWluZXJzKGRvYyA9IGRvY3VtZW50KSB7XG4gICAgcmV0dXJuIEFycmF5LmZyb20oZG9jLnF1ZXJ5U2VsZWN0b3JBbGwoXCIuZmlsdGVyLXBhbmVsLWl0ZW1zLWNvbnRhaW5lclwiKSk7XG4gIH1cblxuICAvKipcbiAgICogRXh0cmFjdCBmaWx0ZXJzIGZyb20gbmV3IHBhbmVsIGFuZCBtZXJnZSB3aXRoIGV4aXN0aW5nIGZpbHRlcnMgaW4gbG9jYWxTdG9yYWdlXG4gICAqL1xuICBfZXh0cmFjdEFuZE1lcmdlRmlsdGVycyhkb2MpIHtcbiAgICB0cnkge1xuICAgICAgLy8gRXh0cmFjdCBmaWx0ZXJzIGZyb20gdGhlIG5ldyBkb2N1bWVudFxuICAgICAgY29uc3QgbmV3RmlsdGVycyA9IHRoaXMuX2dldEF2YWlsYWJsZUZpbHRlcnNGcm9tRG9jdW1lbnQoZG9jKTtcblxuICAgICAgaWYgKG5ld0ZpbHRlcnMubGVuZ3RoID09PSAwKSB7XG4gICAgICAgIHJldHVybjsgLy8gTm8gbmV3IGZpbHRlcnMgdG8gbWVyZ2VcbiAgICAgIH1cblxuICAgICAgLy8gU3RvcmUgY3VycmVudCByZXNwb25zZSBmaWx0ZXJzIHRvIFwibWFjdXJyZmlcIlxuICAgICAgdGhpcy5fc3RvcmVDdXJyZW50RmlsdGVyc1RvTG9jYWxTdG9yYWdlKG5ld0ZpbHRlcnMpO1xuXG4gICAgICAvLyBHZXQgZXhpc3RpbmcgZmlsdGVycyBmcm9tIGxvY2FsU3RvcmFnZVxuICAgICAgY29uc3QgZXhpc3RpbmdGaWx0ZXJzID0gdGhpcy5fZ2V0U3RvcmVkRmlsdGVycygpO1xuXG4gICAgICAvLyBNZXJnZSBmaWx0ZXJzIChjcmVhdGUgdW5pb24gd2l0aCBubyBkdXBsaWNhdGVzKVxuICAgICAgY29uc3QgbWVyZ2VkRmlsdGVycyA9IFsuLi5uZXcgU2V0KFsuLi5leGlzdGluZ0ZpbHRlcnMsIC4uLm5ld0ZpbHRlcnNdKV07XG5cbiAgICAgIC8vIFN0b3JlIG1lcmdlZCBmaWx0ZXJzIGJhY2sgdG8gbG9jYWxTdG9yYWdlXG4gICAgICB0aGlzLl9zdG9yZUZpbHRlcnNUb0xvY2FsU3RvcmFnZShtZXJnZWRGaWx0ZXJzKTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBjb25zb2xlLmVycm9yKFwiTGlzdGluZ0xpc3RlbmVyOiBGYWlsZWQgdG8gZXh0cmFjdCBhbmQgbWVyZ2UgZmlsdGVyczpcIiwgZSk7XG4gICAgfVxuICB9XG5cbiAgLyoqXG4gICAqIEdldCBhdmFpbGFibGUgZmlsdGVycyBmcm9tIGEgZG9jdW1lbnRcbiAgICovXG4gIF9nZXRBdmFpbGFibGVGaWx0ZXJzRnJvbURvY3VtZW50KGRvYykge1xuICAgIGNvbnN0IGZpbHRlckl0ZW1zID0gZG9jLnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICBcIi5maWx0ZXItcGFuZWwtaXRlbVtkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3Qtb3B0aW9uc11cIlxuICAgICk7XG4gICAgY29uc3QgYXZhaWxhYmxlRmlsdGVycyA9IFtdO1xuXG4gICAgZmlsdGVySXRlbXMuZm9yRWFjaCgoZmlsdGVySXRlbSkgPT4ge1xuICAgICAgdHJ5IHtcbiAgICAgICAgY29uc3Qgb3B0aW9uc0RhdGEgPSBmaWx0ZXJJdGVtLmdldEF0dHJpYnV0ZShcbiAgICAgICAgICBcImRhdGEtZmlsdGVyLW11bHRpLXNlbGVjdC1vcHRpb25zXCJcbiAgICAgICAgKTtcbiAgICAgICAgaWYgKG9wdGlvbnNEYXRhKSB7XG4gICAgICAgICAgY29uc3Qgb3B0aW9ucyA9IEpTT04ucGFyc2Uob3B0aW9uc0RhdGEpO1xuICAgICAgICAgIGlmIChvcHRpb25zLm5hbWUpIHtcbiAgICAgICAgICAgIGF2YWlsYWJsZUZpbHRlcnMucHVzaChvcHRpb25zLm5hbWUpO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAvLyBJZ25vcmUgcGFyc2luZyBlcnJvcnMgYW5kIGNvbnRpbnVlIHdpdGggbmV4dCBpdGVtXG4gICAgICAgIGNvbnNvbGUud2FybihcbiAgICAgICAgICBcIkxpc3RpbmdMaXN0ZW5lcjogRmFpbGVkIHRvIHBhcnNlIGZpbHRlciBvcHRpb25zIGZvciBpdGVtOlwiLFxuICAgICAgICAgIGZpbHRlckl0ZW0sXG4gICAgICAgICAgZVxuICAgICAgICApO1xuICAgICAgfVxuICAgIH0pO1xuXG4gICAgcmV0dXJuIGF2YWlsYWJsZUZpbHRlcnM7XG4gIH1cblxuICAvKipcbiAgICogR2V0IHN0b3JlZCBmaWx0ZXJzIGZyb20gbG9jYWxTdG9yYWdlXG4gICAqL1xuICBfZ2V0U3RvcmVkRmlsdGVycygpIHtcbiAgICB0cnkge1xuICAgICAgY29uc3QgZGF0YSA9IGxvY2FsU3RvcmFnZS5nZXRJdGVtKFwibWFjYXRmaWFsbFwiKTtcbiAgICAgIHJldHVybiBkYXRhID8gSlNPTi5wYXJzZShkYXRhKSA6IFtdO1xuICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgIGNvbnNvbGUuZXJyb3IoXG4gICAgICAgIFwiTGlzdGluZ0xpc3RlbmVyOiBGYWlsZWQgdG8gcmV0cmlldmUgZmlsdGVycyBmcm9tIGxvY2FsU3RvcmFnZTpcIixcbiAgICAgICAgZVxuICAgICAgKTtcbiAgICAgIHJldHVybiBbXTtcbiAgICB9XG4gIH1cblxuICAvKipcbiAgICogU3RvcmUgZmlsdGVycyBhcnJheSB0byBsb2NhbFN0b3JhZ2VcbiAgICovXG4gIF9zdG9yZUZpbHRlcnNUb0xvY2FsU3RvcmFnZShmaWx0ZXJzQXJyYXkpIHtcbiAgICB0cnkge1xuICAgICAgY29uc3Qgc3RvcmFnZVZhbHVlID0gSlNPTi5zdHJpbmdpZnkoZmlsdGVyc0FycmF5KTtcbiAgICAgIGxvY2FsU3RvcmFnZS5zZXRJdGVtKFwibWFjYXRmaWFsbFwiLCBzdG9yYWdlVmFsdWUpO1xuICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgIGNvbnNvbGUuZXJyb3IoXG4gICAgICAgIFwiTGlzdGluZ0xpc3RlbmVyOiBGYWlsZWQgdG8gc3RvcmUgZmlsdGVycyB0byBsb2NhbFN0b3JhZ2U6XCIsXG4gICAgICAgIGVcbiAgICAgICk7XG4gICAgfVxuICB9XG5cbiAgLyoqXG4gICAqIFN0b3JlIGN1cnJlbnQgcmVzcG9uc2UgZmlsdGVycyB0byBsb2NhbFN0b3JhZ2VcbiAgICovXG4gIF9zdG9yZUN1cnJlbnRGaWx0ZXJzVG9Mb2NhbFN0b3JhZ2UoZmlsdGVyc0FycmF5KSB7XG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IHN0b3JhZ2VWYWx1ZSA9IEpTT04uc3RyaW5naWZ5KGZpbHRlcnNBcnJheSk7XG4gICAgICBsb2NhbFN0b3JhZ2Uuc2V0SXRlbShcIm1hY3VycmZpXCIsIHN0b3JhZ2VWYWx1ZSk7XG4gICAgfSBjYXRjaCAoZSkge1xuICAgICAgY29uc29sZS5lcnJvcihcbiAgICAgICAgXCJMaXN0aW5nTGlzdGVuZXI6IEZhaWxlZCB0byBzdG9yZSBjdXJyZW50IGZpbHRlcnMgdG8gbG9jYWxTdG9yYWdlOlwiLFxuICAgICAgICBlXG4gICAgICApO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBTZXQgdXAgbW9uaXRvcmluZyBmb3Igb2ZmY2FudmFzIHZpc2liaWxpdHkgY2hhbmdlc1xuICAgKi9cbiAgX3NldHVwT2ZmY2FudmFzTW9uaXRvcmluZygpIHtcbiAgICAvLyBNb25pdG9yIGZvciBvZmZjYW52YXMgc2hvdy9oaWRlIGV2ZW50c1xuICAgIGRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoXCJzaG93bi5icy5vZmZjYW52YXNcIiwgKCkgPT4ge1xuICAgICAgdGhpcy5fb25PZmZjYW52YXNWaXNpYmlsaXR5Q2hhbmdlKHRydWUpO1xuICAgIH0pO1xuXG4gICAgZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcihcImhpZGRlbi5icy5vZmZjYW52YXNcIiwgKCkgPT4ge1xuICAgICAgdGhpcy5fb25PZmZjYW52YXNWaXNpYmlsaXR5Q2hhbmdlKGZhbHNlKTtcbiAgICB9KTtcblxuICAgIC8vIEJpbmQgdG8gY3VzdG9tIG9uQ2xvc2VPZmZjYW52YXMgZXZlbnQgaWYgJGVtaXR0ZXIgaXMgYXZhaWxhYmxlXG4gICAgaWYgKGRvY3VtZW50LiRlbWl0dGVyKSB7XG4gICAgICBkb2N1bWVudC4kZW1pdHRlci5zdWJzY3JpYmUoXCJvbkNsb3NlT2ZmY2FudmFzXCIsICgpID0+IHtcbiAgICAgICAgdGhpcy5fb25PZmZjYW52YXNWaXNpYmlsaXR5Q2hhbmdlKGZhbHNlKTtcbiAgICAgIH0pO1xuICAgIH1cblxuICAgIC8vIEFsc28gbW9uaXRvciBmb3IgbW9kYWwgYmFja2Ryb3AgY2xpY2tzIGFuZCBFU0Mga2V5XG4gICAgZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcihcImtleWRvd25cIiwgKGUpID0+IHtcbiAgICAgIGlmIChlLmtleSA9PT0gXCJFc2NhcGVcIiAmJiB0aGlzLl9pc09mZmNhbnZhc1Zpc2libGUoKSkge1xuICAgICAgICBzZXRUaW1lb3V0KCgpID0+IHRoaXMuX29uT2ZmY2FudmFzVmlzaWJpbGl0eUNoYW5nZShmYWxzZSksIDEwMCk7XG4gICAgICB9XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogSGFuZGxlIG9mZmNhbnZhcyB2aXNpYmlsaXR5IGNoYW5nZXNcbiAgICovXG4gIF9vbk9mZmNhbnZhc1Zpc2liaWxpdHlDaGFuZ2UoaXNWaXNpYmxlKSB7XG4gICAgaWYgKCFpc1Zpc2libGUgJiYgdGhpcy5vcHRpb25zLmhpZGVJdGVtc1doZW5PZmZjYW52YXNIaWRkZW4pIHtcbiAgICAgIHRoaXMuX2hpZGVBbGxGaWx0ZXJJdGVtcygpO1xuICAgIH0gZWxzZSB7XG4gICAgICB0aGlzLl9zaG93QWxsQWN0aXZlRmlsdGVycygpO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBDaGVjayBpZiBhbnkgb2ZmY2FudmFzIGlzIGN1cnJlbnRseSB2aXNpYmxlXG4gICAqL1xuICBfaXNPZmZjYW52YXNWaXNpYmxlKCkge1xuICAgIGNvbnN0IG9mZmNhbnZhc0VsZW1lbnRzID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5vZmZjYW52YXNcIik7XG4gICAgcmV0dXJuIEFycmF5LmZyb20ob2ZmY2FudmFzRWxlbWVudHMpLnNvbWUoKG9mZmNhbnZhcykgPT4ge1xuICAgICAgcmV0dXJuIChcbiAgICAgICAgb2ZmY2FudmFzLmNsYXNzTGlzdC5jb250YWlucyhcInNob3dcIikgfHxcbiAgICAgICAgZ2V0Q29tcHV0ZWRTdHlsZShvZmZjYW52YXMpLmRpc3BsYXkgIT09IFwibm9uZVwiXG4gICAgICApO1xuICAgIH0pO1xuICB9XG5cbiAgLyoqXG4gICAqIEhpZGUgYWxsIGZpbHRlciBwYW5lbCBpdGVtcyBjb250YWluZXJzXG4gICAqL1xuICBfaGlkZUFsbEZpbHRlckl0ZW1zKCkge1xuICAgIC8vIEdldCB0aGUgYXZhaWxhYmxlIGZpbHRlcnMgZnJvbSBsb2NhbFN0b3JhZ2VcbiAgICBjb25zdCBhdmFpbGFibGVGaWx0ZXJzID0gdGhpcy5fZ2V0QXZhaWxhYmxlRmlsdGVyc0Zyb21Mb2NhbFN0b3JhZ2UoKTtcblxuICAgIGlmICghYXZhaWxhYmxlRmlsdGVycyB8fCBhdmFpbGFibGVGaWx0ZXJzLmxlbmd0aCA9PT0gMCkge1xuICAgICAgcmV0dXJuO1xuICAgIH1cblxuICAgIGNvbnN0IGNvbnRhaW5lcnMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKFxuICAgICAgXCIuZmlsdGVyLXBhbmVsLWl0ZW1zLWNvbnRhaW5lclwiXG4gICAgKTtcblxuICAgIGNvbnRhaW5lcnMuZm9yRWFjaCgoY29udGFpbmVyKSA9PiB7XG4gICAgICBjb25zdCBpdGVtcyA9IGNvbnRhaW5lci5xdWVyeVNlbGVjdG9yQWxsKFwiLmZpbHRlci1wYW5lbC1pdGVtXCIpO1xuXG4gICAgICBpdGVtcy5mb3JFYWNoKChpdGVtKSA9PiB7XG4gICAgICAgIC8vIENoZWNrIGlmIHRoaXMgaXRlbSdzIGZpbHRlciBuYW1lIGlzIGluIHRoZSBhdmFpbGFibGUgZmlsdGVycyBsaXN0XG4gICAgICAgIGNvbnN0IGZpbHRlck5hbWUgPSB0aGlzLl9nZXRGaWx0ZXJOYW1lRnJvbUl0ZW0oaXRlbSk7XG4gICAgICAgIGlmIChmaWx0ZXJOYW1lICYmIGF2YWlsYWJsZUZpbHRlcnMuaW5jbHVkZXMoZmlsdGVyTmFtZSkpIHtcbiAgICAgICAgICB0aGlzLl9oaWRlRmlsdGVySXRlbShpdGVtKTtcbiAgICAgICAgfVxuICAgICAgfSk7XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogU2hvdyBvbmx5IGFjdGl2ZSBmaWx0ZXJzIGJhc2VkIG9uIGxvY2FsU3RvcmFnZSBtYWN1cnJmaVxuICAgKi9cbiAgX3Nob3dBbGxBY3RpdmVGaWx0ZXJzKCkge1xuICAgIC8vIEdldCB0aGUgY3VycmVudCBmaWx0ZXJzIGZyb20gbG9jYWxTdG9yYWdlXG4gICAgY29uc3QgY3VycmVudEZpbHRlcnMgPSB0aGlzLl9nZXRDdXJyZW50RmlsdGVyc0Zyb21Mb2NhbFN0b3JhZ2UoKTtcblxuICAgIGlmICghY3VycmVudEZpbHRlcnMgfHwgY3VycmVudEZpbHRlcnMubGVuZ3RoID09PSAwKSB7XG4gICAgICAvLyBJZiBubyBjdXJyZW50IGZpbHRlcnMgYXJlIHNldCwgc2hvdyBhbGwgYXZhaWxhYmxlIGZpbHRlcnNcbiAgICAgIHRoaXMuX3Nob3dBbGxBdmFpbGFibGVGaWx0ZXJzKCk7XG4gICAgICByZXR1cm47XG4gICAgfVxuXG4gICAgY29uc3QgY29udGFpbmVycyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICBcIi5maWx0ZXItcGFuZWwtaXRlbXMtY29udGFpbmVyXCJcbiAgICApO1xuXG4gICAgY29udGFpbmVycy5mb3JFYWNoKChjb250YWluZXIpID0+IHtcbiAgICAgIGNvbnN0IGl0ZW1zID0gY29udGFpbmVyLnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICAgIFwiLmZpbHRlci1wYW5lbC1pdGVtLCAuZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0LWl0ZW1cIlxuICAgICAgKTtcblxuICAgICAgaXRlbXMuZm9yRWFjaCgoaXRlbSkgPT4ge1xuICAgICAgICBjb25zdCBmaWx0ZXJOYW1lID0gdGhpcy5fZ2V0RmlsdGVyTmFtZUZyb21JdGVtKGl0ZW0pO1xuICAgICAgICBpZiAoZmlsdGVyTmFtZSkge1xuICAgICAgICAgIGlmIChjdXJyZW50RmlsdGVycy5pbmNsdWRlcyhmaWx0ZXJOYW1lKSkge1xuICAgICAgICAgICAgLy8gU2hvdyBpdGVtcyB0aGF0IGFyZSBpbiB0aGUgY3VycmVudCBmaWx0ZXJzIGxpc3RcbiAgICAgICAgICAgIHRoaXMuX3Nob3dGaWx0ZXJJdGVtKGl0ZW0pO1xuICAgICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgICAvLyBIaWRlIGl0ZW1zIHRoYXQgYXJlIG5vdCBpbiB0aGUgY3VycmVudCBmaWx0ZXJzIGxpc3RcbiAgICAgICAgICAgIHRoaXMuX2hpZGVGaWx0ZXJJdGVtKGl0ZW0pO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfSk7XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogU2hvdyBhbGwgYXZhaWxhYmxlIGZpbHRlcnMgKGZhbGxiYWNrIHdoZW4gbm8gY3VycmVudCBmaWx0ZXJzIGFyZSBzZXQpXG4gICAqL1xuICBfc2hvd0FsbEF2YWlsYWJsZUZpbHRlcnMoKSB7XG4gICAgY29uc3QgYXZhaWxhYmxlRmlsdGVycyA9IHRoaXMuX2dldEF2YWlsYWJsZUZpbHRlcnNGcm9tTG9jYWxTdG9yYWdlKCk7XG5cbiAgICBpZiAoIWF2YWlsYWJsZUZpbHRlcnMgfHwgYXZhaWxhYmxlRmlsdGVycy5sZW5ndGggPT09IDApIHtcbiAgICAgIHJldHVybjtcbiAgICB9XG5cbiAgICBjb25zdCBjb250YWluZXJzID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcbiAgICAgIFwiLmZpbHRlci1wYW5lbC1pdGVtcy1jb250YWluZXJcIlxuICAgICk7XG5cbiAgICBjb250YWluZXJzLmZvckVhY2goKGNvbnRhaW5lcikgPT4ge1xuICAgICAgY29uc3QgaXRlbXMgPSBjb250YWluZXIucXVlcnlTZWxlY3RvckFsbChcbiAgICAgICAgXCIuZmlsdGVyLXBhbmVsLWl0ZW0sIC5maWx0ZXItbXVsdGktc2VsZWN0LWxpc3QtaXRlbVwiXG4gICAgICApO1xuXG4gICAgICBpdGVtcy5mb3JFYWNoKChpdGVtKSA9PiB7XG4gICAgICAgIGNvbnN0IGZpbHRlck5hbWUgPSB0aGlzLl9nZXRGaWx0ZXJOYW1lRnJvbUl0ZW0oaXRlbSk7XG4gICAgICAgIGlmIChmaWx0ZXJOYW1lICYmIGF2YWlsYWJsZUZpbHRlcnMuaW5jbHVkZXMoZmlsdGVyTmFtZSkpIHtcbiAgICAgICAgICB0aGlzLl9zaG93RmlsdGVySXRlbShpdGVtKTtcbiAgICAgICAgfVxuICAgICAgfSk7XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogR2V0IGF2YWlsYWJsZSBmaWx0ZXJzIGZyb20gbG9jYWxTdG9yYWdlIHVzaW5nIG1hY2F0ZmlhbGwga2V5XG4gICAqL1xuICBfZ2V0QXZhaWxhYmxlRmlsdGVyc0Zyb21Mb2NhbFN0b3JhZ2UoKSB7XG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IGRhdGEgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbShcIm1hY2F0ZmlhbGxcIik7XG4gICAgICByZXR1cm4gZGF0YSA/IEpTT04ucGFyc2UoZGF0YSkgOiBbXTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBjb25zb2xlLmVycm9yKFxuICAgICAgICBcIkxpc3RpbmdMaXN0ZW5lcjogRmFpbGVkIHRvIHJldHJpZXZlIGZpbHRlcnMgZnJvbSBsb2NhbFN0b3JhZ2U6XCIsXG4gICAgICAgIGVcbiAgICAgICk7XG4gICAgICByZXR1cm4gW107XG4gICAgfVxuICB9XG5cbiAgLyoqXG4gICAqIEdldCBjdXJyZW50IGZpbHRlcnMgZnJvbSBsb2NhbFN0b3JhZ2UgdXNpbmcgbWFjdXJyZmkga2V5XG4gICAqL1xuICBfZ2V0Q3VycmVudEZpbHRlcnNGcm9tTG9jYWxTdG9yYWdlKCkge1xuICAgIHRyeSB7XG4gICAgICBjb25zdCBkYXRhID0gbG9jYWxTdG9yYWdlLmdldEl0ZW0oXCJtYWN1cnJmaVwiKTtcbiAgICAgIHJldHVybiBkYXRhID8gSlNPTi5wYXJzZShkYXRhKSA6IFtdO1xuICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgIGNvbnNvbGUuZXJyb3IoXG4gICAgICAgIFwiTGlzdGluZ0xpc3RlbmVyOiBGYWlsZWQgdG8gcmV0cmlldmUgY3VycmVudCBmaWx0ZXJzIGZyb20gbG9jYWxTdG9yYWdlOlwiLFxuICAgICAgICBlXG4gICAgICApO1xuICAgICAgcmV0dXJuIFtdO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBFeHRyYWN0IGZpbHRlciBuYW1lIGZyb20gYSBmaWx0ZXIgaXRlbSBlbGVtZW50XG4gICAqL1xuICBfZ2V0RmlsdGVyTmFtZUZyb21JdGVtKGl0ZW0pIHtcbiAgICB0cnkge1xuICAgICAgLy8gVHJ5IHRvIGdldCB0aGUgZmlsdGVyIG5hbWUgZnJvbSBkYXRhIGF0dHJpYnV0ZVxuICAgICAgY29uc3Qgb3B0aW9uc0RhdGEgPSBpdGVtLmdldEF0dHJpYnV0ZShcImRhdGEtZmlsdGVyLW11bHRpLXNlbGVjdC1vcHRpb25zXCIpO1xuICAgICAgaWYgKG9wdGlvbnNEYXRhKSB7XG4gICAgICAgIGNvbnN0IG9wdGlvbnMgPSBKU09OLnBhcnNlKG9wdGlvbnNEYXRhKTtcbiAgICAgICAgcmV0dXJuIG9wdGlvbnMubmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gRmFsbGJhY2s6IHRyeSB0byBnZXQgZnJvbSBwYXJlbnQgY29udGFpbmVyXG4gICAgICBjb25zdCBwYXJlbnRDb250YWluZXIgPSBpdGVtLmNsb3Nlc3QoXG4gICAgICAgIFwiW2RhdGEtZmlsdGVyLW11bHRpLXNlbGVjdC1vcHRpb25zXVwiXG4gICAgICApO1xuICAgICAgaWYgKHBhcmVudENvbnRhaW5lcikge1xuICAgICAgICBjb25zdCBwYXJlbnRPcHRpb25zRGF0YSA9IHBhcmVudENvbnRhaW5lci5nZXRBdHRyaWJ1dGUoXG4gICAgICAgICAgXCJkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3Qtb3B0aW9uc1wiXG4gICAgICAgICk7XG4gICAgICAgIGlmIChwYXJlbnRPcHRpb25zRGF0YSkge1xuICAgICAgICAgIGNvbnN0IHBhcmVudE9wdGlvbnMgPSBKU09OLnBhcnNlKHBhcmVudE9wdGlvbnNEYXRhKTtcbiAgICAgICAgICByZXR1cm4gcGFyZW50T3B0aW9ucy5uYW1lO1xuICAgICAgICB9XG4gICAgICB9XG5cbiAgICAgIHJldHVybiBudWxsO1xuICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgIGNvbnNvbGUud2FybihcbiAgICAgICAgXCJMaXN0aW5nTGlzdGVuZXI6IEZhaWxlZCB0byBleHRyYWN0IGZpbHRlciBuYW1lIGZyb20gaXRlbTpcIixcbiAgICAgICAgaXRlbSxcbiAgICAgICAgZVxuICAgICAgKTtcbiAgICAgIHJldHVybiBudWxsO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBGaW5kIHRoZSBmaWx0ZXIgcGFuZWwgY29udGFpbmVyIHVzaW5nIGNvbmZpZ3VyYWJsZSBzZWxlY3RvcnMgKGxlZ2FjeSBtZXRob2QpXG4gICAqIEBkZXByZWNhdGVkIFVzZSBfZmluZEZpbHRlclBhbmVsQ29udGFpbmVycyBpbnN0ZWFkXG4gICAqL1xuICBfZmluZEZpbHRlclBhbmVsQ29udGFpbmVyKGRvYyA9IGRvY3VtZW50KSB7XG4gICAgY29uc3QgY29udGFpbmVycyA9IHRoaXMuX2ZpbmRGaWx0ZXJQYW5lbENvbnRhaW5lcnMoZG9jKTtcbiAgICByZXR1cm4gY29udGFpbmVycy5sZW5ndGggPiAwID8gY29udGFpbmVyc1swXSA6IG51bGw7XG4gIH1cblxuICAvKipcbiAgICogR2V0IGEgdW5pcXVlIGlkZW50aWZpZXIgZm9yIGEgY29udGFpbmVyIHRvIG1hdGNoIG9sZCBhbmQgbmV3IHBhbmVsc1xuICAgKi9cbiAgX2dldENvbnRhaW5lcklkZW50aWZpZXIoY29udGFpbmVyKSB7XG4gICAgLy8gVHJ5IGRpZmZlcmVudCBhdHRyaWJ1dGVzIHRvIGNyZWF0ZSBhIHVuaXF1ZSBpZGVudGlmaWVyXG4gICAgaWYgKGNvbnRhaW5lci5pZCkge1xuICAgICAgcmV0dXJuIGBpZC0ke2NvbnRhaW5lci5pZH1gO1xuICAgIH1cblxuICAgIGlmIChjb250YWluZXIuZGF0YXNldC5maWx0ZXJUeXBlKSB7XG4gICAgICByZXR1cm4gYGZpbHRlci10eXBlLSR7Y29udGFpbmVyLmRhdGFzZXQuZmlsdGVyVHlwZX1gO1xuICAgIH1cblxuICAgIGlmIChjb250YWluZXIuY2xhc3NOYW1lKSB7XG4gICAgICAvLyBVc2UgYSBjb21iaW5hdGlvbiBvZiBjbGFzc2VzIGFzIGlkZW50aWZpZXJcbiAgICAgIGNvbnN0IGNsYXNzZXMgPSBjb250YWluZXIuY2xhc3NOYW1lXG4gICAgICAgIC5zcGxpdChcIiBcIilcbiAgICAgICAgLmZpbHRlcihcbiAgICAgICAgICAoY2xzKSA9PlxuICAgICAgICAgICAgY2xzLmluY2x1ZGVzKFwiZmlsdGVyXCIpIHx8XG4gICAgICAgICAgICBjbHMuaW5jbHVkZXMoXCJzaWRlYmFyXCIpIHx8XG4gICAgICAgICAgICBjbHMuaW5jbHVkZXMoXCJvZmZjYW52YXNcIilcbiAgICAgICAgKVxuICAgICAgICAuc29ydCgpXG4gICAgICAgIC5qb2luKFwiLVwiKTtcbiAgICAgIGlmIChjbGFzc2VzKSB7XG4gICAgICAgIHJldHVybiBgY2xhc3Nlcy0ke2NsYXNzZXN9YDtcbiAgICAgIH1cbiAgICB9XG5cbiAgICAvLyBUcnkgdG8gdXNlIHRoZSBwYXJlbnQgZWxlbWVudCdzIGlkZW50aWZpZXIgaWYgYXZhaWxhYmxlXG4gICAgY29uc3QgcGFyZW50ID0gY29udGFpbmVyLmNsb3Nlc3QoXCJbaWRdLCBbZGF0YS1maWx0ZXItdHlwZV1cIik7XG4gICAgaWYgKHBhcmVudCkge1xuICAgICAgY29uc3QgcGFyZW50SWQgPSBwYXJlbnQuaWQgfHwgcGFyZW50LmRhdGFzZXQuZmlsdGVyVHlwZTtcbiAgICAgIGlmIChwYXJlbnRJZCkge1xuICAgICAgICByZXR1cm4gYHBhcmVudC0ke3BhcmVudElkfWA7XG4gICAgICB9XG4gICAgfVxuXG4gICAgcmV0dXJuIG51bGw7XG4gIH1cblxuICBfc3dhcENvbnRlbnQoZGF0YSkge1xuICAgIGlmICh0aGlzLl9pc1VwZGF0aW5nKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuXG4gICAgdGhpcy5faXNVcGRhdGluZyA9IHRydWU7XG5cbiAgICB0cnkge1xuICAgICAgLy8gQ2hlY2sgaWYgd2Ugc2hvdWxkIGhpZGUgaXRlbXMgYmFzZWQgb24gb2ZmY2FudmFzIHZpc2liaWxpdHlcbiAgICAgIGlmIChcbiAgICAgICAgdGhpcy5vcHRpb25zLmhpZGVJdGVtc1doZW5PZmZjYW52YXNIaWRkZW4gJiZcbiAgICAgICAgIXRoaXMuX2lzT2ZmY2FudmFzVmlzaWJsZSgpXG4gICAgICApIHtcbiAgICAgICAgdGhpcy5faGlkZUFsbEZpbHRlckl0ZW1zKCk7XG4gICAgICAgIHJldHVybjtcbiAgICAgIH1cblxuICAgICAgY29uc3QgZG9jID0gbmV3IERPTVBhcnNlcigpLnBhcnNlRnJvbVN0cmluZyhkYXRhLCBcInRleHQvaHRtbFwiKTtcbiAgICAgIGNvbnN0IG9sZEZpbHRlclBhbmVscyA9IHRoaXMuX2ZpbmRGaWx0ZXJQYW5lbENvbnRhaW5lcnMoKTtcbiAgICAgIGNvbnN0IG5ld0ZpbHRlclBhbmVscyA9IHRoaXMuX2ZpbmRGaWx0ZXJQYW5lbENvbnRhaW5lcnMoZG9jKTtcblxuICAgICAgLy8gRXh0cmFjdCBhbmQgbWVyZ2UgZmlsdGVycyBmcm9tIG5ldyBwYW5lbHNcbiAgICAgIHRoaXMuX2V4dHJhY3RBbmRNZXJnZUZpbHRlcnMoZG9jKTtcblxuICAgICAgLy8gQ3JlYXRlIGEgbWFwIG9mIG5ldyBwYW5lbHMgYnkgdGhlaXIgc2VsZWN0b3Igb3IgcG9zaXRpb24gZm9yIG1hdGNoaW5nXG4gICAgICBjb25zdCBuZXdQYW5lbHNNYXAgPSBuZXcgTWFwKCk7XG4gICAgICBuZXdGaWx0ZXJQYW5lbHMuZm9yRWFjaCgocGFuZWwsIGluZGV4KSA9PiB7XG4gICAgICAgIC8vIFRyeSB0byBjcmVhdGUgYSB1bmlxdWUgaWRlbnRpZmllciBmb3IgZWFjaCBwYW5lbFxuICAgICAgICBjb25zdCBpZGVudGlmaWVyID1cbiAgICAgICAgICB0aGlzLl9nZXRDb250YWluZXJJZGVudGlmaWVyKHBhbmVsKSB8fCBgcGFuZWwtJHtpbmRleH1gO1xuICAgICAgICBuZXdQYW5lbHNNYXAuc2V0KGlkZW50aWZpZXIsIHBhbmVsKTtcbiAgICAgIH0pO1xuXG4gICAgICAvLyBVcGRhdGUgZWFjaCBvbGQgcGFuZWwgd2l0aCBpdHMgY29ycmVzcG9uZGluZyBuZXcgcGFuZWxcbiAgICAgIG9sZEZpbHRlclBhbmVscy5mb3JFYWNoKChvbGRQYW5lbCwgaW5kZXgpID0+IHtcbiAgICAgICAgY29uc3QgaWRlbnRpZmllciA9XG4gICAgICAgICAgdGhpcy5fZ2V0Q29udGFpbmVySWRlbnRpZmllcihvbGRQYW5lbCkgfHwgYHBhbmVsLSR7aW5kZXh9YDtcbiAgICAgICAgY29uc3QgbmV3UGFuZWwgPSBuZXdQYW5lbHNNYXAuZ2V0KGlkZW50aWZpZXIpO1xuXG4gICAgICAgIGlmIChuZXdQYW5lbCkge1xuICAgICAgICAgIHRoaXMuX3VwZGF0ZUZpbHRlclBhbmVsU2VsZWN0aXZlbHkob2xkUGFuZWwsIG5ld1BhbmVsKTtcbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAvLyBJZiBubyBtYXRjaGluZyBuZXcgcGFuZWwgZm91bmQsIHRyeSB0byBtYXRjaCBieSBpbmRleCBhcyBmYWxsYmFja1xuICAgICAgICAgIGNvbnN0IGZhbGxiYWNrTmV3UGFuZWwgPSBuZXdGaWx0ZXJQYW5lbHNbaW5kZXhdO1xuICAgICAgICAgIGlmIChmYWxsYmFja05ld1BhbmVsKSB7XG4gICAgICAgICAgICB0aGlzLl91cGRhdGVGaWx0ZXJQYW5lbFNlbGVjdGl2ZWx5KG9sZFBhbmVsLCBmYWxsYmFja05ld1BhbmVsKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH0pO1xuICAgIH0gZmluYWxseSB7XG4gICAgICBzZXRUaW1lb3V0KCgpID0+IHtcbiAgICAgICAgdGhpcy5faXNVcGRhdGluZyA9IGZhbHNlO1xuICAgICAgfSwgNTApO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBPcmlnaW5hbCBpbm5lckhUTUwgcmVwbGFjZW1lbnQgbWV0aG9kIChmYWxsYmFjaylcbiAgICovXG4gIF91cGRhdGVGaWx0ZXJQYW5lbFdpdGhJbm5lckhUTUwob2xkUGFuZWwsIG5ld1BhbmVsKSB7XG4gICAgY29uc3QgaW5wdXRTdGF0ZXMgPSB0aGlzLl9nZXRJbnB1dFN0YXRlcyhvbGRQYW5lbCk7XG5cbiAgICAvLyBSZXBsYWNlIHRoZSBlbnRpcmUgSFRNTCBjb250ZW50XG4gICAgb2xkUGFuZWwuaW5uZXJIVE1MID0gbmV3UGFuZWwuaW5uZXJIVE1MO1xuXG4gICAgLy8gUmVzdG9yZSBzdGF0ZXNcbiAgICB0aGlzLl9yZXN0b3JlSW5wdXRTdGF0ZXMob2xkUGFuZWwsIGlucHV0U3RhdGVzKTtcblxuICAgIC8vIFJlaW5pdGlhbGl6ZSBwbHVnaW5zXG4gICAgLy93aW5kb3cuUGx1Z2luTWFuYWdlci5pbml0aWFsaXplUGx1Z2lucygpO1xuXG4gICAgLy8gVXBkYXRlIGZpbHRlciBsYWJlbHNcbiAgICB0aGlzLl9idWlsZExhYmVscygpO1xuICB9XG5cbiAgLyoqXG4gICAqIFNlbGVjdGl2ZWx5IHVwZGF0ZSBmaWx0ZXIgcGFuZWwgYnkgaGlkaW5nL3Nob3dpbmcgZWxlbWVudHNcbiAgICovXG5cbiAgX3VwZGF0ZUZpbHRlclBhbmVsU2VsZWN0aXZlbHkob2xkUGFuZWwsIG5ld1BhbmVsKSB7XG4gICAgY29uc3QgaW5wdXRTdGF0ZXMgPSB0aGlzLl9nZXRJbnB1dFN0YXRlcyhvbGRQYW5lbCk7XG5cbiAgICBpZiAodGhpcy5vcHRpb25zLmVuYWJsZWQpIHtcbiAgICAgIC8vIEZpcnN0LCBwcmVzZXJ2ZSBleGlzdGluZyBzZWN0aW9uLWl0ZW0gcmVsYXRpb25zaGlwc1xuICAgICAgY29uc3QgZXhpc3RpbmdTZWN0aW9uTWFwID0gdGhpcy5fY3JlYXRlRXhpc3RpbmdTZWN0aW9uTWFwKG9sZFBhbmVsKTtcblxuICAgICAgLy8gQ3JlYXRlIGEgY29tcGxldGUgc3RydWN0dXJhbCByZXBsYWNlbWVudCBhcHByb2FjaFxuICAgICAgdGhpcy5fcmVwbGFjZUZpbHRlclN0cnVjdHVyZUNvbXBsZXRlbHkoXG4gICAgICAgIG9sZFBhbmVsLFxuICAgICAgICBuZXdQYW5lbCxcbiAgICAgICAgZXhpc3RpbmdTZWN0aW9uTWFwXG4gICAgICApO1xuICAgIH1cblxuICAgIHRoaXMuX3JlcmVnaXN0ZXJFeGlzdGluZ0ZpbHRlcnMob2xkUGFuZWwpO1xuICAgIHRoaXMuX3Jlc3RvcmVJbnB1dFN0YXRlcyhvbGRQYW5lbCwgaW5wdXRTdGF0ZXMsIGZhbHNlKTtcbiAgfVxuXG4gIC8qKlxuICAgKiBTeW5jaHJvbml6ZSB0aGUgc3RydWN0dXJhbCBlbGVtZW50cyBiZXR3ZWVuIG9sZCBhbmQgbmV3IGZpbHRlciBwYW5lbHNcbiAgICogVGhpcyBoYW5kbGVzIGVsZW1lbnRzIHRoYXQgYXBwZWFyIGJldHdlZW4gZmlsdGVyIGNvbnRhaW5lcnMgYW5kIHRoZWlyIGxpc3RzXG4gICAqL1xuICBfc3luY2hyb25pemVGaWx0ZXJTdHJ1Y3R1cmUob2xkUGFuZWwsIG5ld1BhbmVsKSB7XG4gICAgLy8gR2V0IGFsbCBmaWx0ZXIgZWxlbWVudHMgZnJvbSBib3RoIHBhbmVsc1xuICAgIGNvbnN0IG9sZEZpbHRlcnMgPSBvbGRQYW5lbC5xdWVyeVNlbGVjdG9yQWxsKFxuICAgICAgXCJbZGF0YS1maWx0ZXItbXVsdGktc2VsZWN0LW9wdGlvbnNdXCJcbiAgICApO1xuICAgIGNvbnN0IG5ld0ZpbHRlcnMgPSBuZXdQYW5lbC5xdWVyeVNlbGVjdG9yQWxsKFxuICAgICAgXCJbZGF0YS1maWx0ZXItbXVsdGktc2VsZWN0LW9wdGlvbnNdXCJcbiAgICApO1xuXG4gICAgLy8gQ3JlYXRlIG1hcHMgZm9yIGNvbXBhcmlzb24gdXNpbmcgZmlsdGVyIG5hbWVzXG4gICAgY29uc3Qgb2xkRmlsdGVyc01hcCA9IHRoaXMuX2NyZWF0ZUZpbHRlckVsZW1lbnRzTWFwKG9sZEZpbHRlcnMpO1xuICAgIGNvbnN0IG5ld0ZpbHRlcnNNYXAgPSB0aGlzLl9jcmVhdGVGaWx0ZXJFbGVtZW50c01hcChuZXdGaWx0ZXJzKTtcblxuICAgIC8vIFN5bmNocm9uaXplIHN0cnVjdHVyZSBmb3IgZWFjaCBmaWx0ZXJcbiAgICBPYmplY3Qua2V5cyhuZXdGaWx0ZXJzTWFwKS5mb3JFYWNoKChmaWx0ZXJOYW1lKSA9PiB7XG4gICAgICBjb25zdCBvbGRGaWx0ZXIgPSBvbGRGaWx0ZXJzTWFwW2ZpbHRlck5hbWVdO1xuICAgICAgY29uc3QgbmV3RmlsdGVyID0gbmV3RmlsdGVyc01hcFtmaWx0ZXJOYW1lXTtcblxuICAgICAgaWYgKG9sZEZpbHRlciAmJiBuZXdGaWx0ZXIpIHtcbiAgICAgICAgdGhpcy5fc3luY2hyb25pemVGaWx0ZXJEcm9wZG93blN0cnVjdHVyZShvbGRGaWx0ZXIsIG5ld0ZpbHRlcik7XG4gICAgICB9XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogU3luY2hyb25pemUgdGhlIGRyb3Bkb3duIHN0cnVjdHVyZSBmb3IgYSBzcGVjaWZpYyBmaWx0ZXJcbiAgICovXG4gIF9zeW5jaHJvbml6ZUZpbHRlckRyb3Bkb3duU3RydWN0dXJlKG9sZEZpbHRlciwgbmV3RmlsdGVyKSB7XG4gICAgY29uc3Qgb2xkRHJvcGRvd24gPSBvbGRGaWx0ZXIucXVlcnlTZWxlY3RvcihcIi5maWx0ZXItcGFuZWwtaXRlbS1kcm9wZG93blwiKTtcbiAgICBjb25zdCBuZXdEcm9wZG93biA9IG5ld0ZpbHRlci5xdWVyeVNlbGVjdG9yKFwiLmZpbHRlci1wYW5lbC1pdGVtLWRyb3Bkb3duXCIpO1xuXG4gICAgaWYgKCFvbGREcm9wZG93biB8fCAhbmV3RHJvcGRvd24pIHJldHVybjtcblxuICAgIC8vIEdldCB0aGUgc3RydWN0dXJlIG1hcCBmb3IgYm90aCBkcm9wZG93bnNcbiAgICBjb25zdCBvbGRTdHJ1Y3R1cmUgPSB0aGlzLl9nZXREcm9wZG93blN0cnVjdHVyZU1hcChvbGREcm9wZG93bik7XG4gICAgY29uc3QgbmV3U3RydWN0dXJlID0gdGhpcy5fZ2V0RHJvcGRvd25TdHJ1Y3R1cmVNYXAobmV3RHJvcGRvd24pO1xuXG4gICAgLy8gQWRkIG1pc3Npbmcgc3RydWN0dXJhbCBlbGVtZW50c1xuICAgIHRoaXMuX2FkZE1pc3NpbmdTdHJ1Y3R1cmFsRWxlbWVudHMob2xkRHJvcGRvd24sIG5ld1N0cnVjdHVyZSwgb2xkU3RydWN0dXJlKTtcbiAgfVxuXG4gIC8qKlxuICAgKiBDcmVhdGUgYSBtYXAgb2YgZmlsdGVyIGVsZW1lbnRzIGtleWVkIGJ5IHRoZWlyIGZpbHRlciBuYW1lXG4gICAqL1xuICBfY3JlYXRlRmlsdGVyRWxlbWVudHNNYXAoZWxlbWVudHMpIHtcbiAgICBjb25zdCBtYXAgPSB7fTtcbiAgICBlbGVtZW50cy5mb3JFYWNoKChlbGVtZW50KSA9PiB7XG4gICAgICBjb25zdCBvcHRpb25zID0gZWxlbWVudC5nZXRBdHRyaWJ1dGUoXCJkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3Qtb3B0aW9uc1wiKTtcbiAgICAgIGlmIChvcHRpb25zKSB7XG4gICAgICAgIHRyeSB7XG4gICAgICAgICAgY29uc3QgcGFyc2VkT3B0aW9ucyA9IEpTT04ucGFyc2Uob3B0aW9ucyk7XG4gICAgICAgICAgaWYgKHBhcnNlZE9wdGlvbnMubmFtZSkge1xuICAgICAgICAgICAgbWFwW3BhcnNlZE9wdGlvbnMubmFtZV0gPSBlbGVtZW50O1xuICAgICAgICAgIH1cbiAgICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAgIGNvbnNvbGUud2FybihcIkxpc3RpbmdMaXN0ZW5lcjogRmFpbGVkIHRvIHBhcnNlIGZpbHRlciBvcHRpb25zXCIsIGUpO1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfSk7XG4gICAgcmV0dXJuIG1hcDtcbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgdGhlIHN0cnVjdHVyYWwgbWFwIG9mIGEgZHJvcGRvd24gY29udGFpbmVyXG4gICAqIFJldHVybnMgYW4gYXJyYXkgb2Ygc3RydWN0dXJhbCBlbGVtZW50cyBpbiBvcmRlclxuICAgKi9cbiAgX2dldERyb3Bkb3duU3RydWN0dXJlTWFwKGRyb3Bkb3duKSB7XG4gICAgY29uc3Qgc3RydWN0dXJlID0gW107XG4gICAgY29uc3QgY2hpbGRyZW4gPSBBcnJheS5mcm9tKGRyb3Bkb3duLmNoaWxkcmVuKTtcblxuICAgIGNoaWxkcmVuLmZvckVhY2goKGNoaWxkLCBpbmRleCkgPT4ge1xuICAgICAgY29uc3QgZWxlbWVudEluZm8gPSB7XG4gICAgICAgIGluZGV4LFxuICAgICAgICBlbGVtZW50OiBjaGlsZCxcbiAgICAgICAgdGFnTmFtZTogY2hpbGQudGFnTmFtZS50b0xvd2VyQ2FzZSgpLFxuICAgICAgICBjbGFzc2VzOiBBcnJheS5mcm9tKGNoaWxkLmNsYXNzTGlzdCksXG4gICAgICAgIHRleHRDb250ZW50OiB0aGlzLl9nZXRFbGVtZW50VGV4dFNpZ25hdHVyZShjaGlsZCksXG4gICAgICAgIGlzTGlzdDpcbiAgICAgICAgICBjaGlsZC50YWdOYW1lLnRvTG93ZXJDYXNlKCkgPT09IFwidWxcIiAmJlxuICAgICAgICAgIGNoaWxkLmNsYXNzTGlzdC5jb250YWlucyhcImZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdFwiKSxcbiAgICAgICAgaXNTdHJ1Y3R1cmFsOiAhY2hpbGQuY2xhc3NMaXN0LmNvbnRhaW5zKFxuICAgICAgICAgIFwiZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0LWl0ZW1cIlxuICAgICAgICApLFxuICAgICAgfTtcblxuICAgICAgc3RydWN0dXJlLnB1c2goZWxlbWVudEluZm8pO1xuICAgIH0pO1xuXG4gICAgcmV0dXJuIHN0cnVjdHVyZTtcbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgYSB0ZXh0IHNpZ25hdHVyZSBmb3IgYW4gZWxlbWVudCAodXNlZnVsIGZvciBtYXRjaGluZylcbiAgICovXG4gIF9nZXRFbGVtZW50VGV4dFNpZ25hdHVyZShlbGVtZW50KSB7XG4gICAgaWYgKGVsZW1lbnQudGFnTmFtZS50b0xvd2VyQ2FzZSgpID09PSBcInVsXCIpIHtcbiAgICAgIHJldHVybiBcIlwiOyAvLyBMaXN0cyBkb24ndCBoYXZlIG1lYW5pbmdmdWwgdGV4dCBjb250ZW50IGZvciBtYXRjaGluZ1xuICAgIH1cblxuICAgIC8vIEdldCBkaXJlY3QgdGV4dCBjb250ZW50LCBub3QgZnJvbSBjaGlsZHJlblxuICAgIGxldCB0ZXh0Q29udGVudCA9IFwiXCI7XG4gICAgZWxlbWVudC5jaGlsZE5vZGVzLmZvckVhY2goKG5vZGUpID0+IHtcbiAgICAgIGlmIChub2RlLm5vZGVUeXBlID09PSBOb2RlLlRFWFRfTk9ERSkge1xuICAgICAgICB0ZXh0Q29udGVudCArPSBub2RlLnRleHRDb250ZW50LnRyaW0oKTtcbiAgICAgIH1cbiAgICB9KTtcblxuICAgIHJldHVybiB0ZXh0Q29udGVudC50cmltKCk7XG4gIH1cblxuICAvKipcbiAgICogQWRkIG1pc3Npbmcgc3RydWN0dXJhbCBlbGVtZW50cyB0byB0aGUgb2xkIGRyb3Bkb3duXG4gICAqL1xuICBfYWRkTWlzc2luZ1N0cnVjdHVyYWxFbGVtZW50cyhvbGREcm9wZG93biwgbmV3U3RydWN0dXJlLCBvbGRTdHJ1Y3R1cmUpIHtcbiAgICAvLyBDcmVhdGUgYSBtYXAgb2YgZXhpc3RpbmcgZWxlbWVudHMgYnkgdGhlaXIgc2lnbmF0dXJlXG4gICAgY29uc3QgZXhpc3RpbmdFbGVtZW50cyA9IG5ldyBNYXAoKTtcbiAgICBvbGRTdHJ1Y3R1cmUuZm9yRWFjaCgoaW5mbykgPT4ge1xuICAgICAgY29uc3Qgc2lnbmF0dXJlID0gdGhpcy5fY3JlYXRlRWxlbWVudFNpZ25hdHVyZShpbmZvKTtcbiAgICAgIGV4aXN0aW5nRWxlbWVudHMuc2V0KHNpZ25hdHVyZSwgaW5mbyk7XG4gICAgfSk7XG5cbiAgICAvLyBUcmFjayB3aGVyZSB0byBpbnNlcnQgbmV3IGVsZW1lbnRzXG4gICAgbGV0IGluc2VydFBvc2l0aW9uID0gMDtcblxuICAgIG5ld1N0cnVjdHVyZS5mb3JFYWNoKChuZXdFbGVtZW50SW5mbywgbmV3SW5kZXgpID0+IHtcbiAgICAgIGNvbnN0IHNpZ25hdHVyZSA9IHRoaXMuX2NyZWF0ZUVsZW1lbnRTaWduYXR1cmUobmV3RWxlbWVudEluZm8pO1xuXG4gICAgICBpZiAoIWV4aXN0aW5nRWxlbWVudHMuaGFzKHNpZ25hdHVyZSkgJiYgbmV3RWxlbWVudEluZm8uaXNTdHJ1Y3R1cmFsKSB7XG4gICAgICAgIC8vIFRoaXMgaXMgYSBuZXcgc3RydWN0dXJhbCBlbGVtZW50LCBjbG9uZSBhbmQgaW5zZXJ0IGl0XG4gICAgICAgIGNvbnN0IGNsb25lZEVsZW1lbnQgPSBuZXdFbGVtZW50SW5mby5lbGVtZW50LmNsb25lTm9kZSh0cnVlKTtcblxuICAgICAgICAvLyBGaW5kIHRoZSBjb3JyZWN0IGluc2VydGlvbiBwb2ludFxuICAgICAgICBjb25zdCBpbnNlcnRCZWZvcmVFbGVtZW50ID0gdGhpcy5fZmluZEluc2VydGlvblBvaW50KFxuICAgICAgICAgIG9sZERyb3Bkb3duLFxuICAgICAgICAgIG5ld1N0cnVjdHVyZSxcbiAgICAgICAgICBuZXdJbmRleCxcbiAgICAgICAgICBleGlzdGluZ0VsZW1lbnRzXG4gICAgICAgICk7XG5cbiAgICAgICAgaWYgKGluc2VydEJlZm9yZUVsZW1lbnQpIHtcbiAgICAgICAgICBvbGREcm9wZG93bi5pbnNlcnRCZWZvcmUoY2xvbmVkRWxlbWVudCwgaW5zZXJ0QmVmb3JlRWxlbWVudCk7XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgb2xkRHJvcGRvd24uYXBwZW5kQ2hpbGQoY2xvbmVkRWxlbWVudCk7XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICB9KTtcbiAgfVxuXG4gIC8qKlxuICAgKiBDcmVhdGUgYSBzaWduYXR1cmUgZm9yIGFuIGVsZW1lbnQgdG8gbWF0Y2ggYmV0d2VlbiBvbGQgYW5kIG5ldyBzdHJ1Y3R1cmVzXG4gICAqL1xuICBfY3JlYXRlRWxlbWVudFNpZ25hdHVyZShlbGVtZW50SW5mbykge1xuICAgIGlmIChlbGVtZW50SW5mby5pc0xpc3QpIHtcbiAgICAgIC8vIEZvciBsaXN0cywgY3JlYXRlIHNpZ25hdHVyZSBiYXNlZCBvbiBwb3NpdGlvbiBhbmQgY29udGV4dFxuICAgICAgcmV0dXJuIGBsaXN0LSR7ZWxlbWVudEluZm8uY2xhc3Nlcy5qb2luKFwiLVwiKX1gO1xuICAgIH1cblxuICAgIC8vIEZvciBvdGhlciBlbGVtZW50cywgdXNlIHRhZyArIGNsYXNzZXMgKyB0ZXh0IGNvbnRlbnRcbiAgICBjb25zdCBjbGFzc1NpZ25hdHVyZSA9IGVsZW1lbnRJbmZvLmNsYXNzZXMuam9pbihcIi1cIik7XG4gICAgY29uc3QgdGV4dFNpZ25hdHVyZSA9IGVsZW1lbnRJbmZvLnRleHRDb250ZW50LnJlcGxhY2UoL1xccysvZywgXCIgXCIpLnRyaW0oKTtcblxuICAgIHJldHVybiBgJHtlbGVtZW50SW5mby50YWdOYW1lfS0ke2NsYXNzU2lnbmF0dXJlfS0ke3RleHRTaWduYXR1cmV9YDtcbiAgfVxuXG4gIC8qKlxuICAgKiBGaW5kIHRoZSBjb3JyZWN0IGluc2VydGlvbiBwb2ludCBmb3IgYSBuZXcgc3RydWN0dXJhbCBlbGVtZW50XG4gICAqL1xuICBfZmluZEluc2VydGlvblBvaW50KFxuICAgIG9sZERyb3Bkb3duLFxuICAgIG5ld1N0cnVjdHVyZSxcbiAgICBuZXdFbGVtZW50SW5kZXgsXG4gICAgZXhpc3RpbmdFbGVtZW50c1xuICApIHtcbiAgICAvLyBMb29rIGZvciB0aGUgbmV4dCBleGlzdGluZyBlbGVtZW50IGFmdGVyIHRoZSBuZXcgZWxlbWVudCBwb3NpdGlvblxuICAgIGZvciAobGV0IGkgPSBuZXdFbGVtZW50SW5kZXggKyAxOyBpIDwgbmV3U3RydWN0dXJlLmxlbmd0aDsgaSsrKSB7XG4gICAgICBjb25zdCBuZXh0RWxlbWVudEluZm8gPSBuZXdTdHJ1Y3R1cmVbaV07XG4gICAgICBjb25zdCBuZXh0U2lnbmF0dXJlID0gdGhpcy5fY3JlYXRlRWxlbWVudFNpZ25hdHVyZShuZXh0RWxlbWVudEluZm8pO1xuXG4gICAgICBpZiAoZXhpc3RpbmdFbGVtZW50cy5oYXMobmV4dFNpZ25hdHVyZSkpIHtcbiAgICAgICAgLy8gRmluZCB0aGlzIGVsZW1lbnQgaW4gdGhlIG9sZCBkcm9wZG93blxuICAgICAgICBjb25zdCBleGlzdGluZ0luZm8gPSBleGlzdGluZ0VsZW1lbnRzLmdldChuZXh0U2lnbmF0dXJlKTtcbiAgICAgICAgcmV0dXJuIGV4aXN0aW5nSW5mby5lbGVtZW50O1xuICAgICAgfVxuICAgIH1cblxuICAgIHJldHVybiBudWxsOyAvLyBJbnNlcnQgYXQgdGhlIGVuZFxuICB9XG5cbiAgLyoqXG4gICAqIFVwZGF0ZSBmaWx0ZXItbXVsdGktc2VsZWN0IGVsZW1lbnRzIGJhc2VkIG9uIGRhdGEtZmlsdGVyLW11bHRpLXNlbGVjdC1vcHRpb25zXG4gICAqL1xuICBfdXBkYXRlRmlsdGVyTXVsdGlTZWxlY3RFbGVtZW50cyhvbGRQYW5lbCwgbmV3UGFuZWwpIHtcbiAgICAvLyBHZXQgYWxsIGZpbHRlci1tdWx0aS1zZWxlY3QgZWxlbWVudHMgZnJvbSBib3RoIHBhbmVsc1xuICAgIGNvbnN0IG9sZEVsZW1lbnRzID0gb2xkUGFuZWwucXVlcnlTZWxlY3RvckFsbChcIltkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3RdXCIpO1xuICAgIGNvbnN0IG5ld0VsZW1lbnRzID0gbmV3UGFuZWwucXVlcnlTZWxlY3RvckFsbChcIltkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3RdXCIpO1xuXG4gICAgLy8gQ3JlYXRlIG1hcHMgZm9yIGNvbXBhcmlzb24gdXNpbmcgZGF0YS1maWx0ZXItbXVsdGktc2VsZWN0LW9wdGlvbnMgbmFtZSBhbmQgdmFsdWVcbiAgICBjb25zdCBvbGRFbGVtZW50c01hcCA9IHRoaXMuX2NyZWF0ZUZpbHRlck11bHRpU2VsZWN0TWFwKG9sZEVsZW1lbnRzKTtcbiAgICBjb25zdCBuZXdFbGVtZW50c01hcCA9IHRoaXMuX2NyZWF0ZUZpbHRlck11bHRpU2VsZWN0TWFwKG5ld0VsZW1lbnRzKTtcblxuICAgIC8vIEhpZGUgZWxlbWVudHMgdGhhdCBhcmUgbm8gbG9uZ2VyIGluIHRoZSBuZXcgcGFuZWxcbiAgICBPYmplY3Qua2V5cyhvbGRFbGVtZW50c01hcCkuZm9yRWFjaCgoa2V5KSA9PiB7XG4gICAgICBpZiAoIW5ld0VsZW1lbnRzTWFwW2tleV0pIHtcbiAgICAgICAgdGhpcy5faGlkZUZpbHRlckl0ZW0ob2xkRWxlbWVudHNNYXBba2V5XSk7XG4gICAgICB9XG4gICAgfSk7XG5cbiAgICAvLyBTaG93IGVsZW1lbnRzIHRoYXQgYXJlIGluIHRoZSBuZXcgcGFuZWxcbiAgICBPYmplY3Qua2V5cyhuZXdFbGVtZW50c01hcCkuZm9yRWFjaCgoa2V5KSA9PiB7XG4gICAgICBpZiAob2xkRWxlbWVudHNNYXBba2V5XSkge1xuICAgICAgICB0aGlzLl9zaG93RmlsdGVySXRlbShvbGRFbGVtZW50c01hcFtrZXldKTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIC8vIE5ldyBlbGVtZW50LCBhZGQgaXQgdG8gdGhlIHBhbmVsXG4gICAgICAgIGNvbnN0IG5ld0VsZW1lbnQgPSBuZXdFbGVtZW50c01hcFtrZXldLmNsb25lTm9kZSh0cnVlKTtcbiAgICAgICAgb2xkUGFuZWwuYXBwZW5kQ2hpbGQobmV3RWxlbWVudCk7XG4gICAgICAgIG5ld0VsZW1lbnQuc2V0QXR0cmlidXRlKFwiZGF0YS1uZWVkcy1pbml0XCIsIFwidHJ1ZVwiKTtcbiAgICAgIH1cbiAgICB9KTtcbiAgfVxuXG4gIC8qKlxuICAgKiBVcGRhdGUgZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0LWl0ZW0gZWxlbWVudHMgYmFzZWQgb24gZGF0YS1sYWJlbFxuICAgKi9cbiAgX3VwZGF0ZUZpbHRlckxpc3RJdGVtRWxlbWVudHMob2xkUGFuZWwsIG5ld1BhbmVsKSB7XG4gICAgLy8gR2V0IGFsbCBmaWx0ZXItbXVsdGktc2VsZWN0LWxpc3QtaXRlbSBlbGVtZW50cyBmcm9tIGJvdGggcGFuZWxzXG4gICAgY29uc3Qgb2xkSXRlbXMgPSBvbGRQYW5lbC5xdWVyeVNlbGVjdG9yQWxsKFxuICAgICAgXCIuZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0LWl0ZW1cIlxuICAgICk7XG4gICAgY29uc3QgbmV3SXRlbXMgPSBuZXdQYW5lbC5xdWVyeVNlbGVjdG9yQWxsKFxuICAgICAgXCIuZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0LWl0ZW1cIlxuICAgICk7XG5cbiAgICAvLyBDcmVhdGUgbWFwcyBmb3IgY29tcGFyaXNvbiB1c2luZyBkYXRhLWxhYmVsIGF0dHJpYnV0ZSBmcm9tIGlucHV0IGVsZW1lbnRzXG4gICAgY29uc3Qgb2xkSXRlbXNNYXAgPSB0aGlzLl9jcmVhdGVGaWx0ZXJMaXN0SXRlbU1hcChvbGRJdGVtcyk7XG4gICAgY29uc3QgbmV3SXRlbXNNYXAgPSB0aGlzLl9jcmVhdGVGaWx0ZXJMaXN0SXRlbU1hcChuZXdJdGVtcyk7XG5cbiAgICAvLyBIaWRlIGl0ZW1zIHRoYXQgYXJlIG5vIGxvbmdlciBpbiB0aGUgbmV3IHBhbmVsXG4gICAgT2JqZWN0LmtleXMob2xkSXRlbXNNYXApLmZvckVhY2goKGtleSkgPT4ge1xuICAgICAgaWYgKCFuZXdJdGVtc01hcFtrZXldKSB7XG4gICAgICAgIHRoaXMuX2hpZGVGaWx0ZXJJdGVtKG9sZEl0ZW1zTWFwW2tleV0pO1xuICAgICAgfVxuICAgIH0pO1xuXG4gICAgLy8gU2hvdyBpdGVtcyB0aGF0IGFyZSBpbiB0aGUgbmV3IHBhbmVsXG4gICAgT2JqZWN0LmtleXMobmV3SXRlbXNNYXApLmZvckVhY2goKGtleSkgPT4ge1xuICAgICAgaWYgKG9sZEl0ZW1zTWFwW2tleV0pIHtcbiAgICAgICAgdGhpcy5fc2hvd0ZpbHRlckl0ZW0ob2xkSXRlbXNNYXBba2V5XSk7XG4gICAgICAgIHRoaXMuX3VwZGF0ZUZpbHRlckxpc3RJdGVtQ29udGVudChvbGRJdGVtc01hcFtrZXldLCBuZXdJdGVtc01hcFtrZXldKTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIHRoaXMuX2FkZE5ld0ZpbHRlckxpc3RJdGVtKG9sZFBhbmVsLCBuZXdJdGVtc01hcFtrZXldKTtcbiAgICAgIH1cbiAgICB9KTtcbiAgfVxuXG4gIC8qKlxuICAgKiBDcmVhdGUgYSBtYXAgb2YgZmlsdGVyLW11bHRpLXNlbGVjdCBlbGVtZW50cyBrZXllZCBieSB0aGVpciBmaWx0ZXIgbmFtZVxuICAgKi9cbiAgX2NyZWF0ZUZpbHRlck11bHRpU2VsZWN0TWFwKGVsZW1lbnRzKSB7XG4gICAgY29uc3QgbWFwID0ge307XG4gICAgZWxlbWVudHMuZm9yRWFjaCgoZWxlbWVudCkgPT4ge1xuICAgICAgY29uc3Qgb3B0aW9ucyA9IGVsZW1lbnQuZ2V0QXR0cmlidXRlKFwiZGF0YS1maWx0ZXItbXVsdGktc2VsZWN0LW9wdGlvbnNcIik7XG4gICAgICBpZiAob3B0aW9ucykge1xuICAgICAgICB0cnkge1xuICAgICAgICAgIC8vIFBhcnNlIHRoZSBvcHRpb25zIHRvIGdldCB0aGUgZmlsdGVyIG5hbWUgZm9yIGEgcmVsaWFibGUga2V5XG4gICAgICAgICAgY29uc3QgcGFyc2VkT3B0aW9ucyA9IEpTT04ucGFyc2Uob3B0aW9ucyk7XG4gICAgICAgICAgaWYgKHBhcnNlZE9wdGlvbnMubmFtZSkge1xuICAgICAgICAgICAgY29uc3Qga2V5ID0gYGZpbHRlci1tdWx0aS1zZWxlY3QtJHtwYXJzZWRPcHRpb25zLm5hbWV9YDtcbiAgICAgICAgICAgIG1hcFtrZXldID0gZWxlbWVudDtcbiAgICAgICAgICB9XG4gICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICAvLyBTa2lwIGVsZW1lbnRzIHdpdGggaW52YWxpZCBKU09OXG4gICAgICAgICAgY29uc29sZS53YXJuKFwiTGlzdGluZ0xpc3RlbmVyOiBGYWlsZWQgdG8gcGFyc2UgZmlsdGVyIG9wdGlvbnNcIiwgZSk7XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICB9KTtcbiAgICByZXR1cm4gbWFwO1xuICB9XG5cbiAgLyoqXG4gICAqIENyZWF0ZSBhIG1hcCBvZiBmaWx0ZXItbXVsdGktc2VsZWN0LWxpc3QtaXRlbSBlbGVtZW50cyBrZXllZCBieSB0aGVpciBkYXRhLWxhYmVsXG4gICAqL1xuICBfY3JlYXRlRmlsdGVyTGlzdEl0ZW1NYXAoaXRlbXMpIHtcbiAgICBjb25zdCBtYXAgPSB7fTtcbiAgICBpdGVtcy5mb3JFYWNoKChpdGVtKSA9PiB7XG4gICAgICAvLyBMb29rIGZvciBkYXRhLWxhYmVsIGF0dHJpYnV0ZSBvbiB0aGUgaW5wdXQgZWxlbWVudCBpbnNpZGUgdGhlIGxpc3QgaXRlbVxuICAgICAgY29uc3QgaW5wdXQgPSBpdGVtLnF1ZXJ5U2VsZWN0b3IoXCJpbnB1dFtkYXRhLWxhYmVsXVwiKTtcbiAgICAgIGNvbnN0IGxhYmVsID0gaW5wdXQgPyBpbnB1dC5nZXRBdHRyaWJ1dGUoXCJkYXRhLWxhYmVsXCIpIDogbnVsbDtcbiAgICAgIGlmIChsYWJlbCkge1xuICAgICAgICAvLyBJbmNsdWRlIHBhcmVudCBmaWx0ZXIgaW5mbyB0byBtYWtlIGtleSBtb3JlIHVuaXF1ZVxuICAgICAgICBjb25zdCBwYXJlbnRGaWx0ZXIgPSBpdGVtLmNsb3Nlc3QoXCJbZGF0YS1maWx0ZXItbXVsdGktc2VsZWN0XVwiKTtcbiAgICAgICAgbGV0IHBhcmVudEZpbHRlck5hbWUgPSBcInVua25vd25cIjtcblxuICAgICAgICBpZiAocGFyZW50RmlsdGVyKSB7XG4gICAgICAgICAgY29uc3QgcGFyZW50T3B0aW9ucyA9IHBhcmVudEZpbHRlci5nZXRBdHRyaWJ1dGUoXG4gICAgICAgICAgICBcImRhdGEtZmlsdGVyLW11bHRpLXNlbGVjdC1vcHRpb25zXCJcbiAgICAgICAgICApO1xuICAgICAgICAgIGlmIChwYXJlbnRPcHRpb25zKSB7XG4gICAgICAgICAgICB0cnkge1xuICAgICAgICAgICAgICBjb25zdCBwYXJzZWRPcHRpb25zID0gSlNPTi5wYXJzZShwYXJlbnRPcHRpb25zKTtcbiAgICAgICAgICAgICAgcGFyZW50RmlsdGVyTmFtZSA9IHBhcnNlZE9wdGlvbnMubmFtZSB8fCBcInVua25vd25cIjtcbiAgICAgICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICAgICAgLy8gVXNlIGZhbGxiYWNrIGlmIHBhcnNpbmcgZmFpbHNcbiAgICAgICAgICAgICAgY29uc29sZS53YXJuKFxuICAgICAgICAgICAgICAgIFwiTGlzdGluZ0xpc3RlbmVyOiBGYWlsZWQgdG8gcGFyc2UgcGFyZW50IGZpbHRlciBvcHRpb25zXCIsXG4gICAgICAgICAgICAgICAgZVxuICAgICAgICAgICAgICApO1xuICAgICAgICAgICAgfVxuICAgICAgICAgIH1cbiAgICAgICAgfVxuXG4gICAgICAgIGNvbnN0IGtleSA9IGAke3BhcmVudEZpbHRlck5hbWV9LSR7bGFiZWx9YDtcbiAgICAgICAgbWFwW2tleV0gPSBpdGVtO1xuICAgICAgfVxuICAgIH0pO1xuICAgIHJldHVybiBtYXA7XG4gIH1cblxuICAvKipcbiAgICogVXBkYXRlIHRoZSBjb250ZW50IG9mIGEgZmlsdGVyIGRyb3Bkb3duXG4gICAqL1xuICBfdXBkYXRlRmlsdGVyRHJvcGRvd25Db250ZW50KG9sZEVsZW1lbnQsIG5ld0VsZW1lbnQpIHtcbiAgICBjb25zdCBvbGREcm9wZG93biA9IG9sZEVsZW1lbnQucXVlcnlTZWxlY3RvcihcIi5maWx0ZXItcGFuZWwtaXRlbS1kcm9wZG93blwiKTtcbiAgICBjb25zdCBuZXdEcm9wZG93biA9IG5ld0VsZW1lbnQucXVlcnlTZWxlY3RvcihcIi5maWx0ZXItcGFuZWwtaXRlbS1kcm9wZG93blwiKTtcblxuICAgIGlmIChvbGREcm9wZG93biAmJiBuZXdEcm9wZG93bikge1xuICAgICAgLy8gU3RvcmUgY3VycmVudCBpbnB1dCBzdGF0ZXMgYmVmb3JlIHVwZGF0aW5nIGNvbnRlbnRcbiAgICAgIGNvbnN0IGlucHV0U3RhdGVzID0gdGhpcy5fZ2V0SW5wdXRTdGF0ZXMob2xkRHJvcGRvd24pO1xuXG4gICAgICAvLyBVc2Ugb3VyIGV4aXN0aW5nIG1lcmdlIG1ldGhvZCB0byBwcmVzZXJ2ZSBldmVudCBoYW5kbGVyc1xuICAgICAgdGhpcy5fbWVyZ2VEcm9wZG93bkNvbnRlbnQob2xkRHJvcGRvd24sIG5ld0Ryb3Bkb3duKTtcblxuICAgICAgLy8gUmVzdG9yZSBzdGF0ZXMgd2l0aG91dCB0cmlnZ2VyaW5nIGV2ZW50c1xuICAgICAgdGhpcy5fcmVzdG9yZUlucHV0U3RhdGVzKG9sZERyb3Bkb3duLCBpbnB1dFN0YXRlcywgZmFsc2UpO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBVcGRhdGUgdGhlIGNvbnRlbnQgb2YgYSBmaWx0ZXIgbGlzdCBpdGVtXG4gICAqL1xuICBfdXBkYXRlRmlsdGVyTGlzdEl0ZW1Db250ZW50KG9sZEl0ZW0sIG5ld0l0ZW0pIHtcbiAgICAvLyBVcGRhdGUgbGFiZWwgdGV4dCBpZiBjaGFuZ2VkXG4gICAgY29uc3Qgb2xkTGFiZWwgPSBvbGRJdGVtLnF1ZXJ5U2VsZWN0b3IoXCJsYWJlbFwiKTtcbiAgICBjb25zdCBuZXdMYWJlbCA9IG5ld0l0ZW0ucXVlcnlTZWxlY3RvcihcImxhYmVsXCIpO1xuXG4gICAgaWYgKG9sZExhYmVsICYmIG5ld0xhYmVsICYmIG9sZExhYmVsLnRleHRDb250ZW50ICE9PSBuZXdMYWJlbC50ZXh0Q29udGVudCkge1xuICAgICAgb2xkTGFiZWwudGV4dENvbnRlbnQgPSBuZXdMYWJlbC50ZXh0Q29udGVudDtcbiAgICB9XG5cbiAgICAvLyBVcGRhdGUgaW5wdXQgYXR0cmlidXRlcyBpZiB0aGV5J3ZlIGNoYW5nZWRcbiAgICBjb25zdCBvbGRJbnB1dCA9IG9sZEl0ZW0ucXVlcnlTZWxlY3RvcihcImlucHV0XCIpO1xuICAgIGNvbnN0IG5ld0lucHV0ID0gbmV3SXRlbS5xdWVyeVNlbGVjdG9yKFwiaW5wdXRcIik7XG5cbiAgICBpZiAob2xkSW5wdXQgJiYgbmV3SW5wdXQpIHtcbiAgICAgIFtcInZhbHVlXCIsIFwibmFtZVwiLCBcImRhdGEtY291bnRcIl0uZm9yRWFjaCgoYXR0cikgPT4ge1xuICAgICAgICBpZiAob2xkSW5wdXQuZ2V0QXR0cmlidXRlKGF0dHIpICE9PSBuZXdJbnB1dC5nZXRBdHRyaWJ1dGUoYXR0cikpIHtcbiAgICAgICAgICBvbGRJbnB1dC5zZXRBdHRyaWJ1dGUoYXR0ciwgbmV3SW5wdXQuZ2V0QXR0cmlidXRlKGF0dHIpIHx8IFwiXCIpO1xuICAgICAgICB9XG4gICAgICB9KTtcbiAgICB9XG4gIH1cblxuICAvKipcbiAgICogRmluZCBhIGZpbHRlciBlbGVtZW50IGJ5IGl0cyBuYW1lIChleHRyYWN0ZWQgZnJvbSBkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3Qtb3B0aW9ucylcbiAgICovXG4gIF9maW5kRmlsdGVyRWxlbWVudEJ5TmFtZShwYW5lbCwgZmlsdGVyTmFtZSkge1xuICAgIGNvbnN0IGZpbHRlckVsZW1lbnRzID0gcGFuZWwucXVlcnlTZWxlY3RvckFsbChcbiAgICAgIFwiW2RhdGEtZmlsdGVyLW11bHRpLXNlbGVjdC1vcHRpb25zXVwiXG4gICAgKTtcblxuICAgIGZvciAoY29uc3QgZWxlbWVudCBvZiBmaWx0ZXJFbGVtZW50cykge1xuICAgICAgdHJ5IHtcbiAgICAgICAgY29uc3Qgb3B0aW9uc0pzb24gPSBlbGVtZW50LmdldEF0dHJpYnV0ZShcbiAgICAgICAgICBcImRhdGEtZmlsdGVyLW11bHRpLXNlbGVjdC1vcHRpb25zXCJcbiAgICAgICAgKTtcbiAgICAgICAgaWYgKG9wdGlvbnNKc29uKSB7XG4gICAgICAgICAgY29uc3Qgb3B0aW9ucyA9IEpTT04ucGFyc2Uob3B0aW9uc0pzb24pO1xuICAgICAgICAgIGlmIChvcHRpb25zLm5hbWUgPT09IGZpbHRlck5hbWUpIHtcbiAgICAgICAgICAgIHJldHVybiBlbGVtZW50O1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAvLyBTa2lwIGVsZW1lbnRzIHdpdGggaW52YWxpZCBKU09OXG4gICAgICAgIGNvbnRpbnVlO1xuICAgICAgfVxuICAgIH1cblxuICAgIHJldHVybiBudWxsO1xuICB9XG5cbiAgLyoqXG4gICAqIEZpbmQgdGhlIHRhcmdldCBsaXN0ICh1bCBlbGVtZW50KSB3aGVyZSBhIG5ldyBmaWx0ZXIgaXRlbSBzaG91bGQgYmUgYWRkZWRcbiAgICovXG4gIF9maW5kVGFyZ2V0TGlzdEZvck5ld0l0ZW0oZHJvcGRvd25Jbk9sZFBhbmVsLCBuZXdJdGVtLCBjbG9uZWRJdGVtKSB7XG4gICAgLy8gRmluZCB0aGUgcHJvcGVyIGNvbnRhaW5lciB0byBzZWFyY2ggaW5cbiAgICBjb25zdCBuZXdEcm9wZG93biA9IG5ld0l0ZW0uY2xvc2VzdChcIi5maWx0ZXItcGFuZWwtaXRlbS1kcm9wZG93blwiKTtcbiAgICBjb25zdCB0YXJnZXRDb250YWluZXIgPSBuZXdEcm9wZG93blxuICAgICAgPyB0aGlzLl9maW5kVGFyZ2V0Q29udGFpbmVyKG5ld0Ryb3Bkb3duLCBkcm9wZG93bkluT2xkUGFuZWwpXG4gICAgICA6IGRyb3Bkb3duSW5PbGRQYW5lbDtcblxuICAgIC8vIEZpcnN0LCB0cnkgdG8gZmluZCB0aGUgc2VjdGlvbiB3aGVyZSB0aGlzIGl0ZW0gYmVsb25ncyBpbiB0aGUgbmV3IHBhbmVsIHN0cnVjdHVyZVxuICAgIGNvbnN0IG5ld0l0ZW1QYXJlbnRMaXN0ID0gbmV3SXRlbS5jbG9zZXN0KFwidWwuZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0XCIpO1xuXG4gICAgaWYgKG5ld0l0ZW1QYXJlbnRMaXN0KSB7XG4gICAgICAvLyBMb29rIGZvciBhIHByZWNlZGluZyBzdHJ1Y3R1cmFsIGVsZW1lbnQgdG8gaWRlbnRpZnkgdGhlIHNlY3Rpb25cbiAgICAgIGxldCBzZWN0aW9uRWxlbWVudCA9IG51bGw7XG4gICAgICBsZXQgc2VjdGlvblRleHQgPSBudWxsO1xuICAgICAgbGV0IGN1cnJlbnRFbGVtZW50ID0gbmV3SXRlbVBhcmVudExpc3QucHJldmlvdXNFbGVtZW50U2libGluZztcblxuICAgICAgLy8gV2FsayBiYWNrd2FyZHMgdG8gZmluZCB0aGUgc2VjdGlvbiBpZGVudGlmaWVyXG4gICAgICB3aGlsZSAoY3VycmVudEVsZW1lbnQgJiYgIXNlY3Rpb25FbGVtZW50KSB7XG4gICAgICAgIC8vIENoZWNrIGlmIHRoaXMgaXMgYSBzdHJ1Y3R1cmFsIGVsZW1lbnQgKG5vdCBhIGxpc3QgaXRlbSlcbiAgICAgICAgaWYgKFxuICAgICAgICAgIGN1cnJlbnRFbGVtZW50LnRhZ05hbWUgJiZcbiAgICAgICAgICAhY3VycmVudEVsZW1lbnQuY2xhc3NMaXN0LmNvbnRhaW5zKFwiZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0LWl0ZW1cIikgJiZcbiAgICAgICAgICBjdXJyZW50RWxlbWVudC50ZXh0Q29udGVudC50cmltKClcbiAgICAgICAgKSB7XG4gICAgICAgICAgc2VjdGlvbkVsZW1lbnQgPSBjdXJyZW50RWxlbWVudDtcbiAgICAgICAgICBzZWN0aW9uVGV4dCA9IGN1cnJlbnRFbGVtZW50LnRleHRDb250ZW50LnRyaW0oKTtcbiAgICAgICAgICBicmVhaztcbiAgICAgICAgfVxuICAgICAgICBjdXJyZW50RWxlbWVudCA9IGN1cnJlbnRFbGVtZW50LnByZXZpb3VzRWxlbWVudFNpYmxpbmc7XG4gICAgICB9XG5cbiAgICAgIC8vIElmIHdlIGZvdW5kIGEgc2VjdGlvbiBlbGVtZW50LCB0cnkgdG8gZmluZCB0aGUgbWF0Y2hpbmcgc2VjdGlvbiBpbiB0aGUgdGFyZ2V0IGNvbnRhaW5lclxuICAgICAgaWYgKHNlY3Rpb25FbGVtZW50ICYmIHNlY3Rpb25UZXh0KSB7XG4gICAgICAgIGNvbnN0IG1hdGNoaW5nU2VjdGlvbiA9IHRoaXMuX2ZpbmRTZWN0aW9uQnlUZXh0KFxuICAgICAgICAgIHRhcmdldENvbnRhaW5lcixcbiAgICAgICAgICBzZWN0aW9uVGV4dCxcbiAgICAgICAgICBzZWN0aW9uRWxlbWVudC50YWdOYW1lXG4gICAgICAgICk7XG4gICAgICAgIGlmIChtYXRjaGluZ1NlY3Rpb24pIHtcbiAgICAgICAgICByZXR1cm4gbWF0Y2hpbmdTZWN0aW9uO1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuXG4gICAgLy8gRmFsbGJhY2s6IHRyeSB0byBmaW5kIHRoZSBiZXN0IG1hdGNoaW5nIGxpc3QgYmFzZWQgb24gaXRlbSBwb3NpdGlvbiBvciBjb250ZW50XG4gICAgY29uc3QgYWxsTGlzdHMgPSB0YXJnZXRDb250YWluZXIucXVlcnlTZWxlY3RvckFsbChcbiAgICAgIFwidWwuZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0XCJcbiAgICApO1xuXG4gICAgaWYgKGFsbExpc3RzLmxlbmd0aCA9PT0gMSkge1xuICAgICAgLy8gSWYgdGhlcmUncyBvbmx5IG9uZSBsaXN0LCB1c2UgaXRcbiAgICAgIHJldHVybiBhbGxMaXN0c1swXTtcbiAgICB9XG5cbiAgICBpZiAoYWxsTGlzdHMubGVuZ3RoID4gMSkge1xuICAgICAgLy8gVHJ5IHRvIGZpbmQgYSBsaXN0IHRoYXQgYWxyZWFkeSBjb250YWlucyBzaW1pbGFyIGl0ZW1zXG4gICAgICBjb25zdCBuZXdJdGVtTGFiZWwgPSBjbG9uZWRJdGVtXG4gICAgICAgIC5xdWVyeVNlbGVjdG9yKFwiaW5wdXRbZGF0YS1sYWJlbF1cIilcbiAgICAgICAgPy5nZXRBdHRyaWJ1dGUoXCJkYXRhLWxhYmVsXCIpO1xuXG4gICAgICBpZiAobmV3SXRlbUxhYmVsKSB7XG4gICAgICAgIGZvciAoY29uc3QgbGlzdCBvZiBhbGxMaXN0cykge1xuICAgICAgICAgIGNvbnN0IGV4aXN0aW5nSXRlbXMgPSBsaXN0LnF1ZXJ5U2VsZWN0b3JBbGwoXCJpbnB1dFtkYXRhLWxhYmVsXVwiKTtcbiAgICAgICAgICBmb3IgKGNvbnN0IGV4aXN0aW5nIG9mIGV4aXN0aW5nSXRlbXMpIHtcbiAgICAgICAgICAgIGNvbnN0IGV4aXN0aW5nTGFiZWwgPSBleGlzdGluZy5nZXRBdHRyaWJ1dGUoXCJkYXRhLWxhYmVsXCIpO1xuXG4gICAgICAgICAgICAvLyBTaW1wbGUgaGV1cmlzdGljOiBpZiBsYWJlbHMgaGF2ZSBzaW1pbGFyIHBhdHRlcm5zLCB0aGV5IG1pZ2h0IGJlbG9uZyB0b2dldGhlclxuICAgICAgICAgICAgaWYgKHRoaXMuX2xhYmVsc1NlZW1SZWxhdGVkKG5ld0l0ZW1MYWJlbCwgZXhpc3RpbmdMYWJlbCkpIHtcbiAgICAgICAgICAgICAgcmV0dXJuIGxpc3Q7XG4gICAgICAgICAgICB9XG4gICAgICAgICAgfVxuICAgICAgICB9XG4gICAgICB9XG5cbiAgICAgIC8vIElmIG5vIGdvb2QgbWF0Y2ggZm91bmQsIHVzZSB0aGUgZmlyc3QgbGlzdFxuICAgICAgcmV0dXJuIGFsbExpc3RzWzBdO1xuICAgIH1cblxuICAgIC8vIE5vIGxpc3RzIGZvdW5kLCByZXR1cm4gbnVsbFxuICAgIHJldHVybiBudWxsO1xuICB9XG5cbiAgLyoqXG4gICAqIEZpbmQgYSBzZWN0aW9uJ3MgdWwgZWxlbWVudCBieSBtYXRjaGluZyB0ZXh0IGNvbnRlbnQgYW5kIHRhZyBuYW1lXG4gICAqL1xuICBfZmluZFNlY3Rpb25CeVRleHQoY29udGFpbmVyLCBzZWN0aW9uVGV4dCwgdGFnTmFtZSkge1xuICAgIC8vIEZpbmQgYWxsIGVsZW1lbnRzIHdpdGggdGhlIHNhbWUgdGFnIG5hbWVcbiAgICBjb25zdCBlbGVtZW50cyA9IGNvbnRhaW5lci5xdWVyeVNlbGVjdG9yQWxsKHRhZ05hbWUudG9Mb3dlckNhc2UoKSk7XG5cbiAgICBmb3IgKGNvbnN0IGVsZW1lbnQgb2YgZWxlbWVudHMpIHtcbiAgICAgIGlmIChlbGVtZW50LnRleHRDb250ZW50LnRyaW0oKSA9PT0gc2VjdGlvblRleHQpIHtcbiAgICAgICAgLy8gRmluZCB0aGUgbmV4dCB1bCBlbGVtZW50IGFmdGVyIHRoaXMgc2VjdGlvbiBlbGVtZW50XG4gICAgICAgIGxldCBuZXh0RWxlbWVudCA9IGVsZW1lbnQubmV4dEVsZW1lbnRTaWJsaW5nO1xuICAgICAgICB3aGlsZSAobmV4dEVsZW1lbnQpIHtcbiAgICAgICAgICBpZiAoXG4gICAgICAgICAgICBuZXh0RWxlbWVudC50YWdOYW1lLnRvTG93ZXJDYXNlKCkgPT09IFwidWxcIiAmJlxuICAgICAgICAgICAgbmV4dEVsZW1lbnQuY2xhc3NMaXN0LmNvbnRhaW5zKFwiZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0XCIpXG4gICAgICAgICAgKSB7XG4gICAgICAgICAgICByZXR1cm4gbmV4dEVsZW1lbnQ7XG4gICAgICAgICAgfVxuICAgICAgICAgIG5leHRFbGVtZW50ID0gbmV4dEVsZW1lbnQubmV4dEVsZW1lbnRTaWJsaW5nO1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuXG4gICAgcmV0dXJuIG51bGw7XG4gIH1cblxuICAvKipcbiAgICogU2ltcGxlIGhldXJpc3RpYyB0byBjaGVjayBpZiB0d28gZmlsdGVyIGxhYmVscyBzZWVtIHJlbGF0ZWRcbiAgICovXG4gIF9sYWJlbHNTZWVtUmVsYXRlZChsYWJlbDEsIGxhYmVsMikge1xuICAgIGlmICghbGFiZWwxIHx8ICFsYWJlbDIpIHJldHVybiBmYWxzZTtcblxuICAgIC8vIENoZWNrIGlmIGJvdGggYXJlIG51bWVyaWMgcmFuZ2VzIChlLmcuLCBcIjQxLTQyXCIsIFwiNDMtNDRcIilcbiAgICBjb25zdCByYW5nZVBhdHRlcm4gPSAvXlxcZCsoLVxcZCspPyQvO1xuICAgIGlmIChyYW5nZVBhdHRlcm4udGVzdChsYWJlbDEpICYmIHJhbmdlUGF0dGVybi50ZXN0KGxhYmVsMikpIHtcbiAgICAgIHJldHVybiB0cnVlO1xuICAgIH1cblxuICAgIC8vIENoZWNrIGlmIGJvdGggYXJlIHNpemUgaW5kaWNhdG9ycyAoZS5nLiwgXCJYTFwiLCBcIlhYTFwiLCBcIjNYTFwiKVxuICAgIGNvbnN0IHNpemVQYXR0ZXJuID0gL15cXGQqWExbS10/JC87XG4gICAgaWYgKHNpemVQYXR0ZXJuLnRlc3QobGFiZWwxKSAmJiBzaXplUGF0dGVybi50ZXN0KGxhYmVsMikpIHtcbiAgICAgIHJldHVybiB0cnVlO1xuICAgIH1cblxuICAgIC8vIENoZWNrIGlmIGJvdGggYXJlIHdhaXN0L2xlbmd0aCBjb21iaW5hdGlvbnMgKGUuZy4sIFwiNDAvMzBcIiwgXCI0Mi8zMlwiKVxuICAgIGNvbnN0IHdhaXN0TGVuZ3RoUGF0dGVybiA9IC9eXFxkK1xcL1xcZCskLztcbiAgICBpZiAod2Fpc3RMZW5ndGhQYXR0ZXJuLnRlc3QobGFiZWwxKSAmJiB3YWlzdExlbmd0aFBhdHRlcm4udGVzdChsYWJlbDIpKSB7XG4gICAgICByZXR1cm4gdHJ1ZTtcbiAgICB9XG5cbiAgICAvLyBDaGVjayBpZiBib3RoIHN0YXJ0IHdpdGggXCJXXCIgKHdhaXN0IHNpemVzIGxpa2UgXCJXNDBcIiwgXCJXNDJcIilcbiAgICBpZiAobGFiZWwxLnN0YXJ0c1dpdGgoXCJXXCIpICYmIGxhYmVsMi5zdGFydHNXaXRoKFwiV1wiKSkge1xuICAgICAgcmV0dXJuIHRydWU7XG4gICAgfVxuXG4gICAgcmV0dXJuIGZhbHNlO1xuICB9XG5cbiAgLyoqXG4gICAqIEFkZCBhIG5ldyBmaWx0ZXIgbGlzdCBpdGVtIHRvIHRoZSBhcHByb3ByaWF0ZSBwYXJlbnRcbiAgICovXG4gIF9hZGROZXdGaWx0ZXJMaXN0SXRlbShvbGRQYW5lbCwgbmV3SXRlbSkge1xuICAgIC8vIEZpbmQgdGhlIHBhcmVudCBmaWx0ZXIgaW4gdGhlIG9sZCBwYW5lbFxuICAgIGNvbnN0IHBhcmVudE9wdGlvbnMgPSBuZXdJdGVtXG4gICAgICAuY2xvc2VzdChcIltkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3RdXCIpXG4gICAgICA/LmdldEF0dHJpYnV0ZShcImRhdGEtZmlsdGVyLW11bHRpLXNlbGVjdC1vcHRpb25zXCIpO1xuICAgIGlmICghcGFyZW50T3B0aW9ucykgcmV0dXJuO1xuXG4gICAgLy8gUGFyc2UgdGhlIG9wdGlvbnMgdG8gZ2V0IHRoZSBmaWx0ZXIgbmFtZVxuICAgIGxldCBmaWx0ZXJOYW1lO1xuICAgIHRyeSB7XG4gICAgICBjb25zdCBwYXJzZWRPcHRpb25zID0gSlNPTi5wYXJzZShwYXJlbnRPcHRpb25zKTtcbiAgICAgIGZpbHRlck5hbWUgPSBwYXJzZWRPcHRpb25zLm5hbWU7XG4gICAgfSBjYXRjaCAoZSkge1xuICAgICAgY29uc29sZS53YXJuKFwiTGlzdGluZ0xpc3RlbmVyOiBGYWlsZWQgdG8gcGFyc2UgcGFyZW50IG9wdGlvbnNcIiwgZSk7XG4gICAgICByZXR1cm47XG4gICAgfVxuXG4gICAgaWYgKCFmaWx0ZXJOYW1lKSByZXR1cm47XG5cbiAgICAvLyBGaW5kIHRoZSBtYXRjaGluZyBwYXJlbnQgaW4gb2xkIHBhbmVsIGJ5IGZpbHRlciBuYW1lXG4gICAgY29uc3QgcGFyZW50SW5PbGRQYW5lbCA9IHRoaXMuX2ZpbmRGaWx0ZXJFbGVtZW50QnlOYW1lKFxuICAgICAgb2xkUGFuZWwsXG4gICAgICBmaWx0ZXJOYW1lXG4gICAgKTtcbiAgICBpZiAoIXBhcmVudEluT2xkUGFuZWwpIHJldHVybjtcblxuICAgIGNvbnN0IGRyb3Bkb3duSW5PbGRQYW5lbCA9IHBhcmVudEluT2xkUGFuZWwucXVlcnlTZWxlY3RvcihcbiAgICAgIFwiLmZpbHRlci1wYW5lbC1pdGVtLWRyb3Bkb3duXCJcbiAgICApO1xuICAgIGlmICghZHJvcGRvd25Jbk9sZFBhbmVsKSByZXR1cm47XG5cbiAgICAvLyBDbG9uZSB0aGUgbmV3IGl0ZW1cbiAgICBjb25zdCBjbG9uZWRJdGVtID0gbmV3SXRlbS5jbG9uZU5vZGUodHJ1ZSk7XG5cbiAgICAvLyBGaXJzdCwgZW5zdXJlIHRoZSBzZWN0aW9uIHN0cnVjdHVyZSBleGlzdHNcbiAgICBjb25zdCBzZWN0aW9uU3RydWN0dXJlID0gdGhpcy5fZW5zdXJlU2VjdGlvblN0cnVjdHVyZUV4aXN0cyhcbiAgICAgIG5ld0l0ZW0sXG4gICAgICBkcm9wZG93bkluT2xkUGFuZWxcbiAgICApO1xuXG4gICAgLy8gVGhlbiBmaW5kIHRoZSBhcHByb3ByaWF0ZSB0YXJnZXQgbGlzdCB3aXRoaW4gdGhlIGV4aXN0aW5nL2NyZWF0ZWQgc2VjdGlvblxuICAgIGNvbnN0IHRhcmdldExpc3QgPSB0aGlzLl9maW5kVGFyZ2V0TGlzdEZvck5ld0l0ZW0oXG4gICAgICBkcm9wZG93bkluT2xkUGFuZWwsXG4gICAgICBuZXdJdGVtLFxuICAgICAgY2xvbmVkSXRlbVxuICAgICk7XG5cbiAgICBpZiAodGFyZ2V0TGlzdCkge1xuICAgICAgdGFyZ2V0TGlzdC5hcHBlbmRDaGlsZChjbG9uZWRJdGVtKTtcbiAgICB9IGVsc2UgaWYgKHNlY3Rpb25TdHJ1Y3R1cmUgJiYgc2VjdGlvblN0cnVjdHVyZS5saXN0KSB7XG4gICAgICAvLyBVc2UgdGhlIGxpc3QgZnJvbSB0aGUgbmV3bHkgY3JlYXRlZCBzZWN0aW9uIHN0cnVjdHVyZVxuICAgICAgc2VjdGlvblN0cnVjdHVyZS5saXN0LmFwcGVuZENoaWxkKGNsb25lZEl0ZW0pO1xuICAgIH0gZWxzZSB7XG4gICAgICAvLyBVbHRpbWF0ZSBmYWxsYmFjazogYXBwZW5kIHRvIHRoZSBtYWluIGRyb3Bkb3duXG4gICAgICBkcm9wZG93bkluT2xkUGFuZWwuYXBwZW5kQ2hpbGQoY2xvbmVkSXRlbSk7XG4gICAgfVxuXG4gICAgLy8gRW5zdXJlIGV2ZW50IGhhbmRsZXJzIGFyZSBhdHRhY2hlZFxuICAgIHRoaXMuX2F0dGFjaEV2ZW50SGFuZGxlcnNUb05ld0l0ZW0oY2xvbmVkSXRlbSwgZHJvcGRvd25Jbk9sZFBhbmVsKTtcbiAgfVxuXG4gIC8qKlxuICAgKiBIaWRlIGEgZmlsdGVyIGl0ZW0gd2l0aCBzbW9vdGggYW5pbWF0aW9uXG4gICAqL1xuICBfaGlkZUZpbHRlckl0ZW0oaXRlbSkge1xuICAgIGl0ZW0uc3R5bGUuZGlzcGxheSA9IFwibm9uZVwiO1xuICAgIGl0ZW0uY2xhc3NMaXN0LmFkZChcImZpbHRlci1pdGVtLWhpZGRlblwiKTtcbiAgfVxuXG4gIC8qKlxuICAgKiBTaG93IGEgZmlsdGVyIGl0ZW0gd2l0aCBzbW9vdGggYW5pbWF0aW9uXG4gICAqIFJlc3BlY3RzIGRpZmZlcmVudCBkaXNwbGF5IG1vZGVzIChzaWRlYmFyIHZzIG9mZmNhbnZhcylcbiAgICovXG4gIF9zaG93RmlsdGVySXRlbShpdGVtKSB7XG4gICAgaWYgKGl0ZW0uY2xhc3NMaXN0LmNvbnRhaW5zKFwiZmlsdGVyLWl0ZW0taGlkZGVuXCIpKSB7XG4gICAgICBpdGVtLmNsYXNzTGlzdC5yZW1vdmUoXCJmaWx0ZXItaXRlbS1oaWRkZW5cIik7XG5cbiAgICAgIC8vIERldGVybWluZSB0aGUgYXBwcm9wcmlhdGUgZGlzcGxheSBzdHlsZSBiYXNlZCBvbiBmaWx0ZXIgY29udGV4dFxuICAgICAgY29uc3QgZGlzcGxheVN0eWxlID0gdGhpcy5fZ2V0QXBwcm9wcmlhdGVEaXNwbGF5U3R5bGUoaXRlbSk7XG4gICAgICBpdGVtLnN0eWxlLmRpc3BsYXkgPSBkaXNwbGF5U3R5bGU7XG4gICAgfVxuICB9XG5cbiAgLyoqXG4gICAqIEdldCB0aGUgYXBwcm9wcmlhdGUgZGlzcGxheSBzdHlsZSBmb3IgYSBmaWx0ZXIgaXRlbSBiYXNlZCBvbiBpdHMgY29udGV4dFxuICAgKi9cbiAgX2dldEFwcHJvcHJpYXRlRGlzcGxheVN0eWxlKGl0ZW0pIHtcbiAgICAvLyBDaGVjayBpZiB3ZSdyZSBpbiBzaWRlYmFyIG1vZGUgKHVzZXMgY29sbGFwc2UvZC1ncmlkKVxuICAgIGlmIChpdGVtLmNsb3Nlc3QoXCIuZmlsdGVyLXBhbmVsLWl0ZW0uZC1ncmlkXCIpKSB7XG4gICAgICByZXR1cm4gXCJibG9ja1wiO1xuICAgIH1cblxuICAgIC8vIENoZWNrIGlmIHdlJ3JlIGluIG9mZmNhbnZhcy9kcm9wZG93biBtb2RlXG4gICAgaWYgKGl0ZW0uY2xvc2VzdChcIi5maWx0ZXItcGFuZWwtaXRlbS5kcm9wZG93blwiKSkge1xuICAgICAgcmV0dXJuIFwiYmxvY2tcIjtcbiAgICB9XG5cbiAgICAvLyBDaGVjayBmb3IgbGlzdCBpdGVtcyB3aGljaCBzaG91bGQgdXNlIGlubGluZS1ibG9ja1xuICAgIGlmIChpdGVtLmNsYXNzTGlzdC5jb250YWlucyhcImZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdC1pdGVtXCIpKSB7XG4gICAgICByZXR1cm4gXCJpbmxpbmUtYmxvY2tcIjtcbiAgICB9XG5cbiAgICAvLyBEZWZhdWx0IHRvIGJsb2NrIGRpc3BsYXlcbiAgICByZXR1cm4gXCJibG9ja1wiO1xuICB9XG5cbiAgLyoqXG4gICAqIENyZWF0ZSBhIG1hcCBvZiBmaWx0ZXIgaXRlbXMga2V5ZWQgYnkgdGhlaXIgaWRlbnRpZmllclxuICAgKi9cbiAgX2dldEZpbHRlckl0ZW1zTWFwKHBhbmVsKSB7XG4gICAgY29uc3QgaXRlbXMgPSB7fTtcbiAgICBjb25zdCBmaWx0ZXJJdGVtcyA9IHBhbmVsLnF1ZXJ5U2VsZWN0b3JBbGwoXCIuZmlsdGVyLXBhbmVsLWl0ZW1cIik7XG5cbiAgICBmaWx0ZXJJdGVtcy5mb3JFYWNoKChpdGVtKSA9PiB7XG4gICAgICAvLyBVc2UgZGF0YSBhdHRyaWJ1dGVzIG9yIG90aGVyIGlkZW50aWZpZXJzIHRvIGNyZWF0ZSB1bmlxdWUga2V5c1xuICAgICAgY29uc3Qga2V5ID0gdGhpcy5fZ2V0RmlsdGVySXRlbUtleShpdGVtKTtcbiAgICAgIGlmIChrZXkpIHtcbiAgICAgICAgaXRlbXNba2V5XSA9IGl0ZW07XG4gICAgICB9XG4gICAgfSk7XG5cbiAgICByZXR1cm4gaXRlbXM7XG4gIH1cblxuICAvKipcbiAgICogR2VuZXJhdGUgYSB1bmlxdWUga2V5IGZvciBhIGZpbHRlciBpdGVtXG4gICAqL1xuICBfZ2V0RmlsdGVySXRlbUtleShpdGVtKSB7XG4gICAgLy8gVHJ5IHRvIGZpbmQgYSB1bmlxdWUgaWRlbnRpZmllciBmb3IgdGhlIGZpbHRlciBpdGVtXG4gICAgY29uc3QgaW5wdXQgPSBpdGVtLnF1ZXJ5U2VsZWN0b3IoXCJpbnB1dFtuYW1lXVwiKTtcbiAgICBjb25zdCB0b2dnbGUgPSBpdGVtLnF1ZXJ5U2VsZWN0b3IoXCIuZmlsdGVyLXBhbmVsLWl0ZW0tdG9nZ2xlXCIpO1xuXG4gICAgaWYgKGlucHV0KSB7XG4gICAgICByZXR1cm4gYGlucHV0LSR7aW5wdXQubmFtZX1gO1xuICAgIH0gZWxzZSBpZiAodG9nZ2xlKSB7XG4gICAgICByZXR1cm4gYHRvZ2dsZS0ke3RvZ2dsZS50ZXh0Q29udGVudC50cmltKCl9YDtcbiAgICB9XG5cbiAgICAvLyBGYWxsYmFjayB0byBpbmRleCBpZiBubyB1bmlxdWUgaWRlbnRpZmllciBmb3VuZFxuICAgIHJldHVybiBudWxsO1xuICB9XG5cbiAgLyoqXG4gICAqIEdldCBjdXJyZW50IHN0YXRlcyBvZiBhbGwgaW5wdXRzIGluIHRoZSBwYW5lbFxuICAgKi9cbiAgX2dldElucHV0U3RhdGVzKHBhbmVsKSB7XG4gICAgY29uc3Qgc3RhdGVzID0gbmV3IE1hcCgpO1xuICAgIGNvbnN0IGlucHV0cyA9IHBhbmVsLnF1ZXJ5U2VsZWN0b3JBbGwoXCJpbnB1dFwiKTtcblxuICAgIGlucHV0cy5mb3JFYWNoKChpbnB1dCkgPT4ge1xuICAgICAgY29uc3Qga2V5ID1cbiAgICAgICAgaW5wdXQudHlwZSA9PT0gXCJjaGVja2JveFwiIHx8IGlucHV0LnR5cGUgPT09IFwicmFkaW9cIlxuICAgICAgICAgID8gaW5wdXQubmFtZSArIFwiX1wiICsgaW5wdXQudmFsdWVcbiAgICAgICAgICA6IGlucHV0Lm5hbWU7XG4gICAgICBzdGF0ZXMuc2V0KGtleSwge1xuICAgICAgICBjaGVja2VkOiBpbnB1dC5jaGVja2VkLFxuICAgICAgICB2YWx1ZTogaW5wdXQudmFsdWUsXG4gICAgICB9KTtcbiAgICB9KTtcblxuICAgIHJldHVybiBzdGF0ZXM7XG4gIH1cblxuICAvKipcbiAgICogUmVzdG9yZSBpbnB1dCBzdGF0ZXMgYWZ0ZXIgY29udGVudCB1cGRhdGVcbiAgICovXG4gIF9yZXN0b3JlSW5wdXRTdGF0ZXMocGFuZWwsIGlucHV0U3RhdGVzLCB0cmlnZ2VyRXZlbnRzID0gdHJ1ZSkge1xuICAgIGNvbnN0IGlucHV0cyA9IHBhbmVsLnF1ZXJ5U2VsZWN0b3JBbGwoXCJpbnB1dFwiKTtcblxuICAgIGlucHV0cy5mb3JFYWNoKChpbnB1dCkgPT4ge1xuICAgICAgY29uc3Qga2V5ID1cbiAgICAgICAgaW5wdXQudHlwZSA9PT0gXCJjaGVja2JveFwiIHx8IGlucHV0LnR5cGUgPT09IFwicmFkaW9cIlxuICAgICAgICAgID8gaW5wdXQubmFtZSArIFwiX1wiICsgaW5wdXQudmFsdWVcbiAgICAgICAgICA6IGlucHV0Lm5hbWU7XG5cbiAgICAgIGlmIChpbnB1dFN0YXRlcy5oYXMoa2V5KSkge1xuICAgICAgICBjb25zdCBzdGF0ZSA9IGlucHV0U3RhdGVzLmdldChrZXkpO1xuICAgICAgICBpZiAoaW5wdXQudHlwZSA9PT0gXCJjaGVja2JveFwiIHx8IGlucHV0LnR5cGUgPT09IFwicmFkaW9cIikge1xuICAgICAgICAgIGlucHV0LmNoZWNrZWQgPSBzdGF0ZS5jaGVja2VkO1xuICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgIGlucHV0LnZhbHVlID0gc3RhdGUudmFsdWU7XG4gICAgICAgIH1cblxuICAgICAgICAvLyBUcmlnZ2VyIGFwcHJvcHJpYXRlIGV2ZW50IG9ubHkgaWYgcmVxdWVzdGVkXG4gICAgICAgIGlmICh0cmlnZ2VyRXZlbnRzKSB7XG4gICAgICAgICAgaW5wdXQuZGlzcGF0Y2hFdmVudChcbiAgICAgICAgICAgIG5ldyBFdmVudChcbiAgICAgICAgICAgICAgaW5wdXQudHlwZSA9PT0gXCJjaGVja2JveFwiIHx8IGlucHV0LnR5cGUgPT09IFwicmFkaW9cIlxuICAgICAgICAgICAgICAgID8gXCJjaGFuZ2VcIlxuICAgICAgICAgICAgICAgIDogXCJpbnB1dFwiLFxuICAgICAgICAgICAgICB7IGJ1YmJsZXM6IHRydWUgfVxuICAgICAgICAgICAgKVxuICAgICAgICAgICk7XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICB9KTtcbiAgfVxuXG4gIC8qKlxuICAgKiBVcGRhdGUgdGhlIGNvbnRlbnQgb2YgYW4gZXhpc3RpbmcgZmlsdGVyIGl0ZW0gaWYgbmVlZGVkXG4gICAqL1xuICBfdXBkYXRlRmlsdGVySXRlbUNvbnRlbnQob2xkSXRlbSwgbmV3SXRlbSkge1xuICAgIC8vIENvbXBhcmUgdGhlIG9wdGlvbnMvY29udGVudCB3aXRoaW4gdGhlIGZpbHRlciBpdGVtXG4gICAgY29uc3Qgb2xkT3B0aW9ucyA9IG9sZEl0ZW0ucXVlcnlTZWxlY3RvckFsbChcbiAgICAgIFwiLmZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdC1pdGVtXCJcbiAgICApO1xuICAgIGNvbnN0IG5ld09wdGlvbnMgPSBuZXdJdGVtLnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICBcIi5maWx0ZXItbXVsdGktc2VsZWN0LWxpc3QtaXRlbVwiXG4gICAgKTtcblxuICAgIC8vIElmIHRoZSBudW1iZXIgb2Ygb3B0aW9ucyBoYXMgY2hhbmdlZCwgdXBkYXRlIHRoZSBjb250ZW50XG4gICAgaWYgKG9sZE9wdGlvbnMubGVuZ3RoICE9PSBuZXdPcHRpb25zLmxlbmd0aCkge1xuICAgICAgY29uc3QgZHJvcGRvd24gPSBvbGRJdGVtLnF1ZXJ5U2VsZWN0b3IoXCIuZmlsdGVyLXBhbmVsLWl0ZW0tZHJvcGRvd25cIik7XG4gICAgICBjb25zdCBuZXdEcm9wZG93biA9IG5ld0l0ZW0ucXVlcnlTZWxlY3RvcihcIi5maWx0ZXItcGFuZWwtaXRlbS1kcm9wZG93blwiKTtcblxuICAgICAgaWYgKGRyb3Bkb3duICYmIG5ld0Ryb3Bkb3duKSB7XG4gICAgICAgIC8vIFN0b3JlIGN1cnJlbnQgaW5wdXQgc3RhdGVzIGJlZm9yZSB1cGRhdGluZyBjb250ZW50XG4gICAgICAgIGNvbnN0IGlucHV0U3RhdGVzID0gdGhpcy5fZ2V0SW5wdXRTdGF0ZXMoZHJvcGRvd24pO1xuXG4gICAgICAgIC8vIEluc3RlYWQgb2YgcmVwbGFjaW5nIGlubmVySFRNTCwgbWVyZ2UgdGhlIGNvbnRlbnQgd2hpbGUgcHJlc2VydmluZyBoYW5kbGVyc1xuICAgICAgICB0aGlzLl9tZXJnZURyb3Bkb3duQ29udGVudChkcm9wZG93biwgbmV3RHJvcGRvd24pO1xuXG4gICAgICAgIC8vIFJlc3RvcmUgc3RhdGVzIHdpdGhvdXQgdHJpZ2dlcmluZyBldmVudHNcbiAgICAgICAgdGhpcy5fcmVzdG9yZUlucHV0U3RhdGVzKGRyb3Bkb3duLCBpbnB1dFN0YXRlcywgZmFsc2UpO1xuICAgICAgfVxuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBNZXJnZSBkcm9wZG93biBjb250ZW50IHdoaWxlIHByZXNlcnZpbmcgZXhpc3RpbmcgZXZlbnQgaGFuZGxlcnNcbiAgICovXG4gIF9tZXJnZURyb3Bkb3duQ29udGVudChvbGREcm9wZG93biwgbmV3RHJvcGRvd24pIHtcbiAgICBjb25zdCBvbGRJdGVtcyA9IHRoaXMuX2dldERyb3Bkb3duSXRlbXNNYXAob2xkRHJvcGRvd24pO1xuICAgIGNvbnN0IG5ld0l0ZW1zID0gdGhpcy5fZ2V0RHJvcGRvd25JdGVtc01hcChuZXdEcm9wZG93bik7XG5cbiAgICAvLyBDcmVhdGUgYSB0ZW1wb3JhcnkgY29udGFpbmVyIHRvIGhvbGQgdGhlIGNvcnJlY3RseSBvcmRlcmVkIGl0ZW1zXG4gICAgY29uc3QgdGVtcENvbnRhaW5lciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIik7XG5cbiAgICAvLyBQcm9jZXNzIGl0ZW1zIGluIHRoZSBjb3JyZWN0IG9yZGVyIGZyb20gdGhlIHNlcnZlciByZXNwb25zZVxuICAgIGNvbnN0IG5ld0l0ZW1FbGVtZW50cyA9IG5ld0Ryb3Bkb3duLnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICBcIi5maWx0ZXItbXVsdGktc2VsZWN0LWxpc3QtaXRlbVwiXG4gICAgKTtcbiAgICBuZXdJdGVtRWxlbWVudHMuZm9yRWFjaCgobmV3SXRlbUVsZW1lbnQsIGluZGV4KSA9PiB7XG4gICAgICBjb25zdCBrZXkgPSB0aGlzLl9nZXREcm9wZG93bkl0ZW1LZXkobmV3SXRlbUVsZW1lbnQpO1xuXG4gICAgICBpZiAob2xkSXRlbXNba2V5XSkge1xuICAgICAgICAvLyBJdGVtIGV4aXN0cywgcmV1c2UgdGhlIG9sZCBET00gZWxlbWVudCBidXQgdXBkYXRlIGl0cyBjb250ZW50XG4gICAgICAgIGNvbnN0IG9sZEl0ZW1FbGVtZW50ID0gb2xkSXRlbXNba2V5XTtcblxuICAgICAgICAvLyBVcGRhdGUgY29udGVudCBpZiBuZWVkZWRcbiAgICAgICAgY29uc3Qgb2xkTGFiZWwgPSBvbGRJdGVtRWxlbWVudC5xdWVyeVNlbGVjdG9yKFwibGFiZWxcIik7XG4gICAgICAgIGNvbnN0IG5ld0xhYmVsID0gbmV3SXRlbUVsZW1lbnQucXVlcnlTZWxlY3RvcihcImxhYmVsXCIpO1xuXG4gICAgICAgIGlmIChcbiAgICAgICAgICBvbGRMYWJlbCAmJlxuICAgICAgICAgIG5ld0xhYmVsICYmXG4gICAgICAgICAgb2xkTGFiZWwudGV4dENvbnRlbnQgIT09IG5ld0xhYmVsLnRleHRDb250ZW50XG4gICAgICAgICkge1xuICAgICAgICAgIG9sZExhYmVsLnRleHRDb250ZW50ID0gbmV3TGFiZWwudGV4dENvbnRlbnQ7XG4gICAgICAgIH1cblxuICAgICAgICAvLyBVcGRhdGUgaW5wdXQgYXR0cmlidXRlcyBpZiB0aGV5J3ZlIGNoYW5nZWRcbiAgICAgICAgY29uc3Qgb2xkSW5wdXQgPSBvbGRJdGVtRWxlbWVudC5xdWVyeVNlbGVjdG9yKFwiaW5wdXRcIik7XG4gICAgICAgIGNvbnN0IG5ld0lucHV0ID0gbmV3SXRlbUVsZW1lbnQucXVlcnlTZWxlY3RvcihcImlucHV0XCIpO1xuXG4gICAgICAgIGlmIChvbGRJbnB1dCAmJiBuZXdJbnB1dCkge1xuICAgICAgICAgIFtcInZhbHVlXCIsIFwibmFtZVwiLCBcImRhdGEtY291bnRcIl0uZm9yRWFjaCgoYXR0cikgPT4ge1xuICAgICAgICAgICAgaWYgKG9sZElucHV0LmdldEF0dHJpYnV0ZShhdHRyKSAhPT0gbmV3SW5wdXQuZ2V0QXR0cmlidXRlKGF0dHIpKSB7XG4gICAgICAgICAgICAgIG9sZElucHV0LnNldEF0dHJpYnV0ZShhdHRyLCBuZXdJbnB1dC5nZXRBdHRyaWJ1dGUoYXR0cikgfHwgXCJcIik7XG4gICAgICAgICAgICB9XG4gICAgICAgICAgfSk7XG4gICAgICAgIH1cblxuICAgICAgICAvLyBNb3ZlIHRoZSBleGlzdGluZyBpdGVtIHRvIHRoZSBjb3JyZWN0IHBvc2l0aW9uIGluIHRlbXAgY29udGFpbmVyXG4gICAgICAgIHRlbXBDb250YWluZXIuYXBwZW5kQ2hpbGQob2xkSXRlbUVsZW1lbnQpO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgLy8gTmV3IGl0ZW0sIGNsb25lIGFuZCBhZGQgaXRcbiAgICAgICAgY29uc3QgY2xvbmVkSXRlbSA9IG5ld0l0ZW1FbGVtZW50LmNsb25lTm9kZSh0cnVlKTtcbiAgICAgICAgdGVtcENvbnRhaW5lci5hcHBlbmRDaGlsZChjbG9uZWRJdGVtKTtcblxuICAgICAgICAvLyBFbnN1cmUgZXZlbnQgaGFuZGxlcnMgYXJlIGF0dGFjaGVkIHRvIHRoZSBuZXcgaXRlbVxuICAgICAgICB0aGlzLl9hdHRhY2hFdmVudEhhbmRsZXJzVG9OZXdJdGVtKGNsb25lZEl0ZW0sIG9sZERyb3Bkb3duKTtcbiAgICAgIH1cbiAgICB9KTtcblxuICAgIC8vIENsZWFyIHRoZSBvbGQgZHJvcGRvd24gYW5kIG1vdmUgYWxsIGl0ZW1zIGZyb20gdGVtcCBjb250YWluZXJcbiAgICBvbGREcm9wZG93bi5pbm5lckhUTUwgPSBcIlwiO1xuICAgIHdoaWxlICh0ZW1wQ29udGFpbmVyLmZpcnN0Q2hpbGQpIHtcbiAgICAgIG9sZERyb3Bkb3duLmFwcGVuZENoaWxkKHRlbXBDb250YWluZXIuZmlyc3RDaGlsZCk7XG4gICAgfVxuICB9XG5cbiAgLyoqXG4gICAqIENyZWF0ZSBhIG1hcCBvZiBkcm9wZG93biBpdGVtcyBrZXllZCBieSB0aGVpciBpZGVudGlmaWVyXG4gICAqL1xuICBfZ2V0RHJvcGRvd25JdGVtc01hcChkcm9wZG93bikge1xuICAgIGNvbnN0IGl0ZW1zID0ge307XG4gICAgY29uc3QgbGlzdEl0ZW1zID0gZHJvcGRvd24ucXVlcnlTZWxlY3RvckFsbChcbiAgICAgIFwiLmZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdC1pdGVtXCJcbiAgICApO1xuXG4gICAgbGlzdEl0ZW1zLmZvckVhY2goKGl0ZW0pID0+IHtcbiAgICAgIGNvbnN0IGtleSA9IHRoaXMuX2dldERyb3Bkb3duSXRlbUtleShpdGVtKTtcbiAgICAgIGlmIChrZXkpIHtcbiAgICAgICAgaXRlbXNba2V5XSA9IGl0ZW07XG4gICAgICB9XG4gICAgfSk7XG5cbiAgICByZXR1cm4gaXRlbXM7XG4gIH1cblxuICAvKipcbiAgICogR2VuZXJhdGUgYSB1bmlxdWUga2V5IGZvciBhIGRyb3Bkb3duIGl0ZW1cbiAgICovXG4gIF9nZXREcm9wZG93bkl0ZW1LZXkoaXRlbSkge1xuICAgIGNvbnN0IGlucHV0ID0gaXRlbS5xdWVyeVNlbGVjdG9yKFwiaW5wdXRcIik7XG4gICAgaWYgKGlucHV0KSB7XG4gICAgICAvLyBQcmVmZXIgZGF0YS1sYWJlbCBpZiBhdmFpbGFibGUsIG90aGVyd2lzZSB1c2UgdmFsdWVcbiAgICAgIGNvbnN0IGlkZW50aWZpZXIgPSBpbnB1dC5nZXRBdHRyaWJ1dGUoXCJkYXRhLWxhYmVsXCIpIHx8IGlucHV0LnZhbHVlO1xuICAgICAgaWYgKGlkZW50aWZpZXIgJiYgaW5wdXQubmFtZSkge1xuICAgICAgICByZXR1cm4gYCR7aW5wdXQubmFtZX0tJHtpZGVudGlmaWVyfWA7XG4gICAgICB9XG4gICAgfVxuXG4gICAgY29uc3QgbGFiZWwgPSBpdGVtLnF1ZXJ5U2VsZWN0b3IoXCJsYWJlbFwiKTtcbiAgICBpZiAobGFiZWwpIHtcbiAgICAgIHJldHVybiBgbGFiZWwtJHtsYWJlbC50ZXh0Q29udGVudC50cmltKCl9YDtcbiAgICB9XG5cbiAgICByZXR1cm4gbnVsbDtcbiAgfVxuXG4gIC8qKlxuICAgKiBBdHRhY2ggZXZlbnQgaGFuZGxlcnMgdG8gbmV3bHkgYWRkZWQgZmlsdGVyIGl0ZW1zXG4gICAqL1xuICBfYXR0YWNoRXZlbnRIYW5kbGVyc1RvTmV3SXRlbShuZXdJdGVtLCBkcm9wZG93bikge1xuICAgIC8vIEZpbmQgYWxsIGlucHV0cyBpbiB0aGUgbmV3IGl0ZW0gdGhhdCBuZWVkIGV2ZW50IGhhbmRsZXJzXG4gICAgY29uc3QgaW5wdXRzID0gbmV3SXRlbS5xdWVyeVNlbGVjdG9yQWxsKFxuICAgICAgJ2lucHV0W3R5cGU9XCJjaGVja2JveFwiXSwgaW5wdXRbdHlwZT1cInJhZGlvXCJdJ1xuICAgICk7XG5cbiAgICBpbnB1dHMuZm9yRWFjaCgoaW5wdXQsIGluZGV4KSA9PiB7XG4gICAgICAvLyBBZGQgY2hhbmdlIGV2ZW50IGxpc3RlbmVyIHRoYXQgY2FsbHMgdGhlIGZpbHRlciBjaGFuZ2UgaGFuZGxlclxuICAgICAgaW5wdXQuYWRkRXZlbnRMaXN0ZW5lcihcImNoYW5nZVwiLCAoZXZlbnQpID0+IHtcbiAgICAgICAgdGhpcy5fb25DaGFuZ2VGaWx0ZXIoZXZlbnQpO1xuICAgICAgfSk7XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogSGFuZGxlIGZpbHRlciBjaGFuZ2UgZXZlbnRzIGZvciBkeW5hbWljYWxseSBhZGRlZCBpdGVtc1xuICAgKi9cbiAgX29uQ2hhbmdlRmlsdGVyKGV2ZW50KSB7XG4gICAgLy8gQ2hlY2sgaWYgd2UgaGF2ZSBhY2Nlc3MgdG8gdGhlIG1haW4gbGlzdGluZyBwbHVnaW5cbiAgICBpZiAodGhpcy5saXN0aW5nICYmIHR5cGVvZiB0aGlzLmxpc3RpbmcuY2hhbmdlTGlzdGluZyA9PT0gXCJmdW5jdGlvblwiKSB7XG4gICAgICB0aGlzLmxpc3RpbmcuY2hhbmdlTGlzdGluZyh0cnVlLCB7IHA6IDEgfSk7XG4gICAgfSBlbHNlIHtcbiAgICAgIC8vIFRyeSB0byBmaW5kIHRoZSBsaXN0aW5nIHBsdWdpbiBpbnN0YW5jZVxuICAgICAgY29uc3QgbGlzdGluZ0VsZW1lbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiW2RhdGEtbGlzdGluZ11cIik7XG4gICAgICBpZiAobGlzdGluZ0VsZW1lbnQpIHtcbiAgICAgICAgY29uc3QgbGlzdGluZ1BsdWdpbiA9IHdpbmRvdy5QbHVnaW5NYW5hZ2VyLmdldFBsdWdpbkluc3RhbmNlRnJvbUVsZW1lbnQoXG4gICAgICAgICAgbGlzdGluZ0VsZW1lbnQsXG4gICAgICAgICAgXCJMaXN0aW5nXCJcbiAgICAgICAgKTtcbiAgICAgICAgaWYgKFxuICAgICAgICAgIGxpc3RpbmdQbHVnaW4gJiZcbiAgICAgICAgICB0eXBlb2YgbGlzdGluZ1BsdWdpbi5jaGFuZ2VMaXN0aW5nID09PSBcImZ1bmN0aW9uXCJcbiAgICAgICAgKSB7XG4gICAgICAgICAgbGlzdGluZ1BsdWdpbi5jaGFuZ2VMaXN0aW5nKHRydWUsIHsgcDogMSB9KTtcbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICBjb25zb2xlLndhcm4oXG4gICAgICAgICAgICBcIkxpc3RpbmdMaXN0ZW5lcjogQ291bGQgbm90IGZpbmQgbGlzdGluZyBwbHVnaW4gb3IgY2hhbmdlTGlzdGluZyBtZXRob2RcIlxuICAgICAgICAgICk7XG4gICAgICAgIH1cbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIGNvbnNvbGUud2FybihcIkxpc3RpbmdMaXN0ZW5lcjogQ291bGQgbm90IGZpbmQgbGlzdGluZyBlbGVtZW50XCIpO1xuICAgICAgfVxuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBSZWluaXRpYWxpemUgcGx1Z2lucyBvbmx5IGZvciBuZXcgb3IgbW9kaWZpZWQgZWxlbWVudHNcbiAgICovXG4gIF9yZWluaXRpYWxpemVQbHVnaW5zU2VsZWN0aXZlbHkocGFuZWwpIHtcbiAgICAvLyBPbmx5IHJlaW5pdGlhbGl6ZSBwbHVnaW5zIGZvciBlbGVtZW50cyB0aGF0IHdlcmUgbmV3bHkgYWRkZWRcbiAgICBjb25zdCBuZXdFbGVtZW50cyA9IHBhbmVsLnF1ZXJ5U2VsZWN0b3JBbGwoJ1tkYXRhLW5lZWRzLWluaXQ9XCJ0cnVlXCJdJyk7XG5cbiAgICBuZXdFbGVtZW50cy5mb3JFYWNoKChlbGVtZW50KSA9PiB7XG4gICAgICB0cnkge1xuICAgICAgICAvLyBJbml0aWFsaXplIHBsdWdpbnMgZm9yIHRoZSBuZXcgZWxlbWVudCBhbmQgaXRzIGNoaWxkcmVuXG4gICAgICAgIGlmIChcbiAgICAgICAgICBlbGVtZW50LmRhdGFzZXQucGx1Z2luTmFtZSAmJlxuICAgICAgICAgIHR5cGVvZiBlbGVtZW50LmRhdGFzZXQucGx1Z2luTmFtZSA9PT0gXCJzdHJpbmdcIlxuICAgICAgICApIHtcbiAgICAgICAgICB3aW5kb3cuUGx1Z2luTWFuYWdlci5pbml0aWFsaXplUGx1Z2luKFxuICAgICAgICAgICAgZWxlbWVudCxcbiAgICAgICAgICAgIGVsZW1lbnQuZGF0YXNldC5wbHVnaW5OYW1lXG4gICAgICAgICAgKTtcbiAgICAgICAgfVxuXG4gICAgICAgIC8vIEFsc28gaW5pdGlhbGl6ZSBwbHVnaW5zIGZvciBjaGlsZCBlbGVtZW50cyB0aGF0IG1pZ2h0IG5lZWQgaXRcbiAgICAgICAgY29uc3QgY2hpbGRFbGVtZW50cyA9IGVsZW1lbnQucXVlcnlTZWxlY3RvckFsbChcIltkYXRhLXBsdWdpbi1uYW1lXVwiKTtcbiAgICAgICAgY2hpbGRFbGVtZW50cy5mb3JFYWNoKChjaGlsZCkgPT4ge1xuICAgICAgICAgIGlmIChcbiAgICAgICAgICAgIGNoaWxkLmRhdGFzZXQucGx1Z2luTmFtZSAmJlxuICAgICAgICAgICAgdHlwZW9mIGNoaWxkLmRhdGFzZXQucGx1Z2luTmFtZSA9PT0gXCJzdHJpbmdcIlxuICAgICAgICAgICkge1xuICAgICAgICAgICAgd2luZG93LlBsdWdpbk1hbmFnZXIuaW5pdGlhbGl6ZVBsdWdpbihcbiAgICAgICAgICAgICAgY2hpbGQsXG4gICAgICAgICAgICAgIGNoaWxkLmRhdGFzZXQucGx1Z2luTmFtZVxuICAgICAgICAgICAgKTtcbiAgICAgICAgICB9XG4gICAgICAgIH0pO1xuICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICBjb25zb2xlLndhcm4oXG4gICAgICAgICAgXCJMaXN0aW5nTGlzdGVuZXI6IEZhaWxlZCB0byByZWluaXRpYWxpemUgcGx1Z2luIGZvciBlbGVtZW50OlwiLFxuICAgICAgICAgIGVsZW1lbnQsXG4gICAgICAgICAgZVxuICAgICAgICApO1xuICAgICAgfVxuXG4gICAgICAvLyBSZW1vdmUgdGhlIGluaXRpYWxpemF0aW9uIGZsYWdcbiAgICAgIGVsZW1lbnQucmVtb3ZlQXR0cmlidXRlKFwiZGF0YS1uZWVkcy1pbml0XCIpO1xuICAgIH0pO1xuICB9XG5cbiAgLyoqXG4gICAqIEJ1aWxkIGZpbHRlciBsYWJlbHMgYWZ0ZXIgY29udGVudCB1cGRhdGVcbiAgICovXG4gIF9idWlsZExhYmVscygpIHtcbiAgICAvLyBjb25zdCBmaWx0ZXJQYW5lbEl0ZW1zID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5maWx0ZXItcGFuZWwtaXRlbVwiKTtcbiAgICAvLyBmaWx0ZXJQYW5lbEl0ZW1zLmZvckVhY2goKGl0ZW0pID0+IHtcbiAgICAvLyAgIGNvbnN0IGNoZWNrZWRJbnB1dHMgPSBpdGVtLnF1ZXJ5U2VsZWN0b3JBbGwoXCJpbnB1dDpjaGVja2VkXCIpO1xuICAgIC8vICAgY29uc3QgY291bnRFbGVtZW50ID0gaXRlbS5xdWVyeVNlbGVjdG9yKFwiLmZpbHRlci1tdWx0aS1zZWxlY3QtY291bnRcIik7XG4gICAgLy8gICBjb25zdCB0b2dnbGVFbGVtZW50ID0gaXRlbS5xdWVyeVNlbGVjdG9yKFwiLmZpbHRlci1wYW5lbC1pdGVtLXRvZ2dsZVwiKTtcbiAgICAvLyAgIGlmIChjb3VudEVsZW1lbnQgJiYgY2hlY2tlZElucHV0cy5sZW5ndGggPiAwKSB7XG4gICAgLy8gICAgIC8vIFVwZGF0ZSBjb3VudCBkaXNwbGF5XG4gICAgLy8gICAgIGNvdW50RWxlbWVudC50ZXh0Q29udGVudCA9IGNoZWNrZWRJbnB1dHMubGVuZ3RoO1xuICAgIC8vICAgICBjb3VudEVsZW1lbnQuc3R5bGUuZGlzcGxheSA9IFwiaW5saW5lXCI7XG4gICAgLy8gICAgIC8vIFVwZGF0ZSB0b2dnbGUgdGV4dCBvciBhZGQgYWN0aXZlIGNsYXNzXG4gICAgLy8gICAgIGlmICh0b2dnbGVFbGVtZW50KSB7XG4gICAgLy8gICAgICAgdG9nZ2xlRWxlbWVudC5jbGFzc0xpc3QuYWRkKFwiaXMtYWN0aXZlXCIpO1xuICAgIC8vICAgICB9XG4gICAgLy8gICB9IGVsc2UgaWYgKGNvdW50RWxlbWVudCkge1xuICAgIC8vICAgICAvLyBIaWRlIGNvdW50IHdoZW4gbm8gZmlsdGVycyBzZWxlY3RlZFxuICAgIC8vICAgICBjb3VudEVsZW1lbnQuc3R5bGUuZGlzcGxheSA9IFwibm9uZVwiO1xuICAgIC8vICAgICBpZiAodG9nZ2xlRWxlbWVudCkge1xuICAgIC8vICAgICAgIHRvZ2dsZUVsZW1lbnQuY2xhc3NMaXN0LnJlbW92ZShcImlzLWFjdGl2ZVwiKTtcbiAgICAvLyAgICAgfVxuICAgIC8vICAgfVxuICAgIC8vIH0pO1xuICB9XG5cbiAgLyoqXG4gICAqIFJlLXJlZ2lzdGVyIGV4aXN0aW5nIGZpbHRlciBwbHVnaW5zIHdpdGggdGhlIG1haW4gbGlzdGluZyBwbHVnaW5cbiAgICogVGhpcyBpcyBuZWVkZWQgYmVjYXVzZSB0aGUgcmVnaXN0cnkgZ2V0cyBjbGVhcmVkIGR1cmluZyB1cGRhdGVzXG4gICAqL1xuICBfcmVyZWdpc3RlckV4aXN0aW5nRmlsdGVycyhwYW5lbCkge1xuICAgIC8vIEZpbmQgdGhlIG1haW4gbGlzdGluZyBwbHVnaW4gaW5zdGFuY2VcbiAgICBjb25zdCBsaXN0aW5nRWxlbWVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCJbZGF0YS1saXN0aW5nXVwiKTtcbiAgICBpZiAoIWxpc3RpbmdFbGVtZW50KSByZXR1cm47XG5cbiAgICBjb25zdCBsaXN0aW5nUGx1Z2luID0gd2luZG93LlBsdWdpbk1hbmFnZXIuZ2V0UGx1Z2luSW5zdGFuY2VGcm9tRWxlbWVudChcbiAgICAgIGxpc3RpbmdFbGVtZW50LFxuICAgICAgXCJMaXN0aW5nXCJcbiAgICApO1xuICAgIGlmICghbGlzdGluZ1BsdWdpbiB8fCAhbGlzdGluZ1BsdWdpbi5yZWdpc3RlckZpbHRlcikgcmV0dXJuO1xuXG4gICAgLy8gRmluZCBhbGwgZmlsdGVyIGVsZW1lbnRzIGFuZCB0aGVpciBhc3NvY2lhdGVkIHBsdWdpbnNcbiAgICBjb25zdCBmaWx0ZXJFbGVtZW50cyA9IHBhbmVsLnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICBcIltkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3RdLCBbZGF0YS1maWx0ZXItcmFuZ2Utc2xpZGVyXSwgW2RhdGEtZmlsdGVyLWJvb2xlYW5dXCJcbiAgICApO1xuXG4gICAgZmlsdGVyRWxlbWVudHMuZm9yRWFjaCgoZWxlbWVudCkgPT4ge1xuICAgICAgLy8gQ2hlY2sgaWYgdGhpcyBlbGVtZW50IG5lZWRzIHJlaW5pdGlhbGl6YXRpb24gZHVlIHRvIG5ldyBjb250ZW50XG4gICAgICBjb25zdCBuZWVkc1JlaW5pdCA9IGVsZW1lbnQuaGFzQXR0cmlidXRlKFwiZGF0YS1uZWVkcy1yZWluaXRcIik7XG5cbiAgICAgIC8vIFRyeSB0byBnZXQgdGhlIHBsdWdpbiBpbnN0YW5jZSBmb3IgZWFjaCBmaWx0ZXIgZWxlbWVudFxuICAgICAgY29uc3QgcGx1Z2luTmFtZXMgPSBbXG4gICAgICAgIFwiRmlsdGVyTXVsdGlTZWxlY3RcIixcbiAgICAgICAgXCJGaWx0ZXJSYW5nZVNsaWRlclwiLFxuICAgICAgICBcIkZpbHRlckJvb2xlYW5cIixcbiAgICAgIF07XG5cbiAgICAgIGZvciAoY29uc3QgcGx1Z2luTmFtZSBvZiBwbHVnaW5OYW1lcykge1xuICAgICAgICB0cnkge1xuICAgICAgICAgIGNvbnN0IGZpbHRlclBsdWdpbiA9XG4gICAgICAgICAgICB3aW5kb3cuUGx1Z2luTWFuYWdlci5nZXRQbHVnaW5JbnN0YW5jZUZyb21FbGVtZW50KFxuICAgICAgICAgICAgICBlbGVtZW50LFxuICAgICAgICAgICAgICBwbHVnaW5OYW1lXG4gICAgICAgICAgICApO1xuICAgICAgICAgIGlmIChmaWx0ZXJQbHVnaW4pIHtcbiAgICAgICAgICAgIC8vIFJlLXJlZ2lzdGVyIHRoaXMgZmlsdGVyIHBsdWdpbiB3aXRoIHRoZSBtYWluIGxpc3RpbmdcbiAgICAgICAgICAgIGlmICh0eXBlb2YgbGlzdGluZ1BsdWdpbi5yZWdpc3RlckZpbHRlciA9PT0gXCJmdW5jdGlvblwiKSB7XG4gICAgICAgICAgICAgIGxpc3RpbmdQbHVnaW4ucmVnaXN0ZXJGaWx0ZXIoZmlsdGVyUGx1Z2luKTtcbiAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgLy8gU2tpcCBhdXRvbWF0aWMgcmVpbml0aWFsaXphdGlvbiB0byBhdm9pZCBjb25mbGljdHNcbiAgICAgICAgICAgIC8vIE91ciBtYW51YWwgZXZlbnQgaGFuZGxlcnMgc2hvdWxkIGJlIHN1ZmZpY2llbnRcbiAgICAgICAgICAgIGlmIChuZWVkc1JlaW5pdCkge1xuICAgICAgICAgICAgICBlbGVtZW50LnJlbW92ZUF0dHJpYnV0ZShcImRhdGEtbmVlZHMtcmVpbml0XCIpO1xuICAgICAgICAgICAgfVxuICAgICAgICAgICAgYnJlYWs7XG4gICAgICAgICAgfVxuICAgICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgICAgY29uc29sZS53YXJuKFxuICAgICAgICAgICAgYExpc3RpbmdMaXN0ZW5lcjogRXJyb3IgcHJvY2Vzc2luZyAke3BsdWdpbk5hbWV9IHBsdWdpbjpgLFxuICAgICAgICAgICAgZVxuICAgICAgICAgICk7XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICB9KTtcbiAgfVxuXG4gIC8qKlxuICAgKiBDcmVhdGUgbWlzc2luZyBzZWN0aW9uIHN0cnVjdHVyZSBmb3IgYSBuZXcgZmlsdGVyIGl0ZW1cbiAgICovXG4gIF9jcmVhdGVNaXNzaW5nU2VjdGlvblN0cnVjdHVyZShuZXdJdGVtLCBkcm9wZG93bkluT2xkUGFuZWwpIHtcbiAgICAvLyBGaW5kIHRoZSBzZWN0aW9uIHN0cnVjdHVyZSB0aGF0IHRoaXMgaXRlbSBiZWxvbmdzIHRvIGluIHRoZSBuZXcgcGFuZWxcbiAgICBjb25zdCBuZXdJdGVtUGFyZW50TGlzdCA9IG5ld0l0ZW0uY2xvc2VzdChcInVsLmZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdFwiKTtcbiAgICBpZiAoIW5ld0l0ZW1QYXJlbnRMaXN0KSB7XG4gICAgICByZXR1cm4geyBsaXN0OiBudWxsIH07XG4gICAgfVxuXG4gICAgLy8gRmluZCB0aGUgbmV3IHBhbmVsIGRyb3Bkb3duIHRoYXQgY29udGFpbnMgdGhpcyBzdHJ1Y3R1cmVcbiAgICBjb25zdCBuZXdEcm9wZG93biA9IG5ld0l0ZW0uY2xvc2VzdChcIi5maWx0ZXItcGFuZWwtaXRlbS1kcm9wZG93blwiKTtcbiAgICBpZiAoIW5ld0Ryb3Bkb3duKSB7XG4gICAgICByZXR1cm4geyBsaXN0OiBudWxsIH07XG4gICAgfVxuXG4gICAgLy8gRmlyc3QsIGVuc3VyZSB3ZSBoYXZlIHRoZSBjb21wbGV0ZSB3cmFwcGVyIHN0cnVjdHVyZVxuICAgIGNvbnN0IHRhcmdldENvbnRhaW5lciA9IHRoaXMuX2Vuc3VyZVdyYXBwZXJTdHJ1Y3R1cmVFeGlzdHMoXG4gICAgICBuZXdEcm9wZG93bixcbiAgICAgIGRyb3Bkb3duSW5PbGRQYW5lbFxuICAgICk7XG5cbiAgICAvLyBGaW5kIGFsbCBlbGVtZW50cyB0aGF0IGNvbWUgYmVmb3JlIHRoaXMgbGlzdCBpbiB0aGUgbmV3IHN0cnVjdHVyZVxuICAgIGNvbnN0IGVsZW1lbnRzVG9DbG9uZSA9IFtdO1xuICAgIGxldCBjdXJyZW50RWxlbWVudCA9IG5ld0l0ZW1QYXJlbnRMaXN0LnByZXZpb3VzRWxlbWVudFNpYmxpbmc7XG5cbiAgICAvLyBXYWxrIGJhY2t3YXJkcyB0byBjb2xsZWN0IGFsbCBzdHJ1Y3R1cmFsIGVsZW1lbnRzIHRoYXQgYmVsb25nIHRvIHRoaXMgc2VjdGlvblxuICAgIHdoaWxlIChjdXJyZW50RWxlbWVudCkge1xuICAgICAgLy8gQ2hlY2sgaWYgdGhpcyBpcyBhIHN0cnVjdHVyYWwgZWxlbWVudCAobm90IGEgbGlzdCBpdGVtKVxuICAgICAgaWYgKFxuICAgICAgICBjdXJyZW50RWxlbWVudC50YWdOYW1lICYmXG4gICAgICAgICFjdXJyZW50RWxlbWVudC5jbGFzc0xpc3QuY29udGFpbnMoXCJmaWx0ZXItbXVsdGktc2VsZWN0LWxpc3QtaXRlbVwiKVxuICAgICAgKSB7XG4gICAgICAgIC8vIENoZWNrIGlmIHRoaXMgZWxlbWVudCBpcyBhbHJlYWR5IGluIHRoZSB0YXJnZXQgY29udGFpbmVyXG4gICAgICAgIGNvbnN0IHNpZ25hdHVyZSA9XG4gICAgICAgICAgdGhpcy5fY3JlYXRlRWxlbWVudFNpZ25hdHVyZUZyb21FbGVtZW50KGN1cnJlbnRFbGVtZW50KTtcbiAgICAgICAgaWYgKCF0aGlzLl9lbGVtZW50RXhpc3RzSW5Db250YWluZXIodGFyZ2V0Q29udGFpbmVyLCBzaWduYXR1cmUpKSB7XG4gICAgICAgICAgZWxlbWVudHNUb0Nsb25lLnVuc2hpZnQoY3VycmVudEVsZW1lbnQpOyAvLyBBZGQgdG8gYmVnaW5uaW5nIHRvIG1haW50YWluIG9yZGVyXG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgLy8gSWYgd2UgZm91bmQgYW4gZXhpc3RpbmcgZWxlbWVudCwgd2UndmUgcmVhY2hlZCB0aGUgYm91bmRhcnkgb2YgdGhpcyBzZWN0aW9uXG4gICAgICAgICAgYnJlYWs7XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICAgIGN1cnJlbnRFbGVtZW50ID0gY3VycmVudEVsZW1lbnQucHJldmlvdXNFbGVtZW50U2libGluZztcbiAgICB9XG5cbiAgICAvLyBGaW5kIHRoZSBpbnNlcnRpb24gcG9pbnQgaW4gdGhlIHRhcmdldCBjb250YWluZXJcbiAgICBjb25zdCBpbnNlcnRpb25Qb2ludCA9IHRoaXMuX2ZpbmRTZWN0aW9uSW5zZXJ0aW9uUG9pbnQoXG4gICAgICB0YXJnZXRDb250YWluZXIsXG4gICAgICBuZXdEcm9wZG93bixcbiAgICAgIG5ld0l0ZW1QYXJlbnRMaXN0XG4gICAgKTtcblxuICAgIC8vIENsb25lIGFuZCBpbnNlcnQgdGhlIHN0cnVjdHVyYWwgZWxlbWVudHNcbiAgICBsZXQgbGFzdEluc2VydGVkRWxlbWVudCA9IG51bGw7XG4gICAgZWxlbWVudHNUb0Nsb25lLmZvckVhY2goKGVsZW1lbnRUb0Nsb25lKSA9PiB7XG4gICAgICBjb25zdCBjbG9uZWRFbGVtZW50ID0gZWxlbWVudFRvQ2xvbmUuY2xvbmVOb2RlKHRydWUpO1xuXG4gICAgICBpZiAoaW5zZXJ0aW9uUG9pbnQpIHtcbiAgICAgICAgdGFyZ2V0Q29udGFpbmVyLmluc2VydEJlZm9yZShjbG9uZWRFbGVtZW50LCBpbnNlcnRpb25Qb2ludCk7XG4gICAgICB9IGVsc2Uge1xuICAgICAgICB0YXJnZXRDb250YWluZXIuYXBwZW5kQ2hpbGQoY2xvbmVkRWxlbWVudCk7XG4gICAgICB9XG5cbiAgICAgIGxhc3RJbnNlcnRlZEVsZW1lbnQgPSBjbG9uZWRFbGVtZW50O1xuICAgIH0pO1xuXG4gICAgLy8gQ3JlYXRlIGFuZCBpbnNlcnQgdGhlIG5ldyBsaXN0XG4gICAgY29uc3QgbmV3TGlzdCA9IG5ld0l0ZW1QYXJlbnRMaXN0LmNsb25lTm9kZShmYWxzZSk7IC8vIENsb25lIHdpdGhvdXQgY2hpbGRyZW5cbiAgICBuZXdMaXN0LmlubmVySFRNTCA9IFwiXCI7IC8vIEVuc3VyZSBpdCdzIGVtcHR5XG5cbiAgICBpZiAobGFzdEluc2VydGVkRWxlbWVudCkge1xuICAgICAgLy8gSW5zZXJ0IHRoZSBsaXN0IHJpZ2h0IGFmdGVyIHRoZSBsYXN0IHN0cnVjdHVyYWwgZWxlbWVudFxuICAgICAgbGFzdEluc2VydGVkRWxlbWVudC5wYXJlbnROb2RlLmluc2VydEJlZm9yZShcbiAgICAgICAgbmV3TGlzdCxcbiAgICAgICAgbGFzdEluc2VydGVkRWxlbWVudC5uZXh0U2libGluZ1xuICAgICAgKTtcbiAgICB9IGVsc2UgaWYgKGluc2VydGlvblBvaW50KSB7XG4gICAgICB0YXJnZXRDb250YWluZXIuaW5zZXJ0QmVmb3JlKG5ld0xpc3QsIGluc2VydGlvblBvaW50KTtcbiAgICB9IGVsc2Uge1xuICAgICAgdGFyZ2V0Q29udGFpbmVyLmFwcGVuZENoaWxkKG5ld0xpc3QpO1xuICAgIH1cblxuICAgIHJldHVybiB7IGxpc3Q6IG5ld0xpc3QgfTtcbiAgfVxuXG4gIC8qKlxuICAgKiBDcmVhdGUgZWxlbWVudCBzaWduYXR1cmUgZnJvbSBhbiBhY3R1YWwgZWxlbWVudFxuICAgKi9cbiAgX2NyZWF0ZUVsZW1lbnRTaWduYXR1cmVGcm9tRWxlbWVudChlbGVtZW50KSB7XG4gICAgY29uc3QgZWxlbWVudEluZm8gPSB7XG4gICAgICB0YWdOYW1lOiBlbGVtZW50LnRhZ05hbWUudG9Mb3dlckNhc2UoKSxcbiAgICAgIGNsYXNzZXM6IEFycmF5LmZyb20oZWxlbWVudC5jbGFzc0xpc3QpLFxuICAgICAgdGV4dENvbnRlbnQ6IHRoaXMuX2dldEVsZW1lbnRUZXh0U2lnbmF0dXJlKGVsZW1lbnQpLFxuICAgICAgaXNMaXN0OlxuICAgICAgICBlbGVtZW50LnRhZ05hbWUudG9Mb3dlckNhc2UoKSA9PT0gXCJ1bFwiICYmXG4gICAgICAgIGVsZW1lbnQuY2xhc3NMaXN0LmNvbnRhaW5zKFwiZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0XCIpLFxuICAgICAgaXNTdHJ1Y3R1cmFsOiAhZWxlbWVudC5jbGFzc0xpc3QuY29udGFpbnMoXG4gICAgICAgIFwiZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0LWl0ZW1cIlxuICAgICAgKSxcbiAgICB9O1xuXG4gICAgcmV0dXJuIHRoaXMuX2NyZWF0ZUVsZW1lbnRTaWduYXR1cmUoZWxlbWVudEluZm8pO1xuICB9XG5cbiAgLyoqXG4gICAqIEZpbmQgdGhlIGluc2VydGlvbiBwb2ludCBmb3IgYSBuZXcgc2VjdGlvbiBpbiB0aGUgdGFyZ2V0IGNvbnRhaW5lclxuICAgKi9cbiAgX2ZpbmRTZWN0aW9uSW5zZXJ0aW9uUG9pbnQodGFyZ2V0Q29udGFpbmVyLCBuZXdEcm9wZG93biwgbmV3SXRlbVBhcmVudExpc3QpIHtcbiAgICAvLyBGaW5kIGVsZW1lbnRzIHRoYXQgY29tZSBhZnRlciB0aGlzIGxpc3QgaW4gdGhlIG5ldyBzdHJ1Y3R1cmVcbiAgICBsZXQgbmV4dEVsZW1lbnQgPSBuZXdJdGVtUGFyZW50TGlzdC5uZXh0RWxlbWVudFNpYmxpbmc7XG5cbiAgICB3aGlsZSAobmV4dEVsZW1lbnQpIHtcbiAgICAgIGlmIChcbiAgICAgICAgbmV4dEVsZW1lbnQudGFnTmFtZSAmJlxuICAgICAgICAhbmV4dEVsZW1lbnQuY2xhc3NMaXN0LmNvbnRhaW5zKFwiZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0LWl0ZW1cIilcbiAgICAgICkge1xuICAgICAgICAvLyBDaGVjayBpZiB0aGlzIGVsZW1lbnQgZXhpc3RzIGluIHRoZSB0YXJnZXQgY29udGFpbmVyXG4gICAgICAgIGNvbnN0IHNpZ25hdHVyZSA9IHRoaXMuX2NyZWF0ZUVsZW1lbnRTaWduYXR1cmVGcm9tRWxlbWVudChuZXh0RWxlbWVudCk7XG5cbiAgICAgICAgLy8gRmluZCB0aGlzIGVsZW1lbnQgaW4gdGhlIHRhcmdldCBjb250YWluZXJcbiAgICAgICAgY29uc3QgY2hpbGRyZW4gPSBBcnJheS5mcm9tKHRhcmdldENvbnRhaW5lci5jaGlsZHJlbik7XG4gICAgICAgIGZvciAoY29uc3QgY2hpbGQgb2YgY2hpbGRyZW4pIHtcbiAgICAgICAgICBjb25zdCBjaGlsZFNpZ25hdHVyZSA9IHRoaXMuX2NyZWF0ZUVsZW1lbnRTaWduYXR1cmVGcm9tRWxlbWVudChjaGlsZCk7XG4gICAgICAgICAgaWYgKGNoaWxkU2lnbmF0dXJlID09PSBzaWduYXR1cmUpIHtcbiAgICAgICAgICAgIHJldHVybiBjaGlsZDsgLy8gSW5zZXJ0IGJlZm9yZSB0aGlzIGVsZW1lbnRcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICAgIG5leHRFbGVtZW50ID0gbmV4dEVsZW1lbnQubmV4dEVsZW1lbnRTaWJsaW5nO1xuICAgIH1cblxuICAgIHJldHVybiBudWxsOyAvLyBJbnNlcnQgYXQgdGhlIGVuZFxuICB9XG5cbiAgLyoqXG4gICAqIEVuc3VyZSB0aGF0IHRoZSBzZWN0aW9uIHN0cnVjdHVyZSBleGlzdHMgZm9yIGEgbmV3IGZpbHRlciBpdGVtXG4gICAqIFJldHVybnMgdGhlIGNyZWF0ZWQgc3RydWN0dXJlIGlmIGl0IHdhcyBjcmVhdGVkLCBudWxsIGlmIGl0IGFscmVhZHkgZXhpc3RlZFxuICAgKi9cbiAgX2Vuc3VyZVNlY3Rpb25TdHJ1Y3R1cmVFeGlzdHMobmV3SXRlbSwgZHJvcGRvd25Jbk9sZFBhbmVsKSB7XG4gICAgLy8gRmlyc3QgY2hlY2sgaWYgdGhlIHNlY3Rpb24gYWxyZWFkeSBleGlzdHNcbiAgICBpZiAodGhpcy5fc2VjdGlvbkV4aXN0c0Zvckl0ZW0obmV3SXRlbSwgZHJvcGRvd25Jbk9sZFBhbmVsKSkge1xuICAgICAgcmV0dXJuIG51bGw7IC8vIFNlY3Rpb24gYWxyZWFkeSBleGlzdHMsIG5vIG5lZWQgdG8gY3JlYXRlXG4gICAgfVxuXG4gICAgLy8gU2VjdGlvbiBkb2Vzbid0IGV4aXN0LCBjcmVhdGUgaXRcbiAgICByZXR1cm4gdGhpcy5fY3JlYXRlTWlzc2luZ1NlY3Rpb25TdHJ1Y3R1cmUobmV3SXRlbSwgZHJvcGRvd25Jbk9sZFBhbmVsKTtcbiAgfVxuXG4gIC8qKlxuICAgKiBDaGVjayBpZiB0aGUgc2VjdGlvbiBzdHJ1Y3R1cmUgYWxyZWFkeSBleGlzdHMgZm9yIGEgZ2l2ZW4gaXRlbVxuICAgKi9cbiAgX3NlY3Rpb25FeGlzdHNGb3JJdGVtKG5ld0l0ZW0sIGRyb3Bkb3duSW5PbGRQYW5lbCkge1xuICAgIC8vIEZpbmQgdGhlIHNlY3Rpb24gc3RydWN0dXJlIHRoYXQgdGhpcyBpdGVtIGJlbG9uZ3MgdG8gaW4gdGhlIG5ldyBwYW5lbFxuICAgIGNvbnN0IG5ld0l0ZW1QYXJlbnRMaXN0ID0gbmV3SXRlbS5jbG9zZXN0KFwidWwuZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0XCIpO1xuICAgIGlmICghbmV3SXRlbVBhcmVudExpc3QpIHtcbiAgICAgIHJldHVybiB0cnVlOyAvLyBJZiBubyBwYXJlbnQgbGlzdCwgYXNzdW1lIHN0cnVjdHVyZSBleGlzdHNcbiAgICB9XG5cbiAgICAvLyBGaXJzdCwgZW5zdXJlIHdlIGtub3cgd2hlcmUgdG8gbG9vayAoZmluZCB0aGUgcHJvcGVyIGNvbnRhaW5lcilcbiAgICBjb25zdCBuZXdEcm9wZG93biA9IG5ld0l0ZW0uY2xvc2VzdChcIi5maWx0ZXItcGFuZWwtaXRlbS1kcm9wZG93blwiKTtcbiAgICBpZiAoIW5ld0Ryb3Bkb3duKSB7XG4gICAgICByZXR1cm4gdHJ1ZTtcbiAgICB9XG5cbiAgICAvLyBHZXQgdGhlIHRhcmdldCBjb250YWluZXIgd2hlcmUgd2Ugc2hvdWxkIGNoZWNrIGZvciB0aGUgc2VjdGlvblxuICAgIGNvbnN0IHRhcmdldENvbnRhaW5lciA9IHRoaXMuX2ZpbmRUYXJnZXRDb250YWluZXIoXG4gICAgICBuZXdEcm9wZG93bixcbiAgICAgIGRyb3Bkb3duSW5PbGRQYW5lbFxuICAgICk7XG5cbiAgICAvLyBMb29rIGZvciB0aGUgcHJlY2VkaW5nIHN0cnVjdHVyYWwgZWxlbWVudCB0byBpZGVudGlmeSB0aGUgc2VjdGlvblxuICAgIGxldCBzZWN0aW9uRWxlbWVudCA9IG51bGw7XG4gICAgbGV0IHNlY3Rpb25UZXh0ID0gbnVsbDtcbiAgICBsZXQgY3VycmVudEVsZW1lbnQgPSBuZXdJdGVtUGFyZW50TGlzdC5wcmV2aW91c0VsZW1lbnRTaWJsaW5nO1xuXG4gICAgLy8gV2FsayBiYWNrd2FyZHMgdG8gZmluZCB0aGUgc2VjdGlvbiBpZGVudGlmaWVyXG4gICAgd2hpbGUgKGN1cnJlbnRFbGVtZW50ICYmICFzZWN0aW9uRWxlbWVudCkge1xuICAgICAgLy8gQ2hlY2sgaWYgdGhpcyBpcyBhIHN0cnVjdHVyYWwgZWxlbWVudCAobm90IGEgbGlzdCBpdGVtKVxuICAgICAgaWYgKFxuICAgICAgICBjdXJyZW50RWxlbWVudC50YWdOYW1lICYmXG4gICAgICAgICFjdXJyZW50RWxlbWVudC5jbGFzc0xpc3QuY29udGFpbnMoXCJmaWx0ZXItbXVsdGktc2VsZWN0LWxpc3QtaXRlbVwiKSAmJlxuICAgICAgICBjdXJyZW50RWxlbWVudC50ZXh0Q29udGVudC50cmltKClcbiAgICAgICkge1xuICAgICAgICBzZWN0aW9uRWxlbWVudCA9IGN1cnJlbnRFbGVtZW50O1xuICAgICAgICBzZWN0aW9uVGV4dCA9IGN1cnJlbnRFbGVtZW50LnRleHRDb250ZW50LnRyaW0oKTtcbiAgICAgICAgYnJlYWs7XG4gICAgICB9XG4gICAgICBjdXJyZW50RWxlbWVudCA9IGN1cnJlbnRFbGVtZW50LnByZXZpb3VzRWxlbWVudFNpYmxpbmc7XG4gICAgfVxuXG4gICAgLy8gSWYgbm8gc2VjdGlvbiBlbGVtZW50IGZvdW5kLCBhc3N1bWUgc3RydWN0dXJlIGV4aXN0c1xuICAgIGlmICghc2VjdGlvbkVsZW1lbnQgfHwgIXNlY3Rpb25UZXh0KSB7XG4gICAgICByZXR1cm4gdHJ1ZTtcbiAgICB9XG5cbiAgICAvLyBDaGVjayBpZiB0aGlzIHNlY3Rpb24gZWxlbWVudCBleGlzdHMgaW4gdGhlIHRhcmdldCBjb250YWluZXJcbiAgICBjb25zdCBzaWduYXR1cmUgPSB0aGlzLl9jcmVhdGVFbGVtZW50U2lnbmF0dXJlRnJvbUVsZW1lbnQoc2VjdGlvbkVsZW1lbnQpO1xuICAgIGNvbnN0IGV4aXN0cyA9IHRoaXMuX2VsZW1lbnRFeGlzdHNJbkNvbnRhaW5lcih0YXJnZXRDb250YWluZXIsIHNpZ25hdHVyZSk7XG5cbiAgICByZXR1cm4gZXhpc3RzO1xuICB9XG5cbiAgLyoqXG4gICAqIEZpbmQgdGhlIHRhcmdldCBjb250YWluZXIgd2hlcmUgY29udGVudCBzaG91bGQgYmUgY2hlY2tlZC9hZGRlZFxuICAgKiAoaGFuZGxlcyB3cmFwcGVyIHN0cnVjdHVyZSlcbiAgICovXG4gIF9maW5kVGFyZ2V0Q29udGFpbmVyKG5ld0Ryb3Bkb3duLCBvbGREcm9wZG93bikge1xuICAgIC8vIEdldCB0aGUgc3RydWN0dXJhbCBwYXRoIGZyb20gdGhlIG5ldyBkcm9wZG93blxuICAgIGNvbnN0IHN0cnVjdHVyYWxQYXRoID0gdGhpcy5fZ2V0U3RydWN0dXJhbFBhdGgobmV3RHJvcGRvd24pO1xuXG4gICAgLy8gTmF2aWdhdGUgdGhyb3VnaCBleGlzdGluZyBzdHJ1Y3R1cmUgaW4gb2xkIGRyb3Bkb3duXG4gICAgbGV0IGN1cnJlbnRDb250YWluZXIgPSBvbGREcm9wZG93bjtcblxuICAgIHN0cnVjdHVyYWxQYXRoLmZvckVhY2goKHdyYXBwZXJJbmZvKSA9PiB7XG4gICAgICBjb25zdCBleGlzdGluZ1dyYXBwZXIgPSB0aGlzLl9maW5kV3JhcHBlckluQ29udGFpbmVyKFxuICAgICAgICBjdXJyZW50Q29udGFpbmVyLFxuICAgICAgICB3cmFwcGVySW5mb1xuICAgICAgKTtcbiAgICAgIGlmIChleGlzdGluZ1dyYXBwZXIpIHtcbiAgICAgICAgY3VycmVudENvbnRhaW5lciA9IGV4aXN0aW5nV3JhcHBlcjtcbiAgICAgIH1cbiAgICAgIC8vIElmIHdyYXBwZXIgZG9lc24ndCBleGlzdCwgd2UnbGwgc3RheSBhdCB0aGUgY3VycmVudCBsZXZlbFxuICAgICAgLy8gVGhlIHNlY3Rpb24gY3JlYXRpb24gd2lsbCBoYW5kbGUgY3JlYXRpbmcgbWlzc2luZyB3cmFwcGVyc1xuICAgIH0pO1xuXG4gICAgcmV0dXJuIGN1cnJlbnRDb250YWluZXI7XG4gIH1cblxuICAvKipcbiAgICogRW5zdXJlIHRoZSBjb21wbGV0ZSB3cmFwcGVyIHN0cnVjdHVyZSBleGlzdHMgZnJvbSBkcm9wZG93biB0byBjb250ZW50IGxldmVsXG4gICAqIFJldHVybnMgdGhlIHRhcmdldCBjb250YWluZXIgd2hlcmUgY29udGVudCBzaG91bGQgYmUgYWRkZWRcbiAgICovXG4gIF9lbnN1cmVXcmFwcGVyU3RydWN0dXJlRXhpc3RzKG5ld0Ryb3Bkb3duLCBvbGREcm9wZG93bikge1xuICAgIC8vIEdldCB0aGUgc3RydWN0dXJhbCBwYXRoIGZyb20gdGhlIG5ldyBkcm9wZG93biB0byB0aGUgY29udGVudFxuICAgIGNvbnN0IHN0cnVjdHVyYWxQYXRoID0gdGhpcy5fZ2V0U3RydWN0dXJhbFBhdGgobmV3RHJvcGRvd24pO1xuXG4gICAgLy8gQnVpbGQgdGhlIHNhbWUgc3RydWN0dXJlIGluIHRoZSBvbGQgZHJvcGRvd24gaWYgaXQgZG9lc24ndCBleGlzdFxuICAgIGxldCBjdXJyZW50Q29udGFpbmVyID0gb2xkRHJvcGRvd247XG5cbiAgICBzdHJ1Y3R1cmFsUGF0aC5mb3JFYWNoKCh3cmFwcGVySW5mbykgPT4ge1xuICAgICAgY29uc3QgZXhpc3RpbmdXcmFwcGVyID0gdGhpcy5fZmluZFdyYXBwZXJJbkNvbnRhaW5lcihcbiAgICAgICAgY3VycmVudENvbnRhaW5lcixcbiAgICAgICAgd3JhcHBlckluZm9cbiAgICAgICk7XG5cbiAgICAgIGlmIChleGlzdGluZ1dyYXBwZXIpIHtcbiAgICAgICAgLy8gV3JhcHBlciBhbHJlYWR5IGV4aXN0cywgdXNlIGl0XG4gICAgICAgIGN1cnJlbnRDb250YWluZXIgPSBleGlzdGluZ1dyYXBwZXI7XG4gICAgICB9IGVsc2Uge1xuICAgICAgICAvLyBDcmVhdGUgdGhlIG1pc3Npbmcgd3JhcHBlclxuICAgICAgICBjb25zdCBuZXdXcmFwcGVyID0gdGhpcy5fY3JlYXRlV3JhcHBlckVsZW1lbnQod3JhcHBlckluZm8pO1xuICAgICAgICBjdXJyZW50Q29udGFpbmVyLmFwcGVuZENoaWxkKG5ld1dyYXBwZXIpO1xuICAgICAgICBjdXJyZW50Q29udGFpbmVyID0gbmV3V3JhcHBlcjtcbiAgICAgIH1cbiAgICB9KTtcblxuICAgIHJldHVybiBjdXJyZW50Q29udGFpbmVyO1xuICB9XG5cbiAgLyoqXG4gICAqIEdldCB0aGUgc3RydWN0dXJhbCBwYXRoIGZyb20gZHJvcGRvd24gdG8gY29udGVudCBsZXZlbFxuICAgKi9cbiAgX2dldFN0cnVjdHVyYWxQYXRoKGRyb3Bkb3duKSB7XG4gICAgY29uc3QgcGF0aCA9IFtdO1xuICAgIGNvbnN0IGRpcmVjdENoaWxkcmVuID0gQXJyYXkuZnJvbShkcm9wZG93bi5jaGlsZHJlbik7XG5cbiAgICAvLyBMb29rIGZvciB3cmFwcGVyIGVsZW1lbnRzIHRoYXQgY29udGFpbiB0aGUgY29udGVudFxuICAgIGRpcmVjdENoaWxkcmVuLmZvckVhY2goKGNoaWxkKSA9PiB7XG4gICAgICBpZiAodGhpcy5faXNXcmFwcGVyRWxlbWVudChjaGlsZCkpIHtcbiAgICAgICAgY29uc3Qgd3JhcHBlckluZm8gPSB7XG4gICAgICAgICAgdGFnTmFtZTogY2hpbGQudGFnTmFtZS50b0xvd2VyQ2FzZSgpLFxuICAgICAgICAgIGNsYXNzZXM6IEFycmF5LmZyb20oY2hpbGQuY2xhc3NMaXN0KSxcbiAgICAgICAgICBzaWduYXR1cmU6IHRoaXMuX2NyZWF0ZUVsZW1lbnRTaWduYXR1cmVGcm9tRWxlbWVudChjaGlsZCksXG4gICAgICAgIH07XG4gICAgICAgIHBhdGgucHVzaCh3cmFwcGVySW5mbyk7XG4gICAgICB9XG4gICAgfSk7XG5cbiAgICByZXR1cm4gcGF0aDtcbiAgfVxuXG4gIC8qKlxuICAgKiBDaGVjayBpZiBhbiBlbGVtZW50IGlzIGEgd3JhcHBlciBlbGVtZW50IChjb250YWlucyBjb250ZW50IGJ1dCBpc24ndCBjb250ZW50IGl0c2VsZilcbiAgICovXG4gIF9pc1dyYXBwZXJFbGVtZW50KGVsZW1lbnQpIHtcbiAgICAvLyBTa2lwIGxpc3QgaXRlbXMgYW5kIGluZGl2aWR1YWwgbGlzdHNcbiAgICBpZiAoXG4gICAgICBlbGVtZW50LmNsYXNzTGlzdC5jb250YWlucyhcImZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdC1pdGVtXCIpIHx8XG4gICAgICAoZWxlbWVudC50YWdOYW1lLnRvTG93ZXJDYXNlKCkgPT09IFwidWxcIiAmJlxuICAgICAgICBlbGVtZW50LmNsYXNzTGlzdC5jb250YWlucyhcImZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdFwiKSlcbiAgICApIHtcbiAgICAgIHJldHVybiBmYWxzZTtcbiAgICB9XG5cbiAgICAvLyBDaGVjayBpZiBpdCBjb250YWlucyBtdWx0aXBsZSBzdHJ1Y3R1cmFsIGVsZW1lbnRzIG9yIGxpc3RzXG4gICAgY29uc3QgY2hpbGRMaXN0cyA9IGVsZW1lbnQucXVlcnlTZWxlY3RvckFsbChcInVsLmZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdFwiKTtcbiAgICBjb25zdCBjaGlsZFN0cnVjdHVyYWwgPSBlbGVtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICBcIjpzY29wZSA+ICo6bm90KC5maWx0ZXItbXVsdGktc2VsZWN0LWxpc3QtaXRlbSlcIlxuICAgICk7XG5cbiAgICByZXR1cm4gY2hpbGRMaXN0cy5sZW5ndGggPiAwIHx8IGNoaWxkU3RydWN0dXJhbC5sZW5ndGggPiAxO1xuICB9XG5cbiAgLyoqXG4gICAqIEZpbmQgYSB3cmFwcGVyIGVsZW1lbnQgaW4gYSBjb250YWluZXIgYnkgaXRzIGluZm9cbiAgICovXG4gIF9maW5kV3JhcHBlckluQ29udGFpbmVyKGNvbnRhaW5lciwgd3JhcHBlckluZm8pIHtcbiAgICBjb25zdCBjaGlsZHJlbiA9IEFycmF5LmZyb20oY29udGFpbmVyLmNoaWxkcmVuKTtcblxuICAgIHJldHVybiBjaGlsZHJlbi5maW5kKChjaGlsZCkgPT4ge1xuICAgICAgY29uc3QgY2hpbGRTaWduYXR1cmUgPSB0aGlzLl9jcmVhdGVFbGVtZW50U2lnbmF0dXJlRnJvbUVsZW1lbnQoY2hpbGQpO1xuICAgICAgcmV0dXJuIGNoaWxkU2lnbmF0dXJlID09PSB3cmFwcGVySW5mby5zaWduYXR1cmU7XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogQ3JlYXRlIGEgd3JhcHBlciBlbGVtZW50IGZyb20gd3JhcHBlciBpbmZvXG4gICAqL1xuICBfY3JlYXRlV3JhcHBlckVsZW1lbnQod3JhcHBlckluZm8pIHtcbiAgICBjb25zdCBlbGVtZW50ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCh3cmFwcGVySW5mby50YWdOYW1lKTtcbiAgICB3cmFwcGVySW5mby5jbGFzc2VzLmZvckVhY2goKGNsYXNzTmFtZSkgPT4ge1xuICAgICAgZWxlbWVudC5jbGFzc0xpc3QuYWRkKGNsYXNzTmFtZSk7XG4gICAgfSk7XG4gICAgcmV0dXJuIGVsZW1lbnQ7XG4gIH1cblxuICAvKipcbiAgICogQ2hlY2sgaWYgYW4gZWxlbWVudCB3aXRoIHRoZSBnaXZlbiBzaWduYXR1cmUgZXhpc3RzIGluIHRoZSBjb250YWluZXJcbiAgICovXG4gIF9lbGVtZW50RXhpc3RzSW5Db250YWluZXIoY29udGFpbmVyLCBzaWduYXR1cmUpIHtcbiAgICBjb25zdCBjaGlsZHJlbiA9IEFycmF5LmZyb20oY29udGFpbmVyLmNoaWxkcmVuKTtcblxuICAgIHJldHVybiBjaGlsZHJlbi5zb21lKChjaGlsZCkgPT4ge1xuICAgICAgY29uc3QgY2hpbGRTaWduYXR1cmUgPSB0aGlzLl9jcmVhdGVFbGVtZW50U2lnbmF0dXJlRnJvbUVsZW1lbnQoY2hpbGQpO1xuICAgICAgcmV0dXJuIGNoaWxkU2lnbmF0dXJlID09PSBzaWduYXR1cmU7XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogQ3JlYXRlIGEgbWFwIG9mIGV4aXN0aW5nIHNlY3Rpb24taXRlbSByZWxhdGlvbnNoaXBzIGJlZm9yZSBzdHJ1Y3R1cmFsIGNoYW5nZXNcbiAgICovXG4gIF9jcmVhdGVFeGlzdGluZ1NlY3Rpb25NYXAob2xkUGFuZWwpIHtcbiAgICBjb25zdCBzZWN0aW9uTWFwID0gbmV3IE1hcCgpO1xuXG4gICAgLy8gRmluZCBhbGwgZmlsdGVyIGVsZW1lbnRzIGluIHRoZSBvbGQgcGFuZWxcbiAgICBjb25zdCBmaWx0ZXJFbGVtZW50cyA9IG9sZFBhbmVsLnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICBcIltkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3Qtb3B0aW9uc11cIlxuICAgICk7XG5cbiAgICBmaWx0ZXJFbGVtZW50cy5mb3JFYWNoKChmaWx0ZXJFbGVtZW50KSA9PiB7XG4gICAgICBjb25zdCBkcm9wZG93biA9IGZpbHRlckVsZW1lbnQucXVlcnlTZWxlY3RvcihcbiAgICAgICAgXCIuZmlsdGVyLXBhbmVsLWl0ZW0tZHJvcGRvd25cIlxuICAgICAgKTtcbiAgICAgIGlmICghZHJvcGRvd24pIHJldHVybjtcblxuICAgICAgLy8gRmluZCB0aGUgdGFyZ2V0IGNvbnRhaW5lclxuICAgICAgY29uc3QgdGFyZ2V0Q29udGFpbmVyID0gdGhpcy5fZmluZFRhcmdldENvbnRhaW5lckluRXhpc3RpbmcoZHJvcGRvd24pO1xuXG4gICAgICAvLyBGaW5kIGFsbCBzdHJ1Y3R1cmFsIGVsZW1lbnRzIHRoYXQgY291bGQgYmUgc2VjdGlvbiBoZWFkZXJzXG4gICAgICBjb25zdCBzdHJ1Y3R1cmFsRWxlbWVudHMgPSB0YXJnZXRDb250YWluZXIucXVlcnlTZWxlY3RvckFsbChcIipcIik7XG5cbiAgICAgIHN0cnVjdHVyYWxFbGVtZW50cy5mb3JFYWNoKChlbGVtZW50KSA9PiB7XG4gICAgICAgIC8vIENoZWNrIGlmIHRoaXMgbG9va3MgbGlrZSBhIHNlY3Rpb24gaGVhZGVyIChoYXMgdGV4dCBjb250ZW50IGFuZCBpcyBmb2xsb3dlZCBieSBhIGxpc3QpXG4gICAgICAgIGlmIChcbiAgICAgICAgICBlbGVtZW50LnRleHRDb250ZW50LnRyaW0oKSAmJlxuICAgICAgICAgICFlbGVtZW50LmNsYXNzTGlzdC5jb250YWlucyhcImZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdC1pdGVtXCIpICYmXG4gICAgICAgICAgZWxlbWVudC50YWdOYW1lLnRvTG93ZXJDYXNlKCkgIT09IFwidWxcIlxuICAgICAgICApIHtcbiAgICAgICAgICBjb25zdCBzZWN0aW9uVGV4dCA9IGVsZW1lbnQudGV4dENvbnRlbnQudHJpbSgpO1xuICAgICAgICAgIGxldCBuZXh0RWxlbWVudCA9IGVsZW1lbnQubmV4dEVsZW1lbnRTaWJsaW5nO1xuXG4gICAgICAgICAgLy8gTG9vayBmb3IgdGhlIGFzc29jaWF0ZWQgbGlzdFxuICAgICAgICAgIHdoaWxlIChuZXh0RWxlbWVudCkge1xuICAgICAgICAgICAgaWYgKFxuICAgICAgICAgICAgICBuZXh0RWxlbWVudC50YWdOYW1lLnRvTG93ZXJDYXNlKCkgPT09IFwidWxcIiAmJlxuICAgICAgICAgICAgICBuZXh0RWxlbWVudC5jbGFzc0xpc3QuY29udGFpbnMoXCJmaWx0ZXItbXVsdGktc2VsZWN0LWxpc3RcIilcbiAgICAgICAgICAgICkge1xuICAgICAgICAgICAgICAvLyBDb2xsZWN0IGFsbCBpdGVtcyBmcm9tIHRoaXMgbGlzdFxuICAgICAgICAgICAgICBjb25zdCBpdGVtcyA9IEFycmF5LmZyb20oXG4gICAgICAgICAgICAgICAgbmV4dEVsZW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5maWx0ZXItbXVsdGktc2VsZWN0LWxpc3QtaXRlbVwiKVxuICAgICAgICAgICAgICApO1xuICAgICAgICAgICAgICBjb25zdCBpdGVtc0Nsb25lZCA9IGl0ZW1zLm1hcCgoaXRlbSkgPT4gaXRlbS5jbG9uZU5vZGUodHJ1ZSkpO1xuXG4gICAgICAgICAgICAgIGlmIChpdGVtc0Nsb25lZC5sZW5ndGggPiAwKSB7XG4gICAgICAgICAgICAgICAgaWYgKCFzZWN0aW9uTWFwLmhhcyhzZWN0aW9uVGV4dCkpIHtcbiAgICAgICAgICAgICAgICAgIHNlY3Rpb25NYXAuc2V0KHNlY3Rpb25UZXh0LCBbXSk7XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgIHNlY3Rpb25NYXAuZ2V0KHNlY3Rpb25UZXh0KS5wdXNoKC4uLml0ZW1zQ2xvbmVkKTtcbiAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICBicmVhaztcbiAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgLy8gU3RvcCBpZiB3ZSBoaXQgYW5vdGhlciBzZWN0aW9uIGhlYWRlclxuICAgICAgICAgICAgaWYgKFxuICAgICAgICAgICAgICBuZXh0RWxlbWVudC50ZXh0Q29udGVudC50cmltKCkgJiZcbiAgICAgICAgICAgICAgIW5leHRFbGVtZW50LmNsYXNzTGlzdC5jb250YWlucyhcbiAgICAgICAgICAgICAgICBcImZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdC1pdGVtXCJcbiAgICAgICAgICAgICAgKSAmJlxuICAgICAgICAgICAgICBuZXh0RWxlbWVudC50YWdOYW1lLnRvTG93ZXJDYXNlKCkgIT09IFwidWxcIlxuICAgICAgICAgICAgKSB7XG4gICAgICAgICAgICAgIGJyZWFrO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICBuZXh0RWxlbWVudCA9IG5leHRFbGVtZW50Lm5leHRFbGVtZW50U2libGluZztcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH0pO1xuICAgIH0pO1xuXG4gICAgcmV0dXJuIHNlY3Rpb25NYXA7XG4gIH1cblxuICAvKipcbiAgICogRmluZCB0aGUgdGFyZ2V0IGNvbnRhaW5lciBpbiBleGlzdGluZyBzdHJ1Y3R1cmUgKGJlZm9yZSBjaGFuZ2VzKVxuICAgKi9cbiAgX2ZpbmRUYXJnZXRDb250YWluZXJJbkV4aXN0aW5nKGRyb3Bkb3duKSB7XG4gICAgLy8gTG9vayBmb3Igd3JhcHBlciBlbGVtZW50cyBpbiB0aGUgZXhpc3Rpbmcgc3RydWN0dXJlXG4gICAgY29uc3QgY2hpbGRyZW4gPSBBcnJheS5mcm9tKGRyb3Bkb3duLmNoaWxkcmVuKTtcblxuICAgIGZvciAoY29uc3QgY2hpbGQgb2YgY2hpbGRyZW4pIHtcbiAgICAgIGlmICh0aGlzLl9pc1dyYXBwZXJFbGVtZW50KGNoaWxkKSkge1xuICAgICAgICByZXR1cm4gY2hpbGQ7XG4gICAgICB9XG4gICAgfVxuXG4gICAgLy8gSWYgbm8gd3JhcHBlciBmb3VuZCwgdXNlIHRoZSBkcm9wZG93biBpdHNlbGZcbiAgICByZXR1cm4gZHJvcGRvd247XG4gIH1cblxuICAvKipcbiAgICogUmVzdG9yZSBleGlzdGluZyBpdGVtcyB0byB0aGVpciBjb3JyZWN0IHNlY3Rpb25zIGFmdGVyIHN0cnVjdHVyYWwgY2hhbmdlc1xuICAgKi9cbiAgX3Jlc3RvcmVFeGlzdGluZ1NlY3Rpb25Bc3NvY2lhdGlvbnMob2xkUGFuZWwsIHNlY3Rpb25NYXApIHtcbiAgICBpZiAoc2VjdGlvbk1hcC5zaXplID09PSAwKSByZXR1cm47XG5cbiAgICAvLyBGaW5kIGFsbCBmaWx0ZXIgZWxlbWVudHMgaW4gdGhlIHVwZGF0ZWQgcGFuZWxcbiAgICBjb25zdCBmaWx0ZXJFbGVtZW50cyA9IG9sZFBhbmVsLnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICBcIltkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3Qtb3B0aW9uc11cIlxuICAgICk7XG5cbiAgICBmaWx0ZXJFbGVtZW50cy5mb3JFYWNoKChmaWx0ZXJFbGVtZW50KSA9PiB7XG4gICAgICBjb25zdCBkcm9wZG93biA9IGZpbHRlckVsZW1lbnQucXVlcnlTZWxlY3RvcihcbiAgICAgICAgXCIuZmlsdGVyLXBhbmVsLWl0ZW0tZHJvcGRvd25cIlxuICAgICAgKTtcbiAgICAgIGlmICghZHJvcGRvd24pIHJldHVybjtcblxuICAgICAgY29uc3QgdGFyZ2V0Q29udGFpbmVyID1cbiAgICAgICAgdGhpcy5fZmluZFRhcmdldENvbnRhaW5lcihudWxsLCBkcm9wZG93bikgfHwgZHJvcGRvd247XG5cbiAgICAgIC8vIEZvciBlYWNoIHByZXNlcnZlZCBzZWN0aW9uLCB0cnkgdG8gcmVzdG9yZSBpdHMgaXRlbXNcbiAgICAgIHNlY3Rpb25NYXAuZm9yRWFjaCgocHJlc2VydmVkSXRlbXMsIHNlY3Rpb25UZXh0KSA9PiB7XG4gICAgICAgIGNvbnN0IHNlY3Rpb25MaXN0ID0gdGhpcy5fZmluZFNlY3Rpb25CeVRleHRJbkNvbnRhaW5lcihcbiAgICAgICAgICB0YXJnZXRDb250YWluZXIsXG4gICAgICAgICAgc2VjdGlvblRleHRcbiAgICAgICAgKTtcblxuICAgICAgICBpZiAoc2VjdGlvbkxpc3QpIHtcbiAgICAgICAgICAvLyBDbGVhciBhbnkgaW5jb3JyZWN0bHkgcGxhY2VkIGl0ZW1zIGZpcnN0XG4gICAgICAgICAgdGhpcy5fcmVtb3ZlSXRlbXNGcm9tSW5jb3JyZWN0U2VjdGlvbnMoXG4gICAgICAgICAgICB0YXJnZXRDb250YWluZXIsXG4gICAgICAgICAgICBwcmVzZXJ2ZWRJdGVtcyxcbiAgICAgICAgICAgIHNlY3Rpb25UZXh0XG4gICAgICAgICAgKTtcblxuICAgICAgICAgIC8vIEFkZCB0aGUgcHJlc2VydmVkIGl0ZW1zIHRvIHRoZSBjb3JyZWN0IHNlY3Rpb25cbiAgICAgICAgICBwcmVzZXJ2ZWRJdGVtcy5mb3JFYWNoKChpdGVtKSA9PiB7XG4gICAgICAgICAgICAvLyBDaGVjayBpZiB0aGlzIGl0ZW0gaXMgYWxyZWFkeSBpbiB0aGUgY29ycmVjdCBzZWN0aW9uXG4gICAgICAgICAgICBpZiAoIXRoaXMuX2l0ZW1FeGlzdHNJbkxpc3Qoc2VjdGlvbkxpc3QsIGl0ZW0pKSB7XG4gICAgICAgICAgICAgIHNlY3Rpb25MaXN0LmFwcGVuZENoaWxkKGl0ZW0uY2xvbmVOb2RlKHRydWUpKTtcbiAgICAgICAgICAgIH1cbiAgICAgICAgICB9KTtcbiAgICAgICAgfVxuICAgICAgfSk7XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogRmluZCBhIHNlY3Rpb24gbGlzdCBieSBzZWN0aW9uIHRleHQgaW4gYSBjb250YWluZXJcbiAgICovXG4gIF9maW5kU2VjdGlvbkJ5VGV4dEluQ29udGFpbmVyKGNvbnRhaW5lciwgc2VjdGlvblRleHQpIHtcbiAgICBjb25zdCBlbGVtZW50cyA9IGNvbnRhaW5lci5xdWVyeVNlbGVjdG9yQWxsKFwiKlwiKTtcblxuICAgIGZvciAoY29uc3QgZWxlbWVudCBvZiBlbGVtZW50cykge1xuICAgICAgaWYgKFxuICAgICAgICBlbGVtZW50LnRleHRDb250ZW50LnRyaW0oKSA9PT0gc2VjdGlvblRleHQgJiZcbiAgICAgICAgIWVsZW1lbnQuY2xhc3NMaXN0LmNvbnRhaW5zKFwiZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0LWl0ZW1cIikgJiZcbiAgICAgICAgZWxlbWVudC50YWdOYW1lLnRvTG93ZXJDYXNlKCkgIT09IFwidWxcIlxuICAgICAgKSB7XG4gICAgICAgIC8vIEZpbmQgdGhlIG5leHQgbGlzdCBhZnRlciB0aGlzIHNlY3Rpb24gaGVhZGVyXG4gICAgICAgIGxldCBuZXh0RWxlbWVudCA9IGVsZW1lbnQubmV4dEVsZW1lbnRTaWJsaW5nO1xuICAgICAgICB3aGlsZSAobmV4dEVsZW1lbnQpIHtcbiAgICAgICAgICBpZiAoXG4gICAgICAgICAgICBuZXh0RWxlbWVudC50YWdOYW1lLnRvTG93ZXJDYXNlKCkgPT09IFwidWxcIiAmJlxuICAgICAgICAgICAgbmV4dEVsZW1lbnQuY2xhc3NMaXN0LmNvbnRhaW5zKFwiZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0XCIpXG4gICAgICAgICAgKSB7XG4gICAgICAgICAgICByZXR1cm4gbmV4dEVsZW1lbnQ7XG4gICAgICAgICAgfVxuICAgICAgICAgIG5leHRFbGVtZW50ID0gbmV4dEVsZW1lbnQubmV4dEVsZW1lbnRTaWJsaW5nO1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuXG4gICAgcmV0dXJuIG51bGw7XG4gIH1cblxuICAvKipcbiAgICogUmVtb3ZlIGl0ZW1zIGZyb20gaW5jb3JyZWN0IHNlY3Rpb25zIChjbGVhbnVwIGJlZm9yZSByZXN0b3JhdGlvbilcbiAgICovXG4gIF9yZW1vdmVJdGVtc0Zyb21JbmNvcnJlY3RTZWN0aW9ucyhcbiAgICBjb250YWluZXIsXG4gICAgcHJlc2VydmVkSXRlbXMsXG4gICAgY29ycmVjdFNlY3Rpb25UZXh0XG4gICkge1xuICAgIGNvbnN0IGFsbExpc3RzID0gY29udGFpbmVyLnF1ZXJ5U2VsZWN0b3JBbGwoXCJ1bC5maWx0ZXItbXVsdGktc2VsZWN0LWxpc3RcIik7XG5cbiAgICBhbGxMaXN0cy5mb3JFYWNoKChsaXN0KSA9PiB7XG4gICAgICAvLyBTa2lwIGlmIHRoaXMgaXMgdGhlIGNvcnJlY3Qgc2VjdGlvblxuICAgICAgY29uc3Qgc2VjdGlvblRleHQgPSB0aGlzLl9nZXRTZWN0aW9uVGV4dEZvckxpc3QobGlzdCk7XG4gICAgICBpZiAoc2VjdGlvblRleHQgPT09IGNvcnJlY3RTZWN0aW9uVGV4dCkgcmV0dXJuO1xuXG4gICAgICAvLyBSZW1vdmUgYW55IGl0ZW1zIHRoYXQgYmVsb25nIHRvIHRoZSBjb3JyZWN0IHNlY3Rpb25cbiAgICAgIGNvbnN0IGxpc3RJdGVtcyA9IEFycmF5LmZyb20oXG4gICAgICAgIGxpc3QucXVlcnlTZWxlY3RvckFsbChcIi5maWx0ZXItbXVsdGktc2VsZWN0LWxpc3QtaXRlbVwiKVxuICAgICAgKTtcblxuICAgICAgbGlzdEl0ZW1zLmZvckVhY2goKGxpc3RJdGVtKSA9PiB7XG4gICAgICAgIGNvbnN0IGl0ZW1MYWJlbCA9IHRoaXMuX2dldEl0ZW1MYWJlbChsaXN0SXRlbSk7XG5cbiAgICAgICAgLy8gQ2hlY2sgaWYgdGhpcyBpdGVtIHNob3VsZCBiZSBpbiB0aGUgcHJlc2VydmVkIHNlY3Rpb25cbiAgICAgICAgY29uc3Qgc2hvdWxkQmVJblByZXNlcnZlZFNlY3Rpb24gPSBwcmVzZXJ2ZWRJdGVtcy5zb21lKFxuICAgICAgICAgIChwcmVzZXJ2ZWRJdGVtKSA9PiB7XG4gICAgICAgICAgICBjb25zdCBwcmVzZXJ2ZWRMYWJlbCA9IHRoaXMuX2dldEl0ZW1MYWJlbChwcmVzZXJ2ZWRJdGVtKTtcbiAgICAgICAgICAgIHJldHVybiBwcmVzZXJ2ZWRMYWJlbCA9PT0gaXRlbUxhYmVsO1xuICAgICAgICAgIH1cbiAgICAgICAgKTtcblxuICAgICAgICBpZiAoc2hvdWxkQmVJblByZXNlcnZlZFNlY3Rpb24pIHtcbiAgICAgICAgICBsaXN0SXRlbS5yZW1vdmUoKTtcbiAgICAgICAgfVxuICAgICAgfSk7XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogR2V0IHRoZSBzZWN0aW9uIHRleHQgZm9yIGEgZ2l2ZW4gbGlzdFxuICAgKi9cbiAgX2dldFNlY3Rpb25UZXh0Rm9yTGlzdChsaXN0KSB7XG4gICAgbGV0IHByZXZFbGVtZW50ID0gbGlzdC5wcmV2aW91c0VsZW1lbnRTaWJsaW5nO1xuXG4gICAgd2hpbGUgKHByZXZFbGVtZW50KSB7XG4gICAgICBpZiAoXG4gICAgICAgIHByZXZFbGVtZW50LnRleHRDb250ZW50LnRyaW0oKSAmJlxuICAgICAgICAhcHJldkVsZW1lbnQuY2xhc3NMaXN0LmNvbnRhaW5zKFwiZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0LWl0ZW1cIikgJiZcbiAgICAgICAgcHJldkVsZW1lbnQudGFnTmFtZS50b0xvd2VyQ2FzZSgpICE9PSBcInVsXCJcbiAgICAgICkge1xuICAgICAgICByZXR1cm4gcHJldkVsZW1lbnQudGV4dENvbnRlbnQudHJpbSgpO1xuICAgICAgfVxuICAgICAgcHJldkVsZW1lbnQgPSBwcmV2RWxlbWVudC5wcmV2aW91c0VsZW1lbnRTaWJsaW5nO1xuICAgIH1cblxuICAgIHJldHVybiBudWxsO1xuICB9XG5cbiAgLyoqXG4gICAqIENoZWNrIGlmIGFuIGl0ZW0gYWxyZWFkeSBleGlzdHMgaW4gYSBsaXN0XG4gICAqL1xuICBfaXRlbUV4aXN0c0luTGlzdChsaXN0LCBpdGVtKSB7XG4gICAgY29uc3QgaXRlbUxhYmVsID0gdGhpcy5fZ2V0SXRlbUxhYmVsKGl0ZW0pO1xuICAgIGNvbnN0IGV4aXN0aW5nSXRlbXMgPSBsaXN0LnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICBcIi5maWx0ZXItbXVsdGktc2VsZWN0LWxpc3QtaXRlbVwiXG4gICAgKTtcblxuICAgIHJldHVybiBBcnJheS5mcm9tKGV4aXN0aW5nSXRlbXMpLnNvbWUoKGV4aXN0aW5nSXRlbSkgPT4ge1xuICAgICAgY29uc3QgZXhpc3RpbmdMYWJlbCA9IHRoaXMuX2dldEl0ZW1MYWJlbChleGlzdGluZ0l0ZW0pO1xuICAgICAgcmV0dXJuIGV4aXN0aW5nTGFiZWwgPT09IGl0ZW1MYWJlbDtcbiAgICB9KTtcbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgdGhlIGxhYmVsIGZyb20gYSBmaWx0ZXIgaXRlbVxuICAgKi9cbiAgX2dldEl0ZW1MYWJlbChpdGVtKSB7XG4gICAgY29uc3QgaW5wdXQgPSBpdGVtLnF1ZXJ5U2VsZWN0b3IoXCJpbnB1dFtkYXRhLWxhYmVsXVwiKTtcbiAgICByZXR1cm4gaW5wdXQgPyBpbnB1dC5nZXRBdHRyaWJ1dGUoXCJkYXRhLWxhYmVsXCIpIDogbnVsbDtcbiAgfVxuXG4gIC8qKlxuICAgKiBSZXBsYWNlIHRoZSBmaWx0ZXIgc3RydWN0dXJlIGNvbXBsZXRlbHkgd2hpbGUgcHJlc2VydmluZyBleGlzdGluZyBpdGVtc1xuICAgKi9cbiAgX3JlcGxhY2VGaWx0ZXJTdHJ1Y3R1cmVDb21wbGV0ZWx5KG9sZFBhbmVsLCBuZXdQYW5lbCwgZXhpc3RpbmdTZWN0aW9uTWFwKSB7XG4gICAgLy8gRmluZCBhbGwgZmlsdGVyIGVsZW1lbnRzIGluIGJvdGggcGFuZWxzXG4gICAgY29uc3Qgb2xkRmlsdGVycyA9IG9sZFBhbmVsLnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICBcIltkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3Qtb3B0aW9uc11cIlxuICAgICk7XG4gICAgY29uc3QgbmV3RmlsdGVycyA9IG5ld1BhbmVsLnF1ZXJ5U2VsZWN0b3JBbGwoXG4gICAgICBcIltkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3Qtb3B0aW9uc11cIlxuICAgICk7XG5cbiAgICAvLyBDcmVhdGUgbWFwcyBmb3IgY29tcGFyaXNvbiB1c2luZyBmaWx0ZXIgbmFtZXNcbiAgICBjb25zdCBvbGRGaWx0ZXJzTWFwID0gdGhpcy5fY3JlYXRlRmlsdGVyRWxlbWVudHNNYXAob2xkRmlsdGVycyk7XG4gICAgY29uc3QgbmV3RmlsdGVyc01hcCA9IHRoaXMuX2NyZWF0ZUZpbHRlckVsZW1lbnRzTWFwKG5ld0ZpbHRlcnMpO1xuXG4gICAgLy8gUHJvY2VzcyBlYWNoIGZpbHRlclxuICAgIE9iamVjdC5rZXlzKG5ld0ZpbHRlcnNNYXApLmZvckVhY2goKGZpbHRlck5hbWUpID0+IHtcbiAgICAgIGNvbnN0IG9sZEZpbHRlciA9IG9sZEZpbHRlcnNNYXBbZmlsdGVyTmFtZV07XG4gICAgICBjb25zdCBuZXdGaWx0ZXIgPSBuZXdGaWx0ZXJzTWFwW2ZpbHRlck5hbWVdO1xuXG4gICAgICBpZiAob2xkRmlsdGVyICYmIG5ld0ZpbHRlcikge1xuICAgICAgICB0aGlzLl9yZXBsYWNlRmlsdGVyRHJvcGRvd25TdHJ1Y3R1cmUoXG4gICAgICAgICAgb2xkRmlsdGVyLFxuICAgICAgICAgIG5ld0ZpbHRlcixcbiAgICAgICAgICBleGlzdGluZ1NlY3Rpb25NYXBcbiAgICAgICAgKTtcbiAgICAgIH0gZWxzZSBpZiAobmV3RmlsdGVyICYmICFvbGRGaWx0ZXIpIHtcbiAgICAgICAgLy8gQWRkIG5ldyBmaWx0ZXJzIHRoYXQgZG9uJ3QgZXhpc3QgaW4gdGhlIG9sZCBwYW5lbFxuICAgICAgICBvbGRQYW5lbC5hcHBlbmRDaGlsZChuZXdGaWx0ZXIpO1xuICAgICAgICAvL3RoaXMuX2F0dGFjaEV2ZW50SGFuZGxlcnNUb05ld0ZpbHRlcihuZXdGaWx0ZXIpO1xuICAgICAgfVxuICAgIH0pO1xuXG4gICAgLy8gUmVtb3ZlIGZpbHRlcnMgdGhhdCBubyBsb25nZXIgZXhpc3QgaW4gdGhlIG5ldyBwYW5lbFxuICAgIE9iamVjdC5rZXlzKG9sZEZpbHRlcnNNYXApLmZvckVhY2goKGZpbHRlck5hbWUpID0+IHtcbiAgICAgIGlmICghbmV3RmlsdGVyc01hcFtmaWx0ZXJOYW1lXSkge1xuICAgICAgICBjb25zdCBvYnNvbGV0ZUZpbHRlciA9IG9sZEZpbHRlcnNNYXBbZmlsdGVyTmFtZV07XG4gICAgICAgIG9ic29sZXRlRmlsdGVyLmNsYXNzTGlzdC5hZGQoXCJmaWx0ZXItcGFuZWwtaXRlbS1oaWRkZW5cIik7XG4gICAgICB9IGVsc2Uge1xuICAgICAgICBjb25zdCBvYnNvbGV0ZUZpbHRlciA9IG9sZEZpbHRlcnNNYXBbZmlsdGVyTmFtZV07XG4gICAgICAgIGlmIChvYnNvbGV0ZUZpbHRlci5jbGFzc0xpc3QuY29udGFpbnMoXCJmaWx0ZXItcGFuZWwtaXRlbS1oaWRkZW5cIikpIHtcbiAgICAgICAgICBvYnNvbGV0ZUZpbHRlci5jbGFzc0xpc3QucmVtb3ZlKFwiZmlsdGVyLXBhbmVsLWl0ZW0taGlkZGVuXCIpO1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogUmVwbGFjZSB0aGUgZHJvcGRvd24gc3RydWN0dXJlIGZvciBhIHNwZWNpZmljIGZpbHRlclxuICAgKi9cbiAgX3JlcGxhY2VGaWx0ZXJEcm9wZG93blN0cnVjdHVyZShvbGRGaWx0ZXIsIG5ld0ZpbHRlciwgZXhpc3RpbmdTZWN0aW9uTWFwKSB7XG4gICAgY29uc3Qgb2xkRHJvcGRvd24gPSBvbGRGaWx0ZXIucXVlcnlTZWxlY3RvcihcIi5maWx0ZXItcGFuZWwtaXRlbS1kcm9wZG93blwiKTtcbiAgICBjb25zdCBuZXdEcm9wZG93biA9IG5ld0ZpbHRlci5xdWVyeVNlbGVjdG9yKFwiLmZpbHRlci1wYW5lbC1pdGVtLWRyb3Bkb3duXCIpO1xuXG4gICAgaWYgKCFvbGREcm9wZG93biB8fCAhbmV3RHJvcGRvd24pIHJldHVybjtcblxuICAgIC8vIEJ1aWxkIHRoZSBjb21wbGV0ZSBuZXcgc3RydWN0dXJlIGZyb20gdGhlIG5ldyBwYW5lbFxuICAgIGNvbnN0IG5ld1N0cnVjdHVyZSA9IHRoaXMuX2J1aWxkQ29tcGxldGVTdHJ1Y3R1cmVGcm9tTmV3KFxuICAgICAgbmV3RHJvcGRvd24sXG4gICAgICBleGlzdGluZ1NlY3Rpb25NYXBcbiAgICApO1xuXG4gICAgLy8gUmVwbGFjZSB0aGUgb2xkIGRyb3Bkb3duIGNvbnRlbnQgd2l0aCB0aGUgbmV3IHN0cnVjdHVyZVxuICAgIG9sZERyb3Bkb3duLmlubmVySFRNTCA9IFwiXCI7XG5cbiAgICAvLyBBZGQgdGhlIG5ldyBzdHJ1Y3R1cmUgdG8gdGhlIG9sZCBkcm9wZG93blxuICAgIG5ld1N0cnVjdHVyZS5mb3JFYWNoKChlbGVtZW50KSA9PiB7XG4gICAgICBvbGREcm9wZG93bi5hcHBlbmRDaGlsZChlbGVtZW50KTtcbiAgICB9KTtcblxuICAgIC8vIEF0dGFjaCBldmVudCBoYW5kbGVycyB0byBhbGwgbmV3IGl0ZW1zXG4gICAgdGhpcy5fYXR0YWNoRXZlbnRIYW5kbGVyc1RvTmV3RHJvcGRvd24ob2xkRHJvcGRvd24pO1xuICB9XG5cbiAgLyoqXG4gICAqIEF0dGFjaCBldmVudCBoYW5kbGVycyB0byBhbGwgaXRlbXMgaW4gYSBkcm9wZG93blxuICAgKi9cbiAgX2F0dGFjaEV2ZW50SGFuZGxlcnNUb05ld0Ryb3Bkb3duKGRyb3Bkb3duKSB7XG4gICAgY29uc3QgYWxsSXRlbXMgPSBkcm9wZG93bi5xdWVyeVNlbGVjdG9yQWxsKFxuICAgICAgXCIuZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0LWl0ZW1cIlxuICAgICk7XG5cbiAgICBhbGxJdGVtcy5mb3JFYWNoKChpdGVtKSA9PiB7XG4gICAgICB0aGlzLl9hdHRhY2hFdmVudEhhbmRsZXJzVG9OZXdJdGVtKGl0ZW0sIGRyb3Bkb3duKTtcbiAgICB9KTtcbiAgfVxuXG4gIC8qKlxuICAgKiBCdWlsZCB0aGUgY29tcGxldGUgc3RydWN0dXJlIGZyb20gdGhlIG5ldyBwYW5lbCwgcGxhY2luZyBleGlzdGluZyBpdGVtcyBjb3JyZWN0bHlcbiAgICovXG4gIF9idWlsZENvbXBsZXRlU3RydWN0dXJlRnJvbU5ldyhuZXdEcm9wZG93biwgZXhpc3RpbmdTZWN0aW9uTWFwKSB7XG4gICAgY29uc3Qgc3RydWN0dXJlID0gW107XG4gICAgY29uc3QgbmV3Q2hpbGRyZW4gPSBBcnJheS5mcm9tKG5ld0Ryb3Bkb3duLmNoaWxkcmVuKTtcblxuICAgIG5ld0NoaWxkcmVuLmZvckVhY2goKGNoaWxkKSA9PiB7XG4gICAgICBpZiAodGhpcy5faXNXcmFwcGVyRWxlbWVudChjaGlsZCkpIHtcbiAgICAgICAgLy8gVGhpcyBpcyBhIHdyYXBwZXIsIHByb2Nlc3MgaXRzIGNvbnRlbnRzXG4gICAgICAgIGNvbnN0IHdyYXBwZXIgPSBjaGlsZC5jbG9uZU5vZGUoZmFsc2UpOyAvLyBDbG9uZSB3aXRob3V0IGNoaWxkcmVuXG4gICAgICAgIGNvbnN0IHdyYXBwZXJDb250ZW50ID0gdGhpcy5fYnVpbGRXcmFwcGVyQ29udGVudChcbiAgICAgICAgICBjaGlsZCxcbiAgICAgICAgICBleGlzdGluZ1NlY3Rpb25NYXBcbiAgICAgICAgKTtcblxuICAgICAgICB3cmFwcGVyQ29udGVudC5mb3JFYWNoKChjb250ZW50RWxlbWVudCkgPT4ge1xuICAgICAgICAgIHdyYXBwZXIuYXBwZW5kQ2hpbGQoY29udGVudEVsZW1lbnQpO1xuICAgICAgICB9KTtcblxuICAgICAgICBzdHJ1Y3R1cmUucHVzaCh3cmFwcGVyKTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIC8vIERpcmVjdCBjaGlsZCBlbGVtZW50XG4gICAgICAgIGNvbnN0IGNsb25lZENoaWxkID0gdGhpcy5fcHJvY2Vzc1N0cnVjdHVyYWxFbGVtZW50KFxuICAgICAgICAgIGNoaWxkLFxuICAgICAgICAgIGV4aXN0aW5nU2VjdGlvbk1hcFxuICAgICAgICApO1xuICAgICAgICBpZiAoY2xvbmVkQ2hpbGQpIHtcbiAgICAgICAgICBzdHJ1Y3R1cmUucHVzaChjbG9uZWRDaGlsZCk7XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICB9KTtcblxuICAgIHJldHVybiBzdHJ1Y3R1cmU7XG4gIH1cblxuICAvKipcbiAgICogQnVpbGQgdGhlIGNvbnRlbnQgZm9yIGEgd3JhcHBlciBlbGVtZW50XG4gICAqL1xuICBfYnVpbGRXcmFwcGVyQ29udGVudCh3cmFwcGVyRWxlbWVudCwgZXhpc3RpbmdTZWN0aW9uTWFwKSB7XG4gICAgY29uc3QgY29udGVudCA9IFtdO1xuICAgIGNvbnN0IGNoaWxkcmVuID0gQXJyYXkuZnJvbSh3cmFwcGVyRWxlbWVudC5jaGlsZHJlbik7XG4gICAgbGV0IGN1cnJlbnRTZWN0aW9uID0gbnVsbDtcbiAgICBsZXQgY3VycmVudFNlY3Rpb25MaXN0ID0gbnVsbDtcblxuICAgIGNoaWxkcmVuLmZvckVhY2goKGNoaWxkKSA9PiB7XG4gICAgICBpZiAoXG4gICAgICAgIGNoaWxkLnRhZ05hbWUudG9Mb3dlckNhc2UoKSA9PT0gXCJ1bFwiICYmXG4gICAgICAgIGNoaWxkLmNsYXNzTGlzdC5jb250YWlucyhcImZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdFwiKVxuICAgICAgKSB7XG4gICAgICAgIC8vIFRoaXMgaXMgYSBsaXN0IC0gcG9wdWxhdGUgaXQgd2l0aCB0aGUgY29ycmVjdCBpdGVtc1xuICAgICAgICBpZiAoY3VycmVudFNlY3Rpb24pIHtcbiAgICAgICAgICBjdXJyZW50U2VjdGlvbkxpc3QgPSB0aGlzLl9jcmVhdGVMaXN0Rm9yU2VjdGlvbihcbiAgICAgICAgICAgIGNoaWxkLFxuICAgICAgICAgICAgY3VycmVudFNlY3Rpb24sXG4gICAgICAgICAgICBleGlzdGluZ1NlY3Rpb25NYXBcbiAgICAgICAgICApO1xuICAgICAgICAgIGNvbnRlbnQucHVzaChjdXJyZW50U2VjdGlvbkxpc3QpO1xuICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgIC8vIExpc3Qgd2l0aG91dCBhIHNlY3Rpb24gLSBjbG9uZSBhcyBpcyBidXQgY2hlY2sgZm9yIGV4aXN0aW5nIGl0ZW1zXG4gICAgICAgICAgY3VycmVudFNlY3Rpb25MaXN0ID0gdGhpcy5fY3JlYXRlTGlzdFdpdGhFeGlzdGluZ0l0ZW1zKFxuICAgICAgICAgICAgY2hpbGQsXG4gICAgICAgICAgICBleGlzdGluZ1NlY3Rpb25NYXBcbiAgICAgICAgICApO1xuICAgICAgICAgIGNvbnRlbnQucHVzaChjdXJyZW50U2VjdGlvbkxpc3QpO1xuICAgICAgICB9XG4gICAgICB9IGVsc2UgaWYgKFxuICAgICAgICBjaGlsZC50ZXh0Q29udGVudC50cmltKCkgJiZcbiAgICAgICAgIWNoaWxkLmNsYXNzTGlzdC5jb250YWlucyhcImZpbHRlci1tdWx0aS1zZWxlY3QtbGlzdC1pdGVtXCIpXG4gICAgICApIHtcbiAgICAgICAgLy8gVGhpcyBpcyBhIHNlY3Rpb24gaGVhZGVyXG4gICAgICAgIGN1cnJlbnRTZWN0aW9uID0gY2hpbGQudGV4dENvbnRlbnQudHJpbSgpO1xuICAgICAgICBjb25zdCBjbG9uZWRIZWFkZXIgPSBjaGlsZC5jbG9uZU5vZGUodHJ1ZSk7XG4gICAgICAgIGNvbnRlbnQucHVzaChjbG9uZWRIZWFkZXIpO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgLy8gT3RoZXIgc3RydWN0dXJhbCBlbGVtZW50XG4gICAgICAgIGNvbnN0IGNsb25lZEVsZW1lbnQgPSBjaGlsZC5jbG9uZU5vZGUodHJ1ZSk7XG4gICAgICAgIGNvbnRlbnQucHVzaChjbG9uZWRFbGVtZW50KTtcbiAgICAgIH1cbiAgICB9KTtcblxuICAgIHJldHVybiBjb250ZW50O1xuICB9XG5cbiAgLyoqXG4gICAqIENyZWF0ZSBhIGxpc3QgZm9yIGEgc3BlY2lmaWMgc2VjdGlvbiwgdXNpbmcgZXhpc3RpbmcgaXRlbXMgaWYgYXZhaWxhYmxlXG4gICAqL1xuICBfY3JlYXRlTGlzdEZvclNlY3Rpb24odGVtcGxhdGVMaXN0LCBzZWN0aW9uVGV4dCwgZXhpc3RpbmdTZWN0aW9uTWFwKSB7XG4gICAgY29uc3QgbGlzdCA9IHRlbXBsYXRlTGlzdC5jbG9uZU5vZGUoZmFsc2UpOyAvLyBDbG9uZSB3aXRob3V0IGNoaWxkcmVuXG5cbiAgICAvLyBDcmVhdGUgYSBtYXAgb2YgZXhpc3RpbmcgaXRlbXMgYnkgdGhlaXIgbGFiZWxzIHRvIHByZXNlcnZlIGNoZWNrZWQgc3RhdGVzXG4gICAgY29uc3QgZXhpc3RpbmdJdGVtc01hcCA9IG5ldyBNYXAoKTtcbiAgICBpZiAoZXhpc3RpbmdTZWN0aW9uTWFwLmhhcyhzZWN0aW9uVGV4dCkpIHtcbiAgICAgIGNvbnN0IGV4aXN0aW5nSXRlbXMgPSBleGlzdGluZ1NlY3Rpb25NYXAuZ2V0KHNlY3Rpb25UZXh0KTtcbiAgICAgIGV4aXN0aW5nSXRlbXMuZm9yRWFjaCgoaXRlbSkgPT4ge1xuICAgICAgICBjb25zdCBsYWJlbCA9IHRoaXMuX2dldEl0ZW1MYWJlbChpdGVtKTtcbiAgICAgICAgaWYgKGxhYmVsKSB7XG4gICAgICAgICAgY29uc3QgaW5wdXQgPSBpdGVtLnF1ZXJ5U2VsZWN0b3IoXCJpbnB1dFwiKTtcbiAgICAgICAgICBleGlzdGluZ0l0ZW1zTWFwLnNldChsYWJlbCwge1xuICAgICAgICAgICAgZWxlbWVudDogaXRlbSxcbiAgICAgICAgICAgIGNoZWNrZWQ6IGlucHV0ID8gaW5wdXQuY2hlY2tlZCA6IGZhbHNlLFxuICAgICAgICAgIH0pO1xuICAgICAgICB9XG4gICAgICB9KTtcbiAgICB9XG5cbiAgICAvLyBVc2UgaXRlbXMgZnJvbSB0aGUgbmV3IHRlbXBsYXRlIChzZXJ2ZXIgcmVzcG9uc2UpIGFzIHRoZSBzb3VyY2Ugb2YgdHJ1dGhcbiAgICBjb25zdCB0ZW1wbGF0ZUl0ZW1zID0gQXJyYXkuZnJvbSh0ZW1wbGF0ZUxpc3QuY2hpbGRyZW4pO1xuICAgIHRlbXBsYXRlSXRlbXMuZm9yRWFjaCgodGVtcGxhdGVJdGVtKSA9PiB7XG4gICAgICBjb25zdCB0ZW1wbGF0ZUxhYmVsID0gdGhpcy5fZ2V0SXRlbUxhYmVsKHRlbXBsYXRlSXRlbSk7XG4gICAgICBjb25zdCBuZXdJdGVtID0gdGVtcGxhdGVJdGVtLmNsb25lTm9kZSh0cnVlKTtcblxuICAgICAgLy8gSWYgd2UgaGF2ZSBhbiBleGlzdGluZyBpdGVtIHdpdGggdGhlIHNhbWUgbGFiZWwsIHByZXNlcnZlIGl0cyBjaGVja2VkIHN0YXRlXG4gICAgICBpZiAodGVtcGxhdGVMYWJlbCAmJiBleGlzdGluZ0l0ZW1zTWFwLmhhcyh0ZW1wbGF0ZUxhYmVsKSkge1xuICAgICAgICBjb25zdCBleGlzdGluZ0luZm8gPSBleGlzdGluZ0l0ZW1zTWFwLmdldCh0ZW1wbGF0ZUxhYmVsKTtcbiAgICAgICAgY29uc3QgbmV3SW5wdXQgPSBuZXdJdGVtLnF1ZXJ5U2VsZWN0b3IoXCJpbnB1dFwiKTtcbiAgICAgICAgaWYgKG5ld0lucHV0ICYmIGV4aXN0aW5nSW5mby5jaGVja2VkKSB7XG4gICAgICAgICAgbmV3SW5wdXQuY2hlY2tlZCA9IHRydWU7XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgbGlzdC5hcHBlbmRDaGlsZChuZXdJdGVtKTtcbiAgICB9KTtcblxuICAgIHJldHVybiBsaXN0O1xuICB9XG5cbiAgLyoqXG4gICAqIENyZWF0ZSBhIGxpc3Qgd2l0aCBleGlzdGluZyBpdGVtcyAoZm9yIGxpc3RzIHdpdGhvdXQgY2xlYXIgc2VjdGlvbiBoZWFkZXJzKVxuICAgKi9cbiAgX2NyZWF0ZUxpc3RXaXRoRXhpc3RpbmdJdGVtcyh0ZW1wbGF0ZUxpc3QsIGV4aXN0aW5nU2VjdGlvbk1hcCkge1xuICAgIGNvbnN0IGxpc3QgPSB0ZW1wbGF0ZUxpc3QuY2xvbmVOb2RlKGZhbHNlKTtcblxuICAgIC8vIFRyeSB0byBkZXRlcm1pbmUgd2hpY2ggc2VjdGlvbiB0aGlzIGxpc3QgYmVsb25ncyB0byBieSBsb29raW5nIGF0IGl0cyBpdGVtc1xuICAgIGNvbnN0IHRlbXBsYXRlSXRlbXMgPSBBcnJheS5mcm9tKHRlbXBsYXRlTGlzdC5jaGlsZHJlbik7XG4gICAgbGV0IG1hdGNoZWRTZWN0aW9uID0gbnVsbDtcblxuICAgIC8vIExvb2sgZm9yIHRoZSBzZWN0aW9uIHRoYXQgY29udGFpbnMgbW9zdCBvZiB0aGVzZSBpdGVtc1xuICAgIGV4aXN0aW5nU2VjdGlvbk1hcC5mb3JFYWNoKChleGlzdGluZ0l0ZW1zLCBzZWN0aW9uVGV4dCkgPT4ge1xuICAgICAgY29uc3QgbWF0Y2hDb3VudCA9IHRlbXBsYXRlSXRlbXMucmVkdWNlKChjb3VudCwgdGVtcGxhdGVJdGVtKSA9PiB7XG4gICAgICAgIGNvbnN0IHRlbXBsYXRlTGFiZWwgPSB0aGlzLl9nZXRJdGVtTGFiZWwodGVtcGxhdGVJdGVtKTtcbiAgICAgICAgY29uc3QgaGFzTWF0Y2ggPSBleGlzdGluZ0l0ZW1zLnNvbWUoKGV4aXN0aW5nSXRlbSkgPT4ge1xuICAgICAgICAgIGNvbnN0IGV4aXN0aW5nTGFiZWwgPSB0aGlzLl9nZXRJdGVtTGFiZWwoZXhpc3RpbmdJdGVtKTtcbiAgICAgICAgICByZXR1cm4gZXhpc3RpbmdMYWJlbCA9PT0gdGVtcGxhdGVMYWJlbDtcbiAgICAgICAgfSk7XG4gICAgICAgIHJldHVybiBoYXNNYXRjaCA/IGNvdW50ICsgMSA6IGNvdW50O1xuICAgICAgfSwgMCk7XG5cbiAgICAgIGlmIChcbiAgICAgICAgbWF0Y2hDb3VudCA+IDAgJiZcbiAgICAgICAgKCFtYXRjaGVkU2VjdGlvbiB8fCBtYXRjaENvdW50ID4gbWF0Y2hlZFNlY3Rpb24uY291bnQpXG4gICAgICApIHtcbiAgICAgICAgbWF0Y2hlZFNlY3Rpb24gPSB7IHNlY3Rpb246IHNlY3Rpb25UZXh0LCBjb3VudDogbWF0Y2hDb3VudCB9O1xuICAgICAgfVxuICAgIH0pO1xuXG4gICAgaWYgKG1hdGNoZWRTZWN0aW9uKSB7XG4gICAgICAvLyBVc2UgdGhlIG1hdGNoZWQgc2VjdGlvbidzIGl0ZW1zXG4gICAgICByZXR1cm4gdGhpcy5fY3JlYXRlTGlzdEZvclNlY3Rpb24oXG4gICAgICAgIHRlbXBsYXRlTGlzdCxcbiAgICAgICAgbWF0Y2hlZFNlY3Rpb24uc2VjdGlvbixcbiAgICAgICAgZXhpc3RpbmdTZWN0aW9uTWFwXG4gICAgICApO1xuICAgIH1cblxuICAgIC8vIE5vIHNlY3Rpb24gbWF0Y2ggZm91bmQgLSBjcmVhdGUgYSBtYXAgb2YgYWxsIGV4aXN0aW5nIGl0ZW1zIHRvIHByZXNlcnZlIGNoZWNrZWQgc3RhdGVzXG4gICAgY29uc3QgZXhpc3RpbmdJdGVtc01hcCA9IG5ldyBNYXAoKTtcbiAgICBleGlzdGluZ1NlY3Rpb25NYXAuZm9yRWFjaCgoZXhpc3RpbmdJdGVtcywgc2VjdGlvblRleHQpID0+IHtcbiAgICAgIGV4aXN0aW5nSXRlbXMuZm9yRWFjaCgoaXRlbSkgPT4ge1xuICAgICAgICBjb25zdCBsYWJlbCA9IHRoaXMuX2dldEl0ZW1MYWJlbChpdGVtKTtcbiAgICAgICAgaWYgKGxhYmVsKSB7XG4gICAgICAgICAgY29uc3QgaW5wdXQgPSBpdGVtLnF1ZXJ5U2VsZWN0b3IoXCJpbnB1dFwiKTtcbiAgICAgICAgICBleGlzdGluZ0l0ZW1zTWFwLnNldChsYWJlbCwge1xuICAgICAgICAgICAgZWxlbWVudDogaXRlbSxcbiAgICAgICAgICAgIGNoZWNrZWQ6IGlucHV0ID8gaW5wdXQuY2hlY2tlZCA6IGZhbHNlLFxuICAgICAgICAgIH0pO1xuICAgICAgICB9XG4gICAgICB9KTtcbiAgICB9KTtcblxuICAgIC8vIFVzZSBpdGVtcyBmcm9tIHRoZSB0ZW1wbGF0ZSAoc2VydmVyIHJlc3BvbnNlKSBhcyB0aGUgc291cmNlIG9mIHRydXRoXG4gICAgdGVtcGxhdGVJdGVtcy5mb3JFYWNoKCh0ZW1wbGF0ZUl0ZW0pID0+IHtcbiAgICAgIGNvbnN0IHRlbXBsYXRlTGFiZWwgPSB0aGlzLl9nZXRJdGVtTGFiZWwodGVtcGxhdGVJdGVtKTtcbiAgICAgIGNvbnN0IG5ld0l0ZW0gPSB0ZW1wbGF0ZUl0ZW0uY2xvbmVOb2RlKHRydWUpO1xuXG4gICAgICAvLyBJZiB3ZSBoYXZlIGFuIGV4aXN0aW5nIGl0ZW0gd2l0aCB0aGUgc2FtZSBsYWJlbCwgcHJlc2VydmUgaXRzIGNoZWNrZWQgc3RhdGVcbiAgICAgIGlmICh0ZW1wbGF0ZUxhYmVsICYmIGV4aXN0aW5nSXRlbXNNYXAuaGFzKHRlbXBsYXRlTGFiZWwpKSB7XG4gICAgICAgIGNvbnN0IGV4aXN0aW5nSW5mbyA9IGV4aXN0aW5nSXRlbXNNYXAuZ2V0KHRlbXBsYXRlTGFiZWwpO1xuICAgICAgICBjb25zdCBuZXdJbnB1dCA9IG5ld0l0ZW0ucXVlcnlTZWxlY3RvcihcImlucHV0XCIpO1xuICAgICAgICBpZiAobmV3SW5wdXQgJiYgZXhpc3RpbmdJbmZvLmNoZWNrZWQpIHtcbiAgICAgICAgICBuZXdJbnB1dC5jaGVja2VkID0gdHJ1ZTtcbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICBsaXN0LmFwcGVuZENoaWxkKG5ld0l0ZW0pO1xuICAgIH0pO1xuXG4gICAgcmV0dXJuIGxpc3Q7XG4gIH1cblxuICAvKipcbiAgICogUHJvY2VzcyBhIHN0cnVjdHVyYWwgZWxlbWVudCAobm9uLXdyYXBwZXIpXG4gICAqL1xuICBfcHJvY2Vzc1N0cnVjdHVyYWxFbGVtZW50KGVsZW1lbnQsIGV4aXN0aW5nU2VjdGlvbk1hcCkge1xuICAgIGlmIChcbiAgICAgIGVsZW1lbnQudGFnTmFtZS50b0xvd2VyQ2FzZSgpID09PSBcInVsXCIgJiZcbiAgICAgIGVsZW1lbnQuY2xhc3NMaXN0LmNvbnRhaW5zKFwiZmlsdGVyLW11bHRpLXNlbGVjdC1saXN0XCIpXG4gICAgKSB7XG4gICAgICByZXR1cm4gdGhpcy5fY3JlYXRlTGlzdFdpdGhFeGlzdGluZ0l0ZW1zKGVsZW1lbnQsIGV4aXN0aW5nU2VjdGlvbk1hcCk7XG4gICAgfVxuXG4gICAgcmV0dXJuIGVsZW1lbnQuY2xvbmVOb2RlKHRydWUpO1xuICB9XG59XG4iLCJpbXBvcnQgUGx1Z2luIGZyb20gXCJzcmMvcGx1Z2luLXN5c3RlbS9wbHVnaW4uY2xhc3NcIjtcblxuLyoqXG4gKiBDYXRlZ29yeUxvY2FsU3RvcmFnZSBQbHVnaW5cbiAqXG4gKiBEZXRlY3RzIGF2YWlsYWJsZSBmaWx0ZXJzIG9uIFNob3B3YXJlIGNhdGVnb3J5IHBhZ2VzIGFuZCBzdG9yZXMgdGhlbSBhcyBhbiBhcnJheSB0byBsb2NhbFN0b3JhZ2UuXG4gKiBUcmFja3Mgd2hpY2ggZmlsdGVycyBhcmUgYXZhaWxhYmxlIGZvciBlYWNoIGNhdGVnb3J5IHBhZ2UgdmlzaXQuXG4gKlxuICogQ29uZmlndXJhdGlvbiBvcHRpb25zOlxuICogLSBlbmFibGVkOiBXaGV0aGVyIHRoZSBwbHVnaW4gaXMgZW5hYmxlZFxuICogLSBzdG9yYWdlS2V5OiBUaGUga2V5IHRvIHVzZSBpbiBsb2NhbFN0b3JhZ2UgKGRlZmF1bHQ6ICdtYWNhdGZpYWxsJylcbiAqXG4gKiBVc2FnZTpcbiAqIDxkaXYgZGF0YS1jYXRlZ29yeS1sb2NhbC1zdG9yYWdlPVwidHJ1ZVwiXG4gKiAgICAgIGRhdGEtY2F0ZWdvcnktbG9jYWwtc3RvcmFnZS1vcHRpb25zPSd7XCJlbmFibGVkXCI6IHRydWUsIFwic3RvcmFnZUtleVwiOiBcIm1hY2F0ZmlhbGxcIn0nPlxuICogPC9kaXY+XG4gKi9cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIENhdGVnb3J5TG9jYWxTdG9yYWdlIGV4dGVuZHMgUGx1Z2luIHtcbiAgc3RhdGljIG9wdGlvbnMgPSB7XG4gICAgZW5hYmxlZDogdHJ1ZSxcbiAgICBzdG9yYWdlS2V5OiBcIm1hY2F0ZmlhbGxcIixcbiAgICBpbmNsdWRlVGltZXN0YW1wOiBmYWxzZSxcbiAgfTtcblxuICBjb25zdHJ1Y3RvcihlbCwgb3B0aW9ucywgcGx1Z2luTmFtZSkge1xuICAgIHN1cGVyKGVsLCBvcHRpb25zLCBwbHVnaW5OYW1lKTtcblxuICAgIHRoaXMuX2N1cnJlbnRDYXRlZ29yeUlkID0gbnVsbDtcbiAgICB0aGlzLl9pc0luaXRpYWxpemVkID0gZmFsc2U7XG5cbiAgICAvLyBNZXJnZSBjb25maWd1cmF0aW9uIGZyb20gZGF0YSBhdHRyaWJ1dGVzXG4gICAgdGhpcy5fbWVyZ2VDb25maWdGcm9tRWxlbWVudChlbCk7XG4gIH1cblxuICAvKipcbiAgICogTWVyZ2UgY29uZmlndXJhdGlvbiBmcm9tIFBIUCAoZGF0YSBhdHRyaWJ1dGUpIHdpdGggZGVmYXVsdCBvcHRpb25zXG4gICAqL1xuICBfbWVyZ2VDb25maWdGcm9tRWxlbWVudChlbCkge1xuICAgIGNvbnN0IGNvbmZpZ0F0dHJpYnV0ZSA9IGVsLmdldEF0dHJpYnV0ZShcbiAgICAgIFwiZGF0YS1jYXRlZ29yeS1sb2NhbC1zdG9yYWdlLW9wdGlvbnNcIlxuICAgICk7XG4gICAgaWYgKGNvbmZpZ0F0dHJpYnV0ZSkge1xuICAgICAgdHJ5IHtcbiAgICAgICAgY29uc3QgcGx1Z2luQ29uZmlnID0gSlNPTi5wYXJzZShjb25maWdBdHRyaWJ1dGUpO1xuICAgICAgICBPYmplY3QuYXNzaWduKHRoaXMub3B0aW9ucywgcGx1Z2luQ29uZmlnKTtcbiAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgY29uc29sZS53YXJuKFxuICAgICAgICAgIFwiQ2F0ZWdvcnlMb2NhbFN0b3JhZ2U6IEZhaWxlZCB0byBwYXJzZSBjb25maWd1cmF0aW9uIGZyb20gZGF0YSBhdHRyaWJ1dGVcIixcbiAgICAgICAgICBlXG4gICAgICAgICk7XG4gICAgICB9XG4gICAgfVxuICB9XG5cbiAgaW5pdCgpIHtcbiAgICBpZiAoIXRoaXMub3B0aW9ucy5lbmFibGVkKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuXG4gICAgdGhpcy5fZGV0ZWN0QW5kU3RvcmVDYXRlZ29yeURhdGEoKTtcbiAgICB0aGlzLl9zZXR1cFVybENoYW5nZUxpc3RlbmVyKCk7XG4gICAgdGhpcy5faXNJbml0aWFsaXplZCA9IHRydWU7XG4gIH1cblxuICAvKipcbiAgICogRGV0ZWN0IGF2YWlsYWJsZSBmaWx0ZXJzIGFuZCBzdG9yZSB0byBsb2NhbFN0b3JhZ2VcbiAgICovXG4gIF9kZXRlY3RBbmRTdG9yZUNhdGVnb3J5RGF0YSgpIHtcbiAgICBjb25zdCBhdmFpbGFibGVGaWx0ZXJzID0gdGhpcy5fZ2V0Q2F0ZWdvcnlEYXRhKCk7XG5cbiAgICBpZiAoYXZhaWxhYmxlRmlsdGVycyAmJiBhdmFpbGFibGVGaWx0ZXJzLmxlbmd0aCA+IDApIHtcbiAgICAgIHRoaXMuX3N0b3JlVG9Mb2NhbFN0b3JhZ2UoYXZhaWxhYmxlRmlsdGVycyk7XG5cbiAgICAgIC8vIEFsc28gc3RvcmUgdG8gbWFjdXJyZmkgaWYgZmlsdGVyIHBhcmFtZXRlcnMgYXJlIHByZXNlbnQgaW4gVVJMXG4gICAgICBpZiAodGhpcy5faGFzRmlsdGVyUGFyYW1ldGVycygpKSB7XG4gICAgICAgIHRoaXMuX3N0b3JlQ3VycmVudEZpbHRlcnNUb0xvY2FsU3RvcmFnZShhdmFpbGFibGVGaWx0ZXJzKTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIC8vIENsZWFuIG1hY3VycmZpIGlmIG5vIGZpbHRlciBwYXJhbWV0ZXJzIGFyZSBwcmVzZW50XG4gICAgICAgIHRoaXMuX2NsZWFyQ3VycmVudEZpbHRlcnNGcm9tTG9jYWxTdG9yYWdlKCk7XG4gICAgICB9XG5cbiAgICAgIHRoaXMuX2N1cnJlbnRDYXRlZ29yeUlkID0gdGhpcy5fZXh0cmFjdENhdGVnb3J5SWQoKTtcbiAgICB9XG4gIH1cblxuICAvKipcbiAgICogU2V0IHVwIGxpc3RlbmVyIGZvciBVUkwgY2hhbmdlcyAoZm9yIFNQQSBuYXZpZ2F0aW9uKVxuICAgKi9cbiAgX3NldHVwVXJsQ2hhbmdlTGlzdGVuZXIoKSB7XG4gICAgLy8gTGlzdGVuIGZvciBwb3BzdGF0ZSBldmVudHMgKGJyb3dzZXIgbmF2aWdhdGlvbilcbiAgICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcihcInBvcHN0YXRlXCIsICgpID0+IHtcbiAgICAgIHNldFRpbWVvdXQoKCkgPT4gdGhpcy5fZGV0ZWN0QW5kU3RvcmVDYXRlZ29yeURhdGEoKSwgMTAwKTtcbiAgICB9KTtcblxuICAgIC8vIExpc3RlbiBmb3IgU2hvcHdhcmUncyBsaXN0aW5nIHVwZGF0ZXNcbiAgICAvLyBpZiAodGhpcy4kZW1pdHRlcikge1xuICAgIC8vICAgdGhpcy4kZW1pdHRlci5zdWJzY3JpYmUoJ0xpc3RpbmcvYWZ0ZXJSZW5kZXJSZXNwb25zZScsICgpID0+IHtcbiAgICAvLyAgICAgc2V0VGltZW91dCgoKSA9PiB0aGlzLl9kZXRlY3RBbmRTdG9yZUNhdGVnb3J5RGF0YSgpLCAxMDApO1xuICAgIC8vICAgfSk7XG4gICAgLy8gfVxuXG4gICAgLy8gQWxzbyBsaXN0ZW4gZm9yIHB1c2hTdGF0ZS9yZXBsYWNlU3RhdGUgY2hhbmdlc1xuICAgIC8vIGNvbnN0IG9yaWdpbmFsUHVzaFN0YXRlID0gaGlzdG9yeS5wdXNoU3RhdGU7XG4gICAgLy8gY29uc3Qgb3JpZ2luYWxSZXBsYWNlU3RhdGUgPSBoaXN0b3J5LnJlcGxhY2VTdGF0ZTtcblxuICAgIC8vIGhpc3RvcnkucHVzaFN0YXRlID0gKC4uLmFyZ3MpID0+IHtcbiAgICAvLyAgIG9yaWdpbmFsUHVzaFN0YXRlLmFwcGx5KGhpc3RvcnksIGFyZ3MpO1xuICAgIC8vICAgc2V0VGltZW91dCgoKSA9PiB0aGlzLl9kZXRlY3RBbmRTdG9yZUNhdGVnb3J5RGF0YSgpLCAxMDApO1xuICAgIC8vIH07XG5cbiAgICAvLyBoaXN0b3J5LnJlcGxhY2VTdGF0ZSA9ICguLi5hcmdzKSA9PiB7XG4gICAgLy8gICBvcmlnaW5hbFJlcGxhY2VTdGF0ZS5hcHBseShoaXN0b3J5LCBhcmdzKTtcbiAgICAvLyAgIHNldFRpbWVvdXQoKCkgPT4gdGhpcy5fZGV0ZWN0QW5kU3RvcmVDYXRlZ29yeURhdGEoKSwgMTAwKTtcbiAgICAvLyB9O1xuICB9XG5cbiAgLyoqXG4gICAqIEV4dHJhY3QgYXZhaWxhYmxlIGZpbHRlcnMgZnJvbSB0aGUgY3VycmVudCBwYWdlXG4gICAqL1xuICBfZ2V0Q2F0ZWdvcnlEYXRhKCkge1xuICAgIC8vIENoZWNrIGlmIHdlJ3JlIG9uIGEgY2F0ZWdvcnkgcGFnZVxuICAgIGlmICghdGhpcy5faXNPbkNhdGVnb3J5UGFnZSgpKSB7XG4gICAgICByZXR1cm4gbnVsbDtcbiAgICB9XG5cbiAgICAvLyBTaW1wbHkgcmV0dXJuIHRoZSBhdmFpbGFibGUgZmlsdGVycyBhcnJheVxuICAgIHJldHVybiB0aGlzLl9nZXRBdmFpbGFibGVGaWx0ZXJzKCk7XG4gIH1cblxuICAvKipcbiAgICogQ2hlY2sgaWYgY3VycmVudCBwYWdlIGlzIGEgY2F0ZWdvcnkgcGFnZVxuICAgKi9cbiAgX2lzT25DYXRlZ29yeVBhZ2UoKSB7XG4gICAgLy8gQ2hlY2sgZm9yIGNhdGVnb3J5LXNwZWNpZmljIGVsZW1lbnRzXG4gICAgY29uc3QgY2F0ZWdvcnlJbmRpY2F0b3JzID0gW1xuICAgICAgXCIuY2F0ZWdvcnktbGlzdGluZ1wiLFxuICAgICAgXCIuY21zLWVsZW1lbnQtcHJvZHVjdC1saXN0aW5nXCIsXG4gICAgICBcIltkYXRhLWxpc3RpbmddXCIsXG4gICAgICBcIi5wcm9kdWN0LWxpc3RpbmdcIixcbiAgICAgIFwiYm9keS5pcy1jdGwtbmF2aWdhdGlvblwiLFxuICAgIF07XG5cbiAgICByZXR1cm4gY2F0ZWdvcnlJbmRpY2F0b3JzLnNvbWUoXG4gICAgICAoc2VsZWN0b3IpID0+IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3Ioc2VsZWN0b3IpICE9PSBudWxsXG4gICAgKTtcbiAgfVxuXG4gIC8qKlxuICAgKiBFeHRyYWN0IGNhdGVnb3J5IElEIGZyb20gdmFyaW91cyBzb3VyY2VzIChzaW1wbGlmaWVkKVxuICAgKi9cbiAgX2V4dHJhY3RDYXRlZ29yeUlkKCkge1xuICAgIC8vIE1ldGhvZCAxOiBGcm9tIGRhdGEgYXR0cmlidXRlc1xuICAgIGNvbnN0IGxpc3RpbmdFbGVtZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIltkYXRhLWxpc3RpbmddXCIpO1xuICAgIGlmIChsaXN0aW5nRWxlbWVudCAmJiBsaXN0aW5nRWxlbWVudC5kYXRhc2V0Lmxpc3RpbmdPcHRpb25zKSB7XG4gICAgICB0cnkge1xuICAgICAgICBjb25zdCBsaXN0aW5nT3B0aW9ucyA9IEpTT04ucGFyc2UoXG4gICAgICAgICAgbGlzdGluZ0VsZW1lbnQuZGF0YXNldC5saXN0aW5nT3B0aW9uc1xuICAgICAgICApO1xuICAgICAgICBpZiAobGlzdGluZ09wdGlvbnMuY2F0ZWdvcnlJZCkge1xuICAgICAgICAgIHJldHVybiBsaXN0aW5nT3B0aW9ucy5jYXRlZ29yeUlkO1xuICAgICAgICB9XG4gICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgIC8vIElnbm9yZSBwYXJzaW5nIGVycm9yc1xuICAgICAgfVxuICAgIH1cblxuICAgIC8vIE1ldGhvZCAyOiBGcm9tIFVSTCBwYXR0ZXJuc1xuICAgIGNvbnN0IHBhdGggPSB3aW5kb3cubG9jYXRpb24ucGF0aG5hbWU7XG4gICAgY29uc3QgbWF0Y2ggPSBwYXRoLm1hdGNoKC9cXC9uYXZpZ2F0aW9uXFwvKFthLWYwLTktXSspLyk7XG4gICAgaWYgKG1hdGNoKSB7XG4gICAgICByZXR1cm4gbWF0Y2hbMV07XG4gICAgfVxuXG4gICAgLy8gTWV0aG9kIDM6IEdlbmVyYXRlIHNpbXBsZSBpZGVudGlmaWVyIGZyb20gVVJMXG4gICAgcmV0dXJuIHdpbmRvdy5sb2NhdGlvbi5wYXRobmFtZS5yZXBsYWNlKC9cXC8vZywgXCJfXCIpIHx8IFwidW5rbm93bl9jYXRlZ29yeVwiO1xuICB9XG5cbiAgLyoqXG4gICAqIENoZWNrIGlmIFVSTCBjb250YWlucyBwYXJhbWV0ZXJzIHRoYXQgc3RhcnQgd2l0aCBcImZpbHRlcl9cIlxuICAgKi9cbiAgX2hhc0ZpbHRlclBhcmFtZXRlcnMoKSB7XG4gICAgY29uc3QgdXJsUGFyYW1zID0gbmV3IFVSTFNlYXJjaFBhcmFtcyh3aW5kb3cubG9jYXRpb24uc2VhcmNoKTtcblxuICAgIGZvciAoY29uc3QgW2tleV0gb2YgdXJsUGFyYW1zKSB7XG4gICAgICBpZiAoa2V5LnN0YXJ0c1dpdGgoXCJmaWx0ZXJfXCIpKSB7XG4gICAgICAgIHJldHVybiB0cnVlO1xuICAgICAgfVxuICAgIH1cblxuICAgIHJldHVybiBmYWxzZTtcbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgYXZhaWxhYmxlIGZpbHRlcnMgZnJvbSB0aGUgcGFnZVxuICAgKi9cbiAgX2dldEF2YWlsYWJsZUZpbHRlcnMoKSB7XG4gICAgY29uc3QgZmlsdGVySXRlbXMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKFxuICAgICAgXCIuZmlsdGVyLXBhbmVsLWl0ZW1bZGF0YS1maWx0ZXItbXVsdGktc2VsZWN0LW9wdGlvbnNdXCJcbiAgICApO1xuICAgIGNvbnN0IGF2YWlsYWJsZUZpbHRlcnMgPSBbXTtcblxuICAgIGZpbHRlckl0ZW1zLmZvckVhY2goKGZpbHRlckl0ZW0pID0+IHtcbiAgICAgIHRyeSB7XG4gICAgICAgIGNvbnN0IG9wdGlvbnNEYXRhID0gZmlsdGVySXRlbS5nZXRBdHRyaWJ1dGUoXG4gICAgICAgICAgXCJkYXRhLWZpbHRlci1tdWx0aS1zZWxlY3Qtb3B0aW9uc1wiXG4gICAgICAgICk7XG4gICAgICAgIGlmIChvcHRpb25zRGF0YSkge1xuICAgICAgICAgIGNvbnN0IG9wdGlvbnMgPSBKU09OLnBhcnNlKG9wdGlvbnNEYXRhKTtcbiAgICAgICAgICBpZiAob3B0aW9ucy5uYW1lKSB7XG4gICAgICAgICAgICBhdmFpbGFibGVGaWx0ZXJzLnB1c2gob3B0aW9ucy5uYW1lKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgLy8gSWdub3JlIHBhcnNpbmcgZXJyb3JzIGFuZCBjb250aW51ZSB3aXRoIG5leHQgaXRlbVxuICAgICAgICBjb25zb2xlLndhcm4oXG4gICAgICAgICAgXCJDYXRlZ29yeUxvY2FsU3RvcmFnZTogRmFpbGVkIHRvIHBhcnNlIGZpbHRlciBvcHRpb25zIGZvciBpdGVtOlwiLFxuICAgICAgICAgIGZpbHRlckl0ZW0sXG4gICAgICAgICAgZVxuICAgICAgICApO1xuICAgICAgfVxuICAgIH0pO1xuXG4gICAgcmV0dXJuIGF2YWlsYWJsZUZpbHRlcnM7XG4gIH1cblxuICAvKipcbiAgICogU3RvcmUgZmlsdGVycyBhcnJheSB0byBsb2NhbFN0b3JhZ2VcbiAgICovXG4gIF9zdG9yZVRvTG9jYWxTdG9yYWdlKGZpbHRlcnNBcnJheSkge1xuICAgIHRyeSB7XG4gICAgICBjb25zdCBzdG9yYWdlVmFsdWUgPSBKU09OLnN0cmluZ2lmeShmaWx0ZXJzQXJyYXkpO1xuICAgICAgbG9jYWxTdG9yYWdlLnNldEl0ZW0odGhpcy5vcHRpb25zLnN0b3JhZ2VLZXksIHN0b3JhZ2VWYWx1ZSk7XG4gICAgfSBjYXRjaCAoZSkge1xuICAgICAgY29uc29sZS5lcnJvcihcbiAgICAgICAgXCJDYXRlZ29yeUxvY2FsU3RvcmFnZTogRmFpbGVkIHRvIHN0b3JlIGZpbHRlcnMgdG8gbG9jYWxTdG9yYWdlOlwiLFxuICAgICAgICBlXG4gICAgICApO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBTdG9yZSBjdXJyZW50IGZpbHRlcnMgdG8gbG9jYWxTdG9yYWdlIHdpdGgga2V5IFwibWFjdXJyZmlcIlxuICAgKi9cbiAgX3N0b3JlQ3VycmVudEZpbHRlcnNUb0xvY2FsU3RvcmFnZShmaWx0ZXJzQXJyYXkpIHtcbiAgICB0cnkge1xuICAgICAgY29uc3Qgc3RvcmFnZVZhbHVlID0gSlNPTi5zdHJpbmdpZnkoZmlsdGVyc0FycmF5KTtcbiAgICAgIGxvY2FsU3RvcmFnZS5zZXRJdGVtKFwibWFjdXJyZmlcIiwgc3RvcmFnZVZhbHVlKTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBjb25zb2xlLmVycm9yKFxuICAgICAgICBcIkNhdGVnb3J5TG9jYWxTdG9yYWdlOiBGYWlsZWQgdG8gc3RvcmUgY3VycmVudCBmaWx0ZXJzIHRvIGxvY2FsU3RvcmFnZTpcIixcbiAgICAgICAgZVxuICAgICAgKTtcbiAgICB9XG4gIH1cblxuICAvKipcbiAgICogQ2xlYXIgY3VycmVudCBmaWx0ZXJzIGZyb20gbG9jYWxTdG9yYWdlIGJ5IHNldHRpbmcgbWFjdXJyZmkgdG8gdmFsdWVzIGZyb20gbWFjYXRmaWFsbFxuICAgKi9cbiAgX2NsZWFyQ3VycmVudEZpbHRlcnNGcm9tTG9jYWxTdG9yYWdlKCkge1xuICAgIHRyeSB7XG4gICAgICAvLyBHZXQgdmFsdWVzIGZyb20gbWFjYXRmaWFsbCBhbmQgc2V0IHRoZW0gdG8gbWFjdXJyZmlcbiAgICAgIGNvbnN0IG1hY2F0ZmlhbGxEYXRhID0gbG9jYWxTdG9yYWdlLmdldEl0ZW0odGhpcy5vcHRpb25zLnN0b3JhZ2VLZXkpO1xuICAgICAgaWYgKG1hY2F0ZmlhbGxEYXRhKSB7XG4gICAgICAgIGxvY2FsU3RvcmFnZS5zZXRJdGVtKFwibWFjdXJyZmlcIiwgbWFjYXRmaWFsbERhdGEpO1xuICAgICAgICBjb25zdCBmaWx0ZXJzQXJyYXkgPSBKU09OLnBhcnNlKG1hY2F0ZmlhbGxEYXRhKTtcbiAgICAgICAgY29uc29sZS5sb2coXG4gICAgICAgICAgXCJDYXRlZ29yeUxvY2FsU3RvcmFnZTogU2V0IG1hY3VycmZpIHRvIHZhbHVlcyBmcm9tIG1hY2F0ZmlhbGwgKG5vIGZpbHRlciBwYXJhbWV0ZXJzKTpcIixcbiAgICAgICAgICBmaWx0ZXJzQXJyYXlcbiAgICAgICAgKTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIC8vIElmIG1hY2F0ZmlhbGwgZG9lc24ndCBleGlzdCwgcmVtb3ZlIG1hY3VycmZpXG4gICAgICAgIGxvY2FsU3RvcmFnZS5yZW1vdmVJdGVtKFwibWFjdXJyZmlcIik7XG4gICAgICAgIGNvbnNvbGUubG9nKFxuICAgICAgICAgIFwiQ2F0ZWdvcnlMb2NhbFN0b3JhZ2U6IFJlbW92ZWQgbWFjdXJyZmkgZnJvbSBsb2NhbFN0b3JhZ2UgKG5vIGZpbHRlciBwYXJhbWV0ZXJzLCBubyBtYWNhdGZpYWxsIGRhdGEpXCJcbiAgICAgICAgKTtcbiAgICAgIH1cbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBjb25zb2xlLmVycm9yKFxuICAgICAgICBcIkNhdGVnb3J5TG9jYWxTdG9yYWdlOiBGYWlsZWQgdG8gY2xlYXIgY3VycmVudCBmaWx0ZXJzIGZyb20gbG9jYWxTdG9yYWdlOlwiLFxuICAgICAgICBlXG4gICAgICApO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgc3RvcmVkIGZpbHRlcnMgZnJvbSBsb2NhbFN0b3JhZ2VcbiAgICovXG4gIGdldFN0b3JlZEZpbHRlcnMoKSB7XG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IGRhdGEgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbSh0aGlzLm9wdGlvbnMuc3RvcmFnZUtleSk7XG4gICAgICByZXR1cm4gZGF0YSA/IEpTT04ucGFyc2UoZGF0YSkgOiBbXTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBjb25zb2xlLmVycm9yKFxuICAgICAgICBcIkNhdGVnb3J5TG9jYWxTdG9yYWdlOiBGYWlsZWQgdG8gcmV0cmlldmUgZmlsdGVycyBmcm9tIGxvY2FsU3RvcmFnZTpcIixcbiAgICAgICAgZVxuICAgICAgKTtcbiAgICAgIHJldHVybiBbXTtcbiAgICB9XG4gIH1cblxuICAvKipcbiAgICogQ2xlYXIgc3RvcmVkIGZpbHRlcnMgZnJvbSBsb2NhbFN0b3JhZ2VcbiAgICovXG4gIGNsZWFyU3RvcmVkRmlsdGVycygpIHtcbiAgICB0cnkge1xuICAgICAgbG9jYWxTdG9yYWdlLnJlbW92ZUl0ZW0odGhpcy5vcHRpb25zLnN0b3JhZ2VLZXkpO1xuICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgIGNvbnNvbGUuZXJyb3IoXG4gICAgICAgIFwiQ2F0ZWdvcnlMb2NhbFN0b3JhZ2U6IEZhaWxlZCB0byBjbGVhciBmaWx0ZXJzIGZyb20gbG9jYWxTdG9yYWdlOlwiLFxuICAgICAgICBlXG4gICAgICApO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBDaGVjayBpZiBjdXJyZW50bHkgb24gYSBjYXRlZ29yeSBwYWdlXG4gICAqL1xuICBpc09uQ2F0ZWdvcnlQYWdlKCkge1xuICAgIHJldHVybiB0aGlzLl9jdXJyZW50Q2F0ZWdvcnlJZCAhPT0gbnVsbDtcbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgY3VycmVudCBjYXRlZ29yeSBJRFxuICAgKi9cbiAgZ2V0Q3VycmVudENhdGVnb3J5SWQoKSB7XG4gICAgcmV0dXJuIHRoaXMuX2N1cnJlbnRDYXRlZ29yeUlkO1xuICB9XG59XG4iLCJpbXBvcnQgTGlzdGluZ0xpc3RlbmVyIGZyb20gXCIuL21ha2FpcmEtZmlsdGVyL2ZpbHRlci9saXN0aW5nLnBsdWdpblwiO1xuaW1wb3J0IENhdGVnb3J5TG9jYWxTdG9yYWdlIGZyb20gXCIuL21ha2FpcmEtZmlsdGVyL2NhdGVnb3J5LWxvY2FsLXN0b3JhZ2UucGx1Z2luXCI7XG5cbmRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoXCJET01Db250ZW50TG9hZGVkXCIsICgpID0+IHtcbiAgaWYgKHdpbmRvdy5QbHVnaW5NYW5hZ2VyKSB7XG4gICAgLy8gT25seSByZWdpc3RlciBpZiBub3QgYWxyZWFkeSByZWdpc3RlcmVkXG4gICAgd2luZG93LlBsdWdpbk1hbmFnZXIucmVnaXN0ZXIoXG4gICAgICBcIkxpc3RpbmdMaXN0ZW5lclwiLFxuICAgICAgTGlzdGluZ0xpc3RlbmVyLFxuICAgICAgXCJbZGF0YS1saXN0aW5nLWxpc3RlbmVyXVwiXG4gICAgKTtcblxuICAgIC8vIFJlZ2lzdGVyIENhdGVnb3J5TG9jYWxTdG9yYWdlIHBsdWdpblxuICAgIHdpbmRvdy5QbHVnaW5NYW5hZ2VyLnJlZ2lzdGVyKFxuICAgICAgXCJDYXRlZ29yeUxvY2FsU3RvcmFnZVwiLFxuICAgICAgQ2F0ZWdvcnlMb2NhbFN0b3JhZ2UsXG4gICAgICBcIltkYXRhLWNhdGVnb3J5LWxvY2FsLXN0b3JhZ2VdXCJcbiAgICApO1xuXG4gICAgaWYgKHdpbmRvdy5QbHVnaW5NYW5hZ2VyLmdldFBsdWdpbihcIkxpc3RpbmdcIikpIHtcbiAgICAgIHdpbmRvdy5QbHVnaW5NYW5hZ2VyLm92ZXJyaWRlKFxuICAgICAgICBcIkxpc3RpbmdcIixcbiAgICAgICAgKCkgPT4gaW1wb3J0KFwiLi9tYWthaXJhLWZpbHRlci9tYWthaXJhLmxpc3RpbmcucGx1Z2luXCIpLFxuICAgICAgICBcIltkYXRhLWxpc3RpbmddXCJcbiAgICAgICk7XG4gICAgfVxuXG4gICAgd2luZG93LlBsdWdpbk1hbmFnZXIuaW5pdGlhbGl6ZVBsdWdpbnMoKTtcbiAgfVxufSk7XG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///792\n'
-        );
+      747: (t, e, r) => {
+        r.d(e, { A: () => i });
+        class i {
+          static ucFirst(t) {
+            return t.charAt(0).toUpperCase() + t.slice(1);
+          }
+          static lcFirst(t) {
+            return t.charAt(0).toLowerCase() + t.slice(1);
+          }
+          static toDashCase(t) {
+            return t
+              .replace(/([A-Z])/g, "-$1")
+              .replace(/^-/, "")
+              .toLowerCase();
+          }
+          static toLowerCamelCase(t, e) {
+            const r = i.toUpperCamelCase(t, e);
+            return i.lcFirst(r);
+          }
+          static toUpperCamelCase(t, e) {
+            return e
+              ? t
+                  .split(e)
+                  .map((t) => i.ucFirst(t.toLowerCase()))
+                  .join("")
+              : i.ucFirst(t.toLowerCase());
+          }
+          static parsePrimitive(t) {
+            try {
+              return (
+                /^\d+(.|,)\d+$/.test(t) && (t = t.replace(",", ".")),
+                JSON.parse(t)
+              );
+            } catch (e) {
+              return t.toString();
+            }
+          }
+        }
       },
     },
-    __webpack_module_cache__ = {},
-    inProgress,
-    dataWebpackPrefix;
-  function __webpack_require__(n) {
-    var t = __webpack_module_cache__[n];
-    if (void 0 !== t) return t.exports;
-    var e = (__webpack_module_cache__[n] = { exports: {} });
-    return __webpack_modules__[n](e, e.exports, __webpack_require__), e.exports;
+    i = {};
+  function n(t) {
+    var e = i[t];
+    if (void 0 !== e) return e.exports;
+    var s = (i[t] = { exports: {} });
+    return r[t](s, s.exports, n), s.exports;
   }
-  (__webpack_require__.m = __webpack_modules__),
-    (__webpack_require__.n = (n) => {
-      var t = n && n.__esModule ? () => n.default : () => n;
-      return __webpack_require__.d(t, { a: t }), t;
+  (n.m = r),
+    (n.n = (t) => {
+      var e = t && t.__esModule ? () => t.default : () => t;
+      return n.d(e, { a: e }), e;
     }),
-    (__webpack_require__.d = (n, t) => {
-      for (var e in t)
-        __webpack_require__.o(t, e) &&
-          !__webpack_require__.o(n, e) &&
-          Object.defineProperty(n, e, { enumerable: !0, get: t[e] });
+    (n.d = (t, e) => {
+      for (var r in e)
+        n.o(e, r) &&
+          !n.o(t, r) &&
+          Object.defineProperty(t, r, { enumerable: !0, get: e[r] });
     }),
-    (__webpack_require__.f = {}),
-    (__webpack_require__.e = (n) =>
-      Promise.all(
-        Object.keys(__webpack_require__.f).reduce(
-          (t, e) => (__webpack_require__.f[e](n, t), t),
-          []
-        )
-      )),
-    (__webpack_require__.u = (n) => n + ".makaira-shopware6-storefront.js"),
-    (__webpack_require__.g = (function () {
+    (n.f = {}),
+    (n.e = (t) =>
+      Promise.all(Object.keys(n.f).reduce((e, r) => (n.f[r](t, e), e), []))),
+    (n.u = (t) => t + ".makaira-shopware6-storefront.js"),
+    (n.g = (function () {
       if ("object" == typeof globalThis) return globalThis;
       try {
         return this || new Function("return this")();
-      } catch (n) {
+      } catch (t) {
         if ("object" == typeof window) return window;
       }
     })()),
-    (__webpack_require__.o = (n, t) =>
-      Object.prototype.hasOwnProperty.call(n, t)),
-    (inProgress = {}),
-    (dataWebpackPrefix = "makaira-shopware6-storefront:"),
-    (__webpack_require__.l = (n, t, e, g) => {
-      if (inProgress[n]) inProgress[n].push(t);
+    (n.o = (t, e) => Object.prototype.hasOwnProperty.call(t, e)),
+    (t = {}),
+    (e = "makaira-shopware6-storefront:"),
+    (n.l = (r, i, s, o) => {
+      if (t[r]) t[r].push(i);
       else {
-        var l, I;
-        if (void 0 !== e)
+        var l, a;
+        if (void 0 !== s)
           for (
-            var c = document.getElementsByTagName("script"), i = 0;
-            i < c.length;
-            i++
+            var c = document.getElementsByTagName("script"), u = 0;
+            u < c.length;
+            u++
           ) {
-            var C = c[i];
+            var d = c[u];
             if (
-              C.getAttribute("src") == n ||
-              C.getAttribute("data-webpack") == dataWebpackPrefix + e
+              d.getAttribute("src") == r ||
+              d.getAttribute("data-webpack") == e + s
             ) {
-              l = C;
+              l = d;
               break;
             }
           }
         l ||
-          ((I = !0),
+          ((a = !0),
           ((l = document.createElement("script")).charset = "utf-8"),
           (l.timeout = 120),
-          __webpack_require__.nc &&
-            l.setAttribute("nonce", __webpack_require__.nc),
-          l.setAttribute("data-webpack", dataWebpackPrefix + e),
-          (l.src = n)),
-          (inProgress[n] = [t]);
-        var b = (t, e) => {
-            (l.onerror = l.onload = null), clearTimeout(B);
-            var g = inProgress[n];
+          n.nc && l.setAttribute("nonce", n.nc),
+          l.setAttribute("data-webpack", e + s),
+          (l.src = r)),
+          (t[r] = [i]);
+        var m = (e, i) => {
+            (l.onerror = l.onload = null), clearTimeout(f);
+            var n = t[r];
             if (
-              (delete inProgress[n],
+              (delete t[r],
               l.parentNode && l.parentNode.removeChild(l),
-              g && g.forEach((n) => n(e)),
-              t)
+              n && n.forEach((t) => t(i)),
+              e)
             )
-              return t(e);
+              return e(i);
           },
-          B = setTimeout(
-            b.bind(null, void 0, { type: "timeout", target: l }),
+          f = setTimeout(
+            m.bind(null, void 0, { type: "timeout", target: l }),
             12e4
           );
-        (l.onerror = b.bind(null, l.onerror)),
-          (l.onload = b.bind(null, l.onload)),
-          I && document.head.appendChild(l);
+        (l.onerror = m.bind(null, l.onerror)),
+          (l.onload = m.bind(null, l.onload)),
+          a && document.head.appendChild(l);
       }
     }),
-    (__webpack_require__.r = (n) => {
+    (n.r = (t) => {
       "undefined" != typeof Symbol &&
         Symbol.toStringTag &&
-        Object.defineProperty(n, Symbol.toStringTag, { value: "Module" }),
-        Object.defineProperty(n, "__esModule", { value: !0 });
+        Object.defineProperty(t, Symbol.toStringTag, { value: "Module" }),
+        Object.defineProperty(t, "__esModule", { value: !0 });
     }),
     (() => {
-      var n;
-      __webpack_require__.g.importScripts &&
-        (n = __webpack_require__.g.location + "");
-      var t = __webpack_require__.g.document;
+      var t;
+      n.g.importScripts && (t = n.g.location + "");
+      var e = n.g.document;
       if (
-        !n &&
-        t &&
-        (t.currentScript &&
-          "SCRIPT" === t.currentScript.tagName.toUpperCase() &&
-          (n = t.currentScript.src),
-        !n)
+        !t &&
+        e &&
+        (e.currentScript &&
+          "SCRIPT" === e.currentScript.tagName.toUpperCase() &&
+          (t = e.currentScript.src),
+        !t)
       ) {
-        var e = t.getElementsByTagName("script");
-        if (e.length)
-          for (var g = e.length - 1; g > -1 && (!n || !/^http(s?):/.test(n)); )
-            n = e[g--].src;
+        var r = e.getElementsByTagName("script");
+        if (r.length)
+          for (var i = r.length - 1; i > -1 && (!t || !/^http(s?):/.test(t)); )
+            t = r[i--].src;
       }
-      if (!n)
+      if (!t)
         throw new Error(
           "Automatic publicPath is not supported in this browser"
         );
-      (n = n
+      (t = t
         .replace(/^blob:/, "")
         .replace(/#.*$/, "")
         .replace(/\?.*$/, "")
         .replace(/\/[^\/]+$/, "/")),
-        (__webpack_require__.p = n);
+        (n.p = t);
     })(),
     (() => {
-      var n = { 792: 0 };
-      __webpack_require__.f.j = (t, e) => {
-        var g = __webpack_require__.o(n, t) ? n[t] : void 0;
-        if (0 !== g)
-          if (g) e.push(g[2]);
+      var t = { 792: 0 };
+      n.f.j = (e, r) => {
+        var i = n.o(t, e) ? t[e] : void 0;
+        if (0 !== i)
+          if (i) r.push(i[2]);
           else {
-            var l = new Promise((e, l) => (g = n[t] = [e, l]));
-            e.push((g[2] = l));
-            var I = __webpack_require__.p + __webpack_require__.u(t),
-              c = new Error();
-            __webpack_require__.l(
-              I,
-              (e) => {
-                if (
-                  __webpack_require__.o(n, t) &&
-                  (0 !== (g = n[t]) && (n[t] = void 0), g)
-                ) {
-                  var l = e && ("load" === e.type ? "missing" : e.type),
-                    I = e && e.target && e.target.src;
-                  (c.message =
-                    "Loading chunk " + t + " failed.\n(" + l + ": " + I + ")"),
-                    (c.name = "ChunkLoadError"),
-                    (c.type = l),
-                    (c.request = I),
-                    g[1](c);
+            var s = new Promise((r, n) => (i = t[e] = [r, n]));
+            r.push((i[2] = s));
+            var o = n.p + n.u(e),
+              l = new Error();
+            n.l(
+              o,
+              (r) => {
+                if (n.o(t, e) && (0 !== (i = t[e]) && (t[e] = void 0), i)) {
+                  var s = r && ("load" === r.type ? "missing" : r.type),
+                    o = r && r.target && r.target.src;
+                  (l.message =
+                    "Loading chunk " + e + " failed.\n(" + s + ": " + o + ")"),
+                    (l.name = "ChunkLoadError"),
+                    (l.type = s),
+                    (l.request = o),
+                    i[1](l);
                 }
               },
-              "chunk-" + t,
-              t
+              "chunk-" + e,
+              e
             );
           }
       };
-      var t = (t, e) => {
-          var g,
-            l,
-            [I, c, i] = e,
-            C = 0;
-          if (I.some((t) => 0 !== n[t])) {
-            for (g in c)
-              __webpack_require__.o(c, g) && (__webpack_require__.m[g] = c[g]);
-            i && i(__webpack_require__);
+      var e = (e, r) => {
+          var i,
+            s,
+            [o, l, a] = r,
+            c = 0;
+          if (o.some((e) => 0 !== t[e])) {
+            for (i in l) n.o(l, i) && (n.m[i] = l[i]);
+            a && a(n);
           }
-          for (t && t(e); C < I.length; C++)
-            (l = I[C]),
-              __webpack_require__.o(n, l) && n[l] && n[l][0](),
-              (n[l] = 0);
+          for (e && e(r); c < o.length; c++)
+            (s = o[c]), n.o(t, s) && t[s] && t[s][0](), (t[s] = 0);
         },
-        e = (self.webpackChunkmakaira_shopware6_storefront =
+        r = (self.webpackChunkmakaira_shopware6_storefront =
           self.webpackChunkmakaira_shopware6_storefront || []);
-      e.forEach(t.bind(null, 0)), (e.push = t.bind(null, e.push.bind(e)));
+      r.forEach(e.bind(null, 0)), (r.push = e.bind(null, r.push.bind(r)));
     })();
-  var __webpack_exports__ = __webpack_require__(792);
+  var s = n(194);
+  class o extends s.A {
+    static sidebarFilterSelector = ".cms-element-sidebar-filter";
+    static options = { hideItemsWhenOffcanvasHidden: !1, enabled: !1 };
+    constructor(t, e, r) {
+      super(t, e, r), (this._isUpdating = !1), this._mergeConfigFromElement(t);
+    }
+    _mergeConfigFromElement(t) {
+      const e = t.getAttribute("data-listing-listener-options");
+      if (e)
+        try {
+          const t = JSON.parse(e);
+          void 0 !== t.enabled && (this.options.enabled = t.enabled),
+            void 0 !== t.hideItemsWhenOffcanvasHidden &&
+              (this.options.hideItemsWhenOffcanvasHidden =
+                t.hideItemsWhenOffcanvasHidden);
+        } catch (t) {
+          console.warn(
+            "ListingListener: Failed to parse configuration from data attribute",
+            t
+          );
+        }
+    }
+    init() {
+      this._registerEvents(),
+        this.options.hideItemsWhenOffcanvasHidden &&
+          this._setupOffcanvasMonitoring(),
+        this._connectToListingPlugin();
+    }
+    _connectToListingPlugin() {
+      const t = document.querySelector("[data-listing]");
+      if (t) {
+        const e = window.PluginManager.getPluginInstanceFromElement(
+          t,
+          "Listing"
+        );
+        e && (this.listing = e);
+      }
+    }
+    _isEnabled() {
+      return !1 !== this.options.enabled && !1 !== this.options.enabled;
+    }
+    _registerEvents() {
+      this.$emitter.subscribe("Listing/afterRenderResponse", (t) => {
+        this._swapContent(t.detail.response);
+      });
+    }
+    _findFilterPanelContainers(t = document) {
+      return Array.from(t.querySelectorAll(".filter-panel-items-container"));
+    }
+    _extractAndMergeFilters(t) {
+      try {
+        const e = this._getAvailableFiltersFromDocument(t);
+        if (0 === e.length) return;
+        this._storeCurrentFiltersToLocalStorage(e);
+        const r = this._getStoredFilters(),
+          i = [...new Set([...r, ...e])];
+        this._storeFiltersToLocalStorage(i);
+      } catch (t) {
+        console.error(
+          "ListingListener: Failed to extract and merge filters:",
+          t
+        );
+      }
+    }
+    _getAvailableFiltersFromDocument(t) {
+      const e = t.querySelectorAll(
+          ".filter-panel-item[data-filter-multi-select-options]"
+        ),
+        r = [];
+      return (
+        e.forEach((t) => {
+          try {
+            const e = t.getAttribute("data-filter-multi-select-options");
+            if (e) {
+              const t = JSON.parse(e);
+              t.name && r.push(t.name);
+            }
+          } catch (e) {
+            console.warn(
+              "ListingListener: Failed to parse filter options for item:",
+              t,
+              e
+            );
+          }
+        }),
+        r
+      );
+    }
+    _getStoredFilters() {
+      try {
+        const t = localStorage.getItem("macatfiall");
+        return t ? JSON.parse(t) : [];
+      } catch (t) {
+        return (
+          console.error(
+            "ListingListener: Failed to retrieve filters from localStorage:",
+            t
+          ),
+          []
+        );
+      }
+    }
+    _storeFiltersToLocalStorage(t) {
+      try {
+        const e = JSON.stringify(t);
+        localStorage.setItem("macatfiall", e);
+      } catch (t) {
+        console.error(
+          "ListingListener: Failed to store filters to localStorage:",
+          t
+        );
+      }
+    }
+    _storeCurrentFiltersToLocalStorage(t) {
+      try {
+        const e = JSON.stringify(t);
+        localStorage.setItem("macurrfi", e);
+      } catch (t) {
+        console.error(
+          "ListingListener: Failed to store current filters to localStorage:",
+          t
+        );
+      }
+    }
+    _setupOffcanvasMonitoring() {
+      document.addEventListener("shown.bs.offcanvas", () => {
+        this._onOffcanvasVisibilityChange(!0);
+      }),
+        document.addEventListener("hidden.bs.offcanvas", () => {
+          this._onOffcanvasVisibilityChange(!1);
+        }),
+        document.$emitter &&
+          document.$emitter.subscribe("onCloseOffcanvas", () => {
+            this._onOffcanvasVisibilityChange(!1);
+          }),
+        document.addEventListener("keydown", (t) => {
+          "Escape" === t.key &&
+            this._isOffcanvasVisible() &&
+            setTimeout(() => this._onOffcanvasVisibilityChange(!1), 100);
+        });
+    }
+    _onOffcanvasVisibilityChange(t) {
+      !t && this.options.hideItemsWhenOffcanvasHidden
+        ? this._hideAllFilterItems()
+        : this._showAllActiveFilters();
+    }
+    _isOffcanvasVisible() {
+      const t = document.querySelectorAll(".offcanvas");
+      return Array.from(t).some(
+        (t) =>
+          t.classList.contains("show") || "none" !== getComputedStyle(t).display
+      );
+    }
+    _hideAllFilterItems() {
+      const t = this._getAvailableFiltersFromLocalStorage();
+      t &&
+        0 !== t.length &&
+        document
+          .querySelectorAll(".filter-panel-items-container")
+          .forEach((e) => {
+            e.querySelectorAll(".filter-panel-item").forEach((e) => {
+              const r = this._getFilterNameFromItem(e);
+              r && t.includes(r) && this._hideFilterItem(e);
+            });
+          });
+    }
+    _showAllActiveFilters() {
+      const t = this._getCurrentFiltersFromLocalStorage();
+      t && 0 !== t.length
+        ? document
+            .querySelectorAll(".filter-panel-items-container")
+            .forEach((e) => {
+              e.querySelectorAll(
+                ".filter-panel-item, .filter-multi-select-list-item"
+              ).forEach((e) => {
+                const r = this._getFilterNameFromItem(e);
+                r &&
+                  (t.includes(r)
+                    ? this._showFilterItem(e)
+                    : this._hideFilterItem(e));
+              });
+            })
+        : this._showAllAvailableFilters();
+    }
+    _showAllAvailableFilters() {
+      const t = this._getAvailableFiltersFromLocalStorage();
+      t &&
+        0 !== t.length &&
+        document
+          .querySelectorAll(".filter-panel-items-container")
+          .forEach((e) => {
+            e.querySelectorAll(
+              ".filter-panel-item, .filter-multi-select-list-item"
+            ).forEach((e) => {
+              const r = this._getFilterNameFromItem(e);
+              r && t.includes(r) && this._showFilterItem(e);
+            });
+          });
+    }
+    _getAvailableFiltersFromLocalStorage() {
+      try {
+        const t = localStorage.getItem("macatfiall");
+        return t ? JSON.parse(t) : [];
+      } catch (t) {
+        return (
+          console.error(
+            "ListingListener: Failed to retrieve filters from localStorage:",
+            t
+          ),
+          []
+        );
+      }
+    }
+    _getCurrentFiltersFromLocalStorage() {
+      try {
+        const t = localStorage.getItem("macurrfi");
+        return t ? JSON.parse(t) : [];
+      } catch (t) {
+        return (
+          console.error(
+            "ListingListener: Failed to retrieve current filters from localStorage:",
+            t
+          ),
+          []
+        );
+      }
+    }
+    _getFilterNameFromItem(t) {
+      try {
+        const e = t.getAttribute("data-filter-multi-select-options");
+        if (e) return JSON.parse(e).name;
+        const r = t.closest("[data-filter-multi-select-options]");
+        if (r) {
+          const t = r.getAttribute("data-filter-multi-select-options");
+          if (t) return JSON.parse(t).name;
+        }
+        return null;
+      } catch (e) {
+        return (
+          console.warn(
+            "ListingListener: Failed to extract filter name from item:",
+            t,
+            e
+          ),
+          null
+        );
+      }
+    }
+    _findFilterPanelContainer(t = document) {
+      const e = this._findFilterPanelContainers(t);
+      return e.length > 0 ? e[0] : null;
+    }
+    _getContainerIdentifier(t) {
+      if (t.id) return `id-${t.id}`;
+      if (t.dataset.filterType) return `filter-type-${t.dataset.filterType}`;
+      if (t.className) {
+        const e = t.className
+          .split(" ")
+          .filter(
+            (t) =>
+              t.includes("filter") ||
+              t.includes("sidebar") ||
+              t.includes("offcanvas")
+          )
+          .sort()
+          .join("-");
+        if (e) return `classes-${e}`;
+      }
+      const e = t.closest("[id], [data-filter-type]");
+      if (e) {
+        const t = e.id || e.dataset.filterType;
+        if (t) return `parent-${t}`;
+      }
+      return null;
+    }
+    _swapContent(t) {
+      if (!this._isUpdating) {
+        this._isUpdating = !0;
+        try {
+          if (
+            this.options.hideItemsWhenOffcanvasHidden &&
+            !this._isOffcanvasVisible()
+          )
+            return void this._hideAllFilterItems();
+          const e = new DOMParser().parseFromString(t, "text/html"),
+            r = this._findFilterPanelContainers(),
+            i = this._findFilterPanelContainers(e);
+          this._extractAndMergeFilters(e);
+          const n = new Map();
+          i.forEach((t, e) => {
+            const r = this._getContainerIdentifier(t) || `panel-${e}`;
+            n.set(r, t);
+          }),
+            r.forEach((t, e) => {
+              const r = this._getContainerIdentifier(t) || `panel-${e}`,
+                s = n.get(r);
+              if (s) this._updateFilterPanelSelectively(t, s);
+              else {
+                const r = i[e];
+                r && this._updateFilterPanelSelectively(t, r);
+              }
+            });
+        } finally {
+          setTimeout(() => {
+            this._isUpdating = !1;
+          }, 50);
+        }
+      }
+    }
+    _updateFilterPanelWithInnerHTML(t, e) {
+      const r = this._getInputStates(t);
+      (t.innerHTML = e.innerHTML),
+        this._restoreInputStates(t, r),
+        this._buildLabels();
+    }
+    _updateFilterPanelSelectively(t, e) {
+      const r = this._getInputStates(t);
+      if (this.options.enabled) {
+        const r = this._createExistingSectionMap(t);
+        this._replaceFilterStructureCompletely(t, e, r);
+      }
+      this._reregisterExistingFilters(t), this._restoreInputStates(t, r, !1);
+    }
+    _synchronizeFilterStructure(t, e) {
+      const r = t.querySelectorAll("[data-filter-multi-select-options]"),
+        i = e.querySelectorAll("[data-filter-multi-select-options]"),
+        n = this._createFilterElementsMap(r),
+        s = this._createFilterElementsMap(i);
+      Object.keys(s).forEach((t) => {
+        const e = n[t],
+          r = s[t];
+        e && r && this._synchronizeFilterDropdownStructure(e, r);
+      });
+    }
+    _synchronizeFilterDropdownStructure(t, e) {
+      const r = t.querySelector(".filter-panel-item-dropdown"),
+        i = e.querySelector(".filter-panel-item-dropdown");
+      if (!r || !i) return;
+      const n = this._getDropdownStructureMap(r),
+        s = this._getDropdownStructureMap(i);
+      this._addMissingStructuralElements(r, s, n);
+    }
+    _createFilterElementsMap(t) {
+      const e = {};
+      return (
+        t.forEach((t) => {
+          const r = t.getAttribute("data-filter-multi-select-options");
+          if (r)
+            try {
+              const i = JSON.parse(r);
+              i.name && (e[i.name] = t);
+            } catch (t) {
+              console.warn(
+                "ListingListener: Failed to parse filter options",
+                t
+              );
+            }
+        }),
+        e
+      );
+    }
+    _getDropdownStructureMap(t) {
+      const e = [];
+      return (
+        Array.from(t.children).forEach((t, r) => {
+          const i = {
+            index: r,
+            element: t,
+            tagName: t.tagName.toLowerCase(),
+            classes: Array.from(t.classList),
+            textContent: this._getElementTextSignature(t),
+            isList:
+              "ul" === t.tagName.toLowerCase() &&
+              t.classList.contains("filter-multi-select-list"),
+            isStructural: !t.classList.contains(
+              "filter-multi-select-list-item"
+            ),
+          };
+          e.push(i);
+        }),
+        e
+      );
+    }
+    _getElementTextSignature(t) {
+      if ("ul" === t.tagName.toLowerCase()) return "";
+      let e = "";
+      return (
+        t.childNodes.forEach((t) => {
+          t.nodeType === Node.TEXT_NODE && (e += t.textContent.trim());
+        }),
+        e.trim()
+      );
+    }
+    _addMissingStructuralElements(t, e, r) {
+      const i = new Map();
+      r.forEach((t) => {
+        const e = this._createElementSignature(t);
+        i.set(e, t);
+      }),
+        e.forEach((r, n) => {
+          const s = this._createElementSignature(r);
+          if (!i.has(s) && r.isStructural) {
+            const s = r.element.cloneNode(!0),
+              o = this._findInsertionPoint(t, e, n, i);
+            o ? t.insertBefore(s, o) : t.appendChild(s);
+          }
+        });
+    }
+    _createElementSignature(t) {
+      if (t.isList) return `list-${t.classes.join("-")}`;
+      const e = t.classes.join("-"),
+        r = t.textContent.replace(/\s+/g, " ").trim();
+      return `${t.tagName}-${e}-${r}`;
+    }
+    _findInsertionPoint(t, e, r, i) {
+      for (let t = r + 1; t < e.length; t++) {
+        const r = e[t],
+          n = this._createElementSignature(r);
+        if (i.has(n)) return i.get(n).element;
+      }
+      return null;
+    }
+    _updateFilterMultiSelectElements(t, e) {
+      const r = t.querySelectorAll("[data-filter-multi-select]"),
+        i = e.querySelectorAll("[data-filter-multi-select]"),
+        n = this._createFilterMultiSelectMap(r),
+        s = this._createFilterMultiSelectMap(i);
+      Object.keys(n).forEach((t) => {
+        s[t] || this._hideFilterItem(n[t]);
+      }),
+        Object.keys(s).forEach((e) => {
+          if (n[e]) this._showFilterItem(n[e]);
+          else {
+            const r = s[e].cloneNode(!0);
+            t.appendChild(r), r.setAttribute("data-needs-init", "true");
+          }
+        });
+    }
+    _updateFilterListItemElements(t, e) {
+      const r = t.querySelectorAll(".filter-multi-select-list-item"),
+        i = e.querySelectorAll(".filter-multi-select-list-item"),
+        n = this._createFilterListItemMap(r),
+        s = this._createFilterListItemMap(i);
+      Object.keys(n).forEach((t) => {
+        s[t] || this._hideFilterItem(n[t]);
+      }),
+        Object.keys(s).forEach((e) => {
+          n[e]
+            ? (this._showFilterItem(n[e]),
+              this._updateFilterListItemContent(n[e], s[e]))
+            : this._addNewFilterListItem(t, s[e]);
+        });
+    }
+    _createFilterMultiSelectMap(t) {
+      const e = {};
+      return (
+        t.forEach((t) => {
+          const r = t.getAttribute("data-filter-multi-select-options");
+          if (r)
+            try {
+              const i = JSON.parse(r);
+              if (i.name) {
+                const r = `filter-multi-select-${i.name}`;
+                e[r] = t;
+              }
+            } catch (t) {
+              console.warn(
+                "ListingListener: Failed to parse filter options",
+                t
+              );
+            }
+        }),
+        e
+      );
+    }
+    _createFilterListItemMap(t) {
+      const e = {};
+      return (
+        t.forEach((t) => {
+          const r = t.querySelector("input[data-label]"),
+            i = r ? r.getAttribute("data-label") : null;
+          if (i) {
+            const r = t.closest("[data-filter-multi-select]");
+            let n = "unknown";
+            if (r) {
+              const t = r.getAttribute("data-filter-multi-select-options");
+              if (t)
+                try {
+                  n = JSON.parse(t).name || "unknown";
+                } catch (t) {
+                  console.warn(
+                    "ListingListener: Failed to parse parent filter options",
+                    t
+                  );
+                }
+            }
+            e[`${n}-${i}`] = t;
+          }
+        }),
+        e
+      );
+    }
+    _updateFilterDropdownContent(t, e) {
+      const r = t.querySelector(".filter-panel-item-dropdown"),
+        i = e.querySelector(".filter-panel-item-dropdown");
+      if (r && i) {
+        const t = this._getInputStates(r);
+        this._mergeDropdownContent(r, i), this._restoreInputStates(r, t, !1);
+      }
+    }
+    _updateFilterListItemContent(t, e) {
+      const r = t.querySelector("label"),
+        i = e.querySelector("label");
+      r &&
+        i &&
+        r.textContent !== i.textContent &&
+        (r.textContent = i.textContent);
+      const n = t.querySelector("input"),
+        s = e.querySelector("input");
+      n &&
+        s &&
+        ["value", "name", "data-count"].forEach((t) => {
+          n.getAttribute(t) !== s.getAttribute(t) &&
+            n.setAttribute(t, s.getAttribute(t) || "");
+        });
+    }
+    _findFilterElementByName(t, e) {
+      const r = t.querySelectorAll("[data-filter-multi-select-options]");
+      for (const t of r)
+        try {
+          const r = t.getAttribute("data-filter-multi-select-options");
+          if (r && JSON.parse(r).name === e) return t;
+        } catch (t) {
+          continue;
+        }
+      return null;
+    }
+    _findTargetListForNewItem(t, e, r) {
+      const i = e.closest(".filter-panel-item-dropdown"),
+        n = i ? this._findTargetContainer(i, t) : t,
+        s = e.closest("ul.filter-multi-select-list");
+      if (s) {
+        let t = null,
+          e = null,
+          r = s.previousElementSibling;
+        for (; r && !t; ) {
+          if (
+            r.tagName &&
+            !r.classList.contains("filter-multi-select-list-item") &&
+            r.textContent.trim()
+          ) {
+            (t = r), (e = r.textContent.trim());
+            break;
+          }
+          r = r.previousElementSibling;
+        }
+        if (t && e) {
+          const r = this._findSectionByText(n, e, t.tagName);
+          if (r) return r;
+        }
+      }
+      const o = n.querySelectorAll("ul.filter-multi-select-list");
+      if (1 === o.length) return o[0];
+      if (o.length > 1) {
+        const t = r
+          .querySelector("input[data-label]")
+          ?.getAttribute("data-label");
+        if (t)
+          for (const e of o) {
+            const r = e.querySelectorAll("input[data-label]");
+            for (const i of r) {
+              const r = i.getAttribute("data-label");
+              if (this._labelsSeemRelated(t, r)) return e;
+            }
+          }
+        return o[0];
+      }
+      return null;
+    }
+    _findSectionByText(t, e, r) {
+      const i = t.querySelectorAll(r.toLowerCase());
+      for (const t of i)
+        if (t.textContent.trim() === e) {
+          let e = t.nextElementSibling;
+          for (; e; ) {
+            if (
+              "ul" === e.tagName.toLowerCase() &&
+              e.classList.contains("filter-multi-select-list")
+            )
+              return e;
+            e = e.nextElementSibling;
+          }
+        }
+      return null;
+    }
+    _labelsSeemRelated(t, e) {
+      if (!t || !e) return !1;
+      const r = /^\d+(-\d+)?$/;
+      if (r.test(t) && r.test(e)) return !0;
+      const i = /^\d*XL[K]?$/;
+      if (i.test(t) && i.test(e)) return !0;
+      const n = /^\d+\/\d+$/;
+      return (
+        !(!n.test(t) || !n.test(e)) ||
+        !(!t.startsWith("W") || !e.startsWith("W"))
+      );
+    }
+    _addNewFilterListItem(t, e) {
+      const r = e
+        .closest("[data-filter-multi-select]")
+        ?.getAttribute("data-filter-multi-select-options");
+      if (!r) return;
+      let i;
+      try {
+        i = JSON.parse(r).name;
+      } catch (t) {
+        return void console.warn(
+          "ListingListener: Failed to parse parent options",
+          t
+        );
+      }
+      if (!i) return;
+      const n = this._findFilterElementByName(t, i);
+      if (!n) return;
+      const s = n.querySelector(".filter-panel-item-dropdown");
+      if (!s) return;
+      const o = e.cloneNode(!0),
+        l = this._ensureSectionStructureExists(e, s),
+        a = this._findTargetListForNewItem(s, e, o);
+      a
+        ? a.appendChild(o)
+        : l && l.list
+          ? l.list.appendChild(o)
+          : s.appendChild(o),
+        this._attachEventHandlersToNewItem(o, s);
+    }
+    _hideFilterItem(t) {
+      (t.style.display = "none"), t.classList.add("filter-item-hidden");
+    }
+    _showFilterItem(t) {
+      if (t.classList.contains("filter-item-hidden")) {
+        t.classList.remove("filter-item-hidden");
+        const e = this._getAppropriateDisplayStyle(t);
+        t.style.display = e;
+      }
+    }
+    _getAppropriateDisplayStyle(t) {
+      return t.closest(".filter-panel-item.d-grid") ||
+        t.closest(".filter-panel-item.dropdown")
+        ? "block"
+        : t.classList.contains("filter-multi-select-list-item")
+          ? "inline-block"
+          : "block";
+    }
+    _getFilterItemsMap(t) {
+      const e = {};
+      return (
+        t.querySelectorAll(".filter-panel-item").forEach((t) => {
+          const r = this._getFilterItemKey(t);
+          r && (e[r] = t);
+        }),
+        e
+      );
+    }
+    _getFilterItemKey(t) {
+      const e = t.querySelector("input[name]"),
+        r = t.querySelector(".filter-panel-item-toggle");
+      return e
+        ? `input-${e.name}`
+        : r
+          ? `toggle-${r.textContent.trim()}`
+          : null;
+    }
+    _getInputStates(t) {
+      const e = new Map();
+      return (
+        t.querySelectorAll("input").forEach((t) => {
+          const r =
+            "checkbox" === t.type || "radio" === t.type
+              ? t.name + "_" + t.value
+              : t.name;
+          e.set(r, { checked: t.checked, value: t.value });
+        }),
+        e
+      );
+    }
+    _restoreInputStates(t, e, r = !0) {
+      t.querySelectorAll("input").forEach((t) => {
+        const i =
+          "checkbox" === t.type || "radio" === t.type
+            ? t.name + "_" + t.value
+            : t.name;
+        if (e.has(i)) {
+          const n = e.get(i);
+          "checkbox" === t.type || "radio" === t.type
+            ? (t.checked = n.checked)
+            : (t.value = n.value),
+            r &&
+              t.dispatchEvent(
+                new Event(
+                  "checkbox" === t.type || "radio" === t.type
+                    ? "change"
+                    : "input",
+                  { bubbles: !0 }
+                )
+              );
+        }
+      });
+    }
+    _updateFilterItemContent(t, e) {
+      const r = t.querySelectorAll(".filter-multi-select-list-item"),
+        i = e.querySelectorAll(".filter-multi-select-list-item");
+      if (r.length !== i.length) {
+        const r = t.querySelector(".filter-panel-item-dropdown"),
+          i = e.querySelector(".filter-panel-item-dropdown");
+        if (r && i) {
+          const t = this._getInputStates(r);
+          this._mergeDropdownContent(r, i), this._restoreInputStates(r, t, !1);
+        }
+      }
+    }
+    _mergeDropdownContent(t, e) {
+      const r = this._getDropdownItemsMap(t),
+        i = (this._getDropdownItemsMap(e), document.createElement("div"));
+      for (
+        e.querySelectorAll(".filter-multi-select-list-item").forEach((e, n) => {
+          const s = this._getDropdownItemKey(e);
+          if (r[s]) {
+            const t = r[s],
+              n = t.querySelector("label"),
+              o = e.querySelector("label");
+            n &&
+              o &&
+              n.textContent !== o.textContent &&
+              (n.textContent = o.textContent);
+            const l = t.querySelector("input"),
+              a = e.querySelector("input");
+            l &&
+              a &&
+              ["value", "name", "data-count"].forEach((t) => {
+                l.getAttribute(t) !== a.getAttribute(t) &&
+                  l.setAttribute(t, a.getAttribute(t) || "");
+              }),
+              i.appendChild(t);
+          } else {
+            const r = e.cloneNode(!0);
+            i.appendChild(r), this._attachEventHandlersToNewItem(r, t);
+          }
+        }),
+          t.innerHTML = "";
+        i.firstChild;
+
+      )
+        t.appendChild(i.firstChild);
+    }
+    _getDropdownItemsMap(t) {
+      const e = {};
+      return (
+        t.querySelectorAll(".filter-multi-select-list-item").forEach((t) => {
+          const r = this._getDropdownItemKey(t);
+          r && (e[r] = t);
+        }),
+        e
+      );
+    }
+    _getDropdownItemKey(t) {
+      const e = t.querySelector("input");
+      if (e) {
+        const t = e.getAttribute("data-label") || e.value;
+        if (t && e.name) return `${e.name}-${t}`;
+      }
+      const r = t.querySelector("label");
+      return r ? `label-${r.textContent.trim()}` : null;
+    }
+    _attachEventHandlersToNewItem(t, e) {
+      t.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(
+        (t, e) => {
+          t.addEventListener("change", (t) => {
+            this._onChangeFilter(t);
+          });
+        }
+      );
+    }
+    _onChangeFilter(t) {
+      if (this.listing && "function" == typeof this.listing.changeListing)
+        this.listing.changeListing(!0, { p: 1 });
+      else {
+        const t = document.querySelector("[data-listing]");
+        if (t) {
+          const e = window.PluginManager.getPluginInstanceFromElement(
+            t,
+            "Listing"
+          );
+          e && "function" == typeof e.changeListing
+            ? e.changeListing(!0, { p: 1 })
+            : console.warn(
+                "ListingListener: Could not find listing plugin or changeListing method"
+              );
+        } else console.warn("ListingListener: Could not find listing element");
+      }
+    }
+    _reinitializePluginsSelectively(t) {
+      t.querySelectorAll('[data-needs-init="true"]').forEach((t) => {
+        try {
+          t.dataset.pluginName &&
+            "string" == typeof t.dataset.pluginName &&
+            window.PluginManager.initializePlugin(t, t.dataset.pluginName),
+            t.querySelectorAll("[data-plugin-name]").forEach((t) => {
+              t.dataset.pluginName &&
+                "string" == typeof t.dataset.pluginName &&
+                window.PluginManager.initializePlugin(t, t.dataset.pluginName);
+            });
+        } catch (e) {
+          console.warn(
+            "ListingListener: Failed to reinitialize plugin for element:",
+            t,
+            e
+          );
+        }
+        t.removeAttribute("data-needs-init");
+      });
+    }
+    _buildLabels() {}
+    _reregisterExistingFilters(t) {
+      const e = document.querySelector("[data-listing]");
+      if (!e) return;
+      const r = window.PluginManager.getPluginInstanceFromElement(e, "Listing");
+      r &&
+        r.registerFilter &&
+        t
+          .querySelectorAll(
+            "[data-filter-multi-select], [data-filter-range-slider], [data-filter-boolean]"
+          )
+          .forEach((t) => {
+            const e = t.hasAttribute("data-needs-reinit"),
+              i = ["FilterMultiSelect", "FilterRangeSlider", "FilterBoolean"];
+            for (const n of i)
+              try {
+                const i = window.PluginManager.getPluginInstanceFromElement(
+                  t,
+                  n
+                );
+                if (i) {
+                  "function" == typeof r.registerFilter && r.registerFilter(i),
+                    e && t.removeAttribute("data-needs-reinit");
+                  break;
+                }
+              } catch (t) {
+                console.warn(
+                  `ListingListener: Error processing ${n} plugin:`,
+                  t
+                );
+              }
+          });
+    }
+    _createMissingSectionStructure(t, e) {
+      const r = t.closest("ul.filter-multi-select-list");
+      if (!r) return { list: null };
+      const i = t.closest(".filter-panel-item-dropdown");
+      if (!i) return { list: null };
+      const n = this._ensureWrapperStructureExists(i, e),
+        s = [];
+      let o = r.previousElementSibling;
+      for (; o; ) {
+        if (
+          o.tagName &&
+          !o.classList.contains("filter-multi-select-list-item")
+        ) {
+          const t = this._createElementSignatureFromElement(o);
+          if (this._elementExistsInContainer(n, t)) break;
+          s.unshift(o);
+        }
+        o = o.previousElementSibling;
+      }
+      const l = this._findSectionInsertionPoint(n, i, r);
+      let a = null;
+      s.forEach((t) => {
+        const e = t.cloneNode(!0);
+        l ? n.insertBefore(e, l) : n.appendChild(e), (a = e);
+      });
+      const c = r.cloneNode(!1);
+      return (
+        (c.innerHTML = ""),
+        a
+          ? a.parentNode.insertBefore(c, a.nextSibling)
+          : l
+            ? n.insertBefore(c, l)
+            : n.appendChild(c),
+        { list: c }
+      );
+    }
+    _createElementSignatureFromElement(t) {
+      const e = {
+        tagName: t.tagName.toLowerCase(),
+        classes: Array.from(t.classList),
+        textContent: this._getElementTextSignature(t),
+        isList:
+          "ul" === t.tagName.toLowerCase() &&
+          t.classList.contains("filter-multi-select-list"),
+        isStructural: !t.classList.contains("filter-multi-select-list-item"),
+      };
+      return this._createElementSignature(e);
+    }
+    _findSectionInsertionPoint(t, e, r) {
+      let i = r.nextElementSibling;
+      for (; i; ) {
+        if (
+          i.tagName &&
+          !i.classList.contains("filter-multi-select-list-item")
+        ) {
+          const e = this._createElementSignatureFromElement(i),
+            r = Array.from(t.children);
+          for (const t of r)
+            if (this._createElementSignatureFromElement(t) === e) return t;
+        }
+        i = i.nextElementSibling;
+      }
+      return null;
+    }
+    _ensureSectionStructureExists(t, e) {
+      return this._sectionExistsForItem(t, e)
+        ? null
+        : this._createMissingSectionStructure(t, e);
+    }
+    _sectionExistsForItem(t, e) {
+      const r = t.closest("ul.filter-multi-select-list");
+      if (!r) return !0;
+      const i = t.closest(".filter-panel-item-dropdown");
+      if (!i) return !0;
+      const n = this._findTargetContainer(i, e);
+      let s = null,
+        o = null,
+        l = r.previousElementSibling;
+      for (; l && !s; ) {
+        if (
+          l.tagName &&
+          !l.classList.contains("filter-multi-select-list-item") &&
+          l.textContent.trim()
+        ) {
+          (s = l), (o = l.textContent.trim());
+          break;
+        }
+        l = l.previousElementSibling;
+      }
+      if (!s || !o) return !0;
+      const a = this._createElementSignatureFromElement(s);
+      return this._elementExistsInContainer(n, a);
+    }
+    _findTargetContainer(t, e) {
+      const r = this._getStructuralPath(t);
+      let i = e;
+      return (
+        r.forEach((t) => {
+          const e = this._findWrapperInContainer(i, t);
+          e && (i = e);
+        }),
+        i
+      );
+    }
+    _ensureWrapperStructureExists(t, e) {
+      const r = this._getStructuralPath(t);
+      let i = e;
+      return (
+        r.forEach((t) => {
+          const e = this._findWrapperInContainer(i, t);
+          if (e) i = e;
+          else {
+            const e = this._createWrapperElement(t);
+            i.appendChild(e), (i = e);
+          }
+        }),
+        i
+      );
+    }
+    _getStructuralPath(t) {
+      const e = [];
+      return (
+        Array.from(t.children).forEach((t) => {
+          if (this._isWrapperElement(t)) {
+            const r = {
+              tagName: t.tagName.toLowerCase(),
+              classes: Array.from(t.classList),
+              signature: this._createElementSignatureFromElement(t),
+            };
+            e.push(r);
+          }
+        }),
+        e
+      );
+    }
+    _isWrapperElement(t) {
+      if (
+        t.classList.contains("filter-multi-select-list-item") ||
+        ("ul" === t.tagName.toLowerCase() &&
+          t.classList.contains("filter-multi-select-list"))
+      )
+        return !1;
+      const e = t.querySelectorAll("ul.filter-multi-select-list"),
+        r = t.querySelectorAll(
+          ":scope > *:not(.filter-multi-select-list-item)"
+        );
+      return e.length > 0 || r.length > 1;
+    }
+    _findWrapperInContainer(t, e) {
+      return Array.from(t.children).find(
+        (t) => this._createElementSignatureFromElement(t) === e.signature
+      );
+    }
+    _createWrapperElement(t) {
+      const e = document.createElement(t.tagName);
+      return (
+        t.classes.forEach((t) => {
+          e.classList.add(t);
+        }),
+        e
+      );
+    }
+    _elementExistsInContainer(t, e) {
+      return Array.from(t.children).some(
+        (t) => this._createElementSignatureFromElement(t) === e
+      );
+    }
+    _createExistingSectionMap(t) {
+      const e = new Map();
+      return (
+        t
+          .querySelectorAll("[data-filter-multi-select-options]")
+          .forEach((t) => {
+            const r = t.querySelector(".filter-panel-item-dropdown");
+            r &&
+              this._findTargetContainerInExisting(r)
+                .querySelectorAll("*")
+                .forEach((t) => {
+                  if (
+                    t.textContent.trim() &&
+                    !t.classList.contains("filter-multi-select-list-item") &&
+                    "ul" !== t.tagName.toLowerCase()
+                  ) {
+                    const r = t.textContent.trim();
+                    let i = t.nextElementSibling;
+                    for (; i; ) {
+                      if (
+                        "ul" === i.tagName.toLowerCase() &&
+                        i.classList.contains("filter-multi-select-list")
+                      ) {
+                        const t = Array.from(
+                          i.querySelectorAll(".filter-multi-select-list-item")
+                        ).map((t) => t.cloneNode(!0));
+                        t.length > 0 &&
+                          (e.has(r) || e.set(r, []), e.get(r).push(...t));
+                        break;
+                      }
+                      if (
+                        i.textContent.trim() &&
+                        !i.classList.contains(
+                          "filter-multi-select-list-item"
+                        ) &&
+                        "ul" !== i.tagName.toLowerCase()
+                      )
+                        break;
+                      i = i.nextElementSibling;
+                    }
+                  }
+                });
+          }),
+        e
+      );
+    }
+    _findTargetContainerInExisting(t) {
+      const e = Array.from(t.children);
+      for (const t of e) if (this._isWrapperElement(t)) return t;
+      return t;
+    }
+    _restoreExistingSectionAssociations(t, e) {
+      0 !== e.size &&
+        t
+          .querySelectorAll("[data-filter-multi-select-options]")
+          .forEach((t) => {
+            const r = t.querySelector(".filter-panel-item-dropdown");
+            if (!r) return;
+            const i = this._findTargetContainer(null, r) || r;
+            e.forEach((t, e) => {
+              const r = this._findSectionByTextInContainer(i, e);
+              r &&
+                (this._removeItemsFromIncorrectSections(i, t, e),
+                t.forEach((t) => {
+                  this._itemExistsInList(r, t) ||
+                    r.appendChild(t.cloneNode(!0));
+                }));
+            });
+          });
+    }
+    _findSectionByTextInContainer(t, e) {
+      const r = t.querySelectorAll("*");
+      for (const t of r)
+        if (
+          t.textContent.trim() === e &&
+          !t.classList.contains("filter-multi-select-list-item") &&
+          "ul" !== t.tagName.toLowerCase()
+        ) {
+          let e = t.nextElementSibling;
+          for (; e; ) {
+            if (
+              "ul" === e.tagName.toLowerCase() &&
+              e.classList.contains("filter-multi-select-list")
+            )
+              return e;
+            e = e.nextElementSibling;
+          }
+        }
+      return null;
+    }
+    _removeItemsFromIncorrectSections(t, e, r) {
+      t.querySelectorAll("ul.filter-multi-select-list").forEach((t) => {
+        this._getSectionTextForList(t) !== r &&
+          Array.from(
+            t.querySelectorAll(".filter-multi-select-list-item")
+          ).forEach((t) => {
+            const r = this._getItemLabel(t);
+            e.some((t) => this._getItemLabel(t) === r) && t.remove();
+          });
+      });
+    }
+    _getSectionTextForList(t) {
+      let e = t.previousElementSibling;
+      for (; e; ) {
+        if (
+          e.textContent.trim() &&
+          !e.classList.contains("filter-multi-select-list-item") &&
+          "ul" !== e.tagName.toLowerCase()
+        )
+          return e.textContent.trim();
+        e = e.previousElementSibling;
+      }
+      return null;
+    }
+    _itemExistsInList(t, e) {
+      const r = this._getItemLabel(e),
+        i = t.querySelectorAll(".filter-multi-select-list-item");
+      return Array.from(i).some((t) => this._getItemLabel(t) === r);
+    }
+    _getItemLabel(t) {
+      const e = t.querySelector("input[data-label]");
+      return e ? e.getAttribute("data-label") : null;
+    }
+    _replaceFilterStructureCompletely(t, e, r) {
+      const i = t.querySelectorAll("[data-filter-multi-select-options]"),
+        n = e.querySelectorAll("[data-filter-multi-select-options]"),
+        s = this._createFilterElementsMap(i),
+        o = this._createFilterElementsMap(n);
+      Object.keys(o).forEach((e) => {
+        const i = s[e],
+          n = o[e];
+        i && n
+          ? this._replaceFilterDropdownStructure(i, n, r)
+          : n && !i && t.appendChild(n);
+      }),
+        Object.keys(s).forEach((t) => {
+          if (o[t]) {
+            const e = s[t];
+            e.classList.contains("filter-panel-item-hidden") &&
+              e.classList.remove("filter-panel-item-hidden");
+          } else s[t].classList.add("filter-panel-item-hidden");
+        });
+    }
+    _replaceFilterDropdownStructure(t, e, r) {
+      const i = t.querySelector(".filter-panel-item-dropdown"),
+        n = e.querySelector(".filter-panel-item-dropdown");
+      if (!i || !n) return;
+      const s = this._buildCompleteStructureFromNew(n, r);
+      (i.innerHTML = ""),
+        s.forEach((t) => {
+          i.appendChild(t);
+        }),
+        this._attachEventHandlersToNewDropdown(i);
+    }
+    _attachEventHandlersToNewDropdown(t) {
+      t.querySelectorAll(".filter-multi-select-list-item").forEach((e) => {
+        this._attachEventHandlersToNewItem(e, t);
+      });
+    }
+    _buildCompleteStructureFromNew(t, e) {
+      const r = [];
+      return (
+        Array.from(t.children).forEach((t) => {
+          if (this._isWrapperElement(t)) {
+            const i = t.cloneNode(!1);
+            this._buildWrapperContent(t, e).forEach((t) => {
+              i.appendChild(t);
+            }),
+              r.push(i);
+          } else {
+            const i = this._processStructuralElement(t, e);
+            i && r.push(i);
+          }
+        }),
+        r
+      );
+    }
+    _buildWrapperContent(t, e) {
+      const r = [],
+        i = Array.from(t.children);
+      let n = null,
+        s = null;
+      return (
+        i.forEach((t) => {
+          if (
+            "ul" === t.tagName.toLowerCase() &&
+            t.classList.contains("filter-multi-select-list")
+          )
+            n
+              ? ((s = this._createListForSection(t, n, e)), r.push(s))
+              : ((s = this._createListWithExistingItems(t, e)), r.push(s));
+          else if (
+            t.textContent.trim() &&
+            !t.classList.contains("filter-multi-select-list-item")
+          ) {
+            n = t.textContent.trim();
+            const e = t.cloneNode(!0);
+            r.push(e);
+          } else {
+            const e = t.cloneNode(!0);
+            r.push(e);
+          }
+        }),
+        r
+      );
+    }
+    _createListForSection(t, e, r) {
+      const i = t.cloneNode(!1),
+        n = new Map();
+      return (
+        r.has(e) &&
+          r.get(e).forEach((t) => {
+            const e = this._getItemLabel(t);
+            if (e) {
+              const r = t.querySelector("input");
+              n.set(e, { element: t, checked: !!r && r.checked });
+            }
+          }),
+        Array.from(t.children).forEach((t) => {
+          const e = this._getItemLabel(t),
+            r = t.cloneNode(!0);
+          if (e && n.has(e)) {
+            const t = n.get(e),
+              i = r.querySelector("input");
+            i && t.checked && (i.checked = !0);
+          }
+          i.appendChild(r);
+        }),
+        i
+      );
+    }
+    _createListWithExistingItems(t, e) {
+      const r = t.cloneNode(!1),
+        i = Array.from(t.children);
+      let n = null;
+      if (
+        (e.forEach((t, e) => {
+          const r = i.reduce((e, r) => {
+            const i = this._getItemLabel(r);
+            return t.some((t) => this._getItemLabel(t) === i) ? e + 1 : e;
+          }, 0);
+          r > 0 && (!n || r > n.count) && (n = { section: e, count: r });
+        }),
+        n)
+      )
+        return this._createListForSection(t, n.section, e);
+      const s = new Map();
+      return (
+        e.forEach((t, e) => {
+          t.forEach((t) => {
+            const e = this._getItemLabel(t);
+            if (e) {
+              const r = t.querySelector("input");
+              s.set(e, { element: t, checked: !!r && r.checked });
+            }
+          });
+        }),
+        i.forEach((t) => {
+          const e = this._getItemLabel(t),
+            i = t.cloneNode(!0);
+          if (e && s.has(e)) {
+            const t = s.get(e),
+              r = i.querySelector("input");
+            r && t.checked && (r.checked = !0);
+          }
+          r.appendChild(i);
+        }),
+        r
+      );
+    }
+    _processStructuralElement(t, e) {
+      return "ul" === t.tagName.toLowerCase() &&
+        t.classList.contains("filter-multi-select-list")
+        ? this._createListWithExistingItems(t, e)
+        : t.cloneNode(!0);
+    }
+  }
+  class l extends s.A {
+    static options = {
+      enabled: !0,
+      storageKey: "macatfiall",
+      includeTimestamp: !1,
+    };
+    constructor(t, e, r) {
+      super(t, e, r),
+        (this._currentCategoryId = null),
+        (this._isInitialized = !1),
+        this._mergeConfigFromElement(t);
+    }
+    _mergeConfigFromElement(t) {
+      const e = t.getAttribute("data-category-local-storage-options");
+      if (e)
+        try {
+          const t = JSON.parse(e);
+          Object.assign(this.options, t);
+        } catch (t) {
+          console.warn(
+            "CategoryLocalStorage: Failed to parse configuration from data attribute",
+            t
+          );
+        }
+    }
+    init() {
+      this.options.enabled &&
+        (this._detectAndStoreCategoryData(),
+        this._setupUrlChangeListener(),
+        (this._isInitialized = !0));
+    }
+    _detectAndStoreCategoryData() {
+      const t = this._getCategoryData();
+      t &&
+        t.length > 0 &&
+        (this._storeToLocalStorage(t),
+        this._hasFilterParameters()
+          ? this._storeCurrentFiltersToLocalStorage(t)
+          : this._clearCurrentFiltersFromLocalStorage(),
+        (this._currentCategoryId = this._extractCategoryId()));
+    }
+    _setupUrlChangeListener() {
+      window.addEventListener("popstate", () => {
+        setTimeout(() => this._detectAndStoreCategoryData(), 100);
+      });
+    }
+    _getCategoryData() {
+      return this._isOnCategoryPage() ? this._getAvailableFilters() : null;
+    }
+    _isOnCategoryPage() {
+      return [
+        ".category-listing",
+        ".cms-element-product-listing",
+        "[data-listing]",
+        ".product-listing",
+        "body.is-ctl-navigation",
+      ].some((t) => null !== document.querySelector(t));
+    }
+    _extractCategoryId() {
+      const t = document.querySelector("[data-listing]");
+      if (t && t.dataset.listingOptions)
+        try {
+          const e = JSON.parse(t.dataset.listingOptions);
+          if (e.categoryId) return e.categoryId;
+        } catch (t) {}
+      const e = window.location.pathname.match(/\/navigation\/([a-f0-9-]+)/);
+      return e
+        ? e[1]
+        : window.location.pathname.replace(/\//g, "_") || "unknown_category";
+    }
+    _hasFilterParameters() {
+      const t = new URLSearchParams(window.location.search);
+      for (const [e] of t) if (e.startsWith("filter_")) return !0;
+      return !1;
+    }
+    _getAvailableFilters() {
+      const t = document.querySelectorAll(
+          ".filter-panel-item[data-filter-multi-select-options]"
+        ),
+        e = [];
+      return (
+        t.forEach((t) => {
+          try {
+            const r = t.getAttribute("data-filter-multi-select-options");
+            if (r) {
+              const t = JSON.parse(r);
+              t.name && e.push(t.name);
+            }
+          } catch (e) {
+            console.warn(
+              "CategoryLocalStorage: Failed to parse filter options for item:",
+              t,
+              e
+            );
+          }
+        }),
+        e
+      );
+    }
+    _storeToLocalStorage(t) {
+      try {
+        const e = JSON.stringify(t);
+        localStorage.setItem(this.options.storageKey, e);
+      } catch (t) {
+        console.error(
+          "CategoryLocalStorage: Failed to store filters to localStorage:",
+          t
+        );
+      }
+    }
+    _storeCurrentFiltersToLocalStorage(t) {
+      try {
+        const e = JSON.stringify(t);
+        localStorage.setItem("macurrfi", e);
+      } catch (t) {
+        console.error(
+          "CategoryLocalStorage: Failed to store current filters to localStorage:",
+          t
+        );
+      }
+    }
+    _clearCurrentFiltersFromLocalStorage() {
+      try {
+        const t = localStorage.getItem(this.options.storageKey);
+        if (t) {
+          localStorage.setItem("macurrfi", t);
+          const e = JSON.parse(t);
+          console.log(
+            "CategoryLocalStorage: Set macurrfi to values from macatfiall (no filter parameters):",
+            e
+          );
+        } else
+          localStorage.removeItem("macurrfi"),
+            console.log(
+              "CategoryLocalStorage: Removed macurrfi from localStorage (no filter parameters, no macatfiall data)"
+            );
+      } catch (t) {
+        console.error(
+          "CategoryLocalStorage: Failed to clear current filters from localStorage:",
+          t
+        );
+      }
+    }
+    getStoredFilters() {
+      try {
+        const t = localStorage.getItem(this.options.storageKey);
+        return t ? JSON.parse(t) : [];
+      } catch (t) {
+        return (
+          console.error(
+            "CategoryLocalStorage: Failed to retrieve filters from localStorage:",
+            t
+          ),
+          []
+        );
+      }
+    }
+    clearStoredFilters() {
+      try {
+        localStorage.removeItem(this.options.storageKey);
+      } catch (t) {
+        console.error(
+          "CategoryLocalStorage: Failed to clear filters from localStorage:",
+          t
+        );
+      }
+    }
+    isOnCategoryPage() {
+      return null !== this._currentCategoryId;
+    }
+    getCurrentCategoryId() {
+      return this._currentCategoryId;
+    }
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    window.PluginManager &&
+      (window.PluginManager.register(
+        "ListingListener",
+        o,
+        "[data-listing-listener]"
+      ),
+      window.PluginManager.register(
+        "CategoryLocalStorage",
+        l,
+        "[data-category-local-storage]"
+      ),
+      window.PluginManager.getPlugin("Listing") &&
+        window.PluginManager.override(
+          "Listing",
+          () => n.e(773).then(n.bind(n, 773)),
+          "[data-listing]"
+        ),
+      window.PluginManager.initializePlugins());
+  });
 })();
+//# sourceMappingURL=makaira-shopware6-storefront.js.map
