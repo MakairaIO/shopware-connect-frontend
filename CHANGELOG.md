@@ -1,3 +1,9 @@
+## [1.9.17](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.16...1.9.17) (2025-08-19)
+
+### Bug Fixes
+
+* disable source maps in webpack configuration ([ac8461a](https://github.com/MakairaIO/shopware-connect-frontend/commit/ac8461a1adf8aaaf92a6126e1ff2ce20b76738cc))
+
 ## [1.9.16](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.15...1.9.16) (2025-08-19)
 
 ### Bug Fixes
