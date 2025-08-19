@@ -1,3 +1,9 @@
+## [1.9.18](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.17...1.9.18) (2025-08-19)
+
+### Bug Fixes
+
+* remove source map script from base template ([89d3eb2](https://github.com/MakairaIO/shopware-connect-frontend/commit/89d3eb2e2643455cd0de0759bbf65bf5ee77a560))
+
 ## [1.9.17](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.16...1.9.17) (2025-08-19)
 
 ### Bug Fixes
