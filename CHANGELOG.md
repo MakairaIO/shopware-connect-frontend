@@ -1,3 +1,9 @@
+## [1.9.20](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.19...1.9.20) (2025-08-20)
+
+### Bug Fixes
+
+* enhance error handling during plugin registration ([5a2f060](https://github.com/MakairaIO/shopware-connect-frontend/commit/5a2f060136be9ffe420d346894f71a020b482f9d))
+
 ## [1.9.19](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.18...1.9.19) (2025-08-19)
 
 ### Bug Fixes
