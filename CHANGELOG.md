@@ -1,3 +1,9 @@
+## [1.9.21](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.20...1.9.21) (2025-08-20)
+
+### Bug Fixes
+
+* rename assets ([af5c1c2](https://github.com/MakairaIO/shopware-connect-frontend/commit/af5c1c23cb860778c18d09c739a70d708c4b95fb))
+
 ## [1.9.20](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.19...1.9.20) (2025-08-20)
 
 ### Bug Fixes
