@@ -3,11 +3,15 @@ import ListingListener from "./makaira-filter/filter/listing.plugin";
 document.addEventListener("DOMContentLoaded", () => {
   if (window.PluginManager) {
     // Only register if not already registered
-    window.PluginManager.register(
-      "ListingListener",
-      ListingListener,
-      "[data-listing-listener]"
-    );
+    try {
+      window.PluginManager.register(
+        "ListingListener",
+        ListingListener,
+        "[data-listing-listener]"
+      );
+    } catch (e) {
+      console.error("Error registering ListingListener", e);
+    }
 
     if (window.PluginManager.getPlugin("Listing")) {
       window.PluginManager.override(

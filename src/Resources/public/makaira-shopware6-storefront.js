@@ -1814,18 +1814,23 @@
     }
   }
   document.addEventListener("DOMContentLoaded", () => {
-    window.PluginManager &&
-      (window.PluginManager.register(
-        "ListingListener",
-        l,
-        "[data-listing-listener]"
-      ),
+    if (window.PluginManager) {
+      try {
+        window.PluginManager.register(
+          "ListingListener",
+          l,
+          "[data-listing-listener]"
+        );
+      } catch (t) {
+        console.error("Error registering ListingListener", t);
+      }
       window.PluginManager.getPlugin("Listing") &&
         window.PluginManager.override(
           "Listing",
           () => n.e(773).then(n.bind(n, 773)),
           "[data-listing]"
         ),
-      window.PluginManager.initializePlugins());
+        window.PluginManager.initializePlugins();
+    }
   });
 })();
