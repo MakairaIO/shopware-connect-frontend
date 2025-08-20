@@ -11,7 +11,7 @@ module.exports = (params = {}) => {
     entry: resolve(__dirname, "src/main.js"),
     output: {
       path: resolve(__dirname, "dist/"),
-      filename: "makaira-shopware6-storefront.js",
+      filename: "makaira-filter-sorting.js",
     },
     resolve: {
       modules: [

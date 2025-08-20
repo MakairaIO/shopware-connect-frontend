@@ -374,7 +374,7 @@
     (n.f = {}),
     (n.e = (t) =>
       Promise.all(Object.keys(n.f).reduce((e, r) => (n.f[r](t, e), e), []))),
-    (n.u = (t) => t + ".makaira-shopware6-storefront.js"),
+    (n.u = (t) => t + ".makaira-filter-sorting.js"),
     (n.g = (function () {
       if ("object" == typeof globalThis) return globalThis;
       try {
