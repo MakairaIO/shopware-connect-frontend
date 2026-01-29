@@ -1,0 +1,349 @@
+/**
+ * Makaira Fast Autosuggest Styles
+ *
+ * Styles for the high-performance client-side autosuggest dropdown.
+ */
+
+// Variables
+$autosuggest-dropdown-bg: #fff;
+$autosuggest-dropdown-border: #dee2e6;
+$autosuggest-dropdown-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+$autosuggest-item-hover-bg: #f8f9fa;
+$autosuggest-item-selected-bg: #e9ecef;
+$autosuggest-section-title-color: #6c757d;
+$autosuggest-link-color: #212529;
+$autosuggest-price-color: #28a745;
+$autosuggest-category-parent-color: #6c757d;
+
+// Main dropdown container
+.makaira-autosuggest-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background-color: $autosuggest-dropdown-bg;
+  border: 1px solid $autosuggest-dropdown-border;
+  border-radius: 0 0 4px 4px;
+  box-shadow: $autosuggest-dropdown-shadow;
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  // Smooth appearance
+  animation: makaira-autosuggest-fadeIn 0.15s ease-out;
+}
+
+@keyframes makaira-autosuggest-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Results container
+.makaira-autosuggest-results {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+// Product section (left column)
+.makaira-autosuggest-products {
+  flex: 0 0 100%;
+  max-width: 100%;
+  border-bottom: 1px solid $autosuggest-dropdown-border;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+
+  @media (min-width: 768px) {
+    flex: 0 0 60%;
+    max-width: 60%;
+    border-bottom: none;
+    border-right: 1px solid $autosuggest-dropdown-border;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+}
+
+// Secondary content (right column)
+.makaira-autosuggest-secondary {
+  flex: 0 0 100%;
+  max-width: 100%;
+
+  @media (min-width: 768px) {
+    flex: 0 0 40%;
+    max-width: 40%;
+  }
+}
+
+// Section styles
+.makaira-autosuggest-section {
+  padding: 12px 16px;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba($autosuggest-dropdown-border, 0.5);
+  }
+}
+
+.makaira-autosuggest-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: $autosuggest-section-title-color;
+  margin: 0 0 8px 0;
+  padding: 0;
+}
+
+// List styles
+.makaira-autosuggest-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+// Item styles
+.makaira-autosuggest-item {
+  margin: 0;
+  padding: 0;
+
+  &.is-selected,
+  &:hover {
+    background-color: $autosuggest-item-hover-bg;
+  }
+
+  &.is-selected {
+    background-color: $autosuggest-item-selected-bg;
+  }
+
+  a {
+    display: block;
+    padding: 8px 0;
+    text-decoration: none;
+    color: $autosuggest-link-color;
+    transition: background-color 0.1s ease;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+// Product item styles
+.makaira-autosuggest-product-item {
+  a {
+    padding: 8px 4px;
+    border-radius: 4px;
+  }
+}
+
+.makaira-autosuggest-product-link {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+}
+
+.makaira-autosuggest-product-image {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+}
+
+.makaira-autosuggest-product-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.makaira-autosuggest-product-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: $autosuggest-link-color;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.makaira-autosuggest-product-price {
+  font-size: 13px;
+  font-weight: 600;
+  color: $autosuggest-price-color;
+}
+
+// Category item styles
+.makaira-autosuggest-category-link {
+  font-size: 13px;
+}
+
+.makaira-autosuggest-category-parent {
+  color: $autosuggest-category-parent-color;
+  font-size: 12px;
+}
+
+.makaira-autosuggest-category-title {
+  font-weight: 500;
+}
+
+// Page item styles
+.makaira-autosuggest-page-link {
+  font-size: 13px;
+}
+
+.makaira-autosuggest-page-title {
+  font-weight: 500;
+}
+
+// Link item styles
+.makaira-autosuggest-link-link {
+  font-size: 13px;
+}
+
+.makaira-autosuggest-link-title {
+  font-weight: 500;
+}
+
+// Footer with "show all" link
+.makaira-autosuggest-footer {
+  padding: 12px 16px;
+  border-top: 1px solid $autosuggest-dropdown-border;
+  text-align: center;
+  width: 100%;
+}
+
+.makaira-autosuggest-show-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0d6efd;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background-color: rgba(13, 110, 253, 0.1);
+    text-decoration: none;
+  }
+}
+
+.makaira-autosuggest-arrow {
+  transition: transform 0.15s ease;
+}
+
+.makaira-autosuggest-show-all:hover .makaira-autosuggest-arrow {
+  transform: translateX(4px);
+}
+
+// Loading state
+.makaira-autosuggest-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  color: $autosuggest-section-title-color;
+  font-size: 14px;
+}
+
+.makaira-autosuggest-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e9ecef;
+  border-top-color: #0d6efd;
+  border-radius: 50%;
+  animation: makaira-autosuggest-spin 0.6s linear infinite;
+}
+
+@keyframes makaira-autosuggest-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// No results state
+.makaira-autosuggest-no-results {
+  padding: 24px;
+  text-align: center;
+  color: $autosuggest-section-title-color;
+  font-size: 14px;
+}
+
+// Error state
+.makaira-autosuggest-error {
+  padding: 24px;
+  text-align: center;
+  color: #dc3545;
+  font-size: 14px;
+}
+
+// Mobile optimizations
+@media (max-width: 767px) {
+  .makaira-autosuggest-dropdown {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 60vh;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .makaira-autosuggest-product-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .makaira-autosuggest-section {
+    padding: 10px 12px;
+  }
+}
+
+// Dark mode support (optional)
+@media (prefers-color-scheme: dark) {
+  .makaira-autosuggest-dropdown.dark-mode {
+    background-color: #1a1a1a;
+    border-color: #333;
+
+    .makaira-autosuggest-section-title {
+      color: #adb5bd;
+    }
+
+    .makaira-autosuggest-item {
+      a {
+        color: #f8f9fa;
+      }
+
+      &:hover {
+        background-color: #2d2d2d;
+      }
+    }
+
+    .makaira-autosuggest-product-image {
+      background-color: #2d2d2d;
+    }
+  }
+}

@@ -18,6 +18,15 @@ class PluginConfig
     public const ENABLE_FILTER_LISTENER           = 'enableFilterListener';
     public const HIDE_ITEMS_WHEN_OFFCANVAS_HIDDEN = 'hideItemsWhenOffcanvasHidden';
 
+    // Fast Autosuggest Configuration
+    public const USE_FAST_AUTOSUGGEST           = 'useFastAutosuggest';
+    public const AUTOSUGGEST_DEBOUNCE_DELAY     = 'autosuggestDebounceDelay';
+    public const AUTOSUGGEST_MIN_CHARS          = 'autosuggestMinChars';
+    public const AUTOSUGGEST_MAX_RESULTS        = 'autosuggestMaxResults';
+    public const AUTOSUGGEST_SHOW_CATEGORIES    = 'autosuggestShowCategories';
+    public const AUTOSUGGEST_SHOW_PAGES         = 'autosuggestShowPages';
+    public const AUTOSUGGEST_SHOW_LINKS         = 'autosuggestShowLinks';
+
     public const KEY_PREFIX = 'MakairaConnectFrontend.config.';
 
     public function __construct(
@@ -57,6 +66,25 @@ class PluginConfig
         return [
             'enabled'                      => (bool) $enabled,
             'hideItemsWhenOffcanvasHidden' => (bool) $this->get(self::HIDE_ITEMS_WHEN_OFFCANVAS_HIDDEN, $salesChannelId),
+        ];
+    }
+
+    /**
+     * Get the fast autosuggest configuration for the given sales channel.
+     *
+     * @param string|null $salesChannelId
+     * @return array{enabled: bool, debounceDelay: int, minChars: int, maxResults: int, showCategories: bool, showPages: bool, showLinks: bool}
+     */
+    public function getFastAutosuggestConfig(?string $salesChannelId = null): array
+    {
+        return [
+            'enabled'        => (bool) $this->get(self::USE_FAST_AUTOSUGGEST, $salesChannelId),
+            'debounceDelay'  => (int) ($this->get(self::AUTOSUGGEST_DEBOUNCE_DELAY, $salesChannelId) ?? 150),
+            'minChars'       => (int) ($this->get(self::AUTOSUGGEST_MIN_CHARS, $salesChannelId) ?? 3),
+            'maxResults'     => (int) ($this->get(self::AUTOSUGGEST_MAX_RESULTS, $salesChannelId) ?? 10),
+            'showCategories' => (bool) ($this->get(self::AUTOSUGGEST_SHOW_CATEGORIES, $salesChannelId) ?? true),
+            'showPages'      => (bool) ($this->get(self::AUTOSUGGEST_SHOW_PAGES, $salesChannelId) ?? true),
+            'showLinks'      => (bool) ($this->get(self::AUTOSUGGEST_SHOW_LINKS, $salesChannelId) ?? true),
         ];
     }
 }

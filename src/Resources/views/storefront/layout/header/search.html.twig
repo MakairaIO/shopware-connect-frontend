@@ -1,0 +1,61 @@
+{% sw_extends '@Storefront/storefront/layout/header/search.html.twig' %}
+
+{# 
+    Makaira Fast Autosuggest Integration
+    
+    This template extends the Shopware search widget to enable the fast client-side 
+    autosuggest that calls the Makaira API directly from the browser.
+    
+    Benefits:
+    - Significantly reduced latency (bypasses PHP backend)
+    - Automatic cancellation of stale requests
+    - Configurable debouncing
+    - Client-side rendering for instant results
+#}
+
+{% block layout_header_search_input_group %}
+    {% if makairaAutosuggestConfig is defined and makairaAutosuggestConfig.enabled %}
+        {# Build the plugin configuration object #}
+        {% set autosuggestOptions = {
+            'makairaBaseUrl': makairaAutosuggestConfig.makairaBaseUrl,
+            'makairaInstance': makairaAutosuggestConfig.makairaInstance,
+            'debounceDelay': makairaAutosuggestConfig.debounceDelay,
+            'minSearchLength': makairaAutosuggestConfig.minSearchLength,
+            'maxResults': makairaAutosuggestConfig.maxResults,
+            'showProducts': makairaAutosuggestConfig.showProducts,
+            'showCategories': makairaAutosuggestConfig.showCategories,
+            'showPages': makairaAutosuggestConfig.showPages,
+            'showLinks': makairaAutosuggestConfig.showLinks,
+            'language': makairaAutosuggestConfig.language,
+            'shopId': makairaAutosuggestConfig.shopId,
+            'inputSelector': 'input[type="search"]',
+            'productUrlTemplate': path('frontend.detail.page', { 'productId': '__PRODUCT_ID__' })|replace({'__PRODUCT_ID__': '{id}'}),
+            'categoryUrlTemplate': path('frontend.navigation.page', { 'navigationId': '__CATEGORY_ID__' })|replace({'__CATEGORY_ID__': '{id}'}),
+            'searchUrlTemplate': path('frontend.search.page') ~ '?search={query}',
+            'labels': {
+                'products': 'makaira.products'|trans|sw_sanitize,
+                'categories': 'general.categories'|trans|sw_sanitize,
+                'pages': 'makaira.page'|trans|sw_sanitize,
+                'links': 'makaira.links'|trans|sw_sanitize,
+                'showAll': 'makaira.autosuggest.showAll'|trans|sw_sanitize,
+                'noResults': 'makaira.autosuggest.noResults'|trans|sw_sanitize,
+                'loading': 'makaira.autosuggest.loading'|trans|sw_sanitize
+            }
+        } %}
+        
+        <div class="input-group" 
+             data-makaira-autosuggest="true"
+             data-makaira-autosuggest-options='{{ autosuggestOptions|json_encode }}'>
+            {% block layout_header_search_input %}
+                {{ parent() }}
+            {% endblock %}
+            
+            {% block layout_header_search_button %}
+                {{ parent() }}
+            {% endblock %}
+        </div>
+    {% else %}
+        {# Fall back to standard Shopware search suggest #}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
