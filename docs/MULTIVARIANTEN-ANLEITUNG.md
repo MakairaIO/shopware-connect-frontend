@@ -2,35 +2,11 @@
 
 ## Zusammenfassung
 
-Das **Makaira Connect Frontend**-Plugin fuer Shopware 6 arbeitet mit der Makaira API zusammen, die Produkte grundsaetzlich als `makaira-product` auf **Parent-Ebene** (Hauptprodukt-Ebene) bereitstellt. Das bedeutet: Makaira liefert Parent-Produkt-IDs, und das Plugin loest diese gegen die Shopware-Produktdatenbank auf. Die Variantenauswahl (Farbe, Groesse, etc.) erfolgt dann ueber das native Shopware-Varianten-Handling auf der Produktdetailseite.
-
-**Wichtig:** Ein reines Variantenmodell, bei dem einzelne Varianten als eigenstaendige Eintraege im Listing erscheinen, wird von der Makaira API nicht unterstuetzt. Pagination (`count`/`offset`), Gesamtanzahl (`total`) und Filter-Aggregationen werden alle auf Parent-Ebene berechnet. Wuerde man versuchen, Varianten client-seitig aus den Parent-Daten herauszuziehen, wuerden diese Werte nicht mehr stimmen.
+Das **Makaira Connect Frontend**-Plugin fuer Shopware 6 arbeitet mit der Makaira API zusammen, die Produkte als `makaira-product` auf **Parent-Ebene** bereitstellt. Makaira uebernimmt dabei die Steuerung von Suche, Sortierung, Filterung und Pagination. Die Variantenauswahl (Farbe, Groesse, etc.) erfolgt ueber das native Shopware-Varianten-Handling auf der Produktdetailseite.
 
 ---
 
-## Warum kein reines Variantenmodell?
-
-Die Makaira API `/search/public` arbeitet auf Parent-Produkt-Ebene. Das hat drei konkrete Konsequenzen:
-
-1. **Pagination**: Die Parameter `count` und `offset` beziehen sich auf die Anzahl der Parent-Produkte. Wenn Makaira 24 Produkte pro Seite liefert, sind das 24 Parents -- nicht 24 Varianten.
-
-2. **Total**: Der Wert `product.total` in der Makaira-Antwort zaehlt Parent-Produkte. Wenn der Shop 500 Produkte hat, steht dort 500, unabhaengig davon, ob jedes Produkt 5 Farbvarianten hat.
-
-3. **Filter-Aggregationen**: Die Aggregationen (z.B. "Farbe: Rot (12), Blau (8)") zaehlen, wie viele Parent-Produkte diesem Filter entsprechen. Nicht wie viele Varianten.
-
-Wuerde man nun versuchen, die Varianten aus den Parents zu extrahieren und als einzelne Listing-Eintraege anzuzeigen, haette man folgende Probleme:
-- Die Seitenanzahl stimmt nicht (Pagination kaputt)
-- Die Filter-Counts stimmen nicht
-- Die Gesamtanzahl stimmt nicht
-- Die Sortierung waere nicht mehr korrekt
-
-**Fazit: Das ist kein gangbarer Weg.**
-
----
-
-## So funktioniert die Multivarianten-Ausspielung korrekt
-
-### Der Datenfluss
+## Datenfluss
 
 ```
 1. Shopware Storefront → Request (Suche, Kategorie, Suggest)
@@ -43,93 +19,44 @@ Wuerde man nun versuchen, die Varianten aus den Parents zu extrahieren und als e
 8. Auf der Produktdetailseite: Shopware zeigt alle Varianten zur Auswahl
 ```
 
-### Konkret im Code
-
-Makaira liefert IDs, das Plugin extrahiert sie:
-
-```php
-// src/Service/ShopwareProductFetchingService.php
-private function extractProductIdsFromMakairaResponse(\stdClass $makairaResponse): array
-{
-    return array_map(fn ($product) => $product->id,
-        $makairaResponse->items ?? $makairaResponse->product->items);
-}
-```
-
-Diese IDs sind **Parent-Produkt-IDs**. Sie werden per `EqualsAnyFilter('id', $ids)` gegen das Shopware `sales_channel.product.repository` aufgeloest:
-
-```php
-$criteria->addFilter(new EqualsAnyFilter('id', $ids));
-$shopwareResult = $this->salesChannelProductRepository->search($criteria, $context);
-```
-
-Shopware liefert dann die vollstaendigen Produktdaten, inklusive Varianteninformationen, Bilder und Preise. Die Reihenfolge wird gemaess der Makaira-Sortierung beibehalten.
+Makaira steuert **was** angezeigt wird und in welcher **Reihenfolge**. Shopware steuert **wie** es angezeigt wird -- inklusive Varianten.
 
 ---
 
-## Einrichtung: Schritt fuer Schritt
+## Varianten-Darstellung im Storefront
 
-### Schritt 1: Plugin installieren und konfigurieren
+Die Darstellung erfolgt auf zwei Ebenen:
 
-```bash
-composer require makaira/shopware6-connect-frontend
-bin/console plugin:install --activate MakairaConnectFrontend
-```
+### Im Listing (Kategorie / Suche)
 
-In der Shopware-Administration unter **Einstellungen > Plugins > Makaira Connect Frontend**:
+- Makaira liefert Parent-Produkt-IDs mit Reihenfolge, Pagination und Filter-Aggregationen
+- Das Plugin loest diese IDs gegen Shopware auf
+- Shopware zeigt das Parent-Produkt bzw. die konfigurierte **Hauptvariante** an (Preis, Bild, Titel)
 
-| Einstellung | Wert |
-|---|---|
-| **Base URL** | `https://<kunde>.makaira.io` |
-| **Makaira Instanz** | z.B. `live` |
-| **Fuer Kategorielisten verwenden** | Aktivieren |
-| **Fuer Suche verwenden** | Aktivieren |
-| **Fuer Autosuggest verwenden** | Aktivieren |
+Welche Variante als "Display-Variante" im Listing erscheint, wird ueber die **Shopware-Produktkonfiguration** gesteuert -- nicht ueber Makaira.
 
-> **Hinweis:** Die Konfiguration ist pro Sales Channel moeglich. Stellen Sie sicher, dass die Makaira-Instanz fuer jeden Sales Channel korrekt eingestellt ist.
+### Auf der Produktdetailseite (PDP)
 
-### Schritt 2: Makaira-seitige Konfiguration
-
-In der Makaira-Administration sicherstellen, dass:
-
-- Die **Parent-Produkte** korrekt indiziert sind
-- Die `id` jedes `makaira-product`-Dokuments der **Shopware-Produkt-UUID** des Parent-Produkts (bzw. der Hauptvariante) entspricht
-- Varianten-Eigenschaften (Farbe, Groesse, Material, etc.) als **Aggregationen** auf dem Parent konfiguriert sind, damit sie als Filter im Listing erscheinen
-
-> **Entscheidend:** Die `id` in Makaira muss exakt der Shopware-UUID entsprechen, da das Plugin die Produkte ueber `EqualsAnyFilter('id', $ids)` auflöst. Stimmt die ID nicht ueberein, wird das Produkt im Listing nicht angezeigt.
-
-### Schritt 3: Varianten-Darstellung im Storefront
-
-Die Varianten-Darstellung erfolgt auf zwei Ebenen:
-
-**Im Listing (Kategorie / Suche):**
-- Es wird das **Parent-Produkt** (bzw. die konfigurierte Hauptvariante) angezeigt
-- Preis, Bild und Titel kommen vom Parent bzw. der Shopware-Hauptvariante
-- Makaira bestimmt **Reihenfolge, Filterung und Pagination**
-
-**Auf der Produktdetailseite (PDP):**
-- Shopware uebernimmt die **Variantenauswahl** vollstaendig (Dropdowns, Farbauswahl, etc.)
+- Shopware uebernimmt die **Variantenauswahl** vollstaendig (Dropdowns, Farbauswahl, Groessenauswahl, etc.)
 - Alle Varianten des Parents sind verfuegbar
-- Das ist natives Shopware-Verhalten und erfordert keine Makaira-Konfiguration
+- Das ist natives Shopware-Verhalten und erfordert keine zusaetzliche Makaira-Konfiguration
 
-### Schritt 4: Filter fuer Varianten-Eigenschaften
+---
 
-Varianten-spezifische Eigenschaften (z.B. Farbe, Groesse) koennen als Filter im Listing angezeigt werden, sofern sie in Makaira als Aggregationen auf dem Parent konfiguriert sind.
+## Query-Anpassungen ueber Events
 
-Unterstuetzte Filtertypen:
+Das Plugin bietet ein Event-System (`ModifierQueryRequestEvent`), mit dem die Makaira-Query vor dem API-Call angepasst werden kann. Das ist der zentrale Erweiterungspunkt fuer individuelle Anforderungen.
 
-| Makaira-Typ | Darstellung im Storefront |
-|---|---|
-| `range_slider_price` | Preis-Slider |
-| `list` | Einfach-Auswahl-Liste |
-| `list_multiselect` | Mehrfach-Auswahl-Liste |
-| `list_multiselect_custom_1` | Benutzerdefinierte Mehrfach-Auswahl |
+### Verfuegbare Events
 
-Die Filter-Counts beziehen sich auf Parent-Produkte. Beispiel: "Farbe: Rot (12)" bedeutet, dass 12 Parent-Produkte eine Variante in Rot haben.
+| Event | Konstante | Anwendungsbereich |
+|---|---|---|
+| `makaira.request.modifier.query.search` | `NAME_SEARCH` | Produktsuche |
+| `makaira.request.modifier.query.category` | `NAME_SEARCH_CATEGORY` | Kategorielisten |
+| `makaira.request.modifier.query.autosuggester` | `NAME_AUTOSUGGESTER` | Autosuggest |
+| `makaira.request.modifier.query.recommendation` | `NAME_RECOMMENDATION` | Recommendations / Cross-Selling |
 
-### Schritt 5: Query-Anpassungen ueber Events (Fortgeschritten)
-
-Das Plugin bietet ein Event-System, mit dem die Makaira-Query vor dem API-Call angepasst werden kann:
+### Beispiel: Eigener Event-Subscriber
 
 ```php
 <?php
@@ -146,7 +73,6 @@ class MakairaQuerySubscriber implements EventSubscriberInterface
         return [
             ModifierQueryRequestEvent::NAME_SEARCH          => 'onModifyQuery',
             ModifierQueryRequestEvent::NAME_SEARCH_CATEGORY => 'onModifyQuery',
-            ModifierQueryRequestEvent::NAME_AUTOSUGGESTER   => 'onModifySuggestQuery',
         ];
     }
 
@@ -154,25 +80,19 @@ class MakairaQuerySubscriber implements EventSubscriberInterface
     {
         $query = $event->getQuery();
 
-        // Beispiel: Zusaetzliche Felder anfordern
+        // Zusaetzliche Felder anfordern
         $query['fields'] = array_merge(
             $query['fields'] ?? [],
             ['variant_count', 'available_colors']
         );
 
-        // Beispiel: Benutzerdefinierten Filter setzen
+        // Benutzerdefinierten Filter setzen
         $query['customFilter'] = ['availability' => 'in_stock'];
-    }
-
-    public function onModifySuggestQuery(ModifierQueryRequestEvent $event): void
-    {
-        $query = $event->getQuery();
-        // Suggest-spezifische Anpassungen
     }
 }
 ```
 
-Die zugehoerige `services.xml`:
+`services.xml` im eigenen Plugin:
 
 ```xml
 <service id="MyCustomPlugin\Subscriber\MakairaQuerySubscriber">
@@ -180,78 +100,36 @@ Die zugehoerige `services.xml`:
 </service>
 ```
 
-#### Verfuegbare Events
-
-| Event | Konstante | Anwendungsbereich |
-|---|---|---|
-| `makaira.request.modifier.query.search` | `NAME_SEARCH` | Produktsuche |
-| `makaira.request.modifier.query.category` | `NAME_SEARCH_CATEGORY` | Kategorielisten |
-| `makaira.request.modifier.query.autosuggester` | `NAME_AUTOSUGGESTER` | Autosuggest |
-| `makaira.request.modifier.query.recommendation` | `NAME_RECOMMENDATION` | Recommendations / Cross-Selling |
-
-### Schritt 6: Cross-Selling / Recommendations
-
-Fuer die Produktempfehlungen auf der Detailseite:
-
-1. **Empfehlungen aktivieren** auf `true` setzen
-2. Eine **Recommendation-ID** aus der Makaira-Administration eingeben
-3. Das **Produktlimit** festlegen (Standard: 10)
-
-Das Plugin sendet die aktuelle Produkt-ID an `/recommendation/public` und erhaelt empfohlene Parent-Produkte zurueck.
-
 ---
 
-## Haeufige Fragen (FAQ)
+## Cross-Selling / Recommendations
 
-### Q: Kann ich einzelne Varianten im Listing anzeigen statt nur den Parent?
+Fuer Produktempfehlungen auf der Detailseite stehen drei Plugin-Konfigurationen zur Verfuegung:
 
-**A:** Nein, das ist mit der Makaira API nicht moeglich. Die API arbeitet auf Parent-Ebene. Pagination, Total und Filter-Aggregationen werden alle auf Parent-Ebene berechnet. Wuerde man Varianten client-seitig extrahieren, waeren all diese Werte falsch. Die Variantenauswahl erfolgt auf der Produktdetailseite ueber das native Shopware-Varianten-Handling.
-
-### Q: Was passiert, wenn eine Makaira-ID keinem Shopware-Produkt entspricht?
-
-**A:** Das Produkt wird stillschweigend herausgefiltert. Die Reihenfolge der verbleibenden Produkte bleibt erhalten. Es gibt keine Fehlermeldung -- das Produkt erscheint einfach nicht im Listing.
-
-### Q: Wie wird die Sprache bei Produkten gehandhabt?
-
-**A:** Das Plugin erkennt automatisch die Sprache des Sales Channels und sendet sie als `query.language`-Constraint an Makaira. Makaira liefert dann die sprachspezifischen Daten zurueck.
-
-### Q: Wie funktioniert die Sortierung?
-
-**A:** Die Sortierung wird von Makaira uebernommen. Das Plugin mappt Shopware-Sortierfelder auf Makaira-Felder:
-
-| Shopware-Feld | Makaira-Feld |
+| Einstellung | Beschreibung |
 |---|---|
-| `product.name` | `title` |
-| `product.cheapestPrice` | `price` |
+| **Empfehlungen aktivieren** | Schaltet die Makaira-Recommendations ein |
+| **Recommendation-ID** | ID der Recommendation-Konfiguration aus der Makaira-Administration |
+| **Produktlimit** | Maximale Anzahl empfohlener Produkte (Standard: 10) |
 
-Zusaetzliche Custom-Sortierungen koennen in der `SortingMappingService`-Klasse konfiguriert werden.
-
-### Q: Was passiert bei einem Makaira-API-Fehler?
-
-**A:** Das Plugin implementiert ein automatisches Fallback. Bei API-Fehlern (Timeout, Serverfehler, keine Daten) wird auf die native Shopware-Suche/-Listing zurueckgegriffen. Kunden sehen also immer Produkte.
-
-### Q: Kann ich die Hauptvariante steuern, die im Listing angezeigt wird?
-
-**A:** Das bestimmt Shopware. Welche Variante als "Display-Variante" im Listing erscheint, wird ueber die Shopware-Produktkonfiguration festgelegt (Hauptvariante in der Shopware-Administration). Makaira liefert nur die Parent-ID, Shopware entscheidet, welche Variante angezeigt wird.
+Das Plugin sendet die aktuelle Produkt-ID an `/recommendation/public` und erhaelt empfohlene Parent-Produkte zurueck, die dann als Cross-Selling-Elemente angezeigt werden.
 
 ---
 
-## Debugging und Tracing
+## Fallback-Verhalten
 
-**Trace-Modus:** HTTP-Header `X-Makaira-Trace: true` senden fuer detaillierte API-Informationen.
-
-**Logging:** Monolog-Channel `makaira_frontend`:
-
-- `[Makaira] Listing on?` -- Ist das Kategorie-Listing aktiv?
-- `[Makaira] Search on?` -- Ist die Suche aktiv?
-- `[Makaira] Filter` -- Extrahierte Filter aus dem Request
-- `[Makaira] Sorting` -- Sortierung, die an Makaira gesendet wird
-- `[Makaira][Listing] Products total` -- Anzahl gefundener Produkte
-- `[Makaira][Suggest] Counts` -- Ergebnis-Counts fuer Suggest (Produkte, Kategorien, Seiten, Links)
+Bei einem Makaira-API-Fehler (Timeout, Serverfehler, keine Daten) greift das Plugin automatisch auf die native Shopware-Suche bzw. das native Listing zurueck. Kunden sehen immer Produkte.
 
 ---
 
-## Architektur-Uebersicht
+## Debugging
+
+- **Trace-Modus:** HTTP-Header `X-Makaira-Trace: true` fuer detaillierte API-Informationen
+- **Logging:** Monolog-Channel `makaira_frontend` fuer vollstaendiges Debug-Logging
+
+---
+
+## Architektur
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -270,12 +148,10 @@ Zusaetzliche Custom-Sortierungen koennen in der `SortingMappingService`-Klasse k
 │  ProductSuggestRoute  → decorates Shopware Suggest       │
 │  CrossSellingRoute    → decorates Shopware CrossSelling  │
 │                                                         │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │ ModifierQueryRequestEvent                        │    │
-│  │ → Erlaubt Query-Anpassung vor dem API-Call       │    │
-│  └─────────────────────────────────────────────────┘    │
+│  ModifierQueryRequestEvent                               │
+│  → Erlaubt Query-Anpassung vor dem API-Call              │
 │                                                         │
-│  Bei API-Fehler: automatischer Fallback auf Shopware    │
+│  Bei API-Fehler: automatischer Fallback auf Shopware     │
 └───┬─────────────────────────────────────┬───────────────┘
     │                                     │
     ▼                                     ▼
@@ -284,19 +160,11 @@ Zusaetzliche Custom-Sortierungen koennen in der `SortingMappingService`-Klasse k
 │                  │         │                            │
 │ /search/public   │  IDs   │ sales_channel.product.     │
 │                  │────────▶│ repository                 │
-│ Liefert:         │         │                            │
-│ Parent-Produkt-  │         │ Liefert:                   │
-│ IDs + Total +    │         │ Vollstaendige Produktdaten │
-│ Aggregationen +  │         │ inkl. Varianten, Bilder,   │
-│ Pagination       │         │ Preise                     │
 │                  │         │                            │
-│ Alles auf        │         │ Varianten-Handling auf     │
-│ PARENT-Ebene     │         │ der PDP durch Shopware     │
+│ Steuert:         │         │ Steuert:                   │
+│ - Reihenfolge    │         │ - Produktdarstellung       │
+│ - Pagination     │         │ - Varianten-Handling       │
+│ - Filter/Aggs    │         │ - Bilder, Preise           │
+│ - Sortierung     │         │ - Display-Variante         │
 └──────────────────┘         └────────────────────────────┘
 ```
-
----
-
-## Ansprechpartner
-
-Bei weiteren Fragen zur Konfiguration wenden Sie sich bitte an Ihr Makaira Customer Success Team.
