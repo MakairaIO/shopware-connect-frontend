@@ -44,7 +44,7 @@
 							<li class=" js-result">
 							{% set url = seoUrl('frontend.navigation.page', { navigationId: category.fields.id }) %}
 								<a href="{{url}}" title="{{ category.fields.category_title }}" class="search-suggest-product-link">
-									<div class="row align-items-center {{ gridNoGuttersClass }}">
+									<div class="row align-items-center {{ gridNoGuttersClass|default('g-0') }}">
 										{% if category.fields.category_parent %}
 											<span class="search-suggest-category-parent">
 												{% autoescape false %}
@@ -72,7 +72,7 @@
 						{% for makairaPage in page.searchResult.extensions.makairaPages.all %}
 							<li class=" js-result">
 								<a href="{{makairaPage.fields.url}}" title="{{ makairaPage.fields.title }}" class="search-suggest-product-link">
-									<div class="row align-items-center {{ gridNoGuttersClass }}">								
+									<div class="row align-items-center {{ gridNoGuttersClass|default('g-0') }}">								
 										<span>
 											{% autoescape false %}
 												{{makairaPage.fields.title}}
@@ -93,7 +93,7 @@
 						{% for links in page.searchResult.extensions.makairaLinks.all %}
 							<li class=" js-result">
 								<a href="{{links.fields.url}}" title="{{ links.fields.title }}" class="search-suggest-product-link">
-									<div class="row align-items-center {{ gridNoGuttersClass }}">								
+									<div class="row align-items-center {{ gridNoGuttersClass|default('g-0') }}">								
 										<span>
 											{% autoescape false %}
 												{{links.fields.title}}

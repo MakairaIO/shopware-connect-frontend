@@ -137,7 +137,7 @@ class ProductSearchRoute extends AbstractProductSearchRoute
 
     private function validateSearchRequest(Request $request): void
     {
-        if (!$request->get('search')) {
+        if (!$request->query->has('search') && !$request->request->has('search')) {
             throw new MissingRequestParameterException('search');
         }
     }

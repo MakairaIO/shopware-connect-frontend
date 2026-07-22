@@ -28,20 +28,17 @@ use Shopware\Core\Content\ProductStream\Service\ProductStreamBuilderInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-#[\AllowDynamicProperties]
 class ProductListingRoute extends AbstractProductListingRoute
 {
     public function __construct(
-        AbstractProductListingRoute $decorated,
-        EntityRepository $categoryRepository,
-        ProductStreamBuilderInterface $productStreamBuilder,
-        EventDispatcherInterface $eventDispatcher,
-        SalesChannelRepository $salesChannelProductRepository,
+        private readonly AbstractProductListingRoute $decorated,
+        private readonly EntityRepository $categoryRepository,
+        private readonly ProductStreamBuilderInterface $productStreamBuilder,
+        private readonly EventDispatcherInterface $eventDispatcher,
         private readonly FilterExtractionService $filterExtractionService,
         private readonly SortingMappingService $sortingMappingService,
         private readonly MakairaProductFetchingService $makairaProductFetchingService,
@@ -52,11 +49,6 @@ class ProductListingRoute extends AbstractProductListingRoute
         private readonly PluginConfig $pluginConfig,
         private readonly SalesChannelLoader $salesChannelLoader,
     ) {
-        $this->decorated                     = $decorated;
-        $this->categoryRepository            = $categoryRepository;
-        $this->productStreamBuilder          = $productStreamBuilder;
-        $this->eventDispatcher               = $eventDispatcher;
-        $this->salesChannelProductRepository = $salesChannelProductRepository;
     }
 
     public function getDecorated(): AbstractProductListingRoute

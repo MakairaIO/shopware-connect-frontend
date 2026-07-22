@@ -14,7 +14,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-#[\AllowDynamicProperties]
 class MakairaProductFetchingService
 {
     private ?ApiGateway $client = null;

@@ -12,19 +12,19 @@ use Psr\Log\LoggerInterface;
 use Shopware\Core\Content\Product\Aggregate\ProductCrossSelling\ProductCrossSellingEntity;
 use Shopware\Core\Content\Product\Events\ProductCrossSellingsLoadedEvent;
 use Shopware\Core\Content\Product\ProductCollection;
+use Shopware\Core\Content\Product\SalesChannel\CrossSelling\AbstractProductCrossSellingRoute;
 use Shopware\Core\Content\Product\SalesChannel\CrossSelling\CrossSellingElement;
 use Shopware\Core\Content\Product\SalesChannel\CrossSelling\CrossSellingElementCollection;
-use Shopware\Core\Content\Product\SalesChannel\CrossSelling\ProductCrossSellingRoute;
 use Shopware\Core\Content\Product\SalesChannel\CrossSelling\ProductCrossSellingRouteResponse;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class CrossSellingRoute extends ProductCrossSellingRoute
+class CrossSellingRoute extends AbstractProductCrossSellingRoute
 {
     public function __construct(
-        private readonly ProductCrossSellingRoute $inner,
+        private readonly AbstractProductCrossSellingRoute $inner,
         private readonly LoggerInterface $logger,
         private readonly PluginConfig $pluginConfig,
         private readonly MakairaProductFetchingService $makairaProductFetchingService,
@@ -33,7 +33,7 @@ class CrossSellingRoute extends ProductCrossSellingRoute
     ) {
     }
 
-    public function getDecorated(): ProductCrossSellingRoute
+    public function getDecorated(): AbstractProductCrossSellingRoute
     {
         return $this->inner;
     }
@@ -67,15 +67,11 @@ class CrossSellingRoute extends ProductCrossSellingRoute
                 throw new NoDataException('Keine Daten oder fehlerhaft vom Makaira Server.');
             }
 
-            $shopwareResult     = $this->shopwareProductFetchingService->fetchProductsFromShopware($makairaResponse, $criteria, $context);
-            $makairaResponseIds = array_map(
-                fn ($item) => $item->id ?? null,
-                $makairaResponse->items
-            );
-            $makairaResponseIds = array_filter($makairaResponseIds);
+            $shopwareResult = $this->shopwareProductFetchingService->fetchProductsFromShopware($makairaResponse, $criteria, $context);
         } catch (\Exception $e) {
             $this->logger->error('[Makaira] Error in CrossSellingRoute: ' . $e->getMessage());
-            $makairaResponseIds = [];
+
+            return $this->inner->load($productId, $request, $context, $criteria);
         }
 
         $crossSelling = new ProductCrossSellingEntity();
