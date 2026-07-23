@@ -18,11 +18,13 @@ use Shopware\Core\Content\Product\SalesChannel\Suggest\AbstractProductSuggestRou
 use Shopware\Core\Content\Product\SalesChannel\Suggest\ProductSuggestRouteResponse;
 use Shopware\Core\Content\Product\SearchKeyword\ProductSearchBuilderInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\Routing\Exception\MissingRequestParameterException;
+use Shopware\Core\Framework\Routing\RoutingException;
 use Shopware\Core\Framework\Struct\ArrayEntity;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+use function is_string;
 
 class ProductSuggestRoute extends AbstractProductSuggestRoute
 {
@@ -44,8 +46,9 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
 
     public function load(Request $request, SalesChannelContext $context, Criteria $criteria): ProductSuggestRouteResponse
     {
-        if (!$request->query->has('search') && !$request->request->has('search')) {
-            throw new MissingRequestParameterException('search');
+        $query = $this->getSearchTerm($request);
+        if ($query === null) {
+            throw RoutingException::missingRequestParameter('search');
         }
 
         $doTrace = $request->headers->has('X-Makaira-Trace') ? $request->headers->get('X-Makaira-Trace') === 'true' || $request->headers->get('X-Makaira-Trace') === '1' : false;
@@ -67,8 +70,6 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
             ProductEvents::PRODUCT_SUGGEST_CRITERIA
         );
         $this->addElasticSearchContext($context);
-
-        $query = $request->query->get('search') ?? $request->request->get('search');
 
         try {
 
@@ -110,6 +111,19 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
         );
 
         return new ProductSuggestRouteResponse($result);
+    }
+
+    private function getSearchTerm(Request $request): ?string
+    {
+        $term = $request->query->get('search') ?? $request->request->get('search');
+
+        if (!is_string($term)) {
+            return null;
+        }
+
+        $term = trim($term);
+
+        return $term !== '' ? $term : null;
     }
 
     public function addElasticSearchContext(SalesChannelContext $context): void
