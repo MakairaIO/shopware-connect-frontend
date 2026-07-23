@@ -1,3 +1,9 @@
+## [1.10.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.21...1.10.0) (2026-07-23)
+
+### Features
+
+* **Version:** Add compatibility for sw 6.7 ([#3](https://github.com/MakairaIO/shopware-connect-frontend/issues/3)) ([5c90b45](https://github.com/MakairaIO/shopware-connect-frontend/commit/5c90b45a7d26eb47aea0a047aeebaa45df8b1909))
+
 ## [1.9.21](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.20...1.9.21) (2025-08-20)
 
 ### Bug Fixes
