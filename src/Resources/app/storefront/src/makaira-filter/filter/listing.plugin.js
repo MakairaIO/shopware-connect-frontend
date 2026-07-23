@@ -1,6 +1,5 @@
-// Import PluginOverride from Shopware's storefront-sdk
-//import Plugin from '../plugin';
-import Plugin from "src/plugin-system/plugin.class";
+// Shopware 6.5+ storefront plugins extend the global PluginBaseClass
+const Plugin = window.PluginBaseClass;
 
 /**
  * ListingListener Plugin

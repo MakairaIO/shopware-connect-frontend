@@ -22,11 +22,13 @@ use Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingResult;
 use Shopware\Core\Content\Product\SalesChannel\Search\AbstractProductSearchRoute;
 use Shopware\Core\Content\Product\SalesChannel\Search\ProductSearchRouteResponse;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\Routing\Exception\MissingRequestParameterException;
+use Shopware\Core\Framework\Routing\RoutingException;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+use function is_string;
 
 class ProductSearchRoute extends AbstractProductSearchRoute
 {
@@ -71,11 +73,11 @@ class ProductSearchRoute extends AbstractProductSearchRoute
             return $this->decorated->load($request, $context, $criteria);
         }
 
-        $this->validateSearchRequest($request);
+        $query = $this->getSearchTerm($request);
+        if ($query === null) {
+            throw RoutingException::missingRequestParameter('search');
+        }
 
-
-
-        $query = $request->query->get('search');
         $criteria->addState(Criteria::STATE_ELASTICSEARCH_AWARE);
 
         $makairaFilter = $this->filterExtractionService->extractMakairaFiltersFromRequest($request);
@@ -135,11 +137,17 @@ class ProductSearchRoute extends AbstractProductSearchRoute
         );
     }
 
-    private function validateSearchRequest(Request $request): void
+    private function getSearchTerm(Request $request): ?string
     {
-        if (!$request->get('search')) {
-            throw new MissingRequestParameterException('search');
+        $term = $request->query->get('search') ?? $request->request->get('search');
+
+        if (!is_string($term)) {
+            return null;
         }
+
+        $term = trim($term);
+
+        return $term !== '' ? $term : null;
     }
 
     private function checkForSearchRedirect($makairaResponse): ?string

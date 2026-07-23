@@ -11,50 +11,32 @@ use Psr\Log\LoggerInterface;
 use Shopware\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Shopware\Core\Content\Product\Events\ProductSuggestCriteriaEvent;
 use Shopware\Core\Content\Product\Events\ProductSuggestResultEvent;
-use Shopware\Core\Content\Product\ProductDefinition;
 use Shopware\Core\Content\Product\ProductEvents;
-use Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingLoader;
 use Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingResult;
 use Shopware\Core\Content\Product\SalesChannel\ProductAvailableFilter;
 use Shopware\Core\Content\Product\SalesChannel\Suggest\AbstractProductSuggestRoute;
 use Shopware\Core\Content\Product\SalesChannel\Suggest\ProductSuggestRouteResponse;
 use Shopware\Core\Content\Product\SearchKeyword\ProductSearchBuilderInterface;
-use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
-use Shopware\Core\Framework\Feature;
-use Shopware\Core\Framework\Routing\Exception\MissingRequestParameterException;
+use Shopware\Core\Framework\Routing\RoutingException;
 use Shopware\Core\Framework\Struct\ArrayEntity;
-use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-#[\AllowDynamicProperties]
+use function is_string;
+
 class ProductSuggestRoute extends AbstractProductSuggestRoute
 {
     public function __construct(
-        AbstractProductSuggestRoute $decorated,
-        ProductSearchBuilderInterface $searchBuilder,
-        EventDispatcherInterface $eventDispatcher,
-        ProductListingLoader $productListingLoader,
-        RequestCriteriaBuilder $criteriaBuilder,
-        SalesChannelRepository $salesChannelProductRepository,
-        ProductDefinition $definition,
+        private readonly AbstractProductSuggestRoute $decorated,
+        private readonly ProductSearchBuilderInterface $searchBuilder,
+        private readonly EventDispatcherInterface $eventDispatcher,
         private readonly MakairaProductFetchingService $makairaProductFetchingService,
         private readonly ShopwareProductFetchingService $shopwareProductFetchingService,
         private readonly LoggerInterface $logger,
         private readonly PluginConfig $pluginConfig,
-        private readonly EntityRepository $categoryRepository,
     ) {
-        $this->decorated                     = $decorated;
-        $this->eventDispatcher               = $eventDispatcher;
-        $this->searchBuilder                 = $searchBuilder;
-        $this->productListingLoader          = $productListingLoader;
-        $this->criteriaBuilder               = $criteriaBuilder;
-        $this->salesChannelProductRepository = $salesChannelProductRepository;
-        $this->definition                    = $definition;
     }
 
     public function getDecorated(): AbstractProductSuggestRoute
@@ -64,8 +46,9 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
 
     public function load(Request $request, SalesChannelContext $context, Criteria $criteria): ProductSuggestRouteResponse
     {
-        if (!$request->get('search')) {
-            throw new MissingRequestParameterException('search');
+        $query = $this->getSearchTerm($request);
+        if ($query === null) {
+            throw RoutingException::missingRequestParameter('search');
         }
 
         $doTrace = $request->headers->has('X-Makaira-Trace') ? $request->headers->get('X-Makaira-Trace') === 'true' || $request->headers->get('X-Makaira-Trace') === '1' : false;
@@ -80,9 +63,6 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
             new ProductAvailableFilter($context->getSalesChannel()->getId(), ProductVisibilityDefinition::VISIBILITY_SEARCH)
         );
         $criteria->addState(Criteria::STATE_ELASTICSEARCH_AWARE);
-        if (!Feature::isActive('v6.5.0.0')) {
-            $context->getContext()->addState(Context::STATE_ELASTICSEARCH_AWARE);
-        }
 
         $this->searchBuilder->build($request, $criteria, $context);
         $this->eventDispatcher->dispatch(
@@ -90,8 +70,6 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
             ProductEvents::PRODUCT_SUGGEST_CRITERIA
         );
         $this->addElasticSearchContext($context);
-
-        $query = $request->query->get('search');
 
         try {
 
@@ -133,6 +111,19 @@ class ProductSuggestRoute extends AbstractProductSuggestRoute
         );
 
         return new ProductSuggestRouteResponse($result);
+    }
+
+    private function getSearchTerm(Request $request): ?string
+    {
+        $term = $request->query->get('search') ?? $request->request->get('search');
+
+        if (!is_string($term)) {
+            return null;
+        }
+
+        $term = trim($term);
+
+        return $term !== '' ? $term : null;
     }
 
     public function addElasticSearchContext(SalesChannelContext $context): void

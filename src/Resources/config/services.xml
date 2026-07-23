@@ -43,12 +43,10 @@
       decoration-priority="-1001"
       decoration-on-invalid="ignore"
     >
-            <argument type="service" id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\Listing\ProductListingRoute.inner" />            
+            <argument type="service" id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\Listing\ProductListingRoute.inner" />
             <argument type="service" id="category.repository" />
             <argument type="service" id="Shopware\Core\Content\ProductStream\Service\ProductStreamBuilder" />
-      
             <argument type="service" id="event_dispatcher" />
-            <argument type="service" id="sales_channel.product.repository" />
             <argument type="service" id="MakairaConnectFrontend\Service\FilterExtractionService" />
             <argument type="service" id="MakairaConnectFrontend\Service\SortingMappingService" />
             <argument type="service" id="MakairaConnectFrontend\Service\MakairaProductFetchingService" />
@@ -68,15 +66,10 @@
             <argument type="service" id="MakairaConnectFrontend\Core\Content\Product\SalesChannel\Suggest\ProductSuggestRoute.inner" />
             <argument type="service" id="Shopware\Core\Content\Product\SearchKeyword\ProductSearchBuilderInterface" />
             <argument type="service" id="event_dispatcher" />
-            <argument type="service" id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingLoader" />
-            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder" />
-            <argument type="service" id="sales_channel.product.repository" />
-            <argument type="service" id="Shopware\Core\Content\Product\ProductDefinition" />
             <argument type="service" id="MakairaConnectFrontend\Service\MakairaProductFetchingService" />
             <argument type="service" id="MakairaConnectFrontend\Service\ShopwareProductFetchingService" />
             <argument type="service" id="monolog.logger.makaira_frontend" />
             <argument type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />
-            <argument type="service" id="category.repository" />
         </service>
 
         <service
@@ -99,9 +92,6 @@
       decoration-on-invalid="ignore"
     >
             <argument type="service" id="MakairaConnectFrontend\Core\Content\Category\SalesChannel\CategoryRoute.inner" />
-            <argument type="service" id="Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoader" />
-            <argument type="service" id="category.repository" />
-            <argument type="service" id="Shopware\Core\Content\Category\CategoryDefinition" />
             <argument type="service" id="monolog.logger.makaira_frontend" />
         </service>
 

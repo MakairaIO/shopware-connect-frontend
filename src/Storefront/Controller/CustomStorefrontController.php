@@ -8,7 +8,7 @@ use Shopware\Core\Content\Category\Exception\CategoryNotFoundException;
 use Shopware\Core\Content\Category\SalesChannel\AbstractCategoryRoute;
 use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
 use Shopware\Core\Content\Cms\SalesChannel\CmsRoute;
-use Shopware\Core\Framework\Routing\Exception\MissingRequestParameterException;
+use Shopware\Core\Framework\Routing\RoutingException;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +33,7 @@ class CustomStorefrontController extends StorefrontController
     public function category(?string $navigationId, Request $request, SalesChannelContext $salesChannelContext): Response
     {
         if (!$navigationId) {
-            throw new MissingRequestParameterException('navigationId');
+            throw RoutingException::missingRequestParameter('navigationId');
         }
 
         try {

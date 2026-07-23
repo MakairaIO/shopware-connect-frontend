@@ -1,6 +1,9 @@
 services:
   shopware:
-    image: dockware/dev:latest
+    # Primary target for 6.7 compatibility work. Override for regression:
+    #   docker compose -f docker-compose.yml -f docker-compose.6.6.yml up -d
+    #   docker compose -f docker-compose.yml -f docker-compose.6.5.yml up -d
+    image: dockware/dev:6.7.2.2
     container_name: shopware
     volumes:
       - "./:/var/www/html/custom/plugins/MakairaConnectFrontend"

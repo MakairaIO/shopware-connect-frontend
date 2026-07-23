@@ -6,3 +6,4 @@ composer.lock
 src/Resources/app/storefront/node_modules/**
 src/Resources/app/storefront/vendor/**
 src/Resources/app/storefront/composer.json
+.idea

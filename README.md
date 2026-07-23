@@ -203,5 +203,6 @@ The **Makaira Connect Frontend** module is compatible with the following Shopwar
 | ---------------- | ------------ |
 | 6.5              | ✅ Supported |
 | 6.6              | ✅ Supported |
+| 6.7              | ✅ Supported |
 
 💡 **Note**: Ensure your Shopware installation matches one of the supported versions for optimal compatibility.

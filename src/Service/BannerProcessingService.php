@@ -16,9 +16,13 @@ class BannerProcessingService
     {
     }
 
-    public function getBaseMediaUrl($context, $mediaUrl)
+    public function getBaseMediaUrl(SalesChannelContext $context, string $mediaUrl): string
     {
-        return 'https://' . $this->config->getApiCustomer($context->getSalesChannelId()) . '.makaira.media/' . $mediaUrl;
+        $baseUrl = (string) $this->config->get(PluginConfig::MAKAIRA_BASE_URL, $context->getSalesChannelId());
+        $host = parse_url($baseUrl, PHP_URL_HOST) ?: '';
+        $customer = explode('.', $host)[0] ?? '';
+
+        return 'https://' . $customer . '.makaira.media/' . $mediaUrl;
     }
 
     public function processBannersFromMakairaResponse(
