@@ -35,7 +35,18 @@ class ShopwareProductFetchingService
 
         $originalLimit = $criteria->getLimit();
 
+        // Makaira has already applied all filtering (price, properties, category, ...).
+        // Here we only re-hydrate the matched products from Shopware by their IDs.
+        //
+        // resetFilters() alone is NOT enough: Shopware attaches the price facet as a
+        // POST-filter (RangeFilter on product.cheapestPrice, see PriceListingFilterHandler +
+        // AggregationListingProcessor::addPostFilter). Post-filters survive resetFilters()
+        // and would be applied a SECOND time against Shopware's indexed cheapestPrice, which
+        // can differ from the price Makaira matched on (e.g. a stale/original price for
+        // reduced sale items) and therefore silently drops products Makaira legitimately
+        // returned -> "N found, fewer/none shown". So we clear post-filters as well.
         $criteria->resetFilters();
+        $criteria->resetPostFilters();
         $criteria->addFilter(new EqualsAnyFilter('id', $ids));
         $criteria->setOffset(0);
 
