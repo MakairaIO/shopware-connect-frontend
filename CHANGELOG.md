@@ -1,3 +1,9 @@
+## [1.10.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.10.0...1.10.1) (2026-07-29)
+
+### Bug Fixes
+
+* reset post-filters when loading products by Makaira ids (MAKAIRA-5277) ([#4](https://github.com/MakairaIO/shopware-connect-frontend/issues/4)) ([4d57b81](https://github.com/MakairaIO/shopware-connect-frontend/commit/4d57b817e03cb3db7039cb6559149116ed4b2ce9))
+
 ## [1.10.0](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.9.21...1.10.0) (2026-07-23)
 
 ### Features
