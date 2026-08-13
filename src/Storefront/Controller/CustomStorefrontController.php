@@ -14,6 +14,7 @@ use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 #[Route(defaults: ['_routeScope' => ['storefront']])]
 class CustomStorefrontController extends StorefrontController
@@ -22,6 +23,17 @@ class CustomStorefrontController extends StorefrontController
         private readonly AbstractCategoryRoute $categoryRoute,
         private readonly CmsRoute $cmsRoute
     ) {
+    }
+
+    /**
+     * Shopware 6.5/6.6 inject Twig via setTwig; 6.7 removed the method and resolves Twig from the container.
+     * Keep this shim so services.xml can still call setTwig on all supported majors.
+     */
+    public function setTwig(Environment $twig): void
+    {
+        if (method_exists(StorefrontController::class, 'setTwig')) {
+            parent::setTwig($twig);
+        }
     }
 
     #[Route(
