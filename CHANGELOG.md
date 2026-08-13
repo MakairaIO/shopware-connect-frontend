@@ -1,3 +1,9 @@
+## [1.10.2](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.10.1...1.10.2) (2026-08-13)
+
+### Bug Fixes
+
+* **Services:** Inject twig manually for 6.7 ([#5](https://github.com/MakairaIO/shopware-connect-frontend/issues/5)) ([9f8a851](https://github.com/MakairaIO/shopware-connect-frontend/commit/9f8a8517e9c47f277e9cf2c0823b2a52df296133))
+
 ## [1.10.1](https://github.com/MakairaIO/shopware-connect-frontend/compare/1.10.0...1.10.1) (2026-07-29)
 
 ### Bug Fixes
