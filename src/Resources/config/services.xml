@@ -116,6 +116,12 @@
             <tag name="kernel.event_subscriber" />
         </service>
 
+        <service id="MakairaConnectFrontend\Subscriber\AutosuggestConfigSubscriber">
+            <argument type="service" id="MakairaConnectFrontend\Utils\PluginConfig" />
+            <argument type="service" id="MakairaConnectFrontend\Loader\SalesChannelLoader" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
         <service id="MakairaConnectFrontend\Service\FilterExtractionService" public="true" />
         <service id="MakairaConnectFrontend\Service\SortingMappingService" public="true" />
         <service id="MakairaConnectFrontend\Service\MakairaProductFetchingService" class="MakairaConnectFrontend\Service\MakairaProductFetchingService">

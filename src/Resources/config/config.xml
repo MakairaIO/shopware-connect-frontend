@@ -71,6 +71,81 @@
         </input-field>
 
     </card>
+
+    <card>
+        <title>Fast Autosuggest Configuration</title>
+        <title lang="de-DE">Schnelle Autosuggest-Konfiguration</title>
+
+        <input-field type="bool">
+            <name>useFastAutosuggest</name>
+            <label>Enable Fast Autosuggest</label>
+            <label lang="de-DE">Schnelle Autosuggest aktivieren</label>
+            <defaultValue>false</defaultValue>
+            <helpText>Enable the fast client-side autosuggest that calls Makaira API directly from the browser. This significantly reduces latency by bypassing the PHP backend and automatically cancels stale requests.</helpText>
+            <helpText lang="de-DE">Aktivieren Sie die schnelle clientseitige Autosuggest, die die Makaira-API direkt vom Browser aus aufruft. Dies reduziert die Latenz erheblich, da der PHP-Backend umgangen wird und veraltete Anfragen automatisch abgebrochen werden.</helpText>
+        </input-field>
+
+        <input-field type="int">
+            <name>autosuggestDebounceDelay</name>
+            <label>Debounce Delay (ms)</label>
+            <label lang="de-DE">Verzögerung (ms)</label>
+            <defaultValue>150</defaultValue>
+            <minValue>0</minValue>
+            <maxValue>1000</maxValue>
+            <helpText>The delay in milliseconds before sending the search request. Lower values mean faster response but more API calls. Recommended: 100-200ms.</helpText>
+            <helpText lang="de-DE">Die Verzögerung in Millisekunden vor dem Senden der Suchanfrage. Niedrigere Werte bedeuten schnellere Reaktion, aber mehr API-Aufrufe. Empfohlen: 100-200ms.</helpText>
+        </input-field>
+
+        <input-field type="int">
+            <name>autosuggestMinChars</name>
+            <label>Minimum Characters</label>
+            <label lang="de-DE">Mindestzeichen</label>
+            <defaultValue>3</defaultValue>
+            <minValue>1</minValue>
+            <maxValue>10</maxValue>
+            <helpText>Minimum number of characters required before triggering the search.</helpText>
+            <helpText lang="de-DE">Mindestanzahl der Zeichen, bevor die Suche ausgelöst wird.</helpText>
+        </input-field>
+
+        <input-field type="int">
+            <name>autosuggestMaxResults</name>
+            <label>Maximum Results</label>
+            <label lang="de-DE">Maximale Ergebnisse</label>
+            <defaultValue>10</defaultValue>
+            <minValue>1</minValue>
+            <maxValue>50</maxValue>
+            <helpText>Maximum number of products to show in the autosuggest dropdown.</helpText>
+            <helpText lang="de-DE">Maximale Anzahl der Produkte, die im Autosuggest-Dropdown angezeigt werden.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>autosuggestShowCategories</name>
+            <label>Show Categories</label>
+            <label lang="de-DE">Kategorien anzeigen</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Show category suggestions in the autosuggest dropdown.</helpText>
+            <helpText lang="de-DE">Kategorievorschläge im Autosuggest-Dropdown anzeigen.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>autosuggestShowPages</name>
+            <label>Show Pages</label>
+            <label lang="de-DE">Seiten anzeigen</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Show page suggestions in the autosuggest dropdown.</helpText>
+            <helpText lang="de-DE">Seitenvorschläge im Autosuggest-Dropdown anzeigen.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>autosuggestShowLinks</name>
+            <label>Show Links</label>
+            <label lang="de-DE">Links anzeigen</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Show link suggestions in the autosuggest dropdown.</helpText>
+            <helpText lang="de-DE">Linkvorschläge im Autosuggest-Dropdown anzeigen.</helpText>
+        </input-field>
+
+    </card>
     <card>
             <title>Recommendation Configuration</title>
             <title lang="de-DE">Recommendation-Konfiguration</title>

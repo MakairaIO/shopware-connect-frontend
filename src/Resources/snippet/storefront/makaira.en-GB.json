@@ -2,6 +2,12 @@
   "makaira": {
     "page": "Landingpages",
     "products": "Products",
-    "links": "Links"
+    "links": "Links",
+    "autosuggest": {
+      "showAll": "Show all results",
+      "noResults": "No results found",
+      "loading": "Searching...",
+      "error": "An error occurred. Please try again."
+    }
   }
 }
